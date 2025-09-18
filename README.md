@@ -19,6 +19,8 @@ The analysis tracks repository activity, maintenance status, and identifies pote
 - 🚀 **Async Processing**: Efficient API calls using modern async/await patterns
 - 🔄 **Retry Logic**: Robust error handling with exponential backoff
 - 📝 **Clear Logging**: Structured logging output for easy monitoring
+- 💾 **Intelligent Caching**: Caches HTTP responses and analysis results for better performance
+- 📊 **Markdown Reports**: Generates comprehensive markdown reports with timestamps
 
 ## Quick Start
 
@@ -65,6 +67,13 @@ just full
 # Run both analyses sequentially
 just all
 
+# Generate comprehensive markdown report
+just report
+
+# Cache management
+just cache-info   # Show cache information
+just fresh        # Clear cache and run fresh analysis
+
 # Show project status
 just status
 
@@ -76,28 +85,39 @@ just check
 
 ```bash
 # Community extensions only
-uv run python scripts/community_analysis.py
+uv run python scripts/analyze_extensions.py community
+
+# Core extensions only
+uv run python scripts/analyze_extensions.py core
 
 # Full analysis
-uv run python scripts/full_analysis.py
+uv run python scripts/analyze_extensions.py full
+
+# Generate markdown report
+uv run python scripts/analyze_extensions.py report
+
+# Cache management
+uv run python scripts/analyze_extensions.py --cache-info
+uv run python scripts/analyze_extensions.py --clear-cache
 ```
 
 ## Scripts
 
-### `community_analysis.py`
+### `analyze_extensions.py`
 
-Analyses community extensions by:
-- Fetching extension list from the `duckdb/community-extensions` repository
+A unified script that supports multiple modes of operation:
+
+- **community**: Analyses community extensions only
+- **core**: Analyses core extensions only
+- **full**: Comprehensive analysis of both core and community extensions
+- **report**: Generates a detailed markdown report of all extensions
+
+The analysis process includes:
+- Fetching extension lists from appropriate sources
 - Reading metadata for each extension
-- Checking the status of the source repositories
+- Checking the status of source repositories
 - Reporting maintenance activity and archived status
-
-### `full_analysis.py`
-
-Comprehensive analysis including:
-- All community extension analysis (as above)
-- Core extensions from the official DuckDB documentation
-- Unified reporting of both extension types
+- Caching results for improved performance on subsequent runs
 
 ## Output
 
@@ -147,8 +167,11 @@ just check
 
 ```
 ├── scripts/
-│   ├── community_analysis.py    # Community extensions analysis
-│   └── full_analysis.py         # Complete analysis (core + community)
+│   └── analyze_extensions.py    # Unified extension analysis script
+├── reports/                     # Generated markdown reports
+│   ├── latest.md                # Always points to the most recent report
+│   └── duckdb_extensions_report_*.md  # Timestamped reports
+├── .cache/                     # Cache directory (git-ignored)
 ├── justfile                     # Task runner configuration
 ├── pyproject.toml              # Project configuration and dependencies
 ├── uv.lock                     # Locked dependency versions
@@ -164,6 +187,7 @@ just check
 - **loguru**: Structured logging
 - **tenacity**: Retry logic with backoff
 - **pyyaml**: YAML file parsing for extension descriptions
+- **diskcache**: Intelligent caching for HTTP responses and analysis results
 
 ### Development
 - **ruff**: Linting and formatting

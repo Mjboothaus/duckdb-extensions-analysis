@@ -147,3 +147,9 @@ Desktop.ini
 *.log
 *.out
 *.tmp
+
+# Generated reports (keep latest.md, ignore timestamped ones)
+reports/duckdb_extensions_report_*.md
+
+# Cache directory
+.cache/

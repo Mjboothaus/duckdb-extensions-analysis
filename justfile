@@ -11,14 +11,30 @@ install:
 
 # Run the community extensions analysis
 community:
-    uv run python scripts/community_analysis.py
+    uv run python scripts/analyze_extensions.py community
+
+# Run the core extensions analysis
+core:
+    uv run python scripts/analyze_extensions.py core
 
 # Run the full extensions analysis (core + community)
 full:
-    uv run python scripts/full_analysis.py
+    uv run python scripts/analyze_extensions.py full
 
 # Run both analyses sequentially
-all: community full
+all: community core
+
+# Generate comprehensive markdown report
+report:
+    uv run python scripts/analyze_extensions.py report
+
+# Clear cache and run fresh analysis
+fresh:
+    uv run python scripts/analyze_extensions.py full --clear-cache
+
+# Show cache information
+cache-info:
+    uv run python scripts/analyze_extensions.py report --cache-info
 
 # Format code using ruff
 format:
@@ -61,8 +77,12 @@ help:
     @echo ""
     @echo "  just install       - Install dependencies"
     @echo "  just community     - Run community extensions analysis"
+    @echo "  just core          - Run core extensions analysis"
     @echo "  just full          - Run full extensions analysis (core + community)"
-    @echo "  just all           - Run both analyses"
+    @echo "  just all           - Run both analyses sequentially"
+    @echo "  just report        - Generate comprehensive markdown report"
+    @echo "  just fresh         - Clear cache and run fresh full analysis"
+    @echo "  just cache-info    - Show cache statistics"
     @echo "  just check         - Format and lint code"
     @echo "  just clean         - Clean cache files and venv"
     @echo "  just status        - Show project status"
