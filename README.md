@@ -42,6 +42,15 @@ The analysis tracks repository activity, maintenance status, and identifies pote
    # or alternatively: uv sync
    ```
 
+3. (Optional) Set up GitHub authentication for higher rate limits:
+   ```bash
+   # If you have gh CLI installed:
+   export GITHUB_TOKEN=$(gh auth token)
+   
+   # Or set your GitHub token manually:
+   export GITHUB_TOKEN=your_github_token_here
+   ```
+
 ### Usage
 
 #### Using just (recommended)
@@ -109,6 +118,14 @@ The scripts use several configuration constants that can be modified:
 - `DUCKDB_VERSION`: Current DuckDB version for core analysis
 - `HEADERS`: HTTP headers for API requests
 
+### GitHub Rate Limits
+
+The GitHub API has rate limits (60 requests/hour for unauthenticated requests). For better performance and to avoid rate limiting:
+
+1. **Recommended**: Use GitHub authentication by setting the `GITHUB_TOKEN` environment variable
+2. The scripts will automatically detect and use the token for authenticated requests (5000 requests/hour)
+3. If you hit rate limits, the scripts will show 403 errors but will continue processing
+
 ## Development
 
 ### Code Quality
@@ -146,7 +163,7 @@ just check
 - **beautifulsoup4**: HTML parsing for documentation scraping
 - **loguru**: Structured logging
 - **tenacity**: Retry logic with backoff
-- **toml**: TOML file parsing
+- **pyyaml**: YAML file parsing for extension descriptions
 
 ### Development
 - **ruff**: Linting and formatting
