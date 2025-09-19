@@ -153,3 +153,6 @@ reports/duckdb_extensions_report_*.md
 
 # Cache directory
 .cache/
+
+# Data directory (DuckDB databases)
+data/
