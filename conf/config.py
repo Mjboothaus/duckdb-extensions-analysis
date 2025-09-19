@@ -6,28 +6,35 @@ This module loads configuration from both pyproject.toml (for version) and confi
 """
 
 import os
+import subprocess
 import toml
 from pathlib import Path
 from datetime import datetime
-from typing import List
+from typing import List, Optional
+from dotenv import load_dotenv
 
 
 class Config:
     """Configuration class that loads settings from TOML files."""
-
+    
     def __init__(self):
         self.project_root = Path(__file__).parent.parent
         self.config_dir = self.project_root / "conf"
-
+        
+        # Load environment variables from .env file
+        dotenv_path = self.project_root / ".env"
+        if dotenv_path.exists():
+            load_dotenv(dotenv_path)
+        
         # Load project metadata from pyproject.toml
         pyproject_path = self.project_root / "pyproject.toml"
         pyproject_data = toml.load(pyproject_path)
         self.project = pyproject_data["project"]
-
+        
         # Load application configuration from config.toml
         config_path = self.config_dir / "config.toml"
         self.config_data = toml.load(config_path)
-
+        
         # Set up derived properties
         self._setup_paths()
         self._setup_headers()
@@ -45,9 +52,13 @@ class Config:
         self.database_path = self.data_dir / self.config_data["database"]["filename"]
 
     def _setup_headers(self):
-        """Set up HTTP headers with optional GitHub token."""
+        """Set up HTTP headers with GitHub token from multiple sources."""
         self.headers = {"Accept": self.config_data["github"]["accept_header"]}
-        if github_token := os.getenv("GITHUB_TOKEN"):
+        
+        # Try to get GitHub token from multiple sources
+        github_token = self._get_github_token()
+        
+        if github_token:
             self.headers["Authorization"] = f"token {github_token}"
             self.has_github_token = True
         else:
@@ -66,15 +77,56 @@ class Config:
         self.data_dir.mkdir(exist_ok=True)
         self.sql_dir.mkdir(exist_ok=True)
 
+    def _get_github_token(self) -> Optional[str]:
+        """Get GitHub token from multiple sources in priority order."""
+        # 1. Environment variable (from .env or system)
+        if token := os.getenv("GITHUB_TOKEN"):
+            return token
+        
+        # 2. Try gh CLI if available
+        try:
+            result = subprocess.run(
+                ["gh", "auth", "token"],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                return result.stdout.strip()
+        except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+            pass
+        
+        return None
+    
+    def _get_git_info(self) -> tuple[str, str]:
+        """Get git version and short hash."""
+        try:
+            # Get git short hash
+            result = subprocess.run(
+                ["git", "rev-parse", "--short", "HEAD"],
+                capture_output=True,
+                text=True,
+                timeout=5,
+                cwd=self.project_root
+            )
+            git_hash = result.stdout.strip() if result.returncode == 0 else "unknown"
+            
+            # Create version with git hash
+            base_version = self.project["version"]
+            full_version = f"{base_version}+{git_hash}"
+            
+            return base_version, full_version
+            
+        except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+            base_version = self.project["version"]
+            return base_version, f"{base_version}+unknown"
+    
     def get_github_token_info(self) -> tuple[bool, str]:
         """Get GitHub token information for logging."""
         if self.has_github_token:
-            return True, "Using GitHub authentication token"
+            return True, "Using GitHub authentication token (from .env or gh CLI)"
         else:
-            return (
-                False,
-                "No GitHub token found. Consider setting GITHUB_TOKEN environment variable for higher rate limits.",
-            )
+            return False, "No GitHub token found. Consider running 'just setup-token' or setting GITHUB_TOKEN environment variable for higher rate limits."
 
     def load_sql(self, filename: str) -> str:
         """Load SQL from a file in the sql directory."""
@@ -86,7 +138,14 @@ class Config:
     # Property accessors for easy access to config values
     @property
     def version(self) -> str:
+        """Get base version from pyproject.toml."""
         return self.project["version"]
+    
+    @property
+    def version_full(self) -> str:
+        """Get full version with git hash."""
+        _, full_version = self._get_git_info()
+        return full_version
 
     @property
     def name(self) -> str:

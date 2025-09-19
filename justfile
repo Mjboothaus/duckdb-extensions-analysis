@@ -15,6 +15,14 @@ install:
 update:
     uv lock --upgrade
 
+# Set up GitHub token from gh CLI
+setup-token:
+    @echo "Setting up GitHub token from gh CLI..."
+    @gh auth token > .env.tmp
+    @echo "GITHUB_TOKEN=$(cat .env.tmp)" > .env
+    @rm .env.tmp
+    @echo "✅ GitHub token saved to .env file"
+
 # === ANALYSIS COMMANDS ===
 
 # Run analysis (options: core, community, full)

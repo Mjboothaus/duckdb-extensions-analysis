@@ -42,31 +42,32 @@ logger.add(
     sys.stdout, format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", level="INFO"
 )
 
-# Configuration constants
-SCRIPT_VERSION = "1.2.0"
-GITHUB_API_BASE = "https://api.github.com"
-COMMUNITY_REPO = "duckdb/community-extensions"
-DUCKDB_REPO = "duckdb/duckdb"
-CURRENT_DATE = datetime.now()
+# Import configuration (add parent directory to path)
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from conf.config import config
+
+# Set up derived values from configuration
+SCRIPT_VERSION = config.version_full
+GITHUB_API_BASE = config.github_api_base
+COMMUNITY_REPO = config.community_repo
+DUCKDB_REPO = config.duckdb_repo
+CURRENT_DATE = config.current_date
 
 # DuckDB release info will be fetched dynamically
 DUCKDB_VERSION = None
 DUCKDB_RELEASE_DATE = None
 
-# Set up caching
-CACHE_DIR = Path(".cache")
-CACHE_DIR.mkdir(exist_ok=True)
-cache = dc.Cache(str(CACHE_DIR))
+# Set up caching from configuration
+config.ensure_directories()
+cache = dc.Cache(str(config.cache_dir))
 
-# GitHub headers with optional token
-HEADERS = {"Accept": "application/vnd.github.v3+json"}
-if github_token := os.getenv("GITHUB_TOKEN"):
-    HEADERS["Authorization"] = f"token {github_token}"
-    logger.info("Using GitHub authentication token")
+# GitHub headers from configuration
+HEADERS = config.headers
+has_token, token_msg = config.get_github_token_info()
+if has_token:
+    logger.info(token_msg)
 else:
-    logger.warning(
-        "No GitHub token found. Consider setting GITHUB_TOKEN environment variable for higher rate limits."
-    )
+    logger.warning(token_msg)
 
 
 def get_cache_key(url: str, headers: Dict[str, str]) -> str:
