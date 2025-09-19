@@ -6,7 +6,7 @@ Handles generation of reports in multiple formats (Markdown, CSV, Excel).
 
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
 import pandas as pd
 from loguru import logger
@@ -21,6 +21,8 @@ class ReportGenerator(BaseReportGenerator):
         super().__init__(config)
         self.reports_dir = config.reports_dir
         self.templates_dir = Path(config.project_root) / "templates"
+        self.config = config
+        self._core_extension_urls_cache = None
     
     def _load_template(self, template_name: str) -> str:
         """Load template content from file."""
@@ -31,6 +33,127 @@ class ReportGenerator(BaseReportGenerator):
         
         with open(template_file, 'r', encoding='utf-8') as f:
             return f.read().strip()
+    
+    def _discover_core_extension_urls(self) -> Dict[str, str]:
+        """Discover URLs for core extensions from DuckDB documentation."""
+        if self._core_extension_urls_cache is not None:
+            return self._core_extension_urls_cache
+        
+        logger.info("Discovering core extension URLs from DuckDB documentation")
+        
+        extension_urls = {}
+        
+        try:
+            import requests
+            from bs4 import BeautifulSoup
+            import diskcache as dc
+            from datetime import timedelta
+            import hashlib
+            
+            # Set up caching
+            cache = dc.Cache(str(self.config.cache_dir))
+            cache_key = "core_extension_urls"
+            
+            # Check cache first (cache for 24 hours)
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                cached_time, urls = cached_data
+                if datetime.now() - cached_time < timedelta(hours=24):
+                    logger.debug("Using cached core extension URLs")
+                    self._core_extension_urls_cache = urls
+                    return urls
+            
+            # Fetch the core extensions overview page
+            overview_url = "https://duckdb.org/docs/stable/core_extensions/overview.html"
+            response = requests.get(overview_url, timeout=10)
+            response.raise_for_status()
+            
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Look for links to individual extension pages
+            # Pattern 1: Links in tables
+            for table in soup.find_all('table'):
+                for row in table.find_all('tr'):
+                    cells = row.find_all(['td', 'th'])
+                    if len(cells) >= 2:
+                        # First cell might contain extension name and link
+                        first_cell = cells[0]
+                        link = first_cell.find('a', href=True)
+                        if link:
+                            href = link['href']
+                            extension_name = link.get_text(strip=True).lower()
+                            if href.startswith('/docs/stable/core_extensions/'):
+                                full_url = f"https://duckdb.org{href}"
+                                extension_urls[extension_name] = full_url
+                            elif href.startswith('https://duckdb.org/docs/stable/core_extensions/'):
+                                extension_urls[extension_name] = href
+            
+            # Pattern 2: Look for any links to core_extensions in the page
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if '/docs/stable/core_extensions/' in href and href.endswith('.html'):
+                    # Extract extension name from URL
+                    extension_name = href.split('/')[-1].replace('.html', '')
+                    if extension_name not in ['overview', 'index']:
+                        if href.startswith('/'):
+                            full_url = f"https://duckdb.org{href}"
+                        else:
+                            full_url = href
+                        extension_urls[extension_name.lower()] = full_url
+            
+            # Also check the main extensions page for additional links
+            try:
+                main_extensions_url = "https://duckdb.org/docs/stable/extensions/overview.html"
+                response2 = requests.get(main_extensions_url, timeout=10)
+                response2.raise_for_status()
+                soup2 = BeautifulSoup(response2.text, 'html.parser')
+                
+                for link in soup2.find_all('a', href=True):
+                    href = link['href']
+                    if '/docs/stable/core_extensions/' in href and href.endswith('.html'):
+                        extension_name = href.split('/')[-1].replace('.html', '')
+                        if extension_name not in ['overview', 'index']:
+                            if href.startswith('/'):
+                                full_url = f"https://duckdb.org{href}"
+                            else:
+                                full_url = href
+                            extension_urls[extension_name.lower()] = full_url
+            except Exception as e:
+                logger.debug(f"Could not fetch main extensions page: {e}")
+            
+            # Cache the results
+            cache.set(cache_key, (datetime.now(), extension_urls))
+            
+            logger.info(f"Discovered {len(extension_urls)} core extension URLs")
+            logger.debug(f"Extension URLs: {list(extension_urls.keys())}")
+            
+        except Exception as e:
+            logger.warning(f"Failed to discover core extension URLs: {e}")
+            # Fallback to basic pattern-based URLs for known extensions
+            common_extensions = [
+                "autocomplete", "avro", "aws", "azure", "delta", "ducklake", "encodings", 
+                "excel", "fts", "httpfs", "iceberg", "icu", "inet", "jemalloc", "json", 
+                "mysql", "parquet", "postgres", "spatial", "sqlite", "tpcds", "tpch", "ui", "vss"
+            ]
+            for ext_name in common_extensions:
+                extension_urls[ext_name] = f"https://duckdb.org/docs/stable/core_extensions/{ext_name}.html"
+        
+        self._core_extension_urls_cache = extension_urls
+        return extension_urls
+    
+    def _format_days_ago(self, date_str: Optional[str], fallback_days: int) -> str:
+        """Format a date string into 'X days ago' format."""
+        if not date_str:
+            return f"{fallback_days} days ago"
+        
+        try:
+            from dateutil import parser
+            commit_date = parser.parse(date_str)
+            days_ago = (datetime.now(commit_date.tzinfo) - commit_date).days
+            return f"{days_ago} days ago"
+        except Exception as e:
+            logger.debug(f"Could not parse date {date_str}: {e}")
+            return f"{fallback_days} days ago"
     
     async def generate(self, analysis_result: AnalysisResult, format_type: str = "markdown") -> str:
         """Generate a report in the specified format."""
@@ -74,11 +197,26 @@ class ReportGenerator(BaseReportGenerator):
             "|-----------|-------------------|--------|--------------|",
         ])
         
+        # Discover core extension URLs
+        extension_urls = self._discover_core_extension_urls()
+        
         for ext in analysis_result.core_extensions:
             stage = ext.stage or "Stable"
             status = "✅ Ongoing"
-            last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
-            report.append(f"| **{ext.name}** | {stage} | {status} | {last_updated} |")
+            
+            # Use actual commit date if available, otherwise fallback to DuckDB release
+            if ext.metadata and ext.metadata.get("last_commit_date"):
+                last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+            else:
+                last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+            
+            # Create extension name with URL if available
+            extension_name = ext.name
+            extension_url = extension_urls.get(ext.name.lower())
+            if extension_url:
+                extension_name = f"[{ext.name}]({extension_url})"
+            
+            report.append(f"| **{extension_name}** | {stage} | {status} | {last_updated} |")
         
         report.extend([
             f"\n**Total Core Extensions**: {len(analysis_result.core_extensions)}\n",
