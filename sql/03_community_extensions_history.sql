@@ -1,0 +1,26 @@
+-- Create community extensions history table
+CREATE TABLE IF NOT EXISTS community_extensions_history (
+    id INTEGER PRIMARY KEY DEFAULT nextval('community_ext_hist_seq'),
+    name VARCHAR NOT NULL,
+    repository VARCHAR,
+    status VARCHAR,
+    last_push_date TIMESTAMP,
+    last_push_days INTEGER,
+    stars INTEGER,
+    forks INTEGER,
+    language VARCHAR,
+    description TEXT,
+    improved_description TEXT,
+    homepage VARCHAR,
+    license VARCHAR,
+    topics VARCHAR[],
+    archived BOOLEAN,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    featured BOOLEAN DEFAULT FALSE,
+    github_url VARCHAR,
+    community_repo_url VARCHAR,
+    install_url VARCHAR,
+    duckdb_version VARCHAR,
+    analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

@@ -1,0 +1,218 @@
+"""
+Core Extensions Analyzer for DuckDB Extensions Analysis.
+
+Handles analysis of DuckDB core extensions from official documentation.
+"""
+
+import asyncio
+from datetime import datetime
+from typing import Dict, List, Optional
+
+import httpx
+import requests
+from bs4 import BeautifulSoup
+from loguru import logger
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+)
+
+from .base import BaseAnalyzer, ExtensionInfo
+from .github_api import GitHubAPIClient
+
+
+class WebContentClient:
+    """Client for fetching web content with caching."""
+    
+    def __init__(self, config):
+        self.config = config
+        # Set up cache from configuration
+        import diskcache as dc
+        self.cache = dc.Cache(str(config.cache_dir))
+    
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+        retry=retry_if_exception_type((requests.RequestException,)),
+        before=lambda _: logger.debug("Retrying web content request..."),
+    )
+    def fetch_cached(self, url: str, cache_hours: int = 24) -> str:
+        """Fetch web content with caching."""
+        import hashlib
+        from datetime import timedelta
+        
+        cache_key = f"web_{hashlib.md5(url.encode()).hexdigest()}"
+
+        # Check cache first if available
+        if self.cache:
+            cached_data = self.cache.get(cache_key)
+            if cached_data:
+                cached_time, content = cached_data
+                if datetime.now() - cached_time < timedelta(hours=cache_hours):
+                    logger.debug(f"Using cached web content for {url}")
+                    return content
+
+        # Fetch fresh content
+        logger.debug(f"Fetching fresh web content from {url}")
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        content = response.text
+
+        # Cache the response if cache available
+        if self.cache:
+            self.cache.set(cache_key, (datetime.now(), content))
+        
+        return content
+
+
+class CoreExtensionAnalyzer(BaseAnalyzer):
+    """Analyzer for DuckDB core extensions."""
+    
+    def __init__(self, config, github_client: GitHubAPIClient, cache_hours: int = 1):
+        super().__init__(config, cache_hours)
+        self.github_client = github_client
+        self.web_client = WebContentClient(config)
+        self.core_extensions: List[Dict] = []
+    
+    def get_core_extensions_from_docs(self) -> List[Dict]:
+        """Fetch core extensions from DuckDB documentation."""
+        if self.core_extensions:
+            return self.core_extensions
+
+        logger.info("Fetching core extensions from DuckDB documentation")
+        url = self.config.core_extensions_url
+        html = self.web_client.fetch_cached(url, cache_hours=self.config.web_cache_hours)
+        soup = BeautifulSoup(html, "html.parser")
+
+        # Parse the table for extensions and stages
+        table = soup.find("table")
+        if not table:
+            logger.warning("Could not find core extensions table")
+            return []
+
+        rows = table.find_all("tr")[1:]  # Skip header
+        extensions = []
+        for row in rows:
+            cols = row.find_all(["td", "th"])
+            if len(cols) >= 2:
+                name = cols[0].get_text(strip=True)
+                stage = cols[1].get_text(strip=True)
+                extensions.append({"name": name, "stage": stage})
+
+        self.core_extensions = extensions
+        logger.info(
+            f"Found {len(extensions)} core extensions from DuckDB documentation"
+        )
+        return extensions
+    
+    async def get_core_extension_github_info(
+        self, client: httpx.AsyncClient, ext_name: str
+    ) -> Optional[Dict]:
+        """Get GitHub repository information for core extensions."""
+        # Most core extensions are in the main DuckDB repo under extensions/
+        try:
+            commits = await self.github_client.get_repository_commits(
+                client, self.github_client.duckdb_repo, f"extensions/{ext_name}", limit=1
+            )
+
+            if commits and len(commits) > 0:
+                last_commit = commits[0]
+                return {
+                    "last_commit_date": last_commit["commit"]["committer"]["date"],
+                    "last_commit_sha": last_commit["sha"],
+                    "last_commit_message": last_commit["commit"]["message"][:100],
+                }
+        except Exception as e:
+            logger.debug(
+                f"Could not get GitHub info for core extension {ext_name}: {e}"
+            )
+
+        return None
+    
+    async def get_featured_extensions(self, client: httpx.AsyncClient) -> set[str]:
+        """Get the list of featured community extensions from the official DuckDB website."""
+        try:
+            logger.info("Fetching featured extensions list from DuckDB website")
+            featured_extensions = set()
+
+            for url in self.config.featured_extensions_pages:
+                try:
+                    html = self.web_client.fetch_cached(url, cache_hours=self.cache_hours)
+                    soup = BeautifulSoup(html, "html.parser")
+
+                    # Look for extension names in various formats
+                    for element in soup.find_all(["code", "strong", "b"]):
+                        text = element.get_text(strip=True)
+                        # Filter for extension-like names
+                        if self._is_valid_extension_name(text):
+                            featured_extensions.add(text.lower())
+
+                    # Also look for extension names in links
+                    for link in soup.find_all("a", href=True):
+                        href = link["href"]
+                        if "extension" in href.lower() or "community" in href.lower():
+                            text = link.get_text(strip=True)
+                            if self._is_valid_extension_name(text):
+                                featured_extensions.add(text.lower())
+
+                except Exception as e:
+                    logger.debug(f"Failed to fetch from {url}: {e}")
+                    continue
+
+            # If we can't find featured extensions dynamically, use the configured popular list
+            if len(featured_extensions) < 5:
+                logger.warning(
+                    "Could not detect featured extensions dynamically, using configured popular list"
+                )
+                featured_extensions = set(self.config.popular_extensions)
+
+            logger.info(f"Found {len(featured_extensions)} featured extensions")
+            return featured_extensions
+
+        except Exception as e:
+            logger.warning(f"Failed to get featured extensions: {e}")
+            return set(self.config.popular_extensions)
+    
+    def _is_valid_extension_name(self, text: str) -> bool:
+        """Check if a text string looks like a valid extension name."""
+        return (
+            text
+            and len(text) > 2
+            and len(text) < 30
+            and text.replace("_", "")
+            .replace("-", "")
+            .replace(".", "")
+            .isalnum()
+            and not text.startswith("http")
+            and "/" not in text
+            and " " not in text
+        )
+    
+    async def analyze(self) -> List[ExtensionInfo]:
+        """Analyze core extensions and return ExtensionInfo objects."""
+        extensions = self.get_core_extensions_from_docs()
+        extension_infos = []
+        
+        async with httpx.AsyncClient() as client:
+            for ext in extensions:
+                # Get GitHub info if available
+                github_info = await self.get_core_extension_github_info(client, ext["name"])
+                
+                # Create ExtensionInfo object
+                ext_info = ExtensionInfo(
+                    name=ext["name"],
+                    type="core",
+                    stage=ext["stage"],
+                    repository=f"{self.github_client.duckdb_repo}/extensions/{ext['name']}"
+                )
+                
+                # Add GitHub metadata if available
+                if github_info:
+                    ext_info.metadata = github_info
+                    ext_info.last_push = github_info.get("last_commit_date")
+                
+                extension_infos.append(ext_info)
+        
+        return extension_infos
