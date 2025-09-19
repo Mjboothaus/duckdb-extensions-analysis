@@ -150,6 +150,8 @@ Desktop.ini
 
 # Generated reports (keep latest.md, ignore timestamped ones)
 reports/duckdb_extensions_report_*.md
+reports/duckdb_extensions_report_*.csv
+reports/duckdb_extensions_report_*.xlsx
 
 # Cache directory
 .cache/

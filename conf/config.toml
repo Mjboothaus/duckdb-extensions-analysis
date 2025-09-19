@@ -1,0 +1,55 @@
+# Configuration for DuckDB Extensions Analysis Tool
+# Version is managed in pyproject.toml and loaded dynamically
+
+[github]
+api_base = "https://api.github.com"
+community_repo = "duckdb/community-extensions"
+duckdb_repo = "duckdb/duckdb"
+accept_header = "application/vnd.github.v3+json"
+
+[directories]
+cache = ".cache"
+reports = "reports"
+data = "data"
+sql = "sql"
+
+[database]
+filename = "extensions.duckdb"
+# Set to true to enable historical tracking with versioned data
+enable_history = false
+
+[caching]
+# Cache duration in hours
+default_hours = 1
+web_content_hours = 24
+
+[analysis]
+core_extensions_url = "https://duckdb.org/docs/stable/core_extensions/overview.html"
+
+# Pages to check for featured extensions (automatic detection)
+featured_extensions_pages = [
+    "https://duckdb.org/docs/stable/extensions/community_extensions.html",
+    "https://duckdb.org/community_extensions/list_of_extensions",
+    "https://duckdb.org/docs/extensions/community_extensions.html"
+]
+
+# Fallback popular extensions if dynamic detection fails
+popular_extensions = [
+    "spatial", "httpfs", "parquet", "json", "aws", "azure", "postgres",
+    "mysql", "sqlite", "bigquery", "arrow", "excel", "prql", "substrait", "h3"
+]
+
+[http]
+timeout_seconds = 10
+max_retries = 3
+retry_min_wait_seconds = 1
+retry_max_wait_seconds = 10
+
+[fallback]
+# Used if GitHub API fails to get latest DuckDB release
+duckdb_version = "v1.4.0"
+duckdb_release_date = "2025-09-16"
+
+[logging]
+level = "INFO"
+format = "{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"

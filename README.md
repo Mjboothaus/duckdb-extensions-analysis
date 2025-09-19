@@ -301,97 +301,144 @@ Sample queries available in the interactive analysis:
 
 ---
 
-## Configuration
+## Appendices
 
-The scripts use several configuration constants that can be modified:
+### Appendix A: Configuration
 
-- `GITHUB_API_BASE`: GitHub API endpoint
-- `COMMUNITY_REPO`: Community extensions repository
-- `DUCKDB_VERSION`: Current DuckDB version for core analysis
-- `HEADERS`: HTTP headers for API requests
+Configuration is now managed through TOML files for transparency and ease of modification:
 
-### GitHub Rate Limits
+#### Configuration Files
+- **`conf/config.toml`**: Main application configuration
+- **`pyproject.toml`**: Project metadata and version (linked to config)
+- **`conf/config.py`**: Python configuration loader
 
-The GitHub API has rate limits (60 requests/hour for unauthenticated requests). For better performance and to avoid rate limiting:
+#### Key Configuration Sections
+- **GitHub API**: Endpoints, repositories, headers
+- **Database**: Schema options (simple vs historical)
+- **Caching**: TTL settings for performance
+- **Analysis**: URLs and fallback data
+- **HTTP**: Timeout and retry settings
 
-1. **Recommended**: Use GitHub authentication by setting the `GITHUB_TOKEN` environment variable
-2. The scripts will automatically detect and use the token for authenticated requests (5000 requests/hour)
-3. If you hit rate limits, the scripts will show 403 errors but will continue processing
+#### GitHub Authentication
+Set the `GITHUB_TOKEN` environment variable for higher rate limits:
+- **Without token**: 60 requests/hour
+- **With token**: 5000 requests/hour (recommended)
 
-## Development
+### Appendix B: Database Schema
 
-### Code Quality
+The tool supports two schema modes via `conf/config.toml`:
 
-The project uses modern Python tooling:
+#### Historical Schema (enable_history = true)
+- **`core_extensions_history`**: Versioned core extension data
+- **`community_extensions_history`**: Versioned community extension data
+- **`analysis_runs`**: Analysis session metadata
+- **`duckdb_releases`**: DuckDB version information
+- **Views**: `core_extensions`, `community_extensions` (current data)
 
+#### Simplified Schema (enable_history = false)
+- **`core_extensions`**: Current core extension data
+- **`community_extensions`**: Current community extension data
+- **`analysis_runs`**: Basic run tracking
+- **`duckdb_releases`**: Version information
+
+### Appendix C: SQL Queries
+
+Common analysis queries are stored in `sql/queries.sql`:
+
+```sql
+-- Find recently active extensions
+SELECT name, repository, last_push_days, stars 
+FROM community_extensions 
+WHERE last_push_days < 30 AND stars > 10
+ORDER BY stars DESC;
+
+-- Extension activity summary
+SELECT 
+    CASE 
+        WHEN last_push_days <= 7 THEN 'Very Active (≤7d)'
+        WHEN last_push_days <= 30 THEN 'Active (≤30d)'
+        ELSE 'Low Activity'
+    END AS activity_level,
+    COUNT(*) as count
+FROM community_extensions 
+GROUP BY activity_level;
+```
+
+### Appendix D: Development
+
+#### Code Quality Tools
 - **ruff**: Fast Python linter and formatter
-- **mypy**: Static type checking
-- **uv**: Fast dependency resolution and environment management
+- **mypy**: Static type checking (future)
+- **uv**: Fast dependency management
 
-Run quality checks:
+#### Project Structure
+```
+duckdb-extensions-analysis/
+├── conf/                       # Configuration files
+│   ├── config.toml            # Main configuration
+│   └── config.py              # Configuration loader
+├── sql/                       # SQL files
+│   ├── create_schema.sql      # Database schema
+│   ├── create_schema_simple.sql # Simplified schema
+│   ├── queries.sql            # Common queries
+│   └── insert_data.sql        # Data insertion SQL
+├── scripts/                   # Python scripts
+│   ├── analyze_extensions.py  # Main analysis script
+│   └── query_database.py      # Database querying
+├── reports/                   # Generated reports
+├── data/                      # Database files (git-ignored)
+├── justfile                   # Simplified task runner
+├── pyproject.toml            # Project metadata
+└── README.md                 # This documentation
+```
 
+#### Development Commands
 ```bash
+# Install dependencies
+just install
+
+# Format and lint code  
 just check
-# or: just format && just lint
+
+# Show project status
+just status
+
+# Clean cache and build files
+just clean
 ```
 
-### Project Structure
+### Appendix E: Performance & Insights
 
-```
-├── scripts/
-│   ├── analyze_extensions.py   # Main analysis script with historical tracking
-│   └── query_database.py       # Database querying and analysis examples
-├── reports/                    # Generated reports in multiple formats
-│   ├── latest.md               # Always points to most recent markdown report
-│   ├── duckdb_extensions_report_*.md   # Timestamped markdown reports
-│   ├── duckdb_extensions_report_*.csv  # CSV exports
-│   └── duckdb_extensions_report_*.xlsx # Excel workbooks
-├── data/                       # Database and data files (git-ignored)
-│   └── extensions.duckdb       # Historical tracking database
-├── docs/                       # Project documentation
-│   ├── project_summary.md      # Comprehensive project overview
-│   └── historical_tracking.md  # Historical tracking documentation
-├── .cache/                     # HTTP response cache (git-ignored)
-├── justfile                    # Task runner with workflow recipes
-├── pyproject.toml             # Project configuration and dependencies
-├── uv.lock                    # Locked dependency versions
-└── README.md                  # This documentation
-```
+#### Performance Characteristics
+- **First run**: ~60-90 seconds (GitHub API calls)
+- **Cached runs**: <2 seconds (99% improvement)
+- **Cache hit rate**: >95% for repeated analysis
 
-## Dependencies
+#### Extension Categories Discovered
+1. **Core Extensions (24)**: Built into DuckDB
+2. **Featured Community (~15)**: Highlighted on DuckDB website  
+3. **All Community (80+)**: Complete repository
 
-### Runtime
-- **httpx**: Modern async HTTP client for API requests
-- **requests**: HTTP library for web content fetching
-- **beautifulsoup4**: HTML parsing for documentation scraping
-- **loguru**: Structured logging with rich formatting
-- **tenacity**: Retry logic with exponential backoff
-- **pyyaml**: YAML file parsing for extension metadata
-- **diskcache**: Intelligent caching with TTL support
-- **pandas**: Data manipulation for CSV/Excel report generation
-- **openpyxl**: Excel file writing capabilities
-- **duckdb**: Embedded database for historical tracking
+#### Activity Patterns
+- **Very Active**: Daily/weekly commits
+- **Stable**: Monthly commits, stable functionality
+- **Legacy**: 100+ days since last commit
+- **Languages**: Primarily C++, with Python, Rust, JavaScript
 
-### Development
-- **ruff**: Fast Python linting and formatting
-- **mypy**: Static type checking
-
-## Contributing
+### Appendix F: Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Make your changes and add tests if applicable
-4. Ensure code quality: `just check`
-5. Commit with a descriptive message: `git commit -m "feat: add new analysis feature"`
-6. Push to your branch: `git push origin feature/your-feature`
-7. Create a Pull Request
+3. Make your changes and ensure code quality: `just check`
+4. Commit with a descriptive message: `git commit -m "feat: add new analysis feature"`
+5. Push to your branch: `git push origin feature/your-feature`  
+6. Create a Pull Request
 
-## Licence
+### Appendix G: Licence & Acknowledgements
 
-This project is licensed under the MIT Licence. See the LICENSE file for details.
+This project is licensed under the MIT Licence.
 
-## Acknowledgements
-
+**Acknowledgements:**
 - [DuckDB](https://duckdb.org) for the excellent database engine
 - The DuckDB community for maintaining extensions
 - All contributors to this analysis tool
