@@ -17,6 +17,7 @@ from .core_analyzer import CoreExtensionAnalyzer
 from .community_analyzer import CommunityExtensionAnalyzer
 from .database_manager import DatabaseManager
 from .report_generator import ReportGenerator
+from .github_issues_tracker import GitHubIssuesTracker
 
 
 class AnalysisOrchestrator:
@@ -32,11 +33,16 @@ class AnalysisOrchestrator:
         self.community_analyzer = CommunityExtensionAnalyzer(config, self.github_client, cache_hours)
         self.database_manager = DatabaseManager(config)
         self.report_generator = ReportGenerator(config)
+        self.github_issues_tracker = GitHubIssuesTracker(self.github_client, cache_hours)
     
-    async def analyze_core_extensions(self) -> List[ExtensionInfo]:
+    async def analyze_core_extensions(self, duckdb_version: Optional[str] = None) -> List[ExtensionInfo]:
         """Analyze core extensions only."""
         logger.info("Starting core extensions analysis")
-        return await self.core_analyzer.analyze()
+        if duckdb_version:
+            # Use enhanced analysis with platform availability checking
+            return await self.core_analyzer.analyze_with_platform_availability(duckdb_version)
+        else:
+            return await self.core_analyzer.analyze()
     
     async def analyze_community_extensions(self, featured_extensions: Optional[set[str]] = None) -> List[ExtensionInfo]:
         """Analyze community extensions only."""
@@ -61,11 +67,18 @@ class AnalysisOrchestrator:
             featured_extensions = await self.core_analyzer.get_featured_extensions(client)
             logger.info(f"Found {len(featured_extensions)} featured extensions")
             
-            # Analyze core extensions
-            core_extensions = await self.analyze_core_extensions()
+            # Analyze core extensions with platform availability checking
+            core_extensions = await self.analyze_core_extensions(duckdb_version)
             
             # Analyze community extensions
             community_extensions = await self.analyze_community_extensions(featured_extensions)
+            
+            # Analyze GitHub issues for all extensions
+            all_extension_names = [ext.name for ext in core_extensions + community_extensions]
+            github_issues = await self.analyze_github_issues(all_extension_names)
+            
+            # Run installation tests for a subset of extensions (prioritize core for database mode)
+            installation_results = await self.run_installation_tests(core_extensions, community_extensions)
             
             # Create analysis result
             analysis_result = AnalysisResult(
@@ -75,6 +88,10 @@ class AnalysisOrchestrator:
                 duckdb_version=duckdb_version,
                 duckdb_release_date=duckdb_release_date
             )
+            
+            # Add GitHub issues and installation results to metadata
+            analysis_result.github_issues = github_issues
+            analysis_result.installation_results = installation_results
             
             return analysis_result
     
@@ -118,12 +135,27 @@ class AnalysisOrchestrator:
     async def run_analysis_mode(self, mode: str = "full") -> AnalysisResult:
         """Run analysis in the specified mode."""
         if mode == "core":
-            core_extensions = await self.analyze_core_extensions()
-            return AnalysisResult(
+            # Get DuckDB version for platform checking
+            async with httpx.AsyncClient() as client:
+                duckdb_version, duckdb_release_date = await self.github_client.get_latest_duckdb_release(client)
+                
+            core_extensions = await self.analyze_core_extensions(duckdb_version)
+            
+            # Run installation tests for core extensions
+            installation_results = await self.run_installation_tests(core_extensions, [])
+            
+            analysis_result = AnalysisResult(
                 core_extensions=core_extensions,
                 community_extensions=[],
-                featured_extensions=set()
+                featured_extensions=set(),
+                duckdb_version=duckdb_version,
+                duckdb_release_date=duckdb_release_date
             )
+            
+            # Add installation results to metadata
+            analysis_result.installation_results = installation_results
+            
+            return analysis_result
         
         elif mode == "community":
             community_extensions = await self.analyze_community_extensions()
@@ -138,6 +170,54 @@ class AnalysisOrchestrator:
         
         else:
             raise ValueError(f"Unknown analysis mode: {mode}")
+    
+    async def analyze_github_issues(self, extension_names: List[str]) -> List[Any]:
+        """Analyze GitHub issues related to extensions."""
+        logger.info(f"Analyzing GitHub issues for {len(extension_names)} extensions")
+        
+        try:
+            issues = await self.github_issues_tracker.fetch_extension_issues(
+                extension_names=extension_names,
+                days_back=90,  # Look back 90 days
+                include_closed=True
+            )
+            return issues
+        except Exception as e:
+            logger.warning(f"Failed to fetch GitHub issues: {e}")
+            return []
+    
+    async def run_installation_tests(self, core_extensions: List, community_extensions: List) -> List[Any]:
+        """Run installation tests for selected extensions."""
+        from .installation_tester import InstallationTester
+        
+        logger.info("Starting installation testing...")
+        installation_tester = InstallationTester()
+        
+        # Select extensions to test: prioritize core extensions and featured community extensions
+        extensions_to_test = set()
+        
+        # Add all core extensions
+        extensions_to_test.update(ext.name for ext in core_extensions)
+        
+        # Add featured community extensions
+        for ext in community_extensions:
+            if getattr(ext, 'featured', False):
+                extensions_to_test.add(ext.name)
+        
+        # Limit the number of tests to avoid excessive runtime
+        extensions_to_test = list(extensions_to_test)[:25]
+        
+        logger.info(f"Running installation tests for {len(extensions_to_test)} extensions: {extensions_to_test}")
+        
+        try:
+            installation_results = await installation_tester.test_extensions_batch(
+                extensions_to_test
+            )
+            logger.info(f"Installation testing completed. {len(installation_results)} results.")
+            return installation_results
+        except Exception as e:
+            logger.warning(f"Installation testing failed: {e}")
+            return []
     
     async def run_report_generation(self, formats: List[str] = None) -> Dict[str, str]:
         """Generate reports from cached analysis data."""

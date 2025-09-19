@@ -22,6 +22,10 @@ class ExtensionInfo:
     featured: bool = False
     links: Optional[Dict[str, str]] = None
     metadata: Optional[Dict[str, Any]] = None
+    # Platform availability information (for core extensions)
+    platform_availability: Optional[Dict[str, Dict]] = None  # platform -> {available, date, error}
+    availability_date: Optional[datetime] = None  # Earliest availability date across platforms
+    available_platforms: Optional[List[str]] = None  # List of platforms where extension is available
 
 
 @dataclass
@@ -33,6 +37,8 @@ class AnalysisResult:
     duckdb_version: Optional[str] = None
     duckdb_release_date: Optional[datetime] = None
     analysis_timestamp: datetime = None
+    github_issues: Optional[List[Any]] = None  # GitHub issues related to extensions
+    installation_results: Optional[List[Any]] = None  # Installation test results
     
     def __post_init__(self):
         if self.analysis_timestamp is None:

@@ -27,45 +27,49 @@ setup-token:
 
 # Run analysis (options: core, community, full)
 analyze mode="full" *flags="":
-    uv run python scripts/analyze_extensions.py {{mode}} {{flags}}
+    uv run scripts/analyze_extensions.py {{mode}} {{flags}}
 
 # Run analysis with fresh data (no cache)
 analyze-fresh mode="full":
-    uv run python scripts/analyze_extensions.py {{mode}} --no-cache
+    uv run scripts/analyze_extensions.py {{mode}} --no-cache
 
 # === REPORTING COMMANDS ===
 
 # Generate reports (supports --csv --excel flags)
 report *flags="":
-    uv run python scripts/analyze_extensions.py report {{flags}}
+    uv run scripts/analyze_extensions.py report {{flags}}
 
 # Generate all report formats
 report-all:
-    uv run python scripts/analyze_extensions.py report --csv --excel
+    uv run scripts/analyze_extensions.py report --csv --excel
+
+# Generate all report formats with fresh data (no cache)
+report-all-fresh:
+    uv run scripts/analyze_extensions.py report --csv --excel --no-cache
 
 # === DATABASE COMMANDS ===
 
 # Save analysis to DuckDB database
 database *flags="":
-    uv run python scripts/analyze_extensions.py database {{flags}}
+    uv run scripts/analyze_extensions.py database {{flags}}
 
 # Query the extensions database
 query:
-    uv run python scripts/query_database.py
+    uv run scripts/query_database.py
 
 # Back-fill database with historical data (demo)
 backfill:
-    uv run python scripts/query_database.py backfill
+    uv run scripts/query_database.py backfill
 
 # === CACHE MANAGEMENT ===
 
 # Show cache information
 cache-info:
-    uv run python scripts/analyze_extensions.py report --cache-info
+    uv run scripts/analyze_extensions.py report --cache-info
 
 # Clear cache
 cache-clear:
-    uv run python scripts/analyze_extensions.py full --clear-cache
+    uv run scripts/analyze_extensions.py full --clear-cache
 
 # === DEVELOPMENT COMMANDS ===
 

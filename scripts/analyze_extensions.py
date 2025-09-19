@@ -121,6 +121,11 @@ Examples:
         if args.mode in ["community", "core", "full"]:
             # Run analysis
             analysis_result = await orchestrator.run_analysis_mode(args.mode)
+            
+            # Save to database automatically for all analysis modes
+            await orchestrator.save_to_database(analysis_result)
+            logger.info(f"Analysis saved to database: {config.database_path}")
+            
             orchestrator.print_analysis_summary(analysis_result)
             
         elif args.mode == "report":

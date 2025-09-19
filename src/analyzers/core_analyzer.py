@@ -6,7 +6,8 @@ Handles analysis of DuckDB core extensions from official documentation.
 
 import asyncio
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
+import platform
 
 import httpx
 import requests
@@ -75,6 +76,16 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         self.github_client = github_client
         self.web_client = WebContentClient(config)
         self.core_extensions: List[Dict] = []
+        self.extensions_base_url = "https://extensions.duckdb.org"
+        # Platform identifiers used by DuckDB extension repository
+        self.platforms = {
+            'linux_amd64': 'Linux x64',
+            'linux_arm64': 'Linux ARM64', 
+            'osx_amd64': 'macOS x64',
+            'osx_arm64': 'macOS ARM64',
+            'windows_amd64': 'Windows x64'
+        }
+        self.current_platform = self._detect_current_platform()
     
     def get_core_extensions_from_docs(self) -> List[Dict]:
         """Fetch core extensions from DuckDB documentation."""
@@ -212,6 +223,149 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                 if github_info:
                     ext_info.metadata = github_info
                     ext_info.last_push = github_info.get("last_commit_date")
+                
+                extension_infos.append(ext_info)
+        
+        return extension_infos
+    
+    def _detect_current_platform(self) -> str:
+        """Detect the current platform for DuckDB extension format."""
+        system = platform.system().lower()
+        machine = platform.machine().lower()
+        
+        if system == 'linux':
+            if machine in ['x86_64', 'amd64']:
+                return 'linux_amd64'
+            elif machine in ['aarch64', 'arm64']:
+                return 'linux_arm64'
+        elif system == 'darwin':
+            if machine in ['x86_64', 'amd64']:
+                return 'osx_amd64' 
+            elif machine in ['arm64']:
+                return 'osx_arm64'
+        elif system == 'windows':
+            if machine in ['x86_64', 'amd64']:
+                return 'windows_amd64'
+        
+        return 'unknown'
+    
+    async def _check_extension_availability(self, extension_name: str, version: str, platform: str) -> Tuple[bool, Optional[datetime], Optional[str]]:
+        """Check if an extension is available for download on a specific platform.
+        
+        Returns:
+            (is_available, availability_date, error_message)
+        """
+        url = f"{self.extensions_base_url}/{version}/{platform}/{extension_name}.duckdb_extension.gz"
+        
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                # First check if file exists
+                response = await client.head(url)
+                
+                if response.status_code == 200:
+                    # Try to get last-modified date as proxy for availability date
+                    last_modified = response.headers.get('last-modified')
+                    availability_date = None
+                    
+                    if last_modified:
+                        try:
+                            from email.utils import parsedate_to_datetime
+                            availability_date = parsedate_to_datetime(last_modified)
+                        except Exception as e:
+                            logger.debug(f"Could not parse last-modified date for {extension_name}: {e}")
+                    
+                    # Check file size as basic validation
+                    content_length = response.headers.get('content-length')
+                    if content_length and int(content_length) > 1000:  # Reasonable minimum size
+                        return True, availability_date, None
+                    else:
+                        return False, None, f"Extension file too small ({content_length} bytes)"
+                        
+                elif response.status_code == 404:
+                    return False, None, "Extension not found"
+                else:
+                    return False, None, f"HTTP {response.status_code}"
+                    
+        except Exception as e:
+            logger.debug(f"Error checking {extension_name} on {platform}: {e}")
+            return False, None, str(e)
+    
+    async def _check_extension_across_platforms(self, extension_name: str, version: str) -> Dict[str, Dict]:
+        """Check extension availability across all platforms.
+        
+        Returns:
+            Dict mapping platform -> {available, date, error, platform_name}
+        """
+        platform_results = {}
+        
+        # Check all platforms concurrently
+        tasks = []
+        for platform_id in self.platforms.keys():
+            task = self._check_extension_availability(extension_name, version, platform_id)
+            tasks.append((platform_id, task))
+        
+        results = await asyncio.gather(*[task for _, task in tasks], return_exceptions=True)
+        
+        for (platform_id, _), result in zip(tasks, results):
+            if isinstance(result, Exception):
+                platform_results[platform_id] = {
+                    'available': False,
+                    'date': None,
+                    'error': str(result),
+                    'platform_name': self.platforms[platform_id]
+                }
+            else:
+                available, date, error = result
+                platform_results[platform_id] = {
+                    'available': available,
+                    'date': date,
+                    'error': error,
+                    'platform_name': self.platforms[platform_id]
+                }
+        
+        return platform_results
+    
+    async def analyze_with_platform_availability(self, duckdb_version: str) -> List[ExtensionInfo]:
+        """Analyze core extensions with detailed platform availability information."""
+        extensions = self.get_core_extensions_from_docs()
+        extension_infos = []
+        
+        async with httpx.AsyncClient() as client:
+            for ext in extensions:
+                # Get GitHub info if available
+                github_info = await self.get_core_extension_github_info(client, ext["name"])
+                
+                # Check platform availability
+                platform_availability = await self._check_extension_across_platforms(ext["name"], duckdb_version)
+                
+                # Create ExtensionInfo object
+                ext_info = ExtensionInfo(
+                    name=ext["name"],
+                    type="core",
+                    stage=ext["stage"],
+                    repository=f"{self.github_client.duckdb_repo}/extensions/{ext['name']}"
+                )
+                
+                # Add GitHub metadata if available
+                if github_info:
+                    ext_info.metadata = github_info
+                    ext_info.last_push = github_info.get("last_commit_date")
+                
+                # Add platform availability information
+                ext_info.platform_availability = platform_availability
+                
+                # Determine overall availability status and earliest date
+                available_platforms = [p for p, data in platform_availability.items() if data['available']]
+                if available_platforms:
+                    # Find earliest availability date across platforms
+                    earliest_date = None
+                    for platform_data in platform_availability.values():
+                        if platform_data['available'] and platform_data['date']:
+                            if earliest_date is None or platform_data['date'] < earliest_date:
+                                earliest_date = platform_data['date']
+                    
+                    ext_info.availability_date = earliest_date
+                    ext_info.available_platforms = available_platforms
                 
                 extension_infos.append(ext_info)
         

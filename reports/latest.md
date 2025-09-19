@@ -1,8 +1,27 @@
 # DuckDB Extensions Status Report
 
-Generated on: **2025-09-19 14:32:33 UTC**
+Generated on: **2025-09-19 15:18:46 UTC**
 
 This report provides a comprehensive analysis of DuckDB extensions, including both core extensions (built into DuckDB) and community-contributed extensions.
+
+## Data Sources
+
+This analysis is based on the following authoritative sources:
+
+### Core Extensions
+- **Overview**: [DuckDB Extensions](https://duckdb.org/docs/stable/extensions/overview.html)
+- **Core Extensions**: [Core Extensions Documentation](https://duckdb.org/docs/stable/core_extensions/overview.html)
+- **Versioning**: [Extension Versioning](https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html)
+- **Repository**: [duckdb/duckdb](https://github.com/duckdb/duckdb)
+- **Releases**: [GitHub Releases](https://github.com/duckdb/duckdb/releases)
+
+### Community Extensions
+- **Registry**: [Community Extensions Repository](https://github.com/duckdb/community-extensions)
+- **Directory**: [Extensions Folder](https://github.com/duckdb/community-extensions/tree/main/extensions)
+- **Featured**: [Community Extensions Page](https://duckdb.org/community_extensions/)
+- **Individual Repositories**: GitHub repositories linked in the extensions directory
+
+---
 
 ## Core Extensions
 
@@ -51,13 +70,13 @@ DuckDB core extensions from version **v1.4.0** (released 3 days ago).
 | **bigquery** | [hafenkran/duckdb-bigquery](https://github.com/hafenkran/duckdb-bigquery) | ✅ Ongoing | 1 days ago | 130 | C++ | Integrates DuckDB with Google BigQuery, allowing d... |
 | **file_dialog** | [yutannihilation/duckdb-ext-file-dialog](https://github.com/yutannihilation/duckdb-ext-file-dialog) | ✅ Ongoing | 1 days ago | 14 | Rust | A DuckDB extension to choose file interactively us... |
 | **flockmtl** | [dais-polymtl/flock](https://github.com/dais-polymtl/flock) | ✅ Ongoing | 1 days ago | 268 | C++ | FlockMTL: DuckDB extension for multimodal querying... |
-| **magic** | [carlopi/duckdb_magic](https://github.com/carlopi/duckdb_magic) | ✅ Ongoing | 1 days ago | 7 | C++ | Auto-detect file types via `libmagic` (`file` util... |
 | **nanoarrow** | [paleolimbot/duckdb-nanoarrow](https://github.com/paleolimbot/duckdb-nanoarrow) | ✅ Ongoing | 1 days ago | 44 | C++ | DuckDB extension: nanoarrow by paleolimbot |
 | **rapidfuzz** | [Query-farm/rapidfuzz](https://github.com/Query-farm/rapidfuzz) | ✅ Ongoing | 1 days ago | 3 | C++ | DuckDB extension: rapidfuzz |
 | **rusty_quack** | [duckdb/extension-template-rs](https://github.com/duckdb/extension-template-rs) | ✅ Ongoing | 1 days ago | 79 | Rust | (Experimental) Template for Rust-based DuckDB exte... |
 | **st_read_multi** | [yutannihilation/duckdb-ext-st-read-multi](https://github.com/yutannihilation/duckdb-ext-st-read-multi) | ✅ Ongoing | 1 days ago | 3 | Rust | A DuckDB extension to import multiple geospatial f... |
 | **h3** | [isaacbrodsky/h3-duckdb](https://github.com/isaacbrodsky/h3-duckdb) | ✅ Ongoing | 2 days ago | 220 | C++ | Bindings for H3 to DuckDB |
 | **lua** | [isaacbrodsky/duckdb-lua](https://github.com/isaacbrodsky/duckdb-lua) | ✅ Ongoing | 2 days ago | 3 | C++ | DuckDB extension to evaluate Lua expressions. |
+| **magic** | [carlopi/duckdb_magic](https://github.com/carlopi/duckdb_magic) | ✅ Ongoing | 2 days ago | 7 | C++ | Auto-detect file types via `libmagic` (`file` util... |
 | **quack** | [duckdb/extension-template](https://github.com/duckdb/extension-template) | ✅ Ongoing | 2 days ago | 221 | Python | Template for DuckDB extensions to help you develop... |
 | **vortex** | [vortex-data/duckdb-vortex](https://github.com/vortex-data/duckdb-vortex) | ✅ Ongoing | 2 days ago | 24 | Shell | DuckDB extension allowing reading/writing of vorte... |
 | **bitfilters** | [Query-farm/bitfilters](https://github.com/Query-farm/bitfilters) | ✅ Ongoing | 3 days ago | 2 | C++ | A high-performance DuckDB extension providing prob... |
@@ -112,7 +131,7 @@ DuckDB core extensions from version **v1.4.0** (released 3 days ago).
 | **scrooge** | [pdet/Scrooge-McDuck](https://github.com/pdet/Scrooge-McDuck) | ✅ Ongoing | 158 days ago | 149 | C++ | DuckDB extension: scrooge by pdet |
 | **wireduck** | [hyehudai/wireduck](https://github.com/hyehudai/wireduck) | ✅ Ongoing | 160 days ago | 45 | C++ | Duckdb extension to read pcap files |
 | **psql** | [ywelsch/duckdb-psql](https://github.com/ywelsch/duckdb-psql) | ✅ Ongoing | 165 days ago | 92 | C++ | A piped SQL for DuckDB |
-| **blockduck** | [luohaha/BlockDuck](https://github.com/luohaha/BlockDuck) | ✅ Ongoing | 176 days ago | 8 | C++ | Live SQL Queries on Blockchain |
+| **blockduck** | [luohaha/BlockDuck](https://github.com/luohaha/BlockDuck) | ✅ Ongoing | 177 days ago | 8 | C++ | Live SQL Queries on Blockchain |
 | **prql** | [ywelsch/duckdb-prql](https://github.com/ywelsch/duckdb-prql) | ✅ Ongoing | 186 days ago | 297 | C++ | PRQL as a DuckDB extension |
 | **hostfs** | [gropaul/hostFS](https://github.com/gropaul/hostFS) | ✅ Ongoing | 192 days ago | 23 | C++ | DuckDB extension: hostfs by gropaul |
 | **open_prompt** | [Query-farm/duckdb-extension-openprompt](https://github.com/Query-farm/duckdb-extension-openprompt) | ✅ Ongoing | 253 days ago | 50 | C++ | DuckDB Community Extension to prompt LLMs from SQL |
@@ -128,6 +147,7 @@ DuckDB core extensions from version **v1.4.0** (released 3 days ago).
 - **Active Extensions**: 80 (100.0%)
 - **Discontinued Extensions**: 0 (0.0%)
 - **Extensions with Issues**: 0 (0.0%)
+
 
 ## Methodology
 

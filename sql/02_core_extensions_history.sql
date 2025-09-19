@@ -10,5 +10,8 @@ CREATE TABLE IF NOT EXISTS core_extensions_history (
     last_commit_message VARCHAR,
     repository VARCHAR,
     duckdb_version VARCHAR,
+    platform_availability JSON, -- Platform availability info
+    earliest_availability_date TIMESTAMP, -- Earliest availability across platforms
+    available_platforms VARCHAR[], -- List of available platforms
     analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
