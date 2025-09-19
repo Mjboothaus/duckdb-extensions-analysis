@@ -20,6 +20,17 @@ class ReportGenerator(BaseReportGenerator):
     def __init__(self, config):
         super().__init__(config)
         self.reports_dir = config.reports_dir
+        self.templates_dir = Path(config.project_root) / "templates"
+    
+    def _load_template(self, template_name: str) -> str:
+        """Load template content from file."""
+        template_file = self.templates_dir / template_name
+        if not template_file.exists():
+            logger.warning(f"Template file not found: {template_file}")
+            return ""
+        
+        with open(template_file, 'r', encoding='utf-8') as f:
+            return f.read().strip()
     
     async def generate(self, analysis_result: AnalysisResult, format_type: str = "markdown") -> str:
         """Generate a report in the specified format."""
@@ -43,15 +54,17 @@ class ReportGenerator(BaseReportGenerator):
         # Calculate days since DuckDB release
         duckdb_lag_days = (timestamp.replace(tzinfo=None) - duckdb_release_date.replace(tzinfo=None)).days if duckdb_release_date else 0
         
-        # Report header
+        # Report header with template content
+        header_template = self._load_template("report_header.md")
         report = [
             "# DuckDB Extensions Status Report",
             "",
             f"Generated on: **{timestamp.strftime('%Y-%m-%d %H:%M:%S UTC')}**",
             "",
-            "This report provides a comprehensive analysis of DuckDB extensions, including both core extensions (built into DuckDB) and community-contributed extensions.",
-            "",
         ]
+        
+        if header_template:
+            report.extend([header_template, ""])
         
         # Core extensions section
         report.extend([
@@ -120,21 +133,10 @@ class ReportGenerator(BaseReportGenerator):
             "",
         ])
         
-        # Add methodology section
-        report.extend([
-            "## Methodology",
-            "",
-            "- **Core Extensions**: Information gathered from the official DuckDB documentation",
-            "- **Community Extensions**: Information gathered from the `duckdb/community-extensions` repository and individual extension repositories",
-            "- **Status Determination**:",
-            "  - ✅ **Ongoing**: Repository is active and not archived",
-            "  - 🔴 **Discontinued**: Repository is archived or marked as discontinued",
-            "  - ❌ **No Repo/Error**: Repository information unavailable or inaccessible",
-            "- **Activity Metrics**: Based on the last push/commit date to the repository",
-            "- **Caching**: API responses are cached to improve performance and reduce rate limiting",
-            "",
-            "Report generated using the [duckdb-extensions-analysis](https://github.com/Mjboothaus/duckdb-extensions-analysis) tool.",
-        ])
+        # Add methodology section from template
+        methodology_template = self._load_template("report_methodology.md")
+        if methodology_template:
+            report.extend(["", methodology_template])
         
         return "\n".join(report)
     
