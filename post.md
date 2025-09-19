@@ -1,72 +1,87 @@
 +++ 
-title = "Navigating DuckDB Extension Updates: A Lesson from Upgrading" 
+title = "When DuckDB Extensions Don't Keep Up: A Practical Guide to Version Management" 
 date = "2025-10-18" 
 
 [taxonomies] 
-tags=["DuckBD", "Extensions", "Upgrading"]
+tags=["DuckDB", "Extensions", "Version Management", "Data Engineering"]
 
 [extra]
 comment = true
 +++
 
-## Executive Summary
-
-Upgrading to a new [DuckDB](https://duckdb.org) version unlocks powerful data processing capabilities (and indeed an awesome new database encryption feature and the prime motivation for upgrading), but unexpected delays in extension availability, like the excellent web-based usee interface being unavailable, can disrupt critical analytics workflows. 
-
-My experience upgrading and facing this issue reminded me of a key lesson: extensions, whether core (developed by the DuckDB team) or community (third-party add-ons), may not be ready immediately, a common challenge in extensible software ecosystems. 
-
-This matters for organisations because incompatible extensions can delay projects, increase costs, or require rollbacks, impacting data-driven decision-making. This post provides straightforward tools to check installed extensions, verify their online status, safely test new versions, and revert to stable ones if needed.
+*Ever upgraded a database only to find your favourite features missing? Here's what I learned about managing DuckDB extension compatibility—and how to avoid getting stuck.*
 
 ---
 
-DuckDB’s rapid evolution is a boon for data engineers, with `v1.4.0`, released on 16 September 2025, delivering exciting new features. However, a recent experience taught me a valuable lesson: extensions don’t always update instantly with new releases. After upgrading to `v1.4.0`, I assumed the web-based `ui` extension would be available, only to find it missing on macOS. When I tried to downgrade back to my previous version using Homebrew, it wasn’t straightforward, though alternatives exist. 
+Last month, I eagerly upgraded to [DuckDB](https://duckdb.org) v1.4.0 for its new database encryption feature. Everything seemed perfect until I tried loading the `ui` extension—DuckDB's excellent web-based interface. 
 
-This prompted me to investigate the status of DuckDB’s core and community extensions for versions `v1.0.0` and later. In this post, I’ll share insights on extension availability, highlight why you need to be judicious when choosing a DuckDB version, and provide tools to check your local setup and downgrade if needed. My aim is to help you plan your projects effectively, not to unnecessarily critique this fantastic tool.
+**Error**: Extension not available.
 
-## Why Extensions Require Careful Planning
+Worse yet, downgrading via Homebrew proved more complex than expected. This experience taught me an important lesson about managing extensible software: **not all extensions are ready on day one of a new release**.
 
-DuckDB extensions enhance its functionality, from querying JSON with the [`json`](https://duckdb.org/docs/stable/data/json/overview.html) extension to visualising data via the `ui` or performing geospatial analysis with [`h3`](https://duckdb.org/community_extensions/extensions/h3.html). Core extensions are maintained by the DuckDB team, while community extensions are third-party contributions hosted at https://github.com/duckdb/community-extensions. 
+If you work with DuckDB extensions—whether for geospatial analysis, cloud connectivity, or data visualisation—this post will help you avoid similar surprises and manage version compatibility effectively.
 
-Like Python’s packages or R’s libraries, extensions in such ecosystems may lag behind core releases as maintainers ensure compatibility. My assumption that the `ui` extension would be ready for `v1.4.0` was a reminder to verify availability before upgrading, especially for critical components. If issues arise post-upgrade, downgrading can be tricky with [Homebrew](https://brew.sh), but there are workarounds (see Appendix C).
+## The Extension Compatibility Challenge
 
-## Core Extensions: Usually Ready, with Exceptions
+DuckDB's power lies partly in its extensions—add-ons that enable everything from JSON querying to geospatial analysis. There are two types:
 
-Core extensions, distributed via https://extensions.duckdb.org, are compiled alongside DuckDB releases. The official documentation (https://duckdb.org/docs/stable/core_extensions/overview.html) lists them as **stable**, except for the `arrow` extension, deprecated in v1.3.0 and replaced by the community-maintained `nanoarrow`. From `v1.0.0` (June 2024) to `v1.4.0` (September 2025), core extensions typically have a **zero-day lag**, available on release day.
+- **Core extensions**: Maintained by the DuckDB team (usually available immediately)
+- **Community extensions**: Third-party contributions (may take days or weeks to update)
 
-However, my upgrade to `v1.4.0` hit a snag: the `ui` extension, first introduced in `v1.2.1` (12 March 2025), isn’t available on macOS (`osx_arm64` and `osx_amd64`) as of 18 September 2025. Running `INSTALL ui;` in DuckDB `v1.4.0` fails, indicating a delay of **at least two days**, likely due to a build issue (although this extension is heavily sponsored by the excellent team at [MotherDuck](https://motherduck.com)). This was unexpected, as the `ui` was available immediately for `v1.2.1` and `v1.3.0`, and other core extensions like `json` and `parquet` are consistently ready. Other platforms (e.g., Linux, Windows) may also be affected, but you can check using tools in the appendices. This highlights the wisdom of confirming extension availability before upgrading, a common consideration in add-on ecosystems.
+Like any extensible system (think Python packages or browser add-ons), extensions need time to catch up with new releases. The problem? It's easy to assume everything will "just work" after upgrading.
 
-## Community Extensions: Active with Minimal Delays
+*For the technical details on extension versioning, see the [DuckDB versioning documentation](https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html).*
 
-Community extensions, distributed via https://community-extensions.duckdb.org, are built through continuous integration (CI). If no code changes are needed, they’re available within hours (0-day lag). If updates are required, lags may reach 7–15 days, depending on maintainers. An extension is discontinued if its GitHub repository is archived or removed from https://duckdb.org/community_extensions/list_of_extensions.html.
+## What I Discovered: The Extension Lag Reality
 
-The current 14 community extensions include `nanoarrow`, `bigquery`, `h3`, `prql`, and others. Using a Python script (Appendix A), I checked their statuses:
-- **h3** (geospatial indexing): Aligns with DuckDB releases, with `v1.4.0` available on 16 September 2025 (0-day lag). Bugfix releases (e.g., `v1.3.1`, 26 days after `v1.3.0`) address issues, not compatibility.
-- **prql** (query language): No tagged releases, but CI rebuilds for `v1.0.0+` ensure availability within zero to a few days, with potential delays for compatibility fixes.
+**Core Extensions** (maintained by DuckDB team) usually have zero-day availability. These include essentials like `json`, `parquet`, and `httpfs`. However, my `ui` extension experience proved that even core extensions can have delays—particularly on specific platforms like macOS.
 
-The script (below) confirmed all 14 extensions are **ongoing**, with no archived repositories and recent activity (commits in 2025), indicating active maintenance.
+**Community Extensions** (80+ third-party extensions) typically lag 0-15 days behind new releases, depending on maintainer response time. The good news? I found all community extensions are actively maintained with recent activity in 2024-2025.
 
-## Investigating Your Local DuckDB Setup
+## Practical Solutions: Three Essential Strategies
 
-Before upgrading, it’s wise to check which extensions are installed in your local DuckDB instance and their versions. Appendix B provides SQL queries to list installed extensions and their versions, helping you assess compatibility with a new DuckDB version. This is especially useful if you rely on specific extensions like `ui` or `h3`.
+After this experience, I developed a simple workflow to avoid extension-related upgrade surprises:
 
-## Downgrading If Needed
+### 1. Check Before You Upgrade
+Before upgrading DuckDB, verify that critical extensions are available:
+```sql
+INSTALL extension_name;  -- Test if it works
+```
 
-If an upgrade reveals extension issues (like my `ui` experience), you may want to revert to a previous version. Homebrew may support direct downgrades (depending on the package), but you can use `brew extract` to install older formulas. Appendix C details steps for downgrading via Homebrew and alternatives, such as downloading binaries from DuckDB’s GitHub releases. These pathways ensure you can roll back without much hassle.
+### 2. Test in Isolation
+Use Python virtual environments to test new DuckDB versions without affecting your main setup (see Appendix D for detailed steps).
 
-## Choosing the Right Version
+### 3. Have a Rollback Plan
+Know how to downgrade if needed. While Homebrew doesn't have a simple `downgrade` command, you can use `brew extract` or download binaries directly (detailed in Appendix C).
 
-DuckDB’s extension ecosystem is robust, but like any tool with add-ons, version selection requires care. Core extensions are usually available immediately, though the `ui` delay in `v1.4.0` on macOS shows exceptions can occur. Community extensions typically keep pace well, with lags of 0–15 days, and none are discontinued to date. To make informed choices:
-- Verify core extension statuses at https://duckdb.org/docs/stable/core_extensions/overview.html. There are a number of examples of "Experimental" extensions on this page.
-- Test extension availability with `INSTALL <extension>;` or the script in Appendix A.
-- Check installed extensions in your local instance using Appendix B.
-- If needed, downgrade using Appendix C.
-- Monitor updates for delayed extensions (e.g., `ui`) by retrying installation or checking availability.
+## The Bigger Picture: Extension Ecosystem Health
 
-## Conclusion
+To better understand DuckDB's extension landscape, I built a tool that monitors both core and community extensions (available on [GitHub](https://github.com/databooth/duckdb-extensions-analysis)). Key findings:
 
-My experience upgrading to `v1.4.0` and finding the `ui` extension unavailable, followed by the non-trivial Homebrew downgrade, was a reminder to approach version upgrades thoughtfully. DuckDB’s extensions are a strength, but their availability isn’t guaranteed on release day, a common trait in add-on ecosystems. By checking statuses, local setups, and having downgrade options, you can avoid surprises. Use the tools in the appendices to explore extension statuses and your DuckDB instance. 
+- **24 core extensions** with generally excellent availability
+- **80+ community extensions** with active maintenance 
+- **Zero discontinued extensions** (all repositories remain active)
+- **Typical lag**: 0-15 days for community extensions, usually 0 days for core
 
-Have you faced similar issues with extensions or downgrades?
+This analysis reinforced that DuckDB's extension ecosystem is healthy and well-maintained—my `ui` experience was an exception, not the rule.
+
+## Key Takeaways
+
+DuckDB's rapid development is impressive, but extension compatibility requires some planning:
+
+1. **Test critical extensions** before upgrading production systems
+2. **Use virtual environments** to safely test new versions
+3. **Have a rollback strategy** ready (especially important with Homebrew)
+4. **Monitor extension status** for delayed availability
+
+The extension ecosystem is robust and well-maintained—delays like my `ui` experience are uncommon but worth preparing for.
+
+**Resources:**
+- Extension monitoring tool: [github.com/databooth/duckdb-extensions-analysis](https://github.com/databooth/duckdb-extensions-analysis)
+- Check your local setup: Use the SQL queries in Appendix B
+- Safe testing: Virtual environment setup in Appendix D
+
+Have you encountered similar extension compatibility issues? I'd love to hear about your experiences in the comments.
 
 ---
 
@@ -74,7 +89,7 @@ Have you faced similar issues with extensions or downgrades?
 
 This Python script checks the status of community extensions by querying the GitHub API. It fetches the extension list, reads `metadata.toml` files for source repositories, and checks if each is archived (discontinued) or when it was last updated. Install dependencies: `pip install httpx loguru tenacity toml`. Save as `check_duckdb_extensions.py` and run with `python check_duckdb_extensions.py`. If you hit GitHub’s rate limit (60 requests/hour unauthenticated), generate a personal access token at https://github.com/settings/tokens and add it to `HEADERS` as `{"Authorization": "token YOUR_TOKEN"}`.
 
-TODO: Add link to code in GitHub repo
+**[View the full script on GitHub →](https://github.com/databooth/duckdb-extensions-analysis/blob/main/scripts/analyze_extensions.py)**
 
 **Inserting Results**: Run the script and copy the `INFO` lines (e.g., “h3 (Repo: isaacbrodsky/h3-duckdb): Ongoing | Last push: 2025-09-16T00:00:00 (2 days ago)”) into the post under “Community Extensions.” For example:
 
@@ -229,6 +244,6 @@ You can set up a Python virtual environment (venv) to install and test a specifi
 This script assesses the "currency" (status and recency) of core and community extensions. Core extensions are pulled from DuckDB docs (status like "stable" and recency tied to the latest DuckDB release). Community extensions are checked via GitHub API. Install dependencies: `pip install httpx loguru tenacity toml beautifulsoup4 requests`. Save as `check_duckdb_extensions_full.py` and run with `python check_duckdb_extensions_full.py`. If you hit GitHub’s rate limit, add a token to `HEADERS`.
 
 
-TODO: Add link to code in GitHub repo
+**[View the complete analysis tool on GitHub →](https://github.com/databooth/duckdb-extensions-analysis)**
 
 **Inserting Results**: Run the script and copy the `INFO` lines into the post. For example, under “Core Extensions” or “Community Extensions,” add the relevant output or a summary. The script first logs core extensions (e.g., "json (Core, Stage: stable): Ongoing | Last updated: 2025-09-16 00:00:00 (2 days ago in v1.4.0)"), then community ones. Update `DUCKDB_VERSION` and `DUCKDB_RELEASE_DATE` for new releases.
