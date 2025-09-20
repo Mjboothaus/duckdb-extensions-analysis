@@ -86,6 +86,21 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
             'windows_amd64': 'Windows x64'
         }
         self.current_platform = self._detect_current_platform()
+        
+        # Known repository paths for core extensions in DuckDB repository
+        self.core_extension_paths = {
+            'autocomplete': 'extension/autocomplete',
+            'delta': 'extension/delta',
+            'excel': 'extension/excel',
+            'fts': 'extension/fts',
+            'httpfs': 'extension/httpfs',
+            'icu': 'extension/icu',
+            'inet': 'extension/inet',
+            'jemalloc': 'extension/jemalloc',
+            'json': 'extension/json',
+            'parquet': 'third_party/parquet',  # Known from previous testing
+            # Note: avro, aws, azure, ducklake, encodings, iceberg not found in main repo
+        }
     
     def get_core_extensions_from_docs(self) -> List[Dict]:
         """Fetch core extensions from DuckDB documentation."""
@@ -121,8 +136,38 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
     async def get_core_extension_github_info(
         self, client: httpx.AsyncClient, ext_name: str
     ) -> Optional[Dict]:
-        """Get GitHub repository information for core extensions."""
-        # Most core extensions are in the main DuckDB repo under extensions/
+        """Get GitHub repository information for core extensions using known paths."""
+        repo_path = self.core_extension_paths.get(ext_name)
+        
+        if not repo_path:
+            # Fallback to the old method for unknown extensions
+            logger.debug(f"No known repository path for {ext_name}, using fallback")
+            return await self._get_github_info_fallback(client, ext_name)
+        
+        try:
+            commits = await self.github_client.get_repository_commits(
+                client, self.github_client.duckdb_repo, repo_path, limit=1
+            )
+
+            if commits and len(commits) > 0:
+                last_commit = commits[0]
+                return {
+                    "last_commit_date": last_commit["commit"]["committer"]["date"],
+                    "last_commit_sha": last_commit["sha"],
+                    "last_commit_message": last_commit["commit"]["message"][:100],
+                    "repository_path": repo_path
+                }
+        except Exception as e:
+            logger.debug(
+                f"Could not get GitHub info for {ext_name} at {repo_path}: {e}"
+            )
+
+        return {"repository_path": repo_path}
+    
+    async def _get_github_info_fallback(
+        self, client: httpx.AsyncClient, ext_name: str
+    ) -> Optional[Dict]:
+        """Fallback method for extensions without known repository paths."""
         try:
             commits = await self.github_client.get_repository_commits(
                 client, self.github_client.duckdb_repo, f"extensions/{ext_name}", limit=1
@@ -134,13 +179,12 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                     "last_commit_date": last_commit["commit"]["committer"]["date"],
                     "last_commit_sha": last_commit["sha"],
                     "last_commit_message": last_commit["commit"]["message"][:100],
+                    "repository_path": f"extensions/{ext_name}"
                 }
         except Exception as e:
-            logger.debug(
-                f"Could not get GitHub info for core extension {ext_name}: {e}"
-            )
+            logger.debug(f"Fallback GitHub lookup failed for {ext_name}: {e}")
 
-        return None
+        return {"repository_path": "not_found"}
     
     async def get_featured_extensions(self, client: httpx.AsyncClient) -> set[str]:
         """Get the list of featured community extensions from the official DuckDB website."""
