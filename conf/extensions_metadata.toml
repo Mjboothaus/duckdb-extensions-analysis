@@ -4,14 +4,10 @@
 [core_extensions]
 
 # Extensions with dedicated source directories in the main DuckDB repository
+# Note: Most core extensions now have external repositories (see external_repositories section)
 [core_extensions.with_source_directories]
 autocomplete = { path = "extension/autocomplete" }
-delta = { path = "extension/delta" }
-excel = { path = "extension/excel" }
-fts = { path = "extension/fts" }
-httpfs = { path = "extension/httpfs" }
 icu = { path = "extension/icu" }
-inet = { path = "extension/inet" }
 jemalloc = { path = "extension/jemalloc" }
 json = { path = "extension/json" }
 parquet = { path = "extension/parquet" }
@@ -21,20 +17,25 @@ tpch = { path = "extension/tpch" }
 # Extensions with external repositories (not in main DuckDB repo)
 [core_extensions.external_repositories]
 ui = { repository = "duckdb/duckdb-ui", description = "Browser-based user interface for DuckDB" }
+avro = { repository = "duckdb/duckdb-avro", description = "Apache Avro format support" }
+aws = { repository = "duckdb/duckdb-aws", description = "AWS S3 integration" }
+azure = { repository = "duckdb/duckdb-azure", description = "Azure Blob Storage integration" }
+delta = { repository = "duckdb/duckdb-delta", description = "Delta Lake format support" }
+encodings = { repository = "duckdb/duckdb-encodings", description = "Character encoding support" }
+excel = { repository = "duckdb/duckdb-excel", description = "Excel file format support" }
+fts = { repository = "duckdb/duckdb-fts", description = "Full-text search functionality" }
+httpfs = { repository = "duckdb/duckdb-httpfs", description = "HTTP/S3 filesystem support" }
+iceberg = { repository = "duckdb/duckdb-iceberg", description = "Apache Iceberg format support" }
+inet = { repository = "duckdb/duckdb-inet", description = "Internet address data types" }
+mysql = { repository = "duckdb/duckdb-mysql", description = "MySQL database connectivity" }
+postgres = { repository = "duckdb/duckdb-postgres", description = "PostgreSQL database connectivity" }
+spatial = { repository = "duckdb/duckdb-spatial", description = "Geospatial data types and functions" }
+sqlite = { repository = "duckdb/duckdb-sqlite", description = "SQLite database connectivity" }
+vss = { repository = "duckdb/duckdb-vss", description = "Vector similarity search" }
 
 # Extensions integrated into core DuckDB without dedicated directories
 [core_extensions.integrated_core]
-avro = { description = "Apache Avro format support" }
-aws = { description = "AWS S3 integration" }
-azure = { description = "Azure Blob Storage integration" }
-ducklake = { description = "Delta Lake support via DuckLake" }
-encodings = { description = "Character encoding support" }
-iceberg = { description = "Apache Iceberg format support" }
-mysql = { description = "MySQL database connectivity" }
-postgres = { description = "PostgreSQL database connectivity" }
-spatial = { description = "Geospatial data types and functions" }
-sqlite = { description = "SQLite database connectivity" }
-vss = { description = "Vector similarity search" }
+ducklake = { description = "Delta Lake support via DuckLake (different from delta extension)" }
 
 # Special URL patterns for core extensions documentation
 [core_extensions.special_urls]

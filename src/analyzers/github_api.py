@@ -135,3 +135,48 @@ class GitHubAPIClient:
             # Fallback to configured values
             # Return None for both values since config doesn't have fallback attribute
             return None, None
+    
+    async def get_duckdb_releases(self, client: httpx.AsyncClient, limit: int = 10) -> List[Dict]:
+        """Get recent DuckDB releases with comprehensive information."""
+        try:
+            url = f"{self.github_api_base}/repos/{self.duckdb_repo}/releases"
+            params = {"per_page": limit}
+            param_str = "&".join([f"{k}={v}" for k, v in params.items()])
+            full_url = f"{url}?{param_str}"
+            
+            releases_data = await self.fetch_cached(client, full_url)
+            
+            if not isinstance(releases_data, list):
+                return []
+            
+            processed_releases = []
+            for release in releases_data:
+                if "tag_name" in release:
+                    processed_release = {
+                        "version": release["tag_name"],
+                        "name": release.get("name", release["tag_name"]),
+                        "published_at": release.get("published_at"),
+                        "prerelease": release.get("prerelease", False),
+                        "draft": release.get("draft", False),
+                        "body": release.get("body", ""),
+                        "html_url": release.get("html_url", ""),
+                        "assets_count": len(release.get("assets", [])),
+                        "author": release.get("author", {}).get("login", "unknown")
+                    }
+                    
+                    # Parse and add formatted date
+                    if processed_release["published_at"]:
+                        try:
+                            pub_date = datetime.fromisoformat(processed_release["published_at"].replace("Z", "+00:00"))
+                            processed_release["published_date"] = pub_date
+                            processed_release["days_ago"] = (datetime.now().replace(tzinfo=pub_date.tzinfo) - pub_date).days
+                        except Exception:
+                            processed_release["published_date"] = None
+                            processed_release["days_ago"] = None
+                    
+                    processed_releases.append(processed_release)
+            
+            return processed_releases
+        except Exception as e:
+            logger.warning(f"Failed to fetch DuckDB releases: {e}")
+            return []

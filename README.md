@@ -78,13 +78,13 @@ The analysis tracks repository activity, maintenance status, popularity metrics,
 **Basic Analysis:**
 ```bash
 # Run community extensions analysis only
-just community
+just analyze community
 
 # Run core extensions analysis only  
-just core
+just analyze core
 
-# Run full analysis (core + community)
-just full
+# Run full analysis (core + community) - default mode
+just analyze all
 ```
 
 **Reports & Data Export:**
@@ -92,14 +92,12 @@ just full
 # Generate comprehensive markdown report
 just report
 
-# Generate CSV report
-just report-csv
+# Generate reports with specific formats
+just report-all                    # All formats (markdown, CSV, Excel)
+just report --no-issues            # Skip GitHub issues for faster generation
 
-# Generate Excel report
-just report-excel
-
-# Generate all report formats
-just report-all
+# Quick report generation (fastest - skips GitHub issues)
+just report-quick
 
 # Save analysis to DuckDB database
 just database
@@ -119,20 +117,14 @@ just backfill-db
 
 **Standard Workflows:**
 ```bash
-# Complete workflow: database + all reports
+# Complete workflow: fresh analysis + all reports + database
 just workflow-complete
-
-# Fresh complete workflow (no cache)
-just workflow-fresh
 
 # Quick workflow: cached analysis + markdown report
 just workflow-quick
 
-# Data export workflow: database + spreadsheets
-just workflow-export
-
-# Development workflow: setup + fresh analysis + reports
-just workflow-dev
+# Fastest workflow: quick report without GitHub issues (fastest)
+just workflow-fastest
 ```
 
 **Utility Commands:**
@@ -148,32 +140,61 @@ just status       # Show project status
 just help         # Show all available commands
 ```
 
-#### Direct execution
+#### Direct CLI usage
 
+**Analysis Commands:**
 ```bash
 # Basic analysis modes
-uv run python scripts/analyze_extensions.py community
-uv run python scripts/analyze_extensions.py core
-uv run python scripts/analyze_extensions.py full
+uv run python scripts/cli.py analyze community
+uv run python scripts/cli.py analyze core  
+uv run python scripts/cli.py analyze all
 
-# Report generation
-uv run python scripts/analyze_extensions.py report
-uv run python scripts/analyze_extensions.py report --csv
-uv run python scripts/analyze_extensions.py report --excel
-uv run python scripts/analyze_extensions.py report --csv --excel
+# With fresh data (bypass cache)
+uv run python scripts/cli.py analyze all --cache-hours 0
+uv run python scripts/cli.py analyze all --with-issues  # Enable GitHub issues (slower, may hit rate limits)
+```
 
-# Database operations
-uv run python scripts/analyze_extensions.py database
-uv run python scripts/analyze_extensions.py database --no-cache
+**Report Generation:**
+```bash
+# Generate markdown report (default)
+uv run python scripts/cli.py report generate
 
-# Cache management
-uv run python scripts/analyze_extensions.py report --cache-info
-uv run python scripts/analyze_extensions.py full --clear-cache
-uv run python scripts/analyze_extensions.py full --no-cache
+# Generate multiple formats
+uv run python scripts/cli.py report generate --format markdown --format csv --format excel
+uv run python scripts/cli.py report generate --with-issues  # Enable GitHub issues (slower, may hit rate limits)
+
+# Quick report (fastest - skips GitHub issues)
+uv run python scripts/cli.py quick
+```
+
+**Database Operations:**
+```bash
+# Save to database
+uv run python scripts/cli.py database save
 
 # Database querying
 uv run python scripts/query_database.py
-uv run python scripts/query_database.py backfill
+```
+
+**Cache Management:**
+```bash
+# Show cache information
+uv run python scripts/cli.py cache info
+
+# Clear cache
+uv run python scripts/cli.py cache clear
+
+# Show version and help
+uv run python scripts/cli.py --version
+uv run python scripts/cli.py --help
+```
+
+**Command Aliases:**
+```bash
+# Commands support partial matching
+uv run python scripts/cli.py ana community      # Same as 'analyze community'
+uv run python scripts/cli.py rep generate       # Same as 'report generate'
+uv run python scripts/cli.py dat save           # Same as 'database save'
 ```
 
 ## Scripts

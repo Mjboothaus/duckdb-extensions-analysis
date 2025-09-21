@@ -25,33 +25,37 @@ setup-token:
 
 # === ANALYSIS COMMANDS ===
 
-# Run analysis (options: core, community, full)
-analyze mode="full" *flags="":
-    uv run scripts/analyze_extensions.py {{mode}} {{flags}}
+# Run analysis (options: core, community, all)
+analyze mode="all" *flags="":
+    uv run scripts/cli.py analyze {{mode}} {{flags}}
 
 # Run analysis with fresh data (no cache)
-analyze-fresh mode="full":
-    uv run scripts/analyze_extensions.py {{mode}} --no-cache
+analyze-fresh mode="all":
+    uv run scripts/cli.py analyze {{mode}} --cache-hours 0
 
 # === REPORTING COMMANDS ===
 
-# Generate reports (supports --csv --excel flags)
+# Generate markdown report (add --with-issues to include GitHub issues analysis)
 report *flags="":
-    uv run scripts/analyze_extensions.py report {{flags}}
+    uv run scripts/cli.py report generate {{flags}}
 
 # Generate all report formats
 report-all:
-    uv run scripts/analyze_extensions.py report --csv --excel
+    uv run scripts/cli.py report generate --format markdown --format csv --format excel
 
 # Generate all report formats with fresh data (no cache)
 report-all-fresh:
-    uv run scripts/analyze_extensions.py report --csv --excel --no-cache
+    uv run scripts/cli.py report generate --format markdown --format csv --format excel --cache-hours 0
+
+# Quick report (same as default behavior now)
+report-quick:
+    uv run scripts/cli.py quick
 
 # === DATABASE COMMANDS ===
 
 # Save analysis to DuckDB database
 database *flags="":
-    uv run scripts/analyze_extensions.py database {{flags}}
+    uv run scripts/cli.py database save {{flags}}
 
 # Query the extensions database
 query:
@@ -65,11 +69,11 @@ backfill:
 
 # Show cache information
 cache-info:
-    uv run scripts/analyze_extensions.py report --cache-info
+    uv run scripts/cli.py cache info
 
 # Clear cache
 cache-clear:
-    uv run scripts/analyze_extensions.py full --clear-cache
+    uv run scripts/cli.py cache clear
 
 # === DEVELOPMENT COMMANDS ===
 
@@ -96,13 +100,18 @@ status:
 
 # Complete workflow: fresh analysis + all reports + database
 workflow-complete:
-    just analyze-fresh full
+    just analyze-fresh all
     just report-all
     just database
     @echo "✅ Complete workflow finished"
 
 # Quick workflow: cached analysis + markdown report  
 workflow-quick:
-    just analyze full
+    just analyze all
     just report
     @echo "✅ Quick workflow finished"
+
+# Fastest workflow: default report (no GitHub issues)
+workflow-fastest:
+    just report-quick
+    @echo "✅ Fastest workflow finished"

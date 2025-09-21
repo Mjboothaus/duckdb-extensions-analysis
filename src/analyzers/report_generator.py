@@ -214,6 +214,7 @@ class ReportGenerator(BaseReportGenerator):
             logger.debug(f"Could not parse date {date_str}: {e}")
             return None
     
+    
     async def generate(self, analysis_result: AnalysisResult, format_type: str = "markdown") -> str:
         """Generate a report in the specified format."""
         if format_type.lower() == "markdown":
@@ -354,6 +355,11 @@ class ReportGenerator(BaseReportGenerator):
             f"- **Extensions with Issues**: {errors} ({errors / total * 100:.1f}%)" if total > 0 else f"- **Extensions with Issues**: 0 (0%)",
             "",
         ])
+        
+        # Add DuckDB Release Information Appendix
+        duckdb_appendix = self._load_template("duckdb_release_info.md")
+        if duckdb_appendix:
+            report.extend(["", duckdb_appendix])
         
         # Add methodology section from template
         methodology_template = self._load_template("report_methodology.md")
