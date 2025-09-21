@@ -12,6 +12,7 @@ import pandas as pd
 from loguru import logger
 
 from .base import BaseReportGenerator, AnalysisResult, ExtensionInfo
+from .extension_metadata import ExtensionMetadata
 
 
 class ReportGenerator(BaseReportGenerator):
@@ -22,6 +23,7 @@ class ReportGenerator(BaseReportGenerator):
         self.reports_dir = config.reports_dir
         self.templates_dir = Path(config.project_root) / "templates"
         self.config = config
+        self.metadata = ExtensionMetadata(config.config_dir)
         self._core_extension_urls_cache = None
     
     def _load_template(self, template_name: str) -> str:
@@ -153,21 +155,18 @@ class ReportGenerator(BaseReportGenerator):
             except Exception as e:
                 logger.debug(f"Could not fetch main extensions page: {e}")
             
-            # Add special case URLs for extensions with documentation under /data/
-            # These extensions are handled differently in the DuckDB documentation structure
-            # and are not found under the standard /core_extensions/ path. Instead, they 
-            # have their own sections under /data/ as they are considered fundamental data formats.
-            #
-            # IMPORTANT: These special cases are always added regardless of what was found 
-            # in the documentation pages to ensure these critical core extensions always 
-            # have valid URLs in the report.
-            #
-            # Notes on DuckDB documentation structure exceptions:
-            # 1. Some core extensions (json, parquet) are documented under /data/ instead of /core_extensions/
-            # 2. Some extensions use /extension_name/overview.html pattern while others use /extension_name.html
-            # 3. The documentation structure may change over time, so this list may need updates
-            extension_urls["json"] = "https://duckdb.org/docs/stable/data/json/overview.html"
-            extension_urls["parquet"] = "https://duckdb.org/docs/stable/data/parquet/overview.html"
+            # Add URLs from metadata system for extensions with special documentation patterns
+            # This handles extensions that don't follow standard URL patterns and ensures
+            # all known core extensions have valid URLs in the report.
+            for ext_name in self.metadata.get_all_core_extensions():
+                special_url = self.metadata.get_special_url(ext_name)
+                if special_url:
+                    extension_urls[ext_name] = special_url
+                elif ext_name not in extension_urls:
+                    # Generate URL using metadata patterns
+                    generated_url = self.metadata.get_documentation_url(ext_name)
+                    if generated_url:
+                        extension_urls[ext_name] = generated_url
             
             # Cache the results (including special cases)
             cache.set(cache_key, (datetime.now(), extension_urls))
@@ -177,18 +176,12 @@ class ReportGenerator(BaseReportGenerator):
             
         except Exception as e:
             logger.warning(f"Failed to discover core extension URLs: {e}")
-            # Fallback to basic pattern-based URLs for known extensions
-            common_extensions = [
-                "autocomplete", "avro", "aws", "azure", "delta", "ducklake", "encodings", 
-                "excel", "fts", "httpfs", "iceberg", "icu", "inet", "jemalloc",
-                "mysql", "postgres", "spatial", "sqlite", "tpcds", "tpch", "ui", "vss"
-            ]
-            for ext_name in common_extensions:
-                extension_urls[ext_name] = f"https://duckdb.org/docs/stable/core_extensions/{ext_name}.html"
-            
-            # Add special case URLs even in fallback scenario
-            extension_urls["json"] = "https://duckdb.org/docs/stable/data/json/overview.html"
-            extension_urls["parquet"] = "https://duckdb.org/docs/stable/data/parquet/overview.html"
+            # Fallback to metadata-based URL generation for all known extensions
+            for ext_name in self.metadata.get_all_core_extensions():
+                # Use metadata to generate appropriate URL
+                generated_url = self.metadata.get_documentation_url(ext_name)
+                if generated_url:
+                    extension_urls[ext_name] = generated_url
         
         self._core_extension_urls_cache = extension_urls
         return extension_urls
@@ -279,6 +272,9 @@ class ReportGenerator(BaseReportGenerator):
                 if repo_path == "integrated_core":
                     # This extension is integrated into core DuckDB, use release date
                     last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+                elif repo_path.startswith("external:"):
+                    # This extension has its own external repository, trust the commit date
+                    last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
                 elif repo_path and repo_path != "not_found" and not repo_path.startswith("extensions/"):
                     # This is from a known extension-specific path, trust the date
                     last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)

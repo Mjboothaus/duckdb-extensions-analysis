@@ -198,6 +198,18 @@ class Config:
     @property
     def max_retries(self) -> int:
         return self.config_data["http"]["max_retries"]
+    
+    @property
+    def enable_issues_analysis(self) -> bool:
+        return self.config_data["analysis"].get("enable_issues_analysis", True)
+    
+    @enable_issues_analysis.setter
+    def enable_issues_analysis(self, value: bool):
+        self.config_data["analysis"]["enable_issues_analysis"] = value
+    
+    @property
+    def issues_analysis_days_back(self) -> int:
+        return self.config_data["analysis"].get("issues_analysis_days_back", 90)
 
     @property
     def retry_min_wait(self) -> int:

@@ -1,0 +1,57 @@
+# Extension metadata configuration for DuckDB Extensions Analysis
+# This file defines special handling rules for extensions that don't follow standard patterns
+
+[core_extensions]
+
+# Extensions with dedicated source directories in the main DuckDB repository
+[core_extensions.with_source_directories]
+autocomplete = { path = "extension/autocomplete" }
+delta = { path = "extension/delta" }
+excel = { path = "extension/excel" }
+fts = { path = "extension/fts" }
+httpfs = { path = "extension/httpfs" }
+icu = { path = "extension/icu" }
+inet = { path = "extension/inet" }
+jemalloc = { path = "extension/jemalloc" }
+json = { path = "extension/json" }
+parquet = { path = "extension/parquet" }
+tpcds = { path = "extension/tpcds" }
+tpch = { path = "extension/tpch" }
+
+# Extensions with external repositories (not in main DuckDB repo)
+[core_extensions.external_repositories]
+ui = { repository = "duckdb/duckdb-ui", description = "Browser-based user interface for DuckDB" }
+
+# Extensions integrated into core DuckDB without dedicated directories
+[core_extensions.integrated_core]
+avro = { description = "Apache Avro format support" }
+aws = { description = "AWS S3 integration" }
+azure = { description = "Azure Blob Storage integration" }
+ducklake = { description = "Delta Lake support via DuckLake" }
+encodings = { description = "Character encoding support" }
+iceberg = { description = "Apache Iceberg format support" }
+mysql = { description = "MySQL database connectivity" }
+postgres = { description = "PostgreSQL database connectivity" }
+spatial = { description = "Geospatial data types and functions" }
+sqlite = { description = "SQLite database connectivity" }
+vss = { description = "Vector similarity search" }
+
+# Special URL patterns for core extensions documentation
+[core_extensions.special_urls]
+json = "https://duckdb.org/docs/stable/data/json/overview.html"
+parquet = "https://duckdb.org/docs/stable/data/parquet/overview.html"
+
+# URL patterns for different extension documentation structures
+[url_patterns]
+standard = "https://duckdb.org/docs/stable/core_extensions/{name}.html"
+overview_pattern = "https://duckdb.org/docs/stable/core_extensions/{name}/overview.html"
+
+# Extensions that use the overview pattern
+overview_extensions = ["httpfs", "iceberg", "spatial"]
+
+# Community extension repositories with special handling
+[community_extensions]
+
+# Extensions that might need special GitHub API handling
+[community_extensions.special_repos]
+# Add any community extensions that need special handling here

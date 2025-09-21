@@ -22,6 +22,7 @@ from tenacity import (
 
 from .base import BaseAnalyzer, ExtensionInfo
 from .github_api import GitHubAPIClient
+from .extension_metadata import ExtensionMetadata
 
 
 class WebContentClient:
@@ -75,6 +76,7 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         super().__init__(config, cache_hours)
         self.github_client = github_client
         self.web_client = WebContentClient(config)
+        self.metadata = ExtensionMetadata(config.config_dir)
         self.core_extensions: List[Dict] = []
         self.extensions_base_url = "https://extensions.duckdb.org"
         # Platform identifiers used by DuckDB extension repository
@@ -86,36 +88,6 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
             'windows_amd64': 'Windows x64'
         }
         self.current_platform = self._detect_current_platform()
-        
-        # Known repository paths for core extensions in DuckDB repository
-        self.core_extension_paths = {
-            'autocomplete': 'extension/autocomplete',
-            'delta': 'extension/delta', 
-            'excel': 'extension/excel',
-            'fts': 'extension/fts',
-            'httpfs': 'extension/httpfs',
-            'icu': 'extension/icu',
-            'inet': 'extension/inet',
-            'jemalloc': 'extension/jemalloc',
-            'json': 'extension/json',
-            'parquet': 'extension/parquet',  # In the main repo directory
-            'tpcds': 'extension/tpcds',
-            'tpch': 'extension/tpch',
-            # Extensions without dedicated directories - these are integrated into core DuckDB
-            # and their "updates" are typically part of general DuckDB releases
-            'avro': None,  # Integrated into core
-            'aws': None,   # Integrated into core  
-            'azure': None, # Integrated into core
-            'ducklake': None, # Integrated into core
-            'encodings': None, # Integrated into core
-            'iceberg': None,   # Integrated into core
-            'mysql': None,     # Integrated into core
-            'postgres': None,  # Integrated into core
-            'spatial': None,   # Integrated into core
-            'sqlite': None,    # Integrated into core
-            'ui': None,        # Integrated into core
-            'vss': None,       # Integrated into core
-        }
     
     def get_core_extensions_from_docs(self) -> List[Dict]:
         """Fetch core extensions from DuckDB documentation."""
@@ -151,16 +123,22 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
     async def get_core_extension_github_info(
         self, client: httpx.AsyncClient, ext_name: str
     ) -> Optional[Dict]:
-        """Get GitHub repository information for core extensions using known paths."""
-        repo_path = self.core_extension_paths.get(ext_name)
+        """Get GitHub repository information for core extensions using metadata."""
+        repo_path = self.metadata.get_core_extension_path(ext_name)
         
-        if repo_path is None:
+        if repo_path == "integrated_core":
             # This extension is integrated into core DuckDB without a dedicated directory
             logger.debug(f"Extension {ext_name} is integrated into core DuckDB (no dedicated directory)")
             return {
                 "repository_path": "integrated_core",
                 "note": "This extension is integrated into core DuckDB without a dedicated source directory"
             }
+        
+        if repo_path and repo_path.startswith("external:"):
+            # This extension has an external repository
+            external_repo = repo_path[9:]  # Remove "external:" prefix
+            logger.debug(f"Extension {ext_name} uses external repository: {external_repo}")
+            return await self._get_external_github_info(client, ext_name, external_repo)
         
         if not repo_path:
             # Fallback to the old method for completely unknown extensions
@@ -208,6 +186,31 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
             logger.debug(f"Fallback GitHub lookup failed for {ext_name}: {e}")
 
         return {"repository_path": "not_found"}
+    
+    async def _get_external_github_info(
+        self, client: httpx.AsyncClient, ext_name: str, external_repo: str
+    ) -> Optional[Dict]:
+        """Get GitHub information for extensions with external repositories."""
+        try:
+            commits = await self.github_client.get_repository_commits(
+                client, external_repo, limit=1
+            )
+
+            if commits and len(commits) > 0:
+                last_commit = commits[0]
+                return {
+                    "last_commit_date": last_commit["commit"]["committer"]["date"],
+                    "last_commit_sha": last_commit["sha"],
+                    "last_commit_message": last_commit["commit"]["message"][:100],
+                    "repository_path": f"external:{external_repo}",
+                    "external_repository": external_repo
+                }
+        except Exception as e:
+            logger.debug(
+                f"Could not get GitHub info for {ext_name} at external repo {external_repo}: {e}"
+            )
+
+        return {"repository_path": f"external:{external_repo}", "external_repository": external_repo}
     
     async def get_featured_extensions(self, client: httpx.AsyncClient) -> set[str]:
         """Get the list of featured community extensions from the official DuckDB website."""

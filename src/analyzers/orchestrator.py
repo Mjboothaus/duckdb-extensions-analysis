@@ -75,9 +75,13 @@ class AnalysisOrchestrator:
             community_extensions = await self.analyze_community_extensions(featured_extensions)
             logger.info(f"Analyzed {len(community_extensions)} community extensions")
             
-            # Analyze GitHub issues for all extensions
-            all_extension_names = [ext.name for ext in core_extensions + community_extensions]
-            github_issues = await self.analyze_github_issues(all_extension_names)
+            # Analyze GitHub issues for all extensions (if enabled)
+            github_issues = []
+            if self.config.enable_issues_analysis:
+                all_extension_names = [ext.name for ext in core_extensions + community_extensions]
+                github_issues = await self.analyze_github_issues(all_extension_names)
+            else:
+                logger.info("Skipping GitHub issues analysis (disabled in configuration)")
             
             # Run installation tests for a subset of extensions (prioritize core for database mode)
             installation_results = await self.run_installation_tests(core_extensions, community_extensions)
@@ -183,7 +187,7 @@ class AnalysisOrchestrator:
         try:
             issues = await self.github_issues_tracker.fetch_extension_issues(
                 extension_names=extension_names,
-                days_back=90,  # Look back 90 days
+                days_back=self.config.issues_analysis_days_back,
                 include_closed=True
             )
             return issues

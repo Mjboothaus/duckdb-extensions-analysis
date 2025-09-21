@@ -26,6 +26,10 @@ web_content_hours = 24
 [analysis]
 core_extensions_url = "https://duckdb.org/docs/stable/core_extensions/overview.html"
 
+# GitHub issues analysis settings
+enable_issues_analysis = true  # Set to false to skip GitHub issues analysis (avoids rate limits)
+issues_analysis_days_back = 90  # How many days back to search for issues
+
 # Pages to check for featured extensions (automatic detection)
 featured_extensions_pages = [
     "https://duckdb.org/docs/stable/extensions/community_extensions.html",

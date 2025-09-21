@@ -102,6 +102,12 @@ Examples:
         action="store_true", 
         help="Show cache statistics"
     )
+    
+    parser.add_argument(
+        "--no-issues", 
+        action="store_true", 
+        help="Skip GitHub issues analysis (avoids rate limits)"
+    )
 
     args = parser.parse_args()
 
@@ -127,6 +133,11 @@ Examples:
         logger.info(f"Cache stats: {cache.stats()}")
         return
 
+    # Override issues analysis setting if requested
+    if args.no_issues:
+        logger.info("Skipping GitHub issues analysis (--no-issues flag)")
+        config.enable_issues_analysis = False
+    
     # Initialize the orchestrator
     orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours)
 
