@@ -214,6 +214,76 @@ class ReportGenerator(BaseReportGenerator):
             logger.debug(f"Could not parse date {date_str}: {e}")
             return None
     
+    def _generate_core_extension_description(self, ext_name: str, stage: str) -> str:
+        """Generate description for core extensions based on name and metadata."""
+        descriptions = {
+            'autocomplete': 'Auto-completion support for DuckDB CLI',
+            'avro': 'Apache Avro format support for reading and writing',
+            'aws': 'AWS S3 integration and cloud services support',
+            'azure': 'Azure Blob Storage integration and cloud services',
+            'delta': 'Delta Lake format support for ACID transactions',
+            'ducklake': 'Delta Lake support via DuckLake implementation',
+            'encodings': 'Character encoding support for text processing',
+            'excel': 'Microsoft Excel file format support',
+            'fts': 'Full-text search functionality and indexing',
+            'httpfs': 'HTTP/S3 filesystem support for remote data',
+            'iceberg': 'Apache Iceberg format support for data lakes',
+            'icu': 'International Components for Unicode support',
+            'inet': 'Internet address data types and functions',
+            'jemalloc': 'Memory allocator for improved performance',
+            'json': 'JSON data format support and functions',
+            'mysql': 'MySQL database connectivity and integration',
+            'parquet': 'Apache Parquet columnar format support',
+            'postgres': 'PostgreSQL database connectivity and integration',
+            'spatial': 'Geospatial data types and spatial functions',
+            'sqlite': 'SQLite database connectivity and integration',
+            'tpcds': 'TPC-DS benchmark data generation',
+            'tpch': 'TPC-H benchmark data generation',
+            'ui': 'Browser-based user interface for DuckDB',
+            'vss': 'Vector similarity search capabilities'
+        }
+        
+        return descriptions.get(ext_name.lower(), f"DuckDB core extension: {ext_name}")
+    
+    def _determine_core_extension_status(self, ext, duckdb_lag_days: int) -> str:
+        """Determine status of core extension based on activity and metadata."""
+        # For now, all core extensions are considered active
+        # This could be enhanced later to detect deprecated extensions
+        return "✅ Active"
+    
+    def _get_core_extension_repository_info(self, ext_name: str, ext_metadata: dict) -> tuple[str, str, str]:
+        """Get repository link, stars, and language for core extension."""
+        # Check if extension has external repository from metadata
+        repo_path = ext_metadata.get("repository_path", "") if ext_metadata else ""
+        
+        # Check extension metadata for external repositories
+        external_repos = self.metadata.metadata.get("core_extensions", {}).get("external_repositories", {})
+        
+        if ext_name.lower() in external_repos:
+            # Extension has dedicated external repository
+            repo_name = external_repos[ext_name.lower()]["repository"]
+            repo_link = f"[{repo_name}](https://github.com/{repo_name})"
+            
+            # Try to get stars from the extension's repository info if available
+            if ext_metadata and ext_metadata.get("repo_info"):
+                stars = str(ext_metadata["repo_info"].get("stargazers_count", "—"))
+            else:
+                stars = "—"  # Stars not fetched yet
+            language = "C++"  # Most DuckDB extensions are C++
+        elif repo_path and repo_path.startswith("external:"):
+            # Fallback: extract repo from external path
+            repo_name = repo_path.replace("external:", "")
+            repo_link = f"[{repo_name}](https://github.com/{repo_name})"
+            stars = "—" 
+            language = "C++"
+        else:
+            # Extension is in main DuckDB repository
+            repo_link = "[duckdb/duckdb](https://github.com/duckdb/duckdb)"
+            stars = "—"  # Don't show main repo stars as it's not meaningful
+            language = "C++"
+        
+        return repo_link, stars, language
+    
     
     async def generate(self, analysis_result: AnalysisResult, format_type: str = "markdown") -> str:
         """Generate a report in the specified format."""
@@ -253,47 +323,35 @@ class ReportGenerator(BaseReportGenerator):
         report.extend([
             "## Core Extensions\n",
             f"DuckDB core extensions from version **{duckdb_version}** (released {duckdb_lag_days} days ago).\n",
-            "| Extension | Development Stage | Status | Last Updated |",
-            "|-----------|-------------------|--------|--------------|",
+            "| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |",
+            "|---|-----------|------------|--------|---------------|-------|----------|-------------|",
         ])
         
-        # Discover core extension URLs - this uses multiple documentation sources 
-        # and handles special cases. See _discover_core_extension_urls() method for 
-        # details on sources, patterns, and exceptions in DuckDB's documentation structure.
+        # Discover core extension URLs
         extension_urls = self._discover_core_extension_urls()
         
-        for ext in analysis_result.core_extensions:
-            stage = ext.stage or "Stable"
-            status = "✅ Ongoing"
+        # Sort core extensions alphabetically
+        sorted_core_extensions = sorted(analysis_result.core_extensions, key=lambda x: x.name.lower())
+        
+        for idx, ext in enumerate(sorted_core_extensions, 1):
+            # Get extension details
+            status = self._determine_core_extension_status(ext, duckdb_lag_days)
+            description = self._generate_core_extension_description(ext.name, ext.stage or "Stable")
+            repo_link, stars, language = self._get_core_extension_repository_info(ext.name, ext.metadata)
             
-            # Use actual commit date if available and from a known extension path,
-            # otherwise indicate uncertainty for extensions without dedicated directories
+            # Calculate last activity
             if ext.metadata and ext.metadata.get("last_commit_date"):
                 repo_path = ext.metadata.get("repository_path", "")
                 if repo_path == "integrated_core":
-                    # This extension is integrated into core DuckDB, use release date
-                    last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+                    last_activity = f"{duckdb_lag_days} days ago"
                 elif repo_path.startswith("external:"):
-                    # This extension has its own external repository, trust the commit date
-                    last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
-                elif repo_path and repo_path != "not_found" and not repo_path.startswith("extensions/"):
-                    # This is from a known extension-specific path, trust the date
-                    last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+                    last_activity = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+                elif repo_path and repo_path != "not_found":
+                    last_activity = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
                 else:
-                    # This might be from general repository commits, be cautious
-                    commit_days = self._get_days_from_date(ext.metadata["last_commit_date"])
-                    if commit_days is not None and commit_days == duckdb_lag_days:
-                        # Commit date matches release date, likely a general release commit
-                        last_updated = f"~{duckdb_lag_days} days ago (estimated)"
-                    else:
-                        # Use the commit date but indicate it's from extension path search
-                        last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+                    last_activity = f"~{duckdb_lag_days} days ago"
             else:
-                repo_path = ext.metadata.get("repository_path", "") if ext.metadata else ""
-                if repo_path == "integrated_core":
-                    last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
-                else:
-                    last_updated = f"~{duckdb_lag_days} days ago (estimated)"
+                last_activity = f"~{duckdb_lag_days} days ago"
             
             # Create extension name with URL if available
             extension_name = ext.name
@@ -301,7 +359,7 @@ class ReportGenerator(BaseReportGenerator):
             if extension_url:
                 extension_name = f"[{ext.name}]({extension_url})"
             
-            report.append(f"| **{extension_name}** | {stage} | {status} | {last_updated} |")
+            report.append(f"| {idx} | **{extension_name}** | {repo_link} | {status} | {last_activity} | {stars} | {language} | {description} |")
         
         report.extend([
             f"\n**Total Core Extensions**: {len(analysis_result.core_extensions)}\n",
@@ -311,14 +369,28 @@ class ReportGenerator(BaseReportGenerator):
         # Community extensions section
         report.extend([
             "## Community Extensions\n",
-            "| Extension | Repository | Status | Last Push | Stars | Language | Description |",
-            "|-----------|------------|--------|-----------|-------|----------|-------------|",
+            "| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |",
+            "|---|-----------|------------|--------|---------------|-------|----------|-------------|",
         ])
         
-        for ext in analysis_result.community_extensions:
-            status = ext.metadata.get("status", "❌ Error") if ext.metadata else "❌ Error"
+        # Sort community extensions alphabetically
+        sorted_community_extensions = sorted(analysis_result.community_extensions, key=lambda x: x.name.lower())
+        
+        for idx, ext in enumerate(sorted_community_extensions, 1):
+            # Determine status with enhanced logic
+            if ext.metadata:
+                raw_status = ext.metadata.get("status", "❌ Issues")
+                if raw_status == "✅ Ongoing":
+                    status = "✅ Active"
+                elif raw_status == "🔴 Discontinued":
+                    status = "🔴 Archived"
+                else:
+                    status = "❌ Issues"
+            else:
+                status = "❌ Issues"
+            
             repo_link = f"[{ext.repository}](https://github.com/{ext.repository})" if ext.repository else "N/A"
-            last_push = f"{ext.days_ago} days ago" if ext.days_ago is not None else "Unknown"
+            last_activity = f"{ext.days_ago} days ago" if ext.days_ago is not None else "Unknown"
             stars = str(ext.stars) if ext.stars is not None else "N/A"
             
             # Get language and description from metadata
@@ -336,14 +408,14 @@ class ReportGenerator(BaseReportGenerator):
             # Escape pipe characters in description
             description = description.replace("|", "\\|")
             
-            report.append(f"| **{ext.name}** | {repo_link} | {status} | {last_push} | {stars} | {language} | {description} |")
+            report.append(f"| {idx} | **{ext.name}** | {repo_link} | {status} | {last_activity} | {stars} | {language} | {description} |")
         
         # Community extensions summary
         active = sum(1 for ext in analysis_result.community_extensions 
                     if ext.metadata and ext.metadata.get("status") == "✅ Ongoing")
-        discontinued = sum(1 for ext in analysis_result.community_extensions 
+        archived = sum(1 for ext in analysis_result.community_extensions 
                           if ext.metadata and ext.metadata.get("status") == "🔴 Discontinued")
-        errors = sum(1 for ext in analysis_result.community_extensions 
+        issues = sum(1 for ext in analysis_result.community_extensions 
                     if ext.metadata and "❌" in ext.metadata.get("status", ""))
         total = len(analysis_result.community_extensions)
         
@@ -351,8 +423,8 @@ class ReportGenerator(BaseReportGenerator):
             "\n### Community Extensions Summary",
             f"- **Total Extensions**: {total}",
             f"- **Active Extensions**: {active} ({active / total * 100:.1f}%)" if total > 0 else f"- **Active Extensions**: 0 (0%)",
-            f"- **Discontinued Extensions**: {discontinued} ({discontinued / total * 100:.1f}%)" if total > 0 else f"- **Discontinued Extensions**: 0 (0%)",
-            f"- **Extensions with Issues**: {errors} ({errors / total * 100:.1f}%)" if total > 0 else f"- **Extensions with Issues**: 0 (0%)",
+            f"- **Archived Extensions**: {archived} ({archived / total * 100:.1f}%)" if total > 0 else f"- **Archived Extensions**: 0 (0%)",
+            f"- **Extensions with Issues**: {issues} ({issues / total * 100:.1f}%)" if total > 0 else f"- **Extensions with Issues**: 0 (0%)",
             "",
         ])
         
