@@ -69,9 +69,11 @@ class AnalysisOrchestrator:
             
             # Analyze core extensions with platform availability checking
             core_extensions = await self.analyze_core_extensions(duckdb_version)
+            logger.info(f"Analyzed {len(core_extensions)} core extensions")
             
             # Analyze community extensions
             community_extensions = await self.analyze_community_extensions(featured_extensions)
+            logger.info(f"Analyzed {len(community_extensions)} community extensions")
             
             # Analyze GitHub issues for all extensions
             all_extension_names = [ext.name for ext in core_extensions + community_extensions]
@@ -92,6 +94,9 @@ class AnalysisOrchestrator:
             # Add GitHub issues and installation results to metadata
             analysis_result.github_issues = github_issues
             analysis_result.installation_results = installation_results
+            
+            # Log comprehensive analysis summary for persistent tracking
+            logger.info(f"ANALYSIS SUMMARY: DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
             
             return analysis_result
     

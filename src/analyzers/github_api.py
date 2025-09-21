@@ -40,7 +40,7 @@ class GitHubAPIClient:
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=1, min=1, max=10),
-        retry=retry_if_exception_type((httpx.RequestError,)),
+        retry=retry_if_exception_type((httpx.RequestError, httpx.HTTPStatusError)),
         before=lambda _: logger.debug("Retrying GitHub API request..."),
     )
     async def fetch_cached(

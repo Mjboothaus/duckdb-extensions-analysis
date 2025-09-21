@@ -33,5 +33,3 @@ This analysis is based on the following authoritative sources and their structur
 - GitHub API rate limits may occasionally affect data freshness
 - Extension metadata quality varies between community extensions
 - Some extensions may have multiple repositories or documentation locations
-
-Report generated using the [duckdb-extensions-analysis](https://github.com/Mjboothaus/duckdb-extensions-analysis) tool.

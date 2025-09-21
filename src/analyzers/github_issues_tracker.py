@@ -12,6 +12,12 @@ from dataclasses import dataclass
 
 import httpx
 from loguru import logger
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_exponential,
+    retry_if_exception_type,
+)
 
 from .base import ExtensionInfo
 
@@ -170,7 +176,7 @@ class GitHubIssuesTracker:
         if hasattr(self.github_client, 'headers') and self.github_client.headers:
             headers.update(self.github_client.headers)
         
-        response = await client.get(url, params=params, headers=headers)
+        response = await self._make_api_request(client, url, params, headers)
         response.raise_for_status()
         
         data = response.json()
@@ -235,6 +241,32 @@ class GitHubIssuesTracker:
                     break
         
         return mentioned_platforms
+    
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=2, min=2, max=30),
+        retry=retry_if_exception_type((httpx.RequestError, httpx.HTTPStatusError)),
+        before=lambda _: logger.debug("Retrying GitHub issues search..."),
+    )
+    async def _make_api_request(self, client: httpx.AsyncClient, url: str, params: dict, headers: dict) -> httpx.Response:
+        """Make API request with retry logic for rate limits and temporary failures."""
+        response = await client.get(url, params=params, headers=headers)
+        
+        # Handle specific status codes
+        if response.status_code == 403:
+            # Check if it's a rate limit issue
+            if 'rate limit' in response.text.lower() or 'x-ratelimit-remaining' in response.headers:
+                remaining = response.headers.get('x-ratelimit-remaining', '0')
+                reset_time = response.headers.get('x-ratelimit-reset', 'unknown')
+                logger.warning(f"GitHub API rate limit hit. Remaining: {remaining}, Reset: {reset_time}")
+                
+                # If we have no remaining requests, wait longer
+                if remaining == '0':
+                    await asyncio.sleep(60)  # Wait 1 minute before retry
+            else:
+                logger.warning(f"GitHub API returned 403 Forbidden: {response.text[:200]}...")
+        
+        return response
     
     def _classify_issue_type(self, issue: ExtensionIssue) -> str:
         """Classify the type of extension issue."""

@@ -13,10 +13,23 @@ from pathlib import Path
 
 from loguru import logger
 
-# Configure logger
+# Configure logger - both stdout and file
 logger.remove()
 logger.add(
     sys.stdout, format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", level="INFO"
+)
+
+# Add file logging for persistent capture of analysis metrics
+from datetime import datetime
+log_file = Path(__file__).parent.parent / "logs" / f"analysis_{datetime.now().strftime('%Y%m%d')}.log"
+log_file.parent.mkdir(exist_ok=True)
+logger.add(
+    str(log_file),
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    level="INFO",
+    rotation="10 MB",
+    retention="30 days",
+    compression="gz"
 )
 
 # Import configuration and analyzers (add parent directory to path)

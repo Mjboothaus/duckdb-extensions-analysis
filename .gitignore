@@ -159,6 +159,9 @@ reports/duckdb_extensions_report_*.xlsx
 # Data directory (DuckDB databases)
 data/
 
+# Log files directory
+logs/
+
 # Environment variables (contains secrets)
 .env
 .env.*

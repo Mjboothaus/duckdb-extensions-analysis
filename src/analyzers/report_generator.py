@@ -35,7 +35,26 @@ class ReportGenerator(BaseReportGenerator):
             return f.read().strip()
     
     def _discover_core_extension_urls(self) -> Dict[str, str]:
-        """Discover URLs for core extensions from DuckDB documentation."""
+        """
+        Discover URLs to the documentation for core extensions from DuckDB website.
+        
+        This function relies on several DuckDB documentation sources to find URLs:
+        1. Primary source: Core extensions overview page at /docs/stable/core_extensions/overview.html
+        2. Secondary source: Main extensions overview at /docs/stable/extensions/overview.html
+        3. Special cases: Some extensions like 'json' and 'parquet' have documentation under 
+           /docs/stable/data/ rather than /core_extensions/
+        
+        The function handles several URL patterns and exceptions:
+        - Standard pattern: /docs/stable/core_extensions/extension_name.html
+        - Overview pattern: /docs/stable/core_extensions/extension_name/overview.html
+        - Data section pattern: /docs/stable/data/extension_name/overview.html
+        
+        Note that DuckDB's documentation structure has inconsistencies in URL patterns 
+        and location of extension documentation, which requires special handling.
+        
+        Returns:
+            Dict[str, str]: Mapping of extension names to their documentation URLs
+        """
         if self._core_extension_urls_cache is not None:
             return self._core_extension_urls_cache
         
@@ -93,7 +112,13 @@ class ReportGenerator(BaseReportGenerator):
                 href = link['href']
                 if '/docs/stable/core_extensions/' in href and href.endswith('.html'):
                     # Extract extension name from URL
-                    extension_name = href.split('/')[-1].replace('.html', '')
+                    if href.endswith('/overview.html'):
+                        # Handle httpfs/overview.html -> httpfs
+                        extension_name = href.split('/')[-2]
+                    else:
+                        # Handle standard extension.html -> extension
+                        extension_name = href.split('/')[-1].replace('.html', '')
+                    
                     if extension_name not in ['overview', 'index']:
                         if href.startswith('/'):
                             full_url = f"https://duckdb.org{href}"
@@ -111,7 +136,14 @@ class ReportGenerator(BaseReportGenerator):
                 for link in soup2.find_all('a', href=True):
                     href = link['href']
                     if '/docs/stable/core_extensions/' in href and href.endswith('.html'):
-                        extension_name = href.split('/')[-1].replace('.html', '')
+                        # Extract extension name from URL
+                        if href.endswith('/overview.html'):
+                            # Handle httpfs/overview.html -> httpfs
+                            extension_name = href.split('/')[-2]
+                        else:
+                            # Handle standard extension.html -> extension
+                            extension_name = href.split('/')[-1].replace('.html', '')
+                        
                         if extension_name not in ['overview', 'index']:
                             if href.startswith('/'):
                                 full_url = f"https://duckdb.org{href}"
@@ -121,7 +153,23 @@ class ReportGenerator(BaseReportGenerator):
             except Exception as e:
                 logger.debug(f"Could not fetch main extensions page: {e}")
             
-            # Cache the results
+            # Add special case URLs for extensions with documentation under /data/
+            # These extensions are handled differently in the DuckDB documentation structure
+            # and are not found under the standard /core_extensions/ path. Instead, they 
+            # have their own sections under /data/ as they are considered fundamental data formats.
+            #
+            # IMPORTANT: These special cases are always added regardless of what was found 
+            # in the documentation pages to ensure these critical core extensions always 
+            # have valid URLs in the report.
+            #
+            # Notes on DuckDB documentation structure exceptions:
+            # 1. Some core extensions (json, parquet) are documented under /data/ instead of /core_extensions/
+            # 2. Some extensions use /extension_name/overview.html pattern while others use /extension_name.html
+            # 3. The documentation structure may change over time, so this list may need updates
+            extension_urls["json"] = "https://duckdb.org/docs/stable/data/json/overview.html"
+            extension_urls["parquet"] = "https://duckdb.org/docs/stable/data/parquet/overview.html"
+            
+            # Cache the results (including special cases)
             cache.set(cache_key, (datetime.now(), extension_urls))
             
             logger.info(f"Discovered {len(extension_urls)} core extension URLs")
@@ -132,11 +180,15 @@ class ReportGenerator(BaseReportGenerator):
             # Fallback to basic pattern-based URLs for known extensions
             common_extensions = [
                 "autocomplete", "avro", "aws", "azure", "delta", "ducklake", "encodings", 
-                "excel", "fts", "httpfs", "iceberg", "icu", "inet", "jemalloc", "json", 
-                "mysql", "parquet", "postgres", "spatial", "sqlite", "tpcds", "tpch", "ui", "vss"
+                "excel", "fts", "httpfs", "iceberg", "icu", "inet", "jemalloc",
+                "mysql", "postgres", "spatial", "sqlite", "tpcds", "tpch", "ui", "vss"
             ]
             for ext_name in common_extensions:
                 extension_urls[ext_name] = f"https://duckdb.org/docs/stable/core_extensions/{ext_name}.html"
+            
+            # Add special case URLs even in fallback scenario
+            extension_urls["json"] = "https://duckdb.org/docs/stable/data/json/overview.html"
+            extension_urls["parquet"] = "https://duckdb.org/docs/stable/data/parquet/overview.html"
         
         self._core_extension_urls_cache = extension_urls
         return extension_urls
@@ -154,6 +206,20 @@ class ReportGenerator(BaseReportGenerator):
         except Exception as e:
             logger.debug(f"Could not parse date {date_str}: {e}")
             return f"{fallback_days} days ago"
+    
+    def _get_days_from_date(self, date_str: Optional[str]) -> Optional[int]:
+        """Extract the number of days ago from a date string."""
+        if not date_str:
+            return None
+        
+        try:
+            from dateutil import parser
+            commit_date = parser.parse(date_str)
+            days_ago = (datetime.now(commit_date.tzinfo) - commit_date).days
+            return days_ago
+        except Exception as e:
+            logger.debug(f"Could not parse date {date_str}: {e}")
+            return None
     
     async def generate(self, analysis_result: AnalysisResult, format_type: str = "markdown") -> str:
         """Generate a report in the specified format."""
@@ -197,18 +263,40 @@ class ReportGenerator(BaseReportGenerator):
             "|-----------|-------------------|--------|--------------|",
         ])
         
-        # Discover core extension URLs
+        # Discover core extension URLs - this uses multiple documentation sources 
+        # and handles special cases. See _discover_core_extension_urls() method for 
+        # details on sources, patterns, and exceptions in DuckDB's documentation structure.
         extension_urls = self._discover_core_extension_urls()
         
         for ext in analysis_result.core_extensions:
             stage = ext.stage or "Stable"
             status = "✅ Ongoing"
             
-            # Use actual commit date if available, otherwise fallback to DuckDB release
+            # Use actual commit date if available and from a known extension path,
+            # otherwise indicate uncertainty for extensions without dedicated directories
             if ext.metadata and ext.metadata.get("last_commit_date"):
-                last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+                repo_path = ext.metadata.get("repository_path", "")
+                if repo_path == "integrated_core":
+                    # This extension is integrated into core DuckDB, use release date
+                    last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+                elif repo_path and repo_path != "not_found" and not repo_path.startswith("extensions/"):
+                    # This is from a known extension-specific path, trust the date
+                    last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
+                else:
+                    # This might be from general repository commits, be cautious
+                    commit_days = self._get_days_from_date(ext.metadata["last_commit_date"])
+                    if commit_days is not None and commit_days == duckdb_lag_days:
+                        # Commit date matches release date, likely a general release commit
+                        last_updated = f"~{duckdb_lag_days} days ago (estimated)"
+                    else:
+                        # Use the commit date but indicate it's from extension path search
+                        last_updated = self._format_days_ago(ext.metadata["last_commit_date"], duckdb_lag_days)
             else:
-                last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+                repo_path = ext.metadata.get("repository_path", "") if ext.metadata else ""
+                if repo_path == "integrated_core":
+                    last_updated = f"{duckdb_lag_days} days ago (in {duckdb_version})"
+                else:
+                    last_updated = f"~{duckdb_lag_days} days ago (estimated)"
             
             # Create extension name with URL if available
             extension_name = ext.name

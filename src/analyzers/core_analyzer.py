@@ -90,7 +90,7 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         # Known repository paths for core extensions in DuckDB repository
         self.core_extension_paths = {
             'autocomplete': 'extension/autocomplete',
-            'delta': 'extension/delta',
+            'delta': 'extension/delta', 
             'excel': 'extension/excel',
             'fts': 'extension/fts',
             'httpfs': 'extension/httpfs',
@@ -98,8 +98,23 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
             'inet': 'extension/inet',
             'jemalloc': 'extension/jemalloc',
             'json': 'extension/json',
-            'parquet': 'third_party/parquet',  # Known from previous testing
-            # Note: avro, aws, azure, ducklake, encodings, iceberg not found in main repo
+            'parquet': 'extension/parquet',  # In the main repo directory
+            'tpcds': 'extension/tpcds',
+            'tpch': 'extension/tpch',
+            # Extensions without dedicated directories - these are integrated into core DuckDB
+            # and their "updates" are typically part of general DuckDB releases
+            'avro': None,  # Integrated into core
+            'aws': None,   # Integrated into core  
+            'azure': None, # Integrated into core
+            'ducklake': None, # Integrated into core
+            'encodings': None, # Integrated into core
+            'iceberg': None,   # Integrated into core
+            'mysql': None,     # Integrated into core
+            'postgres': None,  # Integrated into core
+            'spatial': None,   # Integrated into core
+            'sqlite': None,    # Integrated into core
+            'ui': None,        # Integrated into core
+            'vss': None,       # Integrated into core
         }
     
     def get_core_extensions_from_docs(self) -> List[Dict]:
@@ -139,8 +154,16 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         """Get GitHub repository information for core extensions using known paths."""
         repo_path = self.core_extension_paths.get(ext_name)
         
+        if repo_path is None:
+            # This extension is integrated into core DuckDB without a dedicated directory
+            logger.debug(f"Extension {ext_name} is integrated into core DuckDB (no dedicated directory)")
+            return {
+                "repository_path": "integrated_core",
+                "note": "This extension is integrated into core DuckDB without a dedicated source directory"
+            }
+        
         if not repo_path:
-            # Fallback to the old method for unknown extensions
+            # Fallback to the old method for completely unknown extensions
             logger.debug(f"No known repository path for {ext_name}, using fallback")
             return await self._get_github_info_fallback(client, ext_name)
         
