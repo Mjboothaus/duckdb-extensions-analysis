@@ -244,8 +244,25 @@ Structured, real-time logging with analysis progress:
 
 ### 📊 **Markdown Reports**
 Comprehensive reports with extension tables, summaries, and methodology:
-- `reports/latest.md` - Always current report
-- `reports/duckdb_extensions_report_YYYYMMDD_HHMMSS.md` - Timestamped versions
+- `reports/latest.md` - Always current report (version controlled)
+- `reports/duckdb_extensions_report_YYYYMMDD_HHMMSS.md` - Timestamped versions (archived locally)
+
+#### 🗂️ **Report Management & Archiving**
+
+To keep the repository clean while preserving development history:
+
+- ✅ **Version Controlled**: Only `reports/latest.md` is committed to git
+- 📦 **Local Archive**: Interim reports are automatically moved to `reports/archive/`
+- ❌ **Never Committed**: All timestamped reports and archives are git-ignored
+- 🔄 **Auto-Archive**: New reports are automatically excluded from git tracking
+
+**Archive Features:**
+- **Local Storage**: Historical reports remain accessible on your machine
+- **Development History**: Track evolution of report content and formats
+- **Clean Repository**: No interim reports clutter the repository
+- **Cleanup Tools**: Optional archive cleanup commands for disk space management
+
+See `reports/archive/README.md` for detailed archive documentation.
 
 ### 📈 **CSV & Excel Export** 
 Data analysis friendly formats:

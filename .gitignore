@@ -153,6 +153,15 @@ reports/duckdb_extensions_report_*.md
 reports/duckdb_extensions_report_*.csv
 reports/duckdb_extensions_report_*.xlsx
 
+# Archive directory (interim reports moved here for local storage)
+reports/archive/
+
+# Alternative report patterns (just in case)
+reports/*_20[0-9][0-9][0-9][0-9][0-9][0-9]_*.*
+reports/report_*.md
+reports/report_*.csv
+reports/report_*.xlsx
+
 # Cache directory
 .cache/
 
