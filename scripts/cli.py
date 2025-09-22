@@ -241,7 +241,9 @@ def analyze_all(cache_hours, with_issues):
               help='Enable GitHub issues analysis (slower, may hit rate limits)')
 @click.option('--cache-hours', type=int, default=None,
               help='Cache duration in hours (0 to bypass cache)')
-def report_generate(formats, with_issues, cache_hours):
+@click.option('--as-of-date', type=str, default=None,
+              help='Generate report as of this date (YYYY-MM-DD format, e.g., 2024-09-16 for DuckDB v1.4.0 release)')
+def report_generate(formats, with_issues, cache_hours, as_of_date):
     """Generate analysis report in specified format(s)."""
     if with_issues:
         config.enable_issues_analysis = True
@@ -250,7 +252,7 @@ def report_generate(formats, with_issues, cache_hours):
         config.enable_issues_analysis = False
         logger.info("Skipping GitHub issues analysis (default behavior)")
     
-    asyncio.run(_run_report_generation(list(formats), cache_hours))
+    asyncio.run(_run_report_generation(list(formats), cache_hours, as_of_date))
 
 
 # Database commands
@@ -295,17 +297,20 @@ async def _run_analysis(mode: str, cache_hours: Optional[int]):
         raise click.ClickException(f"Analysis failed: {e}")
 
 
-async def _run_report_generation(formats: List[str], cache_hours: Optional[int]):
+async def _run_report_generation(formats: List[str], cache_hours: Optional[int], as_of_date: Optional[str] = None):
     """Generate reports in specified formats."""
     cache_hours = cache_hours if cache_hours is not None else config.default_cache_hours
     
     if cache_hours == 0:
         logger.info("Bypassing cache for this run (fetching fresh data)")
     
+    if as_of_date:
+        logger.info(f"Generating historical report as of date: {as_of_date}")
+    
     orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours)
     
     try:
-        report_files = await orchestrator.run_report_generation(formats)
+        report_files = await orchestrator.run_report_generation(formats, as_of_date)
         
         for format_type, filepath in report_files.items():
             logger.info(f"{format_type.capitalize()} report saved: {filepath}")

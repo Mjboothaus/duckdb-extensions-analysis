@@ -54,6 +54,89 @@ class AnalysisOrchestrator:
         
         return await self.community_analyzer.analyze(featured_extensions)
     
+    async def analyze_core_extensions_historical(self, duckdb_version: str, cutoff_date) -> List[ExtensionInfo]:
+        """Analyze core extensions as of a specific historical date."""
+        logger.info(f"Starting historical core extensions analysis as of {cutoff_date.strftime('%Y-%m-%d')}")
+        
+        # Get current core extensions first
+        current_extensions = await self.core_analyzer.analyze_with_platform_availability(duckdb_version)
+        
+        # Filter extensions based on their last activity relative to cutoff date
+        historical_extensions = []
+        for ext in current_extensions:
+            # Check if the extension had activity before the cutoff date
+            if hasattr(ext, 'last_push_date') and ext.last_push_date:
+                from datetime import datetime
+                try:
+                    # Parse the last_push_date
+                    if isinstance(ext.last_push_date, str):
+                        if ext.last_push_date.endswith('Z'):
+                            push_date = datetime.fromisoformat(ext.last_push_date.rstrip('Z'))
+                        else:
+                            push_date = datetime.fromisoformat(ext.last_push_date)
+                    else:
+                        push_date = ext.last_push_date
+                    
+                    # If extension had activity before cutoff date, include it but mark status appropriately
+                    if push_date.replace(tzinfo=None) <= cutoff_date:
+                        # Extension was active before cutoff - include it
+                        historical_extensions.append(ext)
+                        logger.debug(f"Core extension '{ext.name}' was active before {cutoff_date.strftime('%Y-%m-%d')} (last activity: {push_date.strftime('%Y-%m-%d')})")
+                    else:
+                        # Extension became active after cutoff - exclude it
+                        logger.info(f"Core extension '{ext.name}' was NOT active as of {cutoff_date.strftime('%Y-%m-%d')} (first activity: {push_date.strftime('%Y-%m-%d')})")
+                except Exception as e:
+                    logger.warning(f"Could not parse date for core extension '{ext.name}': {e}")
+                    # If we can't parse the date, include it to be safe
+                    historical_extensions.append(ext)
+            else:
+                # If no date info available, include it
+                historical_extensions.append(ext)
+        
+        logger.info(f"Historical core analysis: {len(historical_extensions)} of {len(current_extensions)} core extensions were active as of {cutoff_date.strftime('%Y-%m-%d')}")
+        return historical_extensions
+    
+    async def analyze_community_extensions_historical(self, featured_extensions: set, cutoff_date) -> List[ExtensionInfo]:
+        """Analyze community extensions as of a specific historical date."""
+        logger.info(f"Starting historical community extensions analysis as of {cutoff_date.strftime('%Y-%m-%d')}")
+        
+        # Get current community extensions first
+        current_extensions = await self.community_analyzer.analyze(featured_extensions)
+        
+        # Filter extensions based on their last activity relative to cutoff date
+        historical_extensions = []
+        for ext in current_extensions:
+            # Check if the extension had activity before the cutoff date
+            if hasattr(ext, 'last_push_date') and ext.last_push_date:
+                from datetime import datetime
+                try:
+                    # Parse the last_push_date
+                    if isinstance(ext.last_push_date, str):
+                        if ext.last_push_date.endswith('Z'):
+                            push_date = datetime.fromisoformat(ext.last_push_date.rstrip('Z'))
+                        else:
+                            push_date = datetime.fromisoformat(ext.last_push_date)
+                    else:
+                        push_date = ext.last_push_date
+                    
+                    # If extension had activity before cutoff date, include it
+                    if push_date.replace(tzinfo=None) <= cutoff_date:
+                        historical_extensions.append(ext)
+                        logger.debug(f"Community extension '{ext.name}' was active before {cutoff_date.strftime('%Y-%m-%d')} (last activity: {push_date.strftime('%Y-%m-%d')})")
+                    else:
+                        # Extension became active after cutoff - exclude it
+                        logger.info(f"Community extension '{ext.name}' was NOT active as of {cutoff_date.strftime('%Y-%m-%d')} (first activity: {push_date.strftime('%Y-%m-%d')})")
+                except Exception as e:
+                    logger.warning(f"Could not parse date for community extension '{ext.name}': {e}")
+                    # If we can't parse the date, include it to be safe
+                    historical_extensions.append(ext)
+            else:
+                # If no date info available, include it
+                historical_extensions.append(ext)
+        
+        logger.info(f"Historical community analysis: {len(historical_extensions)} of {len(current_extensions)} community extensions were active as of {cutoff_date.strftime('%Y-%m-%d')}")
+        return historical_extensions
+    
     async def analyze_full(self) -> AnalysisResult:
         """Perform full analysis of both core and community extensions."""
         logger.info("Starting DuckDB extensions analysis")
@@ -103,6 +186,60 @@ class AnalysisOrchestrator:
             
             # Log comprehensive analysis summary for persistent tracking
             logger.info(f"ANALYSIS SUMMARY: DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
+            
+            return analysis_result
+    
+    async def analyze_full_historical(self, as_of_date: str) -> AnalysisResult:
+        """Perform full analysis as of a specific historical date."""
+        logger.info(f"Starting historical DuckDB extensions analysis as of {as_of_date}")
+        
+        from datetime import datetime
+        try:
+            cutoff_date = datetime.strptime(as_of_date, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError(f"Invalid date format '{as_of_date}'. Use YYYY-MM-DD format.")
+        
+        async with httpx.AsyncClient() as client:
+            # Get DuckDB release information (this will be current, but we'll adjust analysis)
+            duckdb_version, duckdb_release_date = await self.github_client.get_latest_duckdb_release(client)
+            logger.info(f"Using DuckDB release: {duckdb_version} for historical context")
+            
+            # Get featured extensions (this will be current list)
+            featured_extensions = await self.core_analyzer.get_featured_extensions(client)
+            
+            # Analyze core extensions with historical context
+            core_extensions = await self.analyze_core_extensions_historical(duckdb_version, cutoff_date)
+            logger.info(f"Analyzed {len(core_extensions)} core extensions as of {as_of_date}")
+            
+            # Analyze community extensions with historical context  
+            community_extensions = await self.analyze_community_extensions_historical(featured_extensions, cutoff_date)
+            logger.info(f"Analyzed {len(community_extensions)} community extensions as of {as_of_date}")
+            
+            # Skip GitHub issues analysis for historical mode
+            github_issues = []
+            logger.info("Skipping GitHub issues analysis for historical mode")
+            
+            # Skip installation tests for historical mode
+            installation_results = []
+            
+            # Create analysis result with historical timestamp
+            analysis_result = AnalysisResult(
+                core_extensions=core_extensions,
+                community_extensions=community_extensions,
+                featured_extensions=featured_extensions,
+                duckdb_version=duckdb_version,
+                duckdb_release_date=duckdb_release_date
+            )
+            
+            # Override the analysis timestamp to reflect the historical date
+            analysis_result.analysis_timestamp = cutoff_date
+            
+            # Add GitHub issues and installation results to metadata
+            analysis_result.github_issues = github_issues
+            analysis_result.installation_results = installation_results
+            
+            # Log comprehensive analysis summary for historical tracking
+            logger.info(f"HISTORICAL ANALYSIS SUMMARY ({as_of_date}): DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
             
             return analysis_result
     
@@ -233,13 +370,17 @@ class AnalysisOrchestrator:
             logger.warning(f"Installation testing failed: {e}")
             return []
     
-    async def run_report_generation(self, formats: List[str] = None) -> Dict[str, str]:
+    async def run_report_generation(self, formats: List[str] = None, as_of_date: str = None) -> Dict[str, str]:
         """Generate reports from cached analysis data."""
         logger.info("Generating comprehensive markdown report")
         
-        # For report-only mode, we need to re-run the analysis to get fresh data
-        # This is because we don't have a way to load cached analysis results yet
-        analysis_result = await self.analyze_full()
+        if as_of_date:
+            logger.info(f"Running historical analysis as of {as_of_date}")
+            analysis_result = await self.analyze_full_historical(as_of_date)
+        else:
+            # For report-only mode, we need to re-run the analysis to get fresh data
+            # This is because we don't have a way to load cached analysis results yet
+            analysis_result = await self.analyze_full()
         
         return await self.generate_reports(analysis_result, formats)
     
