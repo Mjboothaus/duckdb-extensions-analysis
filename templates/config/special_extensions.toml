@@ -1,0 +1,92 @@
+# Special Extension Handling Configuration
+# For extensions that need special treatment beyond standard patterns
+
+[extensions]
+
+  [extensions.ducklake]
+  name = "ducklake"
+  description = "DuckLake is an integrated data lake and catalog format built on SQL and Parquet"
+  special_handling = true
+  type = "experimental_core"
+  
+  # Multiple repositories
+  repositories = [
+    {
+      primary = true,
+      url = "https://github.com/duckdb/ducklake",
+      description = "DuckLake extension source code and releases"
+    },
+    {
+      primary = false, 
+      url = "https://github.com/duckdb/duckdb",
+      description = "Main DuckDB repository (for core integration)"
+    }
+  ]
+  
+  # Separate release tracking
+  releases = {
+    source = "github_releases",
+    repository = "duckdb/ducklake",
+    pattern = "v*.*.*",
+    exclude_prereleases = false,
+    notes = "DuckLake has independent versioning (0.x series) separate from DuckDB core"
+  }
+  
+  # Documentation locations
+  docs = {
+    primary_url = "https://duckdb.org/docs/extensions/ducklake.html",
+    secondary_urls = [
+      "https://ducklake.org/",
+      "https://github.com/duckdb/ducklake/blob/main/README.md"
+    ]
+  }
+  
+  # Installation methods
+  installation = {
+    stable = "INSTALL ducklake;",
+    development = "FORCE INSTALL ducklake FROM core_nightly;",
+    notes = "Experimental extension with 0.x versioning"
+  }
+  
+  # Metadata overrides
+  metadata = {
+    experimental = true,
+    version_prefix = "0.",
+    status = "experimental",
+    category = "data_lakes",
+    featured = false,
+    core_integration_planned = true
+  }
+
+# Future special extensions can be added here
+# [extensions.other_special_extension]
+# ...
+
+[handling_rules]
+  # Rules for how to handle different types of special extensions
+  
+  [handling_rules.experimental_core]
+  description = "Extensions that are experimental but developed by DuckDB core team"
+  version_source = "separate_releases"
+  documentation_priority = ["primary_url", "secondary_urls", "repository_readme"]
+  status_determination = "experimental"
+  
+  [handling_rules.multi_repo]
+  description = "Extensions with multiple related repositories"
+  primary_repo_priority = true
+  aggregate_stats = false  # Don't combine stats from multiple repos
+  
+  [handling_rules.independent_versioning]
+  description = "Extensions with versioning independent from DuckDB core"
+  track_separate_releases = true
+  version_comparison_skip = true  # Don't compare versions with DuckDB core
+
+[metadata_enrichment]
+  # Additional metadata to add for special extensions
+  
+  [metadata_enrichment.ducklake]
+  tags = ["experimental", "data-lakes", "parquet", "catalog", "sql"]
+  use_cases = ["Data lake management", "Parquet file organization", "SQL-based data catalogs"]
+  maturity_level = "experimental"
+  development_stage = "active"
+  community_adoption = "early"

@@ -1,0 +1,85 @@
+# Report Template Configuration
+# Defines report structures, components, and metadata
+
+[reports]
+
+  [reports.full_analysis]
+  name = "DuckDB Extensions Analysis"
+  description = "Comprehensive analysis of DuckDB extensions ecosystem"
+  template = "reports/full_analysis.md.j2"
+  components = [
+    "header",
+    "summary_stats",
+    "core_extensions_table",
+    "community_extensions_table", 
+    "featured_extensions_summary",
+    "duckdb_release_info",
+    "methodology"
+  ]
+
+  [reports.core_only]
+  name = "DuckDB Core Extensions Analysis"
+  description = "Analysis focused on core DuckDB extensions"
+  template = "reports/core_analysis.md.j2"
+  components = [
+    "header",
+    "core_extensions_table",
+    "duckdb_release_info",
+    "methodology"
+  ]
+
+  [reports.community_only]
+  name = "DuckDB Community Extensions Analysis"
+  description = "Analysis focused on community DuckDB extensions"
+  template = "reports/community_analysis.md.j2"
+  components = [
+    "header",
+    "community_extensions_table",
+    "featured_extensions_summary",
+    "methodology"
+  ]
+
+[components]
+  # Reusable template components
+  
+  [components.header]
+  template = "components/report_header.md.j2"
+  description = "Report title, timestamp, and basic metadata"
+
+  [components.summary_stats]
+  template = "components/summary_stats.md.j2"
+  description = "High-level statistics and key metrics"
+
+  [components.core_extensions_table]
+  template = "components/core_extensions_table.md.j2" 
+  description = "Table of core extensions with metadata"
+
+  [components.community_extensions_table]
+  template = "components/community_extensions_table.md.j2"
+  description = "Table of community extensions with metadata"
+
+  [components.featured_extensions_summary]
+  template = "components/featured_extensions.md.j2"
+  description = "Summary of featured extensions"
+
+  [components.duckdb_release_info]
+  template = "components/duckdb_release_info.md.j2"
+  description = "DuckDB version and release information"
+
+  [components.methodology]
+  template = "components/methodology_section.md.j2" 
+  description = "Analysis methodology and data sources"
+
+[metadata]
+  # Global metadata and settings
+
+  [metadata.defaults]
+  author = "DuckDB Extensions Analysis Tool"
+  version_link = "https://github.com/your-org/duckdb-extensions-analysis"
+  show_timestamps = true
+  include_methodology = true
+  
+  [metadata.links]
+  duckdb_docs = "https://duckdb.org/docs/"
+  community_extensions = "https://community-extensions.duckdb.org/"
+  github_repo = "https://github.com/duckdb/duckdb"

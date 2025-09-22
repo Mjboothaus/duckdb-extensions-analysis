@@ -13,6 +13,7 @@ from loguru import logger
 
 from .base import BaseReportGenerator, AnalysisResult, ExtensionInfo
 from .extension_metadata import ExtensionMetadata
+from ..templates import TemplateEngine
 
 
 class ReportGenerator(BaseReportGenerator):
@@ -24,6 +25,7 @@ class ReportGenerator(BaseReportGenerator):
         self.templates_dir = Path(config.project_root) / "templates"
         self.config = config
         self.metadata = ExtensionMetadata(config.config_dir)
+        self.template_engine = TemplateEngine(config, self.templates_dir)
         self._core_extension_urls_cache = None
     
     def _load_template(self, template_name: str) -> str:
@@ -540,6 +542,109 @@ class ReportGenerator(BaseReportGenerator):
         
         logger.info(f"Excel report saved: {excel_path}")
         return str(excel_path)
+    
+    async def generate_markdown_template(self, analysis_result: AnalysisResult, template_name: str = 'full_analysis') -> str:
+        """Generate markdown report using the new template system."""
+        logger.info(f"Generating markdown report using template: {template_name}")
+        
+        try:
+            # Convert AnalysisResult to dict format expected by template engine
+            analysis_data = {
+                'core_extensions': [],
+                'community_extensions': [],
+                'duckdb_version_info': {
+                    'version': getattr(analysis_result, 'duckdb_version', None),
+                    'release_date': getattr(analysis_result, 'duckdb_release_date', None)
+                },
+                'analysis_timestamp': analysis_result.analysis_timestamp,
+                'stats': {}
+            }
+            
+            # Convert core extensions
+            extension_urls = self._discover_core_extension_urls()
+            for ext in analysis_result.core_extensions:
+                # Calculate actual days ago from metadata if available
+                last_activity_days = 0  # Default for core extensions
+                if ext.metadata and ext.metadata.get("last_commit_date"):
+                    try:
+                        from dateutil import parser
+                        commit_date = parser.parse(ext.metadata["last_commit_date"])
+                        last_activity_days = (datetime.now(commit_date.tzinfo) - commit_date).days
+                    except Exception:
+                        # If DuckDB release date is available, use that as reference
+                        if analysis_result.duckdb_release_date:
+                            last_activity_days = (analysis_result.analysis_timestamp.replace(tzinfo=None) - analysis_result.duckdb_release_date.replace(tzinfo=None)).days
+                        else:
+                            last_activity_days = 0
+                elif analysis_result.duckdb_release_date:
+                    # For core extensions without specific commit data, use DuckDB release age
+                    last_activity_days = (analysis_result.analysis_timestamp.replace(tzinfo=None) - analysis_result.duckdb_release_date.replace(tzinfo=None)).days
+                
+                # Get meaningful description from metadata or use the extension's description
+                description = ext.description
+                if not description and ext.metadata:
+                    # Try to get description from metadata
+                    description = ext.metadata.get('description')
+                
+                # Use metadata system to get enhanced description if still not available
+                if not description:
+                    metadata_desc = self.metadata.get_extension_description(ext.name)
+                    if metadata_desc:
+                        description = metadata_desc
+                    else:
+                        description = f'Core DuckDB extension: {ext.name}'
+                
+                core_ext = {
+                    'name': ext.name,
+                    'repository': ext.repository or 'duckdb/duckdb',
+                    'docs_url': extension_urls.get(ext.name.lower()),
+                    'status': 'ongoing',
+                    'last_push_days': last_activity_days,
+                    'stars': 0,  # Not applicable for core
+                    'language': 'C++',
+                    'description': description,
+                    'featured': False,
+                    'version': '',
+                    'topics': []
+                }
+                analysis_data['core_extensions'].append(core_ext)
+            
+            # Convert community extensions
+            for ext in analysis_result.community_extensions:
+                repo_info = ext.metadata.get('repo_info', {}) if ext.metadata else {}
+                
+                community_ext = {
+                    'name': ext.name,
+                    'repository': ext.repository,
+                    'docs_url': f"https://duckdb.org/docs/extensions/community_extensions.html#{ext.name}",
+                    'status': self._parse_status(ext.metadata.get('status', '❌ Error') if ext.metadata else '❌ Error'),
+                    'last_push_days': ext.days_ago,
+                    'stars': ext.stars or 0,
+                    'language': repo_info.get('language', 'N/A'),
+                    'description': ext.description or 'No description available',
+                    'featured': getattr(ext, 'featured', False),
+                    'version': '',
+                    'topics': repo_info.get('topics', [])
+                }
+                analysis_data['community_extensions'].append(community_ext)
+            
+            # Generate report using template engine
+            rendered_report = self.template_engine.render_report(template_name, analysis_data)
+            return rendered_report
+            
+        except Exception as e:
+            logger.error(f"Error generating template-based report: {e}")
+            logger.info("Falling back to legacy report generation")
+            return self.generate_markdown(analysis_result)
+    
+    def _parse_status(self, raw_status: str) -> str:
+        """Parse status from raw format to standardized format."""
+        if "✅" in raw_status or "Ongoing" in raw_status:
+            return "ongoing"
+        elif "🔴" in raw_status or "Discontinued" in raw_status or "Archived" in raw_status:
+            return "archived" 
+        else:
+            return "unknown"
     
     def save_report(self, content: str, filename: str) -> str:
         """Save the report content to a file."""

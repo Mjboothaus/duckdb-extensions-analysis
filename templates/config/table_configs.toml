@@ -1,0 +1,122 @@
+# Table Configuration
+# Defines table structures, columns, and formatting options
+
+[tables]
+
+  [tables.core_extensions]
+  title = "Core Extensions"
+  description = "Built-in extensions that are part of the main DuckDB release"
+  sort_by = "extension_name"
+  columns = [
+    "ref_no",
+    "extension_name",
+    "repository", 
+    "status",
+    "last_activity",
+    "stars",
+    "language",
+    "description"
+  ]
+
+  [tables.community_extensions]
+  title = "Community Extensions"
+  description = "Third-party extensions maintained by the community"
+  sort_by = "extension_name"
+  columns = [
+    "ref_no", 
+    "extension_name",
+    "repository",
+    "status",
+    "last_activity", 
+    "stars",
+    "language",
+    "description"
+  ]
+
+[columns]
+  # Column definitions and formatting
+
+  [columns.ref_no]
+  header = "#"
+  width = 3
+  align = "right"
+  format = "%d"
+  description = "Reference number for easy citation"
+
+  [columns.extension_name]
+  header = "Extension"
+  width = 20
+  align = "left"
+  format = "link"  # Special formatting for links
+  description = "Extension name with link to documentation"
+
+  [columns.repository]
+  header = "Repository" 
+  width = 25
+  align = "left"
+  format = "github_link"  # Special formatting for GitHub links
+  description = "GitHub repository link"
+
+  [columns.status]
+  header = "Status"
+  width = 12
+  align = "center"
+  format = "status_badge"  # Special formatting for status
+  description = "Extension maintenance status"
+
+  [columns.last_activity]
+  header = "Last Activity"
+  width = 15
+  align = "center"
+  format = "relative_date"  # Special formatting for dates
+  description = "Time since last repository activity"
+
+  [columns.stars]
+  header = "Stars"
+  width = 8
+  align = "right"
+  format = "%,d"  # Comma-separated numbers
+  description = "GitHub repository stars"
+
+  [columns.language]
+  header = "Language"
+  width = 12
+  align = "center"
+  format = "text"
+  description = "Primary programming language"
+
+  [columns.description]
+  header = "Description"
+  width = 50
+  align = "left"
+  format = "text_wrap"  # Wrap long descriptions
+  description = "Extension description and purpose"
+
+[formatting]
+  # Global formatting options
+
+  [formatting.status]
+  ongoing = "🟢 Ongoing"
+  archived = "🟡 Archived"
+  discontinued = "🔴 Discontinued"
+  unknown = "❓ Unknown"
+
+  [formatting.dates]
+  format = "%Y-%m-%d"
+  relative_thresholds = [
+    { days = 1, format = "today" },
+    { days = 7, format = "{} days ago" },
+    { days = 30, format = "{} days ago" },
+    { days = 365, format = "{} days ago" },
+    { days = 99999, format = "over a year ago" }
+  ]
+
+  [formatting.links]
+  github_format = "[{name}](https://github.com/{repo})"
+  docs_format = "[{name}]({url})"
+  
+  [formatting.table]
+  header_separator = "---"
+  cell_padding = 1
+  max_description_length = 100
+  truncate_suffix = "..."

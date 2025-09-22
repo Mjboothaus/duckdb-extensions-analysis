@@ -115,7 +115,8 @@ class AnalysisOrchestrator:
         for format_type in formats:
             try:
                 if format_type.lower() == "markdown":
-                    content = await self.report_generator.generate_markdown(analysis_result)
+                    # Try new template-based generation first, fall back to legacy if needed
+                    content = await self.report_generator.generate_markdown_template(analysis_result)
                     filename = f"duckdb_extensions_report_{timestamp}.md"
                     filepath = self.report_generator.save_report(content, filename)
                     results[format_type] = filepath

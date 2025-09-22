@@ -1,0 +1,116 @@
+# Output Format Configuration
+# Defines format-specific settings and templates
+
+[formats]
+
+  [formats.markdown]
+  name = "Markdown"
+  description = "GitHub-flavoured markdown for documentation"
+  extension = "md"
+  template_base = "formats/markdown"
+  enabled = true
+
+  [formats.html]
+  name = "HTML" 
+  description = "Styled HTML report with interactive features"
+  extension = "html"
+  template_base = "formats/html"
+  enabled = true
+
+  [formats.csv]
+  name = "CSV"
+  description = "Comma-separated values for data analysis"
+  extension = "csv"
+  template_base = "formats/csv"
+  enabled = true
+  
+  [formats.excel]
+  name = "Excel"
+  description = "Excel workbook with multiple sheets"
+  extension = "xlsx"  
+  template_base = "formats/excel"
+  enabled = true
+
+[markdown]
+  # Markdown-specific settings
+  flavour = "github"
+  table_format = "github"
+  code_highlighting = true
+  toc_enabled = true
+  toc_depth = 3
+  
+  [markdown.styling]
+  h1_prefix = "# "
+  h2_prefix = "## "
+  h3_prefix = "### "
+  table_align_separator = "---"
+  
+[html]
+  # HTML-specific settings
+  title_template = "DuckDB Extensions Analysis - {report_name}"
+  css_framework = "bootstrap"
+  include_charts = true
+  responsive_tables = true
+  
+  [html.styling]
+  theme = "light"
+  primary_color = "#1f2937"
+  accent_color = "#3b82f6"
+  font_family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+  
+  [html.features]
+  sortable_tables = true
+  search_functionality = true
+  export_buttons = true
+  dark_mode_toggle = false
+
+[csv]
+  # CSV-specific settings
+  delimiter = ","
+  quote_char = "\""
+  escape_char = "\\"
+  line_terminator = "\n"
+  encoding = "utf-8"
+  
+  [csv.options]
+  include_header = true
+  quote_all = false
+  double_quote = true
+
+[excel] 
+  # Excel-specific settings
+  engine = "openpyxl"
+  freeze_panes = true
+  auto_filter = true
+  
+  [excel.sheets]
+  # Sheet configuration
+  summary = { name = "Summary", position = 0 }
+  core = { name = "Core Extensions", position = 1 }
+  community = { name = "Community Extensions", position = 2 }
+  featured = { name = "Featured Extensions", position = 3 }
+  
+  [excel.styling]
+  header_style = "bold"
+  alternating_rows = true
+  freeze_header = true
+  auto_width = true
+
+[output]
+  # Global output settings
+  
+  [output.files]
+  timestamp_format = "%Y%m%d_%H%M%S"
+  filename_template = "duckdb_extensions_report_{timestamp}.{extension}"
+  latest_filename = "latest.{extension}"
+  
+  [output.paths]
+  reports_dir = "reports"
+  archive_dir = "reports/archive"
+  temp_dir = "reports/temp"
+  
+  [output.metadata]
+  include_generation_time = true
+  include_tool_version = true
+  include_data_sources = true
+  include_row_counts = true

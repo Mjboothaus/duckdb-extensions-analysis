@@ -1,0 +1,24 @@
+# {{ report.name }}
+
+{% if metadata.show_timestamps %}
+**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}  
+**Tool Version:** {{ tool.version }}{% if metadata.version_link %} ([Source]({{ metadata.version_link }})){% endif %}
+{% endif %}
+
+{% include 'components/report_header.md.j2' %}
+
+{% include 'components/summary_stats.md.j2' %}
+
+{% include 'components/core_extensions_table.md.j2' %}
+
+{% include 'components/community_extensions_table.md.j2' %}
+
+{% if stats.featured_count > 0 %}
+{% include 'components/featured_extensions.md.j2' %}
+{% endif %}
+
+{% include 'components/duckdb_release_info.md.j2' %}
+
+{% if metadata.include_methodology %}
+{% include 'components/methodology_section.md.j2' %}
+{% endif %}
