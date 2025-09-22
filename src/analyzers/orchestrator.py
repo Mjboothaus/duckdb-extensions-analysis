@@ -84,7 +84,9 @@ class AnalysisOrchestrator:
                 logger.info("Skipping GitHub issues analysis (disabled in configuration)")
             
             # Run installation tests for a subset of extensions (prioritize core for database mode)
-            installation_results = await self.run_installation_tests(core_extensions, community_extensions)
+            # Installation testing is disabled by default for faster report generation
+            # installation_results = await self.run_installation_tests(core_extensions, community_extensions)
+            installation_results = []
             
             # Create analysis result
             analysis_result = AnalysisResult(
@@ -152,7 +154,9 @@ class AnalysisOrchestrator:
             core_extensions = await self.analyze_core_extensions(duckdb_version)
             
             # Run installation tests for core extensions
-            installation_results = await self.run_installation_tests(core_extensions, [])
+            # Installation testing is disabled by default for faster analysis
+            # installation_results = await self.run_installation_tests(core_extensions, [])
+            installation_results = []
             
             analysis_result = AnalysisResult(
                 core_extensions=core_extensions,

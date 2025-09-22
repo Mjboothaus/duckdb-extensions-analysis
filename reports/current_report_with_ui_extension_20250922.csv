@@ -1,0 +1,107 @@
+Extension,Type,Repository,Status,Development Stage,Last Push Days,Stars,Language,Description,Featured
+autocomplete,Core,duckdb/duckdb/extensions/autocomplete,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+avro,Core,duckdb/duckdb/extensions/avro,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+aws,Core,duckdb/duckdb/extensions/aws,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+azure,Core,duckdb/duckdb/extensions/azure,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+delta,Core,duckdb/duckdb/extensions/delta,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+ducklake,Core,duckdb/duckdb/extensions/ducklake,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+encodings,Core,duckdb/duckdb/extensions/encodings,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+excel,Core,duckdb/duckdb/extensions/excel,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+fts,Core,duckdb/duckdb/extensions/fts,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+httpfs,Core,duckdb/duckdb/extensions/httpfs,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+iceberg,Core,duckdb/duckdb/extensions/iceberg,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+icu,Core,duckdb/duckdb/extensions/icu,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+inet,Core,duckdb/duckdb/extensions/inet,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+jemalloc,Core,duckdb/duckdb/extensions/jemalloc,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+json,Core,duckdb/duckdb/extensions/json,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+mysql,Core,duckdb/duckdb/extensions/mysql,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+parquet,Core,duckdb/duckdb/extensions/parquet,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+postgres,Core,duckdb/duckdb/extensions/postgres,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+spatial,Core,duckdb/duckdb/extensions/spatial,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+sqlite,Core,duckdb/duckdb/extensions/sqlite,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+tpcds,Core,duckdb/duckdb/extensions/tpcds,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+tpch,Core,duckdb/duckdb/extensions/tpch,✅ Ongoing,Stable,6,N/A,C++,Core DuckDB extension,False
+ui,Core,duckdb/duckdb/extensions/ui,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+vss,Core,duckdb/duckdb/extensions/vss,✅ Ongoing,GitHub,6,N/A,C++,Core DuckDB extension,False
+bigquery,Community,hafenkran/duckdb-bigquery,✅ Ongoing,N/A,0,130,C++,"Integrates DuckDB with Google BigQuery, allowing direct querying and management of BigQuery datasets",True
+cache_httpfs,Community,dentiny/duck-read-cache-fs,✅ Ongoing,N/A,1,96,C++,This repository is made as read-only filesystem for remote access.,True
+observefs,Community,dentiny/duckdb-filesystem-observability,✅ Ongoing,N/A,1,0,C++,Provides observability for duckdb filesystem.,True
+chaos,Community,taniabogatsch/duckdb-chaos,✅ Ongoing,N/A,2,0,C++,DuckDB extension: chaos by taniabogatsch,True
+flock,Community,dais-polymtl/flock,✅ Ongoing,N/A,2,269,C++,FlockMTL: DuckDB extension for multimodal querying using language models (LMs) and retrieval augmented generation (RAG),True
+msolap,Community,Hugoberry/duckdb-msolap-extension,✅ Ongoing,N/A,2,8,C++,DuckDB extension: msolap by Hugoberry,False
+parser_tools,Community,zfarrell/duckdb_extension_parser_tools,✅ Ongoing,N/A,2,15,C++,Parse sql - with sql!,True
+pbix,Community,Hugoberry/duckdb-pbix-extension,✅ Ongoing,N/A,2,27,C++,Duckdb extension for parsing the metadata and contents of the embedded data mode in PowerBI pbix files,True
+airport,Community,Query-farm/airport,✅ Ongoing,N/A,3,297,C++,"The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB",True
+cwiqduck,Community,cwiq-os/cwiqduck,✅ Ongoing,N/A,3,1,C++,DuckDB extensions for CWIQ,True
+mooncake,Community,Mooncake-Labs/duckdb_mooncake,✅ Ongoing,N/A,3,0,C++,Read Iceberg tables written by moonlink in real time,True
+nanodbc,Community,Hugoberry/duckdb-nanodbc-extension,✅ Ongoing,N/A,3,34,C++,Database connectivity extension by Hugoberry,True
+snowflake,Community,iqea-ai/duckdb-snowflake,✅ Ongoing,N/A,3,10,C++,A powerful DuckDB extension that enables seamless querying of Snowflake databases using Arrow ADBC drivers with runtime loading capabilities.,True
+zipfs,Community,isaacbrodsky/duckdb-zipfs,✅ Ongoing,N/A,3,41,C++,DuckDB extension to read files within zip archives.,True
+file_dialog,Community,yutannihilation/duckdb-ext-file-dialog,✅ Ongoing,N/A,4,14,Rust,A DuckDB extension to choose file interactively using native file open dialogs,True
+magic,Community,carlopi/duckdb_magic,✅ Ongoing,N/A,4,7,C++,Auto-detect file types via `libmagic` (`file` utility),True
+nanoarrow,Community,paleolimbot/duckdb-nanoarrow,✅ Ongoing,N/A,4,45,C++,DuckDB extension: nanoarrow by paleolimbot,True
+rapidfuzz,Community,Query-farm/rapidfuzz,✅ Ongoing,N/A,4,3,C++,DuckDB extension: rapidfuzz,True
+rusty_quack,Community,duckdb/extension-template-rs,✅ Ongoing,N/A,4,80,Rust,(Experimental) Template for Rust-based DuckDB extensions,False
+st_read_multi,Community,yutannihilation/duckdb-ext-st-read-multi,✅ Ongoing,N/A,4,3,Rust,A DuckDB extension to import multiple geospatial files with `ST_Read_Multi()`,True
+h3,Community,isaacbrodsky/h3-duckdb,✅ Ongoing,N/A,5,220,C++,Bindings for H3 to DuckDB,False
+lua,Community,isaacbrodsky/duckdb-lua,✅ Ongoing,N/A,5,4,C++,DuckDB extension to evaluate Lua expressions.,True
+quack,Community,duckdb/extension-template,✅ Ongoing,N/A,5,221,Python,"Template for DuckDB extensions to help you develop, test and deploy a custom extension",True
+splink_udfs,Community,moj-analytical-services/splink_udfs,✅ Ongoing,N/A,5,8,C++,DuckDB extension: splink_udfs by moj-analytical-services,True
+vortex,Community,vortex-data/duckdb-vortex,✅ Ongoing,N/A,5,24,Shell,DuckDB extension allowing reading/writing of vortex files,False
+bitfilters,Community,Query-farm/bitfilters,✅ Ongoing,N/A,6,2,C++,"A high-performance DuckDB extension providing probabilistic data structures for fast set membership testing and approximate duplicate detection. This extension implements state-of-the-art filter algorithms including Quotient filters, XOR filters, Binary Fuse filters, and soon Bloom filters.",True
+shellfs,Community,Query-farm/shellfs,✅ Ongoing,N/A,6,80,C++,DuckDB extension allowing shell commands to be used for input and output.,True
+stochastic,Community,Query-farm/stochastic,✅ Ongoing,N/A,6,11,C++,"A DuckDB extension that add comprehensive statistical distribution functions to DuckDB, enabling advanced statistical analysis, probability calculations, and random sampling directly within SQL queries.",True
+textplot,Community,Query-farm/textplot,✅ Ongoing,N/A,6,9,C++,"A DuckDB community extension that enables text-based data visualization directly in SQL queries, including ASCII/Unicode bar charts, density plots, and sparklines for lightweight analytics and dashboards.",True
+yaml,Community,teaguesterling/duckdb_yaml,✅ Ongoing,N/A,10,9,C++, A DuckDB to read and work with YAML files in a similar way to JSON files (also an exploration of AI-guided development) Resources,False
+eeagrid,Community,ahuarte47/duckdb-eeagrid,✅ Ongoing,N/A,11,0,C++,Functions for transforming XY coordinates to and from the EEA Reference Grid (EPSG:3035),True
+cronjob,Community,Query-farm/duckdb-extension-cronjob,✅ Ongoing,N/A,12,41,C++,DuckDB CronJob Extension,False
+gsheets,Community,evidence-dev/duckdb_gsheets,✅ Ongoing,N/A,12,298,C++,DuckDB extension to read and write Google Sheets using SQL,True
+faiss,Community,duckdb-faiss-ext/duckdb-faiss-ext,✅ Ongoing,N/A,13,25,Go,DuckDB wrapper for FAISS - Experimental,False
+chsql,Community,Query-farm/duckdb-extension-clickhouse-sql,✅ Ongoing,N/A,30,70,C++,DuckDB Community Extension implementing ClickHouse SQL Dialect macros and Custom functions for DuckDB,False
+geography,Community,paleolimbot/duckdb-geography,✅ Ongoing,N/A,33,32,C++,Geospatial data extension by paleolimbot,False
+geotiff,Community,babaknaimi/duckdb-geotiff,✅ Ongoing,N/A,33,2,C++,Duckdb extension to read GeoTiffs directly with duckdb database,False
+highs,Community,fhk/HiGHS-duckdb,✅ Ongoing,N/A,37,0,C++,Run the solver in the database!,False
+rusty_sheet,Community,redraiment/rusty-sheet,✅ Ongoing,N/A,39,17,Rust,An Excel/OpenDocument Spreadsheets file reader for DuckDB,False
+httpserver,Community,Query-farm/duckdb-extension-httpserver,✅ Ongoing,N/A,40,230,HTML,DuckDB HTTP API Server and Query Interface in a  Community Extension,False
+webbed,Community,teaguesterling/duckdb_webbed,✅ Ongoing,N/A,40,14,C++,Web/HTTP functionality extension by teaguesterling,False
+read_stat,Community,mettekou/duckdb-read-stat,✅ Ongoing,N/A,42,22,C,"Read data sets from SAS, Stata, and SPSS from DuckDB with ReadStat",False
+hashfuncs,Community,Query-farm/hashfuncs,✅ Ongoing,N/A,46,4,C++,A DuckDB extension that supplies non-cryptographic hash functions.,True
+hdf5,Community,Berrysoft/duckdb-hdf5,✅ Ongoing,N/A,46,9,Rust,HDF5 plugin for duckdb,False
+marisa,Community,Query-farm/marisa,✅ Ongoing,N/A,46,2,C++,"The Marisa extension by Query.Farm integrates the fast, space-efficient MARISA trie into DuckDB, enabling high-performance string lookups, prefix searches, and autocomplete functionality.",True
+http_client,Community,Query-farm/duckdb-extension-httpclient,✅ Ongoing,N/A,55,70,C++,DuckDB HTTP GET/POST Client in a Community Extension,False
+duckdb_mcp,Community,teaguesterling/duckdb_mcp,✅ Ongoing,N/A,57,6,C++,A simple MCP server extension for DuckDB,False
+chsql_native,Community,Query-farm/duckdb-extension-clickhouse-native,✅ Ongoing,N/A,60,16,Rust,Experimental ClickHouse Native Client and Native file reader Extension for DuckDB chsql,False
+duckpgq,Community,cwida/duckpgq-extension,✅ Ongoing,N/A,62,261,C++,DuckDB extension that adds support for SQL/PGQ and graph algorithms,False
+datasketches,Community,Query-farm/datasketches,✅ Ongoing,N/A,64,25,C++,"Integrates DuckDB with the high-performance Apache DataSketches library. This extension enables users to perform approximate analytics on large-scale datasets using state-of-the-art streaming algorithms, all from within DuckDB.",True
+duck_tails,Community,teaguesterling/duck_tails,✅ Ongoing,N/A,64,2,C++,A DuckDB extension for exploring and reading git history.,False
+lindel,Community,Query-farm/lindel,✅ Ongoing,N/A,65,50,C++,"DuckDB Extension Linearization/Delinearization, Z-Order, Hilbert and Morton Curves",True
+capi_quack,Community,duckdb/extension-template-c,✅ Ongoing,N/A,66,17,C,(Experimental) C/C++ template for DuckDB extensions based on the C API,True
+markdown,Community,teaguesterling/duckdb_markdown,✅ Ongoing,N/A,73,5,C++,Heirarchical markdown parsing for DuckDB,False
+jwt,Community,GalvinGao/duckdb_jwt,✅ Ongoing,N/A,75,0,C++,DuckDB extension: jwt by GalvinGao,False
+quickjs,Community,Query-farm/duckdb-quickjs,✅ Ongoing,N/A,85,8,C++,DuckDB extension: quickjs by quackscience,True
+substrait,Community,substrait-io/duckdb-substrait-extension,✅ Ongoing,N/A,85,48,C++,DuckDB extension: substrait by substrait-io,False
+redis,Community,Query-farm/duckdb-extension-redis,✅ Ongoing,N/A,100,7,C++,DuckDB Redis Client community extension,False
+radio,Community,Query-farm/radio,✅ Ongoing,N/A,101,30,C++,Radio is a DuckDB extension by Query.Farm that brings real-time event streams into your SQL workflows. It enables DuckDB to receive and send events over systems like WebSocket and Redis Pub/Sub.,True
+tributary,Community,Query-farm/tributary,✅ Ongoing,N/A,101,29,C++,A DuckDB Extension for Kafka,True
+crypto,Community,Query-farm/crypto,✅ Ongoing,N/A,104,22,Rust,DuckDB Extension for cryptographic hash functions and HMAC,True
+evalexpr_rhai,Community,Query-farm/evalexpr_rhai,✅ Ongoing,N/A,104,21,C++,A DuckDB extension to evaluate the Rhai scripting language as part of SQL.,True
+fuzzycomplete,Community,Query-farm/fuzzycomplete,✅ Ongoing,N/A,104,21,C++,DuckDB Extension for fuzzy string matching based autocompletion,True
+pcap_reader,Community,Query-farm/duckdb-extension-pcap,✅ Ongoing,N/A,104,10,Rust,DuckDB PCAP Reader Extension made in Rust,False
+pyroscope,Community,Query-farm/duckdb-extension-pyroscope,✅ Ongoing,N/A,104,19,Rust,DuckDB Pyroscope Extension for Continuous Profiling,False
+netquack,Community,hatamiarash7/duckdb-netquack,✅ Ongoing,N/A,107,17,C++,"DuckDB extension for parsing, extracting, and analyzing domains, URIs, and paths with ease.",False
+quackformers,Community,martin-conur/quackformers,✅ Ongoing,N/A,113,6,Rust,DuckDB NLP extension.,False
+arrow,Community,duckdb/duckdb-extension-alias,✅ Ongoing,N/A,136,4,C,DuckDB extension: arrow,False
+ofquack,Community,krokozyab/ofquack,✅ Ongoing,N/A,152,5,C++,Oracle Fusion DuckDB extension ,False
+scrooge,Community,pdet/Scrooge-McDuck,✅ Ongoing,N/A,161,149,C++,DuckDB extension: scrooge by pdet,False
+wireduck,Community,hyehudai/wireduck,✅ Ongoing,N/A,163,45,C++,Duckdb extension to read pcap files,False
+psql,Community,ywelsch/duckdb-psql,✅ Ongoing,N/A,168,92,C++,A piped SQL for DuckDB,False
+blockduck,Community,luohaha/BlockDuck,✅ Ongoing,N/A,179,8,C++,Live SQL Queries on Blockchain,False
+prql,Community,ywelsch/duckdb-prql,✅ Ongoing,N/A,188,297,C++,PRQL as a DuckDB extension,False
+hostfs,Community,gropaul/hostFS,✅ Ongoing,N/A,195,23,C++,DuckDB extension: hostfs by gropaul,False
+open_prompt,Community,Query-farm/duckdb-extension-openprompt,✅ Ongoing,N/A,256,50,C++,DuckDB Community Extension to prompt LLMs from SQL,False
+webmacro,Community,Query-farm/duckdb-extension-webmacro,✅ Ongoing,N/A,280,13,C++,DuckDB WebMacro: Share and Load your SQL Macros via gists,False
+tsid,Community,Query-farm/duckdb-extension-tsid,✅ Ongoing,N/A,286,5,C++,TSID Extension for DuckDB ,False
+sheetreader,Community,polydbms/sheetreader-duckdb,✅ Ongoing,N/A,341,55,Jupyter Notebook,DuckDB extension: sheetreader by polydbms,False
+pivot_table,Community,Alex-Monahan/pivot_table,✅ Ongoing,N/A,364,15,C++,"Full spreadsheet-style pivot table through SQL macros. Just specify values, rows, columns, and filters!",False
+tarfs,Community,Maxxen/duckdb_tarfs,✅ Ongoing,N/A,392,10,C++,DuckDB extension: tarfs by Maxxen,False
+ulid,Community,Maxxen/duckdb_ulid,✅ Ongoing,N/A,440,24,C++,DuckDB extension: ulid by Maxxen,False
