@@ -92,7 +92,7 @@ clean:
 # Show project status
 status:
     @echo "Project: DuckDB Extensions Analysis"
-    @uv run python --version
+    @uv run --version
     @echo ""
     @uv tree --depth 1
 
