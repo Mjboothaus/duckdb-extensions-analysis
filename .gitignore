@@ -174,3 +174,7 @@ logs/
 # Environment variables (contains secrets)
 .env
 .env.*
+
+# Cache stashes and backups
+.cache_stash_*
+.cache_backup_*

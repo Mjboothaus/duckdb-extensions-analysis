@@ -66,12 +66,58 @@ class GitHubIssuesTracker:
             'windows_amd64': ['windows', 'win32', 'win64', 'x64', 'amd64']
         }
     
+    async def fetch_extension_issues_from_repos(self, 
+                                              extension_repos: Dict[str, str],
+                                              days_back: int = 90,
+                                              include_closed: bool = True) -> List[ExtensionIssue]:
+        """
+        Fetch GitHub issues directly from individual extension repositories.
+        
+        Args:
+            extension_repos: Dict mapping extension names to their repository paths (e.g., 'duckdb/duckdb-excel')
+            days_back: How many days back to search for issues
+            include_closed: Whether to include closed issues
+            
+        Returns:
+            List of ExtensionIssue objects
+        """
+        logger.info(f"Fetching GitHub issues directly from {len(extension_repos)} extension repositories")
+        
+        all_issues = []
+        since_date = datetime.now() - timedelta(days=days_back)
+        
+        async with httpx.AsyncClient(timeout=30) as client:
+            for ext_name, repo_path in extension_repos.items():
+                try:
+                    logger.debug(f"Fetching issues for {ext_name} from {repo_path}")
+                    
+                    # Fetch issues from the specific repository
+                    issues = await self._fetch_repository_issues(client, repo_path, since_date, include_closed)
+                    
+                    # Process and enrich issues
+                    for issue in issues:
+                        issue.extension_names = {ext_name}
+                        issue.platforms = self._extract_mentioned_platforms(issue)
+                        issue.issue_type = self._classify_issue_type(issue)
+                        issue.severity = self._determine_severity(issue)
+                        all_issues.append(issue)
+                    
+                    # Rate limiting - sleep between repository requests
+                    await asyncio.sleep(0.1)
+                        
+                except Exception as e:
+                    logger.warning(f"Failed to fetch issues for {ext_name} from {repo_path}: {e}")
+                    continue
+        
+        logger.info(f"Found {len(all_issues)} issues across all extension repositories")
+        return all_issues
+    
     async def fetch_extension_issues(self, 
                                    extension_names: List[str], 
                                    days_back: int = 90,
                                    include_closed: bool = True) -> List[ExtensionIssue]:
         """
-        Fetch GitHub issues related to specific extensions.
+        Fetch GitHub issues related to specific extensions using the efficient repository-based approach.
         
         Args:
             extension_names: List of extension names to search for
@@ -83,32 +129,125 @@ class GitHubIssuesTracker:
         """
         logger.info(f"Fetching GitHub issues for {len(extension_names)} extensions")
         
-        # Build search queries for extensions
-        extension_queries = []
+        # First, try to determine repository paths for extensions with known repositories
+        extension_repos = {}
+        
+        # For core extensions with external repositories
+        from .extension_metadata import ExtensionMetadata
+        from pathlib import Path
+        metadata = ExtensionMetadata(Path("conf"))
+        
         for ext_name in extension_names:
-            # Search for issues mentioning the extension name
-            queries = [
-                f'"{ext_name}" extension',
-                f'"{ext_name}" install',
-                f'"{ext_name}" load',
-                f'extension {ext_name}'
-            ]
-            extension_queries.extend(queries)
+            external_repo = metadata.get_external_repository(ext_name)
+            if external_repo:
+                extension_repos[ext_name] = external_repo
+        
+        # Use the more efficient repository-based approach if we have repositories
+        if extension_repos:
+            return await self.fetch_extension_issues_from_repos(extension_repos, days_back, include_closed)
+        
+        # Fallback to the original search approach for extensions without known repositories
+        logger.info("No known repositories found, falling back to search-based approach")
+        return await self._fetch_extension_issues_fallback(extension_names, days_back, include_closed)
+    
+    async def _fetch_repository_issues(self,
+                                      client: httpx.AsyncClient,
+                                      repo_path: str,
+                                      since_date: datetime,
+                                      include_closed: bool) -> List[ExtensionIssue]:
+        """Fetch issues directly from a specific repository."""
+        issues = []
+        
+        # Fetch open issues
+        open_issues = await self._fetch_issues_by_state(client, repo_path, 'open', since_date)
+        issues.extend(open_issues)
+        
+        # Fetch closed issues if requested
+        if include_closed:
+            closed_issues = await self._fetch_issues_by_state(client, repo_path, 'closed', since_date)
+            issues.extend(closed_issues)
+        
+        return issues
+    
+    async def _fetch_issues_by_state(self,
+                                   client: httpx.AsyncClient,
+                                   repo_path: str,
+                                   state: str,
+                                   since_date: datetime) -> List[ExtensionIssue]:
+        """Fetch issues from a repository with a specific state."""
+        url = f"https://api.github.com/repos/{repo_path}/issues"
+        params = {
+            'state': state,
+            'since': since_date.isoformat(),
+            'per_page': 100,
+            'sort': 'updated',
+            'direction': 'desc'
+        }
+        
+        # Add authentication if available
+        headers = {}
+        if hasattr(self.github_client, 'headers') and self.github_client.headers:
+            headers.update(self.github_client.headers)
+        
+        try:
+            response = await self._make_api_request(client, url, params, headers)
+            response.raise_for_status()
+            
+            data = response.json()
+            issues = []
+            
+            for item in data:
+                try:
+                    # Skip pull requests (GitHub API includes them in issues endpoint)
+                    if 'pull_request' in item:
+                        continue
+                        
+                    issue = ExtensionIssue(
+                        issue_number=item['number'],
+                        title=item['title'],
+                        body=item.get('body', ''),
+                        state=item['state'],
+                        created_at=datetime.fromisoformat(item['created_at'].rstrip('Z')),
+                        updated_at=datetime.fromisoformat(item['updated_at'].rstrip('Z')),
+                        closed_at=datetime.fromisoformat(item['closed_at'].rstrip('Z')) if item.get('closed_at') else None,
+                        labels=[label['name'] for label in item.get('labels', [])],
+                        extension_names=set(),
+                        platforms=set(),
+                        issue_type='other',
+                        severity='medium',
+                        html_url=item['html_url']
+                    )
+                    issues.append(issue)
+                except Exception as e:
+                    logger.warning(f"Failed to parse issue {item.get('number', 'unknown')}: {e}")
+                    continue
+            
+            return issues
+            
+        except Exception as e:
+            logger.warning(f"Failed to fetch {state} issues from {repo_path}: {e}")
+            return []
+    
+    async def _fetch_extension_issues_fallback(self, 
+                                             extension_names: List[str], 
+                                             days_back: int = 90,
+                                             include_closed: bool = True) -> List[ExtensionIssue]:
+        """Fallback method using the original search approach (less efficient but broader)."""
+        logger.info("Using fallback search-based approach for GitHub issues")
+        
+        # Build more targeted search queries to avoid rate limits
+        extension_queries = []
+        for ext_name in extension_names[:10]:  # Limit to first 10 extensions to avoid rate limits
+            extension_queries.append(f'extension {ext_name}')
         
         # Also search for general extension issues
         general_queries = [
-            'extension install',
-            'extension load',
-            'extension missing',
+            'extension install error',
+            'extension load error',
             'extension not found',
-            'extension unavailable',
-            'HTTP 403 extension',
-            'HTTP 404 extension'
         ]
         
         all_queries = extension_queries + general_queries
-        
-        # Fetch issues for all queries
         all_issues = []
         
         async with httpx.AsyncClient(timeout=30) as client:
@@ -118,9 +257,9 @@ class GitHubIssuesTracker:
                     issues = await self._search_issues(client, query, days_back, include_closed)
                     all_issues.extend(issues)
                     
-                    # Rate limiting - sleep between requests
+                    # Longer rate limiting delay for search API
                     if i < len(all_queries) - 1:
-                        await asyncio.sleep(0.5)
+                        await asyncio.sleep(2.0)
                         
                 except Exception as e:
                     logger.warning(f"Failed to search issues with query '{query}': {e}")
@@ -135,7 +274,6 @@ class GitHubIssuesTracker:
         # Filter and enrich issues
         extension_issues = []
         for issue in unique_issues.values():
-            # Determine which extensions this issue relates to
             mentioned_extensions = self._extract_mentioned_extensions(
                 issue, set(extension_names)
             )
@@ -147,7 +285,7 @@ class GitHubIssuesTracker:
                 issue.severity = self._determine_severity(issue)
                 extension_issues.append(issue)
         
-        logger.info(f"Found {len(extension_issues)} extension-related issues")
+        logger.info(f"Found {len(extension_issues)} extension-related issues using fallback method")
         return extension_issues
     
     async def _search_issues(self, 
@@ -155,7 +293,7 @@ class GitHubIssuesTracker:
                            query: str, 
                            days_back: int,
                            include_closed: bool) -> List[ExtensionIssue]:
-        """Search GitHub issues using the GitHub API."""
+        """Search GitHub issues using the GitHub search API (legacy method)."""
         since_date = (datetime.now() - timedelta(days=days_back)).strftime('%Y-%m-%d')
         
         # Build GitHub search query

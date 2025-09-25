@@ -1,73 +1,64 @@
-# Cross-platform justfile for DuckDB Extensions Analysis
-# Simplified version with core commands only
+# DuckDB Extensions Analysis - Simplified justfile
 
-# Default recipe - show available commands
+# Show available commands
 default:
     @just --list
 
-# === SETUP & INSTALLATION ===
+# === SETUP ===
 
-# Install dependencies using uv
+# Install dependencies
 install:
     uv sync
 
-# Update dependencies
-update:
-    uv lock --upgrade
-
-# Set up GitHub token from gh CLI
-setup-token:
-    @echo "Setting up GitHub token from gh CLI..."
+# Set up GitHub authentication
+setup-auth:
+    @echo "Setting up GitHub authentication..."
     @gh auth token > .env.tmp
     @echo "GITHUB_TOKEN=$(cat .env.tmp)" > .env
     @rm .env.tmp
-    @echo "✅ GitHub token saved to .env file"
+    @echo "✅ GitHub token saved to .env"
 
-# === ANALYSIS COMMANDS ===
+# === ANALYSIS ===
 
-# Run analysis (options: core, community, all)
-analyze mode="all" *flags="":
-    uv run scripts/cli.py analyze {{mode}} {{flags}}
+# Analyze extensions (core | community | all)
+analyze mode="all":
+    uv run scripts/cli.py analyze {{mode}}
 
-# Run analysis with fresh data (no cache)
-analyze-fresh mode="all":
+# Analyze with fresh data (bypass cache)
+fresh mode="all":
     uv run scripts/cli.py analyze {{mode}} --cache-hours 0
 
-# === REPORTING COMMANDS ===
+# === REPORTING ===
 
-# Generate markdown report (add --with-issues to include GitHub issues analysis)
-report *flags="":
-    uv run scripts/cli.py report generate {{flags}}
+# Generate markdown report
+report:
+    uv run scripts/cli.py report generate
 
-# Generate all report formats
+# Generate report with GitHub issues (slower)
+report-issues:
+    uv run scripts/cli.py report generate --with-issues
+
+# Generate all formats (markdown, CSV, Excel)
 report-all:
     uv run scripts/cli.py report generate --format markdown --format csv --format excel
 
-# Generate all report formats with fresh data (no cache)
-report-all-fresh:
-    uv run scripts/cli.py report generate --format markdown --format csv --format excel --cache-hours 0
+# Generate all formats with GitHub issues
+report-all-issues:
+    uv run scripts/cli.py report generate --format markdown --format csv --format excel --with-issues
 
-# Quick report (same as default behavior now)
-report-quick:
-    uv run scripts/cli.py quick
+# === DATABASE ===
 
-# === DATABASE COMMANDS ===
+# Save analysis to database
+database:
+    uv run scripts/cli.py database save
 
-# Save analysis to DuckDB database
-database *flags="":
-    uv run scripts/cli.py database save {{flags}}
-
-# Query the extensions database
+# Query database with analytics
 query:
     uv run scripts/query_database.py
 
-# Back-fill database with historical data (demo)
-backfill:
-    uv run scripts/query_database.py backfill
+# === CACHE ===
 
-# === CACHE MANAGEMENT ===
-
-# Show cache information
+# Show cache info
 cache-info:
     uv run scripts/cli.py cache info
 
@@ -75,43 +66,123 @@ cache-info:
 cache-clear:
     uv run scripts/cli.py cache clear
 
-# === DEVELOPMENT COMMANDS ===
+# Stash current cache (save it with timestamp)
+cache-stash:
+    #!/usr/bin/env bash
+    if [ -d ".cache" ]; then
+        timestamp=$(date +"%Y%m%d_%H%M%S")
+        cache_backup=".cache_stash_${timestamp}"
+        echo "📦 Stashing current cache to: ${cache_backup}"
+        cp -r .cache "${cache_backup}"
+        echo "✅ Cache stashed successfully"
+        echo "📊 Stashed cache info:"
+        du -sh "${cache_backup}" 2>/dev/null || echo "Could not determine size"
+    else
+        echo "⚠️  No cache directory found to stash"
+    fi
+
+# List all stashed caches
+cache-list-stashes:
+    #!/usr/bin/env bash
+    echo "📦 Available cache stashes:"
+    if ls -d .cache_stash_* 2>/dev/null; then
+        echo ""
+        echo "Size breakdown:"
+        du -sh .cache_stash_* 2>/dev/null | sort -k2
+    else
+        echo "No cache stashes found"
+    fi
+
+# Restore cache from most recent stash
+cache-restore:
+    #!/usr/bin/env bash
+    latest_stash=$(ls -d .cache_stash_* 2>/dev/null | sort | tail -1)
+    if [ -n "$latest_stash" ]; then
+        echo "🔄 Restoring cache from: $latest_stash"
+        if [ -d ".cache" ]; then
+            echo "⚠️  Current cache exists, creating backup first..."
+            timestamp=$(date +"%Y%m%d_%H%M%S")
+            mv .cache ".cache_backup_${timestamp}"
+        fi
+        cp -r "$latest_stash" .cache
+        echo "✅ Cache restored successfully"
+        echo "📊 Restored cache info:"
+        du -sh .cache 2>/dev/null || echo "Could not determine size"
+    else
+        echo "❌ No cache stashes found to restore"
+    fi
+
+# Restore cache from specific stash
+cache-restore-from stash_name:
+    #!/usr/bin/env bash
+    stash_path=".cache_stash_{{stash_name}}"
+    if [ -d "$stash_path" ]; then
+        echo "🔄 Restoring cache from: $stash_path"
+        if [ -d ".cache" ]; then
+            echo "⚠️  Current cache exists, creating backup first..."
+            timestamp=$(date +"%Y%m%d_%H%M%S")
+            mv .cache ".cache_backup_${timestamp}"
+        fi
+        cp -r "$stash_path" .cache
+        echo "✅ Cache restored successfully"
+    else
+        echo "❌ Stash not found: $stash_path"
+        echo "Available stashes:"
+        just cache-list-stashes
+    fi
+
+# Clean up old cache stashes (keep only the 5 most recent)
+cache-cleanup-stashes:
+    #!/usr/bin/env bash
+    echo "🧹 Cleaning up old cache stashes (keeping 5 most recent)..."
+    stashes=($(ls -d .cache_stash_* 2>/dev/null | sort))
+    total_stashes=${#stashes[@]}
+    if [ $total_stashes -gt 5 ]; then
+        keep_count=5
+        remove_count=$((total_stashes - keep_count))
+        echo "Found $total_stashes stashes, removing $remove_count oldest ones"
+        for ((i=0; i<remove_count; i++)); do
+            echo "Removing: ${stashes[i]}"
+            rm -rf "${stashes[i]}"
+        done
+        echo "✅ Cleanup complete"
+    else
+        echo "Only $total_stashes stashes found, no cleanup needed"
+    fi
+
+# === UTILITIES ===
 
 # Format and lint code
 check:
-    uv run ruff format scripts/ conf/
-    uv run ruff check scripts/ conf/
-
-# Clean up cache and build files
-clean:
-    @echo "Cleaning up cache and build files..."
-    @{{ if os() == "windows" { "powershell -Command \"Get-ChildItem -Path . -Recurse -Name '__pycache__' | Remove-Item -Recurse -Force\"" } else { "find . -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true" } }}
-    @{{ if os() == "windows" { "powershell -Command \"Get-ChildItem -Path . -Recurse -Name '*.pyc' | Remove-Item -Force\"" } else { "find . -name '*.pyc' -delete 2>/dev/null || true" } }}
-    @{{ if os() == "windows" { "if exist .venv rmdir /s /q .venv" } else { "rm -rf .venv" } }}
+    uv run ruff format scripts/ conf/ src/
+    uv run ruff check scripts/ conf/ src/
 
 # Show project status
 status:
-    @echo "Project: DuckDB Extensions Analysis"
-    @uv run --version
-    @echo ""
-    @uv tree --depth 1
+    @echo "📊 DuckDB Extensions Analysis"
+    @echo "Version:" $(uv run scripts/cli.py --version | tail -1)
+    @echo "Cache:" $(uv run scripts/cli.py --cache-info | grep "Cache size" || echo "No cache info")
+    @echo "Database:" $(if [ -f data/extensions.duckdb ]; then echo "✅ Present"; else echo "❌ Missing"; fi)
 
-# === COMMON WORKFLOWS ===
+# === WORKFLOWS ===
 
-# Complete workflow: fresh analysis + all reports + database
-workflow-complete:
-    just analyze-fresh all
+# Complete analysis and reporting (cached)
+workflow:
+    just analyze all
     just report-all
     just database
-    @echo "✅ Complete workflow finished"
+    @echo "✅ Workflow complete"
 
-# Quick workflow: cached analysis + markdown report  
-workflow-quick:
+# Complete analysis and reporting (fresh data)
+workflow-fresh:
+    just fresh all
+    just report-all
+    just database
+    @echo "✅ Fresh workflow complete"
+
+# Complete analysis and reporting with GitHub issues
+workflow-issues:
     just analyze all
-    just report
-    @echo "✅ Quick workflow finished"
-
-# Fastest workflow: default report (no GitHub issues)
-workflow-fastest:
-    just report-quick
-    @echo "✅ Fastest workflow finished"
+    just report-all-issues
+    just database
+    @echo "✅ Issues workflow complete"
