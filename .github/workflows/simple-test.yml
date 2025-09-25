@@ -1,0 +1,24 @@
+name: Simple Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      
+      - name: Setup Python and dependencies
+        run: uv sync
+      
+      - name: Run analysis
+        run: |
+          echo "Running DuckDB extensions analysis..."
+          uv run scripts/cli.py report generate --format markdown
+          ls -la reports/
