@@ -41,12 +41,14 @@ just workflow-fresh             # Complete analysis with latest data
 - **107 Total Extensions** (24 core + 83 community)
 - Extension status, GitHub activity, installation health
 - **264 GitHub issues** tracked across extension repositories
+- **URL Validation** - All repository and documentation URLs checked automatically
 
 ## 📊 Understanding Reports
 
 **Core Extensions (24)** - Built into DuckDB, updated with releases
 **Community Extensions (83)** - Third-party, independent development
 **GitHub Issues** - Installation problems, platform issues, health indicators
+**URL Validation** - Broken links show as ~~strikethrough~~ with **NOT FOUND** message
 
 ## 🔧 Advanced Features
 
