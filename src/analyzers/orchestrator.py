@@ -18,6 +18,7 @@ from .community_analyzer import CommunityExtensionAnalyzer
 from .database_manager import DatabaseManager
 from .report_generator import ReportGenerator
 from .github_issues_tracker import GitHubIssuesTracker
+from .url_validator import URLValidator
 
 
 class AnalysisOrchestrator:
@@ -34,6 +35,7 @@ class AnalysisOrchestrator:
         self.database_manager = DatabaseManager(config)
         self.report_generator = ReportGenerator(config)
         self.github_issues_tracker = GitHubIssuesTracker(self.github_client, cache_hours)
+        self.url_validator = URLValidator(timeout=10)
     
     async def analyze_core_extensions(self, duckdb_version: Optional[str] = None) -> List[ExtensionInfo]:
         """Analyze core extensions only."""
@@ -171,6 +173,10 @@ class AnalysisOrchestrator:
             # installation_results = await self.run_installation_tests(core_extensions, community_extensions)
             installation_results = []
             
+            # Validate URLs in all extensions
+            all_extensions = core_extensions + community_extensions
+            url_validation_results = await self.validate_extension_urls(all_extensions)
+            
             # Create analysis result
             analysis_result = AnalysisResult(
                 core_extensions=core_extensions,
@@ -180,14 +186,50 @@ class AnalysisOrchestrator:
                 duckdb_release_date=duckdb_release_date
             )
             
-            # Add GitHub issues and installation results to metadata
+            # Add GitHub issues, installation results, and URL validation to metadata
             analysis_result.github_issues = github_issues
             analysis_result.installation_results = installation_results
+            analysis_result.url_validation_results = url_validation_results
             
             # Log comprehensive analysis summary for persistent tracking
             logger.info(f"ANALYSIS SUMMARY: DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
             
             return analysis_result
+    
+    async def validate_extension_urls(self, extensions: List[ExtensionInfo]) -> Dict[str, Dict]:
+        """Validate all URLs in extension data and return validation results."""
+        logger.info(f"Validating URLs for {len(extensions)} extensions")
+        
+        urls_to_validate = {}
+        
+        for ext in extensions:
+            # Collect all URLs from the extension
+            if hasattr(ext, 'repository') and ext.repository:
+                if ext.repository.startswith('http'):
+                    urls_to_validate[f"{ext.name}_repository"] = ext.repository
+                elif '/' in ext.repository and not ext.repository.startswith('integrated_core'):
+                    # Convert repo path to full GitHub URL
+                    urls_to_validate[f"{ext.name}_repository"] = f"https://github.com/{ext.repository}"
+            
+            # Check documentation URLs if available
+            if hasattr(ext, 'documentation_url') and ext.documentation_url:
+                urls_to_validate[f"{ext.name}_documentation"] = ext.documentation_url
+                
+            # Check metadata for additional URLs
+            if hasattr(ext, 'metadata') and ext.metadata:
+                # Check for external repository URLs
+                if isinstance(ext.metadata, dict) and 'external_repository' in ext.metadata:
+                    repo_url = f"https://github.com/{ext.metadata['external_repository']}"
+                    urls_to_validate[f"{ext.name}_external_repo"] = repo_url
+        
+        # Validate all collected URLs
+        if urls_to_validate:
+            validation_results = await self.url_validator.validate_urls_batch(urls_to_validate)
+            logger.info(f"Validated {len(urls_to_validate)} URLs")
+            return validation_results
+        else:
+            logger.info("No URLs found to validate")
+            return {}
     
     async def analyze_full_historical(self, as_of_date: str) -> AnalysisResult:
         """Perform full analysis as of a specific historical date."""

@@ -67,6 +67,7 @@ class TemplateEngine:
         self.env.filters['github_link'] = self._filter_github_link
         self.env.filters['extension_link'] = self._filter_extension_link
         self.env.filters['truncate'] = self._filter_truncate
+        self.env.filters['validated_link'] = self._filter_validated_link
     
     def _filter_strftime(self, date: Union[datetime, str], format_str: str = '%Y-%m-%d') -> str:
         """Format datetime using strftime."""
@@ -131,35 +132,77 @@ class TemplateEngine:
         except (ValueError, TypeError):
             return str(number)
     
-    def _filter_github_link(self, repository: str) -> str:
-        """Format repository as GitHub link."""
+    def _filter_github_link(self, repository: str, validation_results: Dict = None, ext_name: str = "") -> str:
+        """Format repository as GitHub link with URL validation."""
         if not repository:
             return "N/A"
         
-        # Handle different repository formats
+        # Determine the full URL
         if repository.startswith('http'):
-            # Full URL provided
+            full_url = repository
             repo_match = re.search(r'github\.com/([^/]+/[^/]+)', repository)
-            if repo_match:
-                repo_name = repo_match.group(1)
-                return f"[{repo_name}]({repository})"
-            return f"[Repository]({repository})"
+            repo_name = repo_match.group(1) if repo_match else "Repository"
+        else:
+            # Assume it's in owner/repo format
+            full_url = f"https://github.com/{repository}"
+            repo_name = repository.split('/')[-1] if '/' in repository else repository
         
-        # Assume it's in owner/repo format
-        github_format = self.format_config.get('formatting', {}).get('links', {}).get('github_format', '[{name}](https://github.com/{repo})')
-        return github_format.format(name=repository.split('/')[-1], repo=repository)
+        # Check URL validation if available
+        if validation_results and ext_name:
+            url_key = f"{ext_name}_repository"
+            if url_key in validation_results:
+                validation_result = validation_results[url_key]
+                if not validation_result.get('is_valid', True):
+                    error_msg = validation_result.get('error_message', 'URL validation failed')
+                    return f"~~[{repo_name}]({full_url})~~ **NOT FOUND:** {full_url} ({error_msg})"
+        
+        return f"[{repo_name}]({full_url})"
     
-    def _filter_extension_link(self, name: str, url: Optional[str] = None) -> str:
-        """Format extension name as link if URL is provided."""
-        if url:
-            return f"[{name}]({url})"
-        return name
+    def _filter_extension_link(self, name: str, url: Optional[str] = None, validation_results: Dict = None, ext_name: str = "") -> str:
+        """Format extension name as link if URL is provided, with validation."""
+        if not url:
+            return name
+            
+        # Check URL validation if available
+        if validation_results and ext_name:
+            url_key = f"{ext_name}_documentation"
+            if url_key in validation_results:
+                validation_result = validation_results[url_key]
+                if not validation_result.get('is_valid', True):
+                    error_msg = validation_result.get('error_message', 'URL validation failed')
+                    return f"~~[{name}]({url})~~ **NOT FOUND:** {url} ({error_msg})"
+            
+        return f"[{name}]({url})"
     
     def _filter_truncate(self, text: str, length: int = 100, suffix: str = "...") -> str:
         """Truncate text to specified length."""
         if not text or len(text) <= length:
             return text
         return text[:length - len(suffix)].rstrip() + suffix
+    
+    def _filter_validated_link(self, name: str, url: Optional[str] = None, validation_results: Dict = None, ext_name: str = "") -> str:
+        """Format link with URL validation status."""
+        if not url:
+            return name
+            
+        # Check validation results for this URL
+        if validation_results:
+            # Look for validation result for this extension's repository or documentation
+            url_key_patterns = [f"{ext_name}_repository", f"{ext_name}_documentation", f"{ext_name}_external_repo"]
+            validation_result = None
+            
+            for pattern in url_key_patterns:
+                if pattern in validation_results and validation_results[pattern].get('url') == url:
+                    validation_result = validation_results[pattern]
+                    break
+            
+            # If URL is validated and broken, mark it as NOT FOUND
+            if validation_result and not validation_result.get('is_valid', True):
+                error_msg = validation_result.get('error_message', 'URL validation failed')
+                return f"~~[{name}]({url})~~ **NOT FOUND:** {url} ({error_msg})"
+        
+        # URL is valid or not checked - return normal link
+        return f"[{name}]({url})"
     
     def prepare_template_data(self, analysis_result: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -177,6 +220,9 @@ class TemplateEngine:
         recently_active = self._count_recent_activity(community_extensions, 30)
         very_active = self._count_recent_activity(community_extensions, 7)
         
+        # Extract URL validation results if available
+        url_validation_results = analysis_result.get('url_validation_results', {})
+        
         # Prepare template data structure
         template_data = {
             'report': {
@@ -186,6 +232,7 @@ class TemplateEngine:
             },
             'metadata': self.report_config.get('metadata', {}),
             'tables': self.table_config.get('tables', {}),
+            'url_validation': url_validation_results,
             'stats': {
                 'core_count': len(core_extensions),
                 'community_count': len(community_extensions),

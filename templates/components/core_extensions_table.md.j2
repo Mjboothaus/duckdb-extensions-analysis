@@ -5,7 +5,7 @@
 | # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
 |---|-----------|------------|--------|---------------|-------|----------|-------------|
 {% for ext in core_extensions | sort(attribute='name') -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url) }} | {{ ext.repository | github_link }} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(100) }} |
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(100) }} |
 {% endfor %}
 
 **Total:** {{ core_extensions | length }} extensions
