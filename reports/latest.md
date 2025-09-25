@@ -55,7 +55,7 @@ Built-in extensions that are part of the main DuckDB release
 | 11 | [iceberg](https://duckdb.org/docs/stable/core_extensions/iceberg/overview.html) | [duckdb-iceberg](https://github.com/duckdb/duckdb-iceberg) | 🟢 Ongoing | today | 0 | C++ | Apache Iceberg format support |
 | 12 | [icu](https://duckdb.org/docs/stable/core_extensions/icu.html) | [duckdb](https://github.com/duckdb/duckdb) | 🟢 Ongoing | 8 days ago | 0 | C++ | Core DuckDB extension: icu |
 | 13 | [inet](https://duckdb.org/docs/stable/core_extensions/inet.html) | [duckdb-inet](https://github.com/duckdb/duckdb-inet) | 🟢 Ongoing | 5 days ago | 0 | C++ | Internet address data types |
-| 14 | [jemalloc](https://duckdb.org/docs/stable/core_extensions/jemalloc.html) | [duckdb](https://github.com/duckdb/duckdb) | 🟢 Ongoing | 109 days ago | 0 | C++ | Core DuckDB extension: jemalloc |
+| 14 | [jemalloc](https://duckdb.org/docs/stable/core_extensions/jemalloc.html) | [duckdb](https://github.com/duckdb/duckdb) | 🟢 Ongoing | 110 days ago | 0 | C++ | Core DuckDB extension: jemalloc |
 | 15 | [json](https://duckdb.org/docs/stable/data/json/overview.html) | [duckdb](https://github.com/duckdb/duckdb) | 🟢 Ongoing | 15 days ago | 0 | C++ | Core DuckDB extension: json |
 | 16 | [mysql](https://duckdb.org/docs/stable/core_extensions/mysql.html) | [duckdb-mysql](https://github.com/duckdb/duckdb-mysql) | 🟢 Ongoing | 17 days ago | 0 | C++ | MySQL database connectivity |
 | 17 | [parquet](https://duckdb.org/docs/stable/data/parquet/overview.html) | [duckdb](https://github.com/duckdb/duckdb) | 🟢 Ongoing | 2 days ago | 0 | C++ | Core DuckDB extension: parquet |
