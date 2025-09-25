@@ -1,0 +1,177 @@
+name: Daily DuckDB Extensions Report
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:      # Allow manual triggering
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  analyze-extensions:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      
+      - name: Setup Python and dependencies
+        run: |
+          uv sync
+      
+      - name: Generate extensions report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🚀 Starting DuckDB extensions analysis..."
+          uv run scripts/cli.py report generate \
+            --format markdown --format csv --format excel \
+            --with-issues
+          
+          echo "✅ Analysis complete. Generated files:"
+          ls -la reports/
+      
+      - name: Update README with latest status
+        run: |
+          # Extract key metrics from the latest report
+          TOTAL_EXTENSIONS=$(grep -o "Total: [0-9]*" reports/latest.md | head -1 | grep -o "[0-9]*")
+          REPORT_DATE=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          
+          # Create status badge info
+          cat > README.md << EOF
+          # DuckDB Extensions Analysis
+          
+          [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
+          [![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-${TOTAL_EXTENSIONS:-107}-blue)](./reports/latest.md)
+          [![Last Updated](https://img.shields.io/badge/Last%20Updated-${REPORT_DATE// /%20}-lightgrey)](./reports/latest.md)
+          
+          Automated monitoring of DuckDB's extension ecosystem, tracking core and community extensions with daily reports.
+          
+          ## 📊 Latest Analysis
+          
+          **Last Updated:** ${REPORT_DATE}
+          
+          EOF
+          
+          # Add summary from report
+          echo "### Quick Summary" >> README.md
+          echo "" >> README.md
+          grep -A 10 "ANALYSIS SUMMARY" reports/latest.md | head -5 >> README.md
+          echo "" >> README.md
+          
+          # Add links to reports
+          cat >> README.md << EOF
+          ## 📋 Reports
+          
+          - 📊 **[Latest Analysis Report](./reports/latest.md)** - Complete markdown analysis
+          - 📈 **[CSV Data](./reports/)** - Machine-readable data for further analysis
+          - 📋 **[Excel Reports](./reports/)** - Business-friendly spreadsheet format
+          
+          ## 🚀 Quick Start
+          
+          See [QUICKSTART.md](./QUICKSTART.md) for setup and usage instructions.
+          
+          ## 🤖 Automation
+          
+          This repository automatically runs daily analysis at 6 AM UTC via GitHub Actions.
+          The reports track extension status, GitHub activity, and installation health across the DuckDB ecosystem.
+          
+          ---
+          *Generated automatically by [GitHub Actions](.github/workflows/daily-extensions-report.yml)*
+          EOF
+      
+      - name: Commit and push reports
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          
+          # Add all report files and README
+          git add reports/ README.md
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📊 Daily extensions analysis: $(date -I)
+            
+            - Updated extension analysis for $(date -u '+%Y-%m-%d')
+            - Generated markdown, CSV, and Excel reports
+            - Includes GitHub issues analysis for extension health monitoring"
+            git push
+          fi
+
+  deploy-to-pages:
+    needs: analyze-extensions
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main  # Ensure we get the updated reports
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Create Pages site
+        run: |
+          mkdir -p _site
+          
+          # Convert markdown to HTML-friendly format
+          cp reports/latest.md _site/index.md
+          
+          # Create a simple HTML wrapper
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>DuckDB Extensions Analysis</title>
+              <style>
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 40px; }
+                  .container { max-width: 1200px; margin: 0 auto; }
+                  h1, h2, h3 { color: #2c3e50; }
+                  table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+                  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                  th { background-color: #f2f2f2; }
+                  .status-ongoing { color: #27ae60; }
+                  .status-discontinued { color: #e74c3c; }
+                  .status-issues { color: #f39c12; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+          EOF
+          
+          # Convert markdown to basic HTML (simple regex replacements)
+          sed -e 's/^# \(.*\)/<h1>\1<\/h1>/' \
+              -e 's/^## \(.*\)/<h2>\1<\/h2>/' \
+              -e 's/^### \(.*\)/<h3>\1<\/h3>/' \
+              -e 's/^\*\*\(.*\)\*\*/<strong>\1<\/strong>/g' \
+              -e 's/✅/<span class="status-ongoing">✅<\/span>/g' \
+              -e 's/🔴/<span class="status-discontinued">🔴<\/span>/g' \
+              -e 's/❌/<span class="status-issues">❌<\/span>/g' \
+              reports/latest.md >> _site/index.html
+          
+          echo "</div></body></html>" >> _site/index.html
+          
+          # Copy CSV and Excel files for download
+          cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
+          
+          echo "✅ Pages site prepared"
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+      
+      - name: Deploy to Pages
+        uses: actions/deploy-pages@v4
