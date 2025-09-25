@@ -40,7 +40,7 @@ jobs:
       - name: Update README with latest status
         run: |
           # Extract key metrics from the latest report
-          TOTAL_EXTENSIONS=$(grep -o "Total: [0-9]*" reports/latest.md | head -1 | grep -o "[0-9]*")
+          TOTAL_EXTENSIONS=$(grep "Total Extensions" reports/latest.md | grep -o "[0-9]*" | head -1)
           REPORT_DATE=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
           
           # Create status badge info
@@ -62,7 +62,8 @@ jobs:
           # Add summary from report
           echo "### Quick Summary" >> README.md
           echo "" >> README.md
-          grep -A 10 "ANALYSIS SUMMARY" reports/latest.md | head -5 >> README.md
+          # Extract key metrics from the Summary section
+          awk '/## Summary/,/---/ {print}' reports/latest.md | head -10 >> README.md
           echo "" >> README.md
           
           # Add links to reports
