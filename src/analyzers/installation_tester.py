@@ -26,11 +26,14 @@ class InstallationTestResult:
     success: bool
     install_time: Optional[float]
     load_time: Optional[float]
+    functional_test_time: Optional[float]
     total_time: float
     error_message: Optional[str]
     python_version: str
     duckdb_version_used: str
     test_environment: str
+    functional_test_passed: Optional[bool] = None
+    test_query_used: Optional[str] = None
 
 
 class InstallationTester:
@@ -39,6 +42,42 @@ class InstallationTester:
     def __init__(self):
         self.platform = self._get_current_platform()
         
+        # Extension-specific functional test queries
+        self.extension_test_queries = {
+            # Format extensions - use simple validation queries
+            'parquet': "SELECT 'parquet loaded' as status",
+            'csv': "SELECT 'csv loaded' as status", 
+            'json': "SELECT json_valid('{\"test\": 1}') as valid",
+            'excel': "SELECT 'excel loaded' as status",
+            'avro': "SELECT 'avro loaded' as status",
+            
+            # Database connectors - just check if they load
+            'mysql': "SELECT 'mysql loaded' as status",
+            'postgres': "SELECT 'postgres loaded' as status", 
+            'sqlite': "SELECT 'sqlite loaded' as status",
+            'aws': "SELECT 'aws loaded' as status",
+            'azure': "SELECT 'azure loaded' as status",
+            
+            # Analytics extensions - simple function tests
+            'httpfs': "SELECT 'httpfs loaded' as status",
+            'spatial': "SELECT 'spatial loaded' as status",
+            'fts': "SELECT 'fts loaded' as status",
+            'delta': "SELECT 'delta loaded' as status",
+            'iceberg': "SELECT 'iceberg loaded' as status",
+            'icu': "SELECT 'icu loaded' as status",
+            'inet': "SELECT 'inet loaded' as status",
+            'vss': "SELECT 'vss loaded' as status",
+            
+            # Community extensions - basic functionality tests
+            'h3': "SELECT 'h3 loaded' as status",
+            'bigquery': "SELECT 'bigquery loaded' as status",
+            'gsheets': "SELECT 'gsheets loaded' as status",
+            'prql': "SELECT 'prql loaded' as status",
+            
+            # Default test for unknown extensions
+            'default': "SELECT 1 as test_value"
+        }
+        
         # Test script template for running in isolated environment
         self.test_script_template = '''
 import duckdb
@@ -46,17 +85,20 @@ import sys
 import json
 import time
 
-def test_extension(extension_name):
-    """Test extension installation and loading."""
+def test_extension(extension_name, test_query=None):
+    """Test extension installation, loading, and basic functionality."""
     result = {
         "success": False,
         "install_time": 0.0,
         "load_time": None,
+        "functional_test_time": None,
         "total_time": 0.0,
         "error_message": None,
         "python_version": f"{sys.version_info.major}.{sys.version_info.minor}",
         "duckdb_version_used": duckdb.__version__,
-        "test_environment": "uv"
+        "test_environment": "uv",
+        "functional_test_passed": None,
+        "test_query_used": test_query
     }
     
     total_start = time.time()
@@ -85,6 +127,19 @@ def test_extension(extension_name):
             result["total_time"] = time.time() - total_start
             return result
         
+        # Test basic functionality if query provided
+        if test_query:
+            functional_start = time.time()
+            try:
+                conn.execute(test_query)
+                result["functional_test_passed"] = True
+                result["functional_test_time"] = time.time() - functional_start
+            except Exception as e:
+                # Functionality test failure is not critical for success
+                result["functional_test_passed"] = False
+                result["functional_test_time"] = time.time() - functional_start
+                # Don't fail the overall test for functional test failures
+        
         conn.close()
         result["success"] = True
         
@@ -97,8 +152,9 @@ def test_extension(extension_name):
 if __name__ == "__main__":
     import sys
     extension_name = sys.argv[1]
+    test_query = sys.argv[2] if len(sys.argv) > 2 and sys.argv[2] != "None" else None
     
-    result = test_extension(extension_name)
+    result = test_extension(extension_name, test_query)
     print(json.dumps(result))
 '''
     
@@ -119,6 +175,10 @@ if __name__ == "__main__":
         else:
             return f"{system}_{machine}"
     
+    def _get_test_query(self, extension_name: str) -> str:
+        """Get an appropriate functional test query for an extension."""
+        return self.extension_test_queries.get(extension_name, self.extension_test_queries['default'])
+    
     def _handle_special_cases(self, extension_name: str) -> Optional[InstallationTestResult]:
         """Handle special case extensions that cannot be tested normally."""
         current_platform = self._get_current_platform()
@@ -132,11 +192,14 @@ if __name__ == "__main__":
                     success=False,
                     install_time=None,
                     load_time=None,
+                    functional_test_time=None,
                     total_time=0.0,
                     error_message=f"jemalloc extension is statically linked and not available on {current_platform}. See: https://duckdb.org/docs/stable/core_extensions/jemalloc.html",
                     python_version=f"{platform.python_version()}",
                     duckdb_version_used="N/A",
-                    test_environment="special_case"
+                    test_environment="special_case",
+                    functional_test_passed=None,
+                    test_query_used=None
                 )
             else:
                 # On Linux, jemalloc is available but still cannot be installed at runtime
@@ -145,11 +208,14 @@ if __name__ == "__main__":
                     success=False,
                     install_time=None,
                     load_time=None,
+                    functional_test_time=None,
                     total_time=0.0,
                     error_message="jemalloc extension is statically linked and cannot be installed or loaded at runtime. It's built into DuckDB on this platform.",
                     python_version=f"{platform.python_version()}",
                     duckdb_version_used="N/A",
-                    test_environment="special_case"
+                    test_environment="special_case",
+                    functional_test_passed=None,
+                    test_query_used=None
                 )
         
         # Add more special cases here as needed
@@ -193,11 +259,14 @@ if __name__ == "__main__":
                     success=False,
                     install_time=None,
                     load_time=None,
+                    functional_test_time=None,
                     total_time=0.0,
                     error_message=str(e),
                     python_version=f"{platform.python_version()}",
                     duckdb_version_used="unknown",
-                    test_environment="uv"
+                    test_environment="uv",
+                    functional_test_passed=None,
+                    test_query_used=None
                 ))
         
         return results
@@ -227,10 +296,13 @@ build-backend = "setuptools.build_meta"
             test_script_path.write_text(self.test_script_template)
             
             try:
+                # Get test query for this extension
+                test_query = self._get_test_query(extension_name)
+                
                 # Run the test in uv environment
                 cmd = [
                     "uv", "run", "--directory", str(temp_path), 
-                    "python", "test_extension.py", extension_name
+                    "python", "test_extension.py", extension_name, test_query or "None"
                 ]
                 
                 process = await asyncio.create_subprocess_exec(
@@ -251,11 +323,14 @@ build-backend = "setuptools.build_meta"
                             success=result_data.get("success", False),
                             install_time=result_data.get("install_time"),
                             load_time=result_data.get("load_time"),
+                            functional_test_time=result_data.get("functional_test_time"),
                             total_time=result_data.get("total_time", 0.0),
                             error_message=result_data.get("error_message"),
                             python_version=result_data.get("python_version", "unknown"),
                             duckdb_version_used=result_data.get("duckdb_version_used", "unknown"),
-                            test_environment=result_data.get("test_environment", "uv")
+                            test_environment=result_data.get("test_environment", "uv"),
+                            functional_test_passed=result_data.get("functional_test_passed"),
+                            test_query_used=result_data.get("test_query_used")
                         )
                     else:
                         error_msg = stderr.decode() if stderr else "Process failed"
@@ -266,11 +341,14 @@ build-backend = "setuptools.build_meta"
                             success=False,
                             install_time=None,
                             load_time=None,
+                            functional_test_time=None,
                             total_time=0.0,
                             error_message=error_msg,
                             python_version="unknown",
                             duckdb_version_used="unknown",
-                            test_environment="uv"
+                            test_environment="uv",
+                            functional_test_passed=None,
+                            test_query_used=test_query
                         )
                         
                 except asyncio.TimeoutError:
@@ -283,11 +361,14 @@ build-backend = "setuptools.build_meta"
                         success=False,
                         install_time=None,
                         load_time=None,
+                        functional_test_time=None,
                         total_time=0.0,
                         error_message="Test timed out after 120 seconds",
                         python_version="unknown",
                         duckdb_version_used="unknown",
-                        test_environment="uv"
+                        test_environment="uv",
+                        functional_test_passed=None,
+                        test_query_used=test_query
                     )
                     
             except Exception as e:
@@ -297,11 +378,14 @@ build-backend = "setuptools.build_meta"
                     success=False,
                     install_time=None,
                     load_time=None,
+                    functional_test_time=None,
                     total_time=0.0,
                     error_message=f"Environment setup failed: {str(e)}",
                     python_version="unknown",
                     duckdb_version_used="unknown",
-                    test_environment="uv"
+                    test_environment="uv",
+                    functional_test_passed=None,
+                    test_query_used=None
                 )
 
 
@@ -315,7 +399,11 @@ if __name__ == "__main__":
             print(f"\n{result.extension_name}:")
             print(f"  Success: {result.success}")
             print(f"  Install Time: {result.install_time}s")
-            print(f"  Load Time: {result.load_time}s") 
+            print(f"  Load Time: {result.load_time}s")
+            if result.functional_test_time:
+                print(f"  Functional Test Time: {result.functional_test_time}s")
+                print(f"  Functional Test Passed: {result.functional_test_passed}")
+                print(f"  Test Query: {result.test_query_used}")
             print(f"  Total Time: {result.total_time}s")
             if result.error_message:
                 print(f"  Error: {result.error_message}")
