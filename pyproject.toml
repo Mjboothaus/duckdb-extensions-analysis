@@ -12,6 +12,7 @@ dependencies = [
     "httpx>=0.28.1",
     "jinja2>=3.1.4",
     "loguru>=0.7.3",
+    "markdown>=3.9",
     "openpyxl>=3.1.5",
     "pandas>=2.2.3",
     "python-dotenv>=1.1.1",
