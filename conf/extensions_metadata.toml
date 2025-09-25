@@ -33,6 +33,18 @@ spatial = { repository = "duckdb/duckdb-spatial", description = "Geospatial data
 sqlite = { repository = "duckdb/duckdb-sqlite", description = "SQLite database connectivity" }
 vss = { repository = "duckdb/duckdb-vss", description = "Vector similarity search" }
 
+# Manual overrides for extensions that should point to main DuckDB repo instead of broken subpaths
+[core_extensions.repository_overrides]
+# These extensions don't have separate repositories and should point to main DuckDB repo
+autocomplete = "duckdb/duckdb"
+icu = "duckdb/duckdb"
+jemalloc = "duckdb/duckdb"
+json = "duckdb/duckdb"
+parquet = "duckdb/duckdb"
+tpcds = "duckdb/duckdb"
+tpch = "duckdb/duckdb"
+ducklake = "duckdb/duckdb"
+
 # Extensions integrated into core DuckDB without dedicated directories
 [core_extensions.integrated_core]
 ducklake = { description = "Delta Lake support via DuckLake (different from delta extension)" }

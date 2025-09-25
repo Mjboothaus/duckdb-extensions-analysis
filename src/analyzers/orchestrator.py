@@ -208,8 +208,10 @@ class AnalysisOrchestrator:
                 if ext.repository.startswith('http'):
                     urls_to_validate[f"{ext.name}_repository"] = ext.repository
                 elif '/' in ext.repository and not ext.repository.startswith('integrated_core'):
-                    # Convert repo path to full GitHub URL
-                    urls_to_validate[f"{ext.name}_repository"] = f"https://github.com/{ext.repository}"
+                    # For core extensions, only validate if it's NOT the main duckdb/duckdb repo
+                    # since that will always be valid
+                    if ext.repository != 'duckdb/duckdb':
+                        urls_to_validate[f"{ext.name}_repository"] = f"https://github.com/{ext.repository}"
             
             # Check documentation URLs if available
             if hasattr(ext, 'documentation_url') and ext.documentation_url:

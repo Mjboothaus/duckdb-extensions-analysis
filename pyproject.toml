@@ -19,6 +19,7 @@ dependencies = [
     "requests>=2.32.5",
     "tenacity>=9.1.2",
     "toml>=0.10.2",
+    "tqdm>=4.67.1",
 ]
 
 [dependency-groups]

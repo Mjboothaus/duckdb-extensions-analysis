@@ -11,6 +11,7 @@ from typing import Dict, List, Optional, Tuple
 
 import httpx
 from loguru import logger
+from tqdm import tqdm
 
 from .base import BaseAnalyzer, ExtensionInfo
 from .github_api import GitHubAPIClient
@@ -174,58 +175,77 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         """Analyze community extensions and return detailed data and statistics."""
         extensions = await self.get_community_extensions_list(client)
         extension_data = []
+        
+        # Use tqdm progress bar only when processing many extensions
+        logger.info(f"Processing {len(extensions)} community extensions...")
+        
+        # Only show progress bar if processing more than 10 extensions 
+        # (avoids clutter when most data is cached)
+        show_progress = len(extensions) > 10
+        
+        if show_progress:
+            pbar = tqdm(extensions, desc="Analyzing community extensions", unit="ext")
+            iterator = pbar
+        else:
+            iterator = extensions
+            pbar = None
+            
+        for ext in iterator:
+            if pbar:
+                pbar.set_description(f"Processing {ext}")
+                metadata = await self.get_extension_metadata(client, ext)
 
-        for ext in extensions:
-            logger.info(f"Processing {ext}")
-            metadata = await self.get_extension_metadata(client, ext)
+                ext_info = {
+                    "name": ext,
+                    "metadata": metadata,
+                    "repo_info": None,
+                    "error": None,
+                    "status": "❌ Error",
+                    "last_push_days": None,
+                    "featured": ext.lower() in featured_extensions,
+                    "urls": {},
+                    "improved_description": None,
+                }
 
-            ext_info = {
-                "name": ext,
-                "metadata": metadata,
-                "repo_info": None,
-                "error": None,
-                "status": "❌ Error",
-                "last_push_days": None,
-                "featured": ext.lower() in featured_extensions,
-                "urls": {},
-                "improved_description": None,
-            }
+                # Generate URLs for the extension
+                ext_info["urls"] = self.get_extension_links(ext)
 
-            # Generate URLs for the extension
-            ext_info["urls"] = self.get_extension_links(ext)
+                if metadata and "repo" in metadata and "github" in metadata["repo"]:
+                    repo = metadata["repo"]["github"]
+                    repo_info = await self.get_repository_info(client, repo)
+                    if repo_info:
+                        ext_info["repo_info"] = repo_info
+                        ext_info["last_push_days"] = self.calculate_days_ago(
+                            repo_info["last_push"]
+                        )
 
-            if metadata and "repo" in metadata and "github" in metadata["repo"]:
-                repo = metadata["repo"]["github"]
-                repo_info = await self.get_repository_info(client, repo)
-                if repo_info:
-                    ext_info["repo_info"] = repo_info
-                    ext_info["last_push_days"] = self.calculate_days_ago(
-                        repo_info["last_push"]
-                    )
+                        # Update URLs with repo information
+                        ext_info["urls"] = self.get_extension_links(ext, repo)
 
-                    # Update URLs with repo information
-                    ext_info["urls"] = self.get_extension_links(ext, repo)
+                        # Generate improved description if needed
+                        ext_info["improved_description"] = self.improve_description(
+                            ext,
+                            repo_info.get("description"),
+                            repo,
+                            repo_info.get("topics", []),
+                        )
 
-                    # Generate improved description if needed
-                    ext_info["improved_description"] = self.improve_description(
-                        ext,
-                        repo_info.get("description"),
-                        repo,
-                        repo_info.get("topics", []),
-                    )
-
-                    if repo_info["archived"]:
-                        ext_info["status"] = "🔴 Discontinued"
+                        if repo_info["archived"]:
+                            ext_info["status"] = "🔴 Discontinued"
+                        else:
+                            ext_info["status"] = "✅ Ongoing"
                     else:
-                        ext_info["status"] = "✅ Ongoing"
+                        ext_info["error"] = "Failed to fetch repository info"
+                        ext_info["improved_description"] = self.improve_description(ext, None)
                 else:
-                    ext_info["error"] = "Failed to fetch repository info"
+                    ext_info["error"] = "No repository found"
                     ext_info["improved_description"] = self.improve_description(ext, None)
-            else:
-                ext_info["error"] = "No repository found"
-                ext_info["improved_description"] = self.improve_description(ext, None)
 
-            extension_data.append(ext_info)
+                extension_data.append(ext_info)
+        
+        # Close progress bar if it was used
+        if pbar:
+            pbar.close()
 
         # Sort by last activity (most recent first)
         extension_data.sort(

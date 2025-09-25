@@ -14,7 +14,7 @@ This analysis is based on the following authoritative sources:
 ### Community Extensions
 - **Registry**: [Community Extensions Repository](https://github.com/duckdb/community-extensions)
 - **Directory**: [Extensions Folder](https://github.com/duckdb/community-extensions/tree/main/extensions)
-- **Featured**: [Community Extensions Page](https://duckdb.org/community_extensions/)
+- **Featured**: [Community Extensions Page](https://community-extensions.duckdb.org/)
 - **Individual Repositories**: GitHub repositories linked in the extensions directory
 
 ---

@@ -557,6 +557,7 @@ class ReportGenerator(BaseReportGenerator):
                     'release_date': getattr(analysis_result, 'duckdb_release_date', None)
                 },
                 'analysis_timestamp': analysis_result.analysis_timestamp,
+                'url_validation_results': getattr(analysis_result, 'url_validation_results', {}),
                 'stats': {}
             }
             
@@ -594,9 +595,16 @@ class ReportGenerator(BaseReportGenerator):
                     else:
                         description = f'Core DuckDB extension: {ext.name}'
                 
+                # For core extensions, use the main DuckDB repository unless it's an external extension
+                repository_url = 'duckdb/duckdb'
+                if ext.metadata and ext.metadata.get('repository_path', '').startswith('external:'):
+                    repository_url = ext.metadata['repository_path'].replace('external:', '')
+                elif ext.repository and ext.repository != 'integrated_core':
+                    repository_url = ext.repository
+                
                 core_ext = {
                     'name': ext.name,
-                    'repository': ext.repository or 'duckdb/duckdb',
+                    'repository': repository_url,
                     'docs_url': extension_urls.get(ext.name.lower()),
                     'status': 'ongoing',
                     'last_push_days': last_activity_days,

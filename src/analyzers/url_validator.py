@@ -28,7 +28,9 @@ class URLValidator:
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.head(url, follow_redirects=True)
-                return True, response.status_code, None
+                is_valid = 200 <= response.status_code < 400
+                error_message = None if is_valid else f"HTTP {response.status_code}"
+                return is_valid, response.status_code, error_message
         except httpx.TimeoutException:
             return False, None, "Request timeout"
         except httpx.RequestError as e:
@@ -77,12 +79,15 @@ class URLValidator:
         """Validate a URL with a provided client."""
         try:
             response = await client.head(url, follow_redirects=True)
+            is_valid = 200 <= response.status_code < 400
+            error_message = None if is_valid else f"HTTP {response.status_code}"
+            
             result = {
                 'url': url,
-                'is_valid': True,
+                'is_valid': is_valid,
                 'status_code': response.status_code,
                 'final_url': str(response.url),
-                'error_message': None
+                'error_message': error_message
             }
             return name, result
         except httpx.TimeoutException:

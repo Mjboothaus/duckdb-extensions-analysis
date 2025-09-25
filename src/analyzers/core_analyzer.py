@@ -409,11 +409,26 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                 platform_availability = await self._check_extension_across_platforms(ext["name"], duckdb_version)
                 
                 # Create ExtensionInfo object
+                # Determine correct repository URL using metadata overrides
+                repository_url = f"{self.github_client.duckdb_repo}/extensions/{ext['name']}"
+                
+                # Check for manual repository override first
+                from .extension_metadata import ExtensionMetadata
+                metadata_helper = ExtensionMetadata(self.config.config_dir)
+                repo_overrides = metadata_helper.metadata.get('core_extensions', {}).get('repository_overrides', {})
+                if ext['name'] in repo_overrides:
+                    repository_url = repo_overrides[ext['name']]
+                # Then check for external repository
+                elif github_info and 'external_repository' in github_info:
+                    repository_url = github_info['external_repository']
+                elif github_info and github_info.get('repository_path') == 'integrated_core':
+                    repository_url = self.github_client.duckdb_repo
+                
                 ext_info = ExtensionInfo(
                     name=ext["name"],
                     type="core",
                     stage=ext["stage"],
-                    repository=f"{self.github_client.duckdb_repo}/extensions/{ext['name']}"
+                    repository=repository_url
                 )
                 
                 # Add GitHub metadata if available

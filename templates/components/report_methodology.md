@@ -15,7 +15,7 @@ This analysis is based on the following authoritative sources and their structur
 ### Community Extensions Data Sources  
 - **Registry**: [Community Extensions Repository](https://github.com/duckdb/community-extensions)
 - **Directory**: [Extensions Folder](https://github.com/duckdb/community-extensions/tree/main/extensions)
-- **Featured Page**: [Community Extensions](https://duckdb.org/community_extensions/)
+- **Featured Page**: [Community Extensions](https://community-extensions.duckdb.org/)
 - **Individual Repositories**: GitHub repositories linked in the extensions directory
 
 ### Status Determination Methodology
