@@ -23,6 +23,93 @@ def main():
     md = markdown.Markdown(extensions=['tables', 'fenced_code', 'toc'])
     html_content = md.convert(md_content)
 
+    # Create JavaScript content separately to avoid f-string issues
+    javascript_content = '''
+    $(document).ready(function() {
+        // Display user's local time based on the report's UTC timestamp
+        function updateLocalTime() {
+            // Extract UTC time from the report
+            const utcTimeText = $('#utc-time').text();
+            const utcMatch = utcTimeText.match(/(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}) UTC/);
+            
+            if (utcMatch) {
+                // Parse the UTC time from the report
+                const utcTimeString = utcMatch[1];
+                const utcDate = new Date(utcTimeString + ' UTC');
+                
+                // Convert to local time
+                const localTimeString = utcDate.toLocaleString('en-AU', {
+                    year: 'numeric',
+                    month: '2-digit', 
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                });
+                $('#local-time').text(localTimeString);
+            } else {
+                // Fallback to current time if parsing fails
+                const now = new Date();
+                const localTimeString = now.toLocaleString('en-AU', {
+                    year: 'numeric',
+                    month: '2-digit', 
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZoneName: 'short'
+                });
+                $('#local-time').text(localTimeString + ' (current)');
+            }
+        }
+        
+        // Update local time once (it's static based on report time)
+        updateLocalTime();
+        
+        // Make tables interactive with appropriate configurations
+        $('table').addClass('table table-striped table-hover');
+        
+        // Configure static tables (Summary, Historical Releases) differently
+        $('table').each(function() {
+            const $table = $(this);
+            const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
+                                 $table.closest('h2, h3').prev().text().includes('Historical Releases');
+            
+            if (isStaticTable) {
+                // Static tables: no pagination, no length menu, but keep search for Historical
+                const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
+                $table.DataTable({
+                    "paging": false,
+                    "lengthChange": false,
+                    "info": false,
+                    "searching": isHistorical,
+                    "order": [],
+                    "responsive": true,
+                    "dom": isHistorical ? 'ft' : 't'
+                });
+            } else {
+                // Interactive tables: full functionality
+                $table.DataTable({
+                    "pageLength": 25,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "order": [],
+                    "columnDefs": [
+                        { "orderable": true, "targets": "_all" }
+                    ],
+                    "responsive": true,
+                    "dom": '<"top"lf>rt<"bottom"ip><"clear">'
+                });
+            }
+        });
+        
+        // Add timezone info tooltip after tables are initialized
+        setTimeout(function() {
+            $('#local-time').attr('title', 'Shows the report generation time converted to your local timezone');
+        }, 100);
+    });
+    '''
+
     # Create full HTML page
     full_html = f'''<!DOCTYPE html>
 <html lang="en">
@@ -145,89 +232,7 @@ def main():
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     
     <script>
-    $(document).ready(function() {{
-        // Display user's local time based on the report's UTC timestamp
-        function updateLocalTime() {
-            // Extract UTC time from the report
-            const utcTimeText = $('#utc-time').text();
-            const utcMatch = utcTimeText.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/);
-            
-            if (utcMatch) {
-                // Parse the UTC time from the report
-                const utcTimeString = utcMatch[1];
-                const utcDate = new Date(utcTimeString + ' UTC');
-                
-                // Convert to local time
-                const localTimeString = utcDate.toLocaleString('en-AU', {
-                    year: 'numeric',
-                    month: '2-digit', 
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZoneName: 'short'
-                });
-                $('#local-time').text(localTimeString);
-            } else {
-                // Fallback to current time if parsing fails
-                const now = new Date();
-                const localTimeString = now.toLocaleString('en-AU', {
-                    year: 'numeric',
-                    month: '2-digit', 
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZoneName: 'short'
-                });
-                $('#local-time').text(localTimeString + ' (current)');
-            }
-        }
-        
-        // Update local time once (it's static based on report time)
-        updateLocalTime();
-        
-        // Make tables interactive with appropriate configurations
-        $('table').addClass('table table-striped table-hover');
-        
-        // Configure static tables (Summary, Historical Releases) differently
-        $('table').each(function() {{
-            const $table = $(this);
-            const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
-                                 $table.closest('h2, h3').prev().text().includes('Historical Releases');
-            
-            if (isStaticTable) {{
-                // Static tables: no pagination, no length menu, but keep search for Historical
-                const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
-                $table.DataTable({{
-                    "paging": false,
-                    "lengthChange": false,
-                    "info": false,
-                    "searching": isHistorical,
-                    "order": [],
-                    "responsive": true,
-                    "dom": isHistorical ? 'ft' : 't'
-                }});
-            }} else {{
-                // Interactive tables: full functionality
-                $table.DataTable({{
-                    "pageLength": 25,
-                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    "order": [],
-                    "columnDefs": [
-                        {{ "orderable": true, "targets": "_all" }}
-                    ],
-                    "responsive": true,
-                    "dom": '<"top"lf>rt<"bottom"ip><"clear">'
-                }});
-            }}
-        }});
-        
-        // Add timezone info tooltip after tables are initialized
-        setTimeout(function() {{
-            $('#local-time').attr('title', 'Shows the report generation time converted to your local timezone');
-        }}, 100);
-    }});
+    {javascript_content}
     </script>
 </body>
 </html>'''
