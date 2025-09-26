@@ -116,13 +116,13 @@ Third-party extensions maintained by the community
 | 33 | [rapidfuzz](https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz) | [rapidfuzz](https://github.com/Query-farm/rapidfuzz) | 🟢 Ongoing | 2 days ago | 3 | C++ | DuckDB Community Extension adding RapidFuzz algorithms for search, deduplicat... | ⭐ |
 | 34 | [redis](https://duckdb.org/docs/extensions/community_extensions.html#redis) | [redis](https://github.com/Query-farm/redis) | 🟢 Ongoing | 2 days ago | 7 | C++ | DuckDB Redis Client community extension |  |
 | 35 | [shellfs](https://duckdb.org/docs/extensions/community_extensions.html#shellfs) | [shellfs](https://github.com/Query-farm/shellfs) | 🟢 Ongoing | 2 days ago | 81 | C++ | DuckDB extension allowing shell commands to be used for input and output. | ⭐ |
-| 36 | [snowflake](https://duckdb.org/docs/extensions/community_extensions.html#snowflake) | [duckdb-snowflake](https://github.com/iqea-ai/duckdb-snowflake) | 🟢 Ongoing | 2 days ago | 12 | C++ | A powerful DuckDB extension that enables seamless querying of Snowflake datab... | ⭐ |
-| 37 | [tsid](https://duckdb.org/docs/extensions/community_extensions.html#tsid) | [tsid](https://github.com/Query-farm/tsid) | 🟢 Ongoing | 2 days ago | 5 | C++ | TSID Extension for DuckDB  |  |
-| 38 | [webmacro](https://duckdb.org/docs/extensions/community_extensions.html#webmacro) | [webmacro](https://github.com/Query-farm/webmacro) | 🟢 Ongoing | 2 days ago | 13 | C++ | DuckDB WebMacro: Share and Load your SQL Macros via gists |  |
-| 39 | [wireduck](https://duckdb.org/docs/extensions/community_extensions.html#wireduck) | [wireduck](https://github.com/hyehudai/wireduck) | 🟢 Ongoing | 2 days ago | 46 | C++ | Duckdb extension to read pcap files | ⭐ |
-| 40 | [magic](https://duckdb.org/docs/extensions/community_extensions.html#magic) | [duckdb_magic](https://github.com/carlopi/duckdb_magic) | 🟢 Ongoing | 3 days ago | 7 | C++ | Auto-detect file types via `libmagic` (`file` utility) | ⭐ |
-| 41 | [prql](https://duckdb.org/docs/extensions/community_extensions.html#prql) | [duckdb-prql](https://github.com/ywelsch/duckdb-prql) | 🟢 Ongoing | 3 days ago | 297 | C++ | PRQL as a DuckDB extension | ⭐ |
-| 42 | [psql](https://duckdb.org/docs/extensions/community_extensions.html#psql) | [duckdb-psql](https://github.com/ywelsch/duckdb-psql) | 🟢 Ongoing | 3 days ago | 92 | C++ | A piped SQL for DuckDB | ⭐ |
+| 36 | [tsid](https://duckdb.org/docs/extensions/community_extensions.html#tsid) | [tsid](https://github.com/Query-farm/tsid) | 🟢 Ongoing | 2 days ago | 5 | C++ | TSID Extension for DuckDB  |  |
+| 37 | [webmacro](https://duckdb.org/docs/extensions/community_extensions.html#webmacro) | [webmacro](https://github.com/Query-farm/webmacro) | 🟢 Ongoing | 2 days ago | 13 | C++ | DuckDB WebMacro: Share and Load your SQL Macros via gists |  |
+| 38 | [wireduck](https://duckdb.org/docs/extensions/community_extensions.html#wireduck) | [wireduck](https://github.com/hyehudai/wireduck) | 🟢 Ongoing | 2 days ago | 46 | C++ | Duckdb extension to read pcap files | ⭐ |
+| 39 | [magic](https://duckdb.org/docs/extensions/community_extensions.html#magic) | [duckdb_magic](https://github.com/carlopi/duckdb_magic) | 🟢 Ongoing | 3 days ago | 7 | C++ | Auto-detect file types via `libmagic` (`file` utility) | ⭐ |
+| 40 | [prql](https://duckdb.org/docs/extensions/community_extensions.html#prql) | [duckdb-prql](https://github.com/ywelsch/duckdb-prql) | 🟢 Ongoing | 3 days ago | 297 | C++ | PRQL as a DuckDB extension | ⭐ |
+| 41 | [psql](https://duckdb.org/docs/extensions/community_extensions.html#psql) | [duckdb-psql](https://github.com/ywelsch/duckdb-psql) | 🟢 Ongoing | 3 days ago | 92 | C++ | A piped SQL for DuckDB | ⭐ |
+| 42 | [snowflake](https://duckdb.org/docs/extensions/community_extensions.html#snowflake) | [duckdb-snowflake](https://github.com/iqea-ai/duckdb-snowflake) | 🟢 Ongoing | 3 days ago | 12 | C++ | A powerful DuckDB extension that enables seamless querying of Snowflake datab... | ⭐ |
 | 43 | [bigquery](https://duckdb.org/docs/extensions/community_extensions.html#bigquery) | [duckdb-bigquery](https://github.com/hafenkran/duckdb-bigquery) | 🟢 Ongoing | 4 days ago | 131 | C++ | Integrates DuckDB with Google BigQuery, allowing direct querying and manageme... | ⭐ |
 | 44 | [cwiqduck](https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck) | [cwiqduck](https://github.com/cwiq-os/cwiqduck) | 🟢 Ongoing | 4 days ago | 1 | C++ | DuckDB extensions for CWIQ | ⭐ |
 | 45 | [zipfs](https://duckdb.org/docs/extensions/community_extensions.html#zipfs) | [duckdb-zipfs](https://github.com/isaacbrodsky/duckdb-zipfs) | 🟢 Ongoing | 4 days ago | 41 | C++ | DuckDB extension to read files within zip archives. | ⭐ |
@@ -358,9 +358,6 @@ This section shows the results of validating URLs associated with extensions, in
 **shellfs_documentation**
 - Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#shellfs`
 - HTTP Status: 200- Extension name not found on page
-**snowflake_documentation**
-- Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#snowflake`
-- HTTP Status: 200- Extension name not found on page
 **tsid_documentation**
 - Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#tsid`
 - HTTP Status: 200- Extension name not found on page
@@ -378,6 +375,9 @@ This section shows the results of validating URLs associated with extensions, in
 - HTTP Status: 200- Extension name not found on page
 **psql_documentation**
 - Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#psql`
+- HTTP Status: 200- Extension name not found on page
+**snowflake_documentation**
+- Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#snowflake`
 - HTTP Status: 200- Extension name not found on page
 **bigquery_documentation**
 - Status: ⚠️ Likely Wrong- URL: `https://duckdb.org/docs/extensions/community_extensions.html#bigquery`
@@ -730,9 +730,6 @@ This section shows the results of validating URLs associated with extensions, in
 **shellfs_repository**
 - URL: `https://github.com/Query-farm/shellfs`
 - Status: ✅ OK- HTTP Status: 200
-**snowflake_repository**
-- URL: `https://github.com/iqea-ai/duckdb-snowflake`
-- Status: ✅ OK- HTTP Status: 200
 **tsid_repository**
 - URL: `https://github.com/Query-farm/tsid`
 - Status: ✅ OK- HTTP Status: 200
@@ -750,6 +747,9 @@ This section shows the results of validating URLs associated with extensions, in
 - Status: ✅ OK- HTTP Status: 200
 **psql_repository**
 - URL: `https://github.com/ywelsch/duckdb-psql`
+- Status: ✅ OK- HTTP Status: 200
+**snowflake_repository**
+- URL: `https://github.com/iqea-ai/duckdb-snowflake`
 - Status: ✅ OK- HTTP Status: 200
 **bigquery_repository**
 - URL: `https://github.com/hafenkran/duckdb-bigquery`
@@ -1051,9 +1051,6 @@ This section shows the results of validating URLs associated with extensions, in
 **shellfs_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#shellfs`
 - Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-**snowflake_documentation**
-- URL: `https://duckdb.org/docs/extensions/community_extensions.html#snowflake`
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 **tsid_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#tsid`
 - Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
@@ -1071,6 +1068,9 @@ This section shows the results of validating URLs associated with extensions, in
 - Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 **psql_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#psql`
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
+**snowflake_documentation**
+- URL: `https://duckdb.org/docs/extensions/community_extensions.html#snowflake`
 - Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 **bigquery_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#bigquery`
