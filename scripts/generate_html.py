@@ -9,6 +9,15 @@ def main():
     # Read the markdown file
     with open('reports/latest.md', 'r') as f:
         md_content = f.read()
+    
+    # Extract report timestamp from markdown content
+    report_timestamp = 'Loading...'
+    timestamp_match = re.search(r'\*\*Report Generated:\*\* ([\d-]+ [\d:]+ UTC)', md_content)
+    if timestamp_match:
+        report_timestamp = timestamp_match.group(1)
+    else:
+        # Fallback to current time if not found in report
+        report_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')
 
     # Convert markdown to HTML
     md = markdown.Markdown(extensions=['tables', 'fenced_code', 'toc'])
@@ -118,7 +127,7 @@ def main():
     <div class="header-info">
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
-        <p><strong>Last Updated:</strong> <code id="utc-time">{datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</code></p>
+        <p><strong>Last Updated:</strong> <code id="utc-time">{report_timestamp}</code></p>
         <p><strong>Your Local Time:</strong> <code id="local-time">Loading...</code></p>
         <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
     </div>
@@ -216,7 +225,7 @@ def main():
         
         // Add timezone info tooltip after tables are initialized
         setTimeout(function() {{
-            $('#local-time').attr('title', 'This time updates automatically and shows your browser\'s timezone');
+            $('#local-time').attr('title', 'Shows the report generation time converted to your local timezone');
         }}, 100);
     }});
     </script>
