@@ -355,6 +355,17 @@ TO 'featured.csv' WITH (FORMAT CSV, HEADER);"
 
 This database-driven approach provides powerful analysis capabilities and enables integration with other tools while maintaining data consistency with the reporting system.
 
+## 🌐 Future: MotherDuck Integration
+
+**Coming in v0.3.0+**: We're planning to publish the extensions analysis database to [MotherDuck](https://motherduck.com) for cloud access and sharing. This would enable:
+
+- **Public Dataset**: Query the latest extension data without running the analysis locally
+- **Collaborative Analysis**: Share queries and insights with the DuckDB community
+- **Real-time Access**: Always up-to-date data via MotherDuck's cloud infrastructure
+- **Enhanced Performance**: Leverage MotherDuck's optimizations for analytical workloads
+
+Stay tuned for this exciting integration that will make DuckDB extension intelligence accessible to everyone!
+
 ---
 
 *For more examples and advanced usage, see the sample queries in `sql/sample_queries.sql`*

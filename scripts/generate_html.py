@@ -119,6 +119,7 @@ def main():
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
         <p><strong>Last Updated:</strong> <code>{datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</code></p>
+        <p><strong>Your Local Time:</strong> <code id="local-time">Loading...</code></p>
         <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
     </div>
     {html_content}
@@ -136,6 +137,25 @@ def main():
     
     <script>
     $(document).ready(function() {{
+        // Display user's local time
+        function updateLocalTime() {{
+            const now = new Date();
+            const localTimeString = now.toLocaleString('en-AU', {{
+                year: 'numeric',
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            }});
+            $('#local-time').text(localTimeString);
+        }}
+        
+        // Update local time immediately and then every second
+        updateLocalTime();
+        setInterval(updateLocalTime, 1000);
+        
         // Make all tables interactive
         $('table').addClass('table table-striped table-hover');
         $('table').DataTable({{
@@ -146,7 +166,11 @@ def main():
                 {{ "orderable": true, "targets": "_all" }}
             ],
             "responsive": true,
-            "dom": '<"top"lf>rt<"bottom"ip><"clear">'
+            "dom": '<"top"lf>rt<"bottom"ip><"clear">',
+            "initComplete": function() {{
+                // Add timezone info tooltip
+                $('#local-time').attr('title', 'This time updates automatically and shows your browser\'s timezone');
+            }}
         }});
     }});
     </script>

@@ -10,6 +10,8 @@ DuckDB's extension ecosystem has exploded from a handful of core extensions to o
 
 As someone who's been following DuckDB since its early days, I've watched the extension ecosystem grow from a neat addition to an essential part of what makes DuckDB powerful. But recent projects left me frustrated: Which spatial extension should I use? Is that machine learning extension still maintained? Are there broken installation URLs I should avoid?
 
+This challenge became particularly acute during a recent upgrade to DuckDB v1.4.0, where I encountered unexpected delays in core extension availability that disrupted my workflow. The experience highlighted a broader issue: with 107+ extensions across core and community repositories, navigating the ecosystem had become overwhelming.
+
 The DuckDB documentation does a great job listing extensions, but static documentation can't capture the dynamic health of an ecosystem. What I needed was a live view of what's working, what's active, and what's worth investing time in.
 
 ## Why Build This?
@@ -119,12 +121,23 @@ These limitations don't diminish the tool's value - they represent the iterative
 - Extension search and filtering capabilities
 - Performance monitoring (installation success rates)
 - Additional export formats (JSON, Parquet)
+- **Upgrade Planning Alerts**: Notifications when extensions aren't ready for new DuckDB versions
 
 **Long Term (v1.0.0)**
 - Real-time updates beyond daily batch processing
 - Custom dashboard configurations
 - RESTful API for programmatic access
 - Alerting system for extension changes
+- **Pre-upgrade Compatibility Checks**: Automated validation before DuckDB upgrades
+- **MotherDuck Integration**: Publish analysis database to MotherDuck for cloud access and sharing
+
+## Real-World Impact: Preventing Upgrade Surprises
+
+The practical value of this monitoring approach became clear during my recent DuckDB v1.4.0 upgrade experience. Had this tool existed then, it would have immediately flagged that the `ui` extension wasn't available for macOS - saving hours of troubleshooting and the frustration of a failed upgrade.
+
+The tool's URL validation catches broken documentation links before you encounter them. The activity monitoring reveals which extensions are actively maintained versus dormant projects. The GitHub integration provides early warnings about extensions that might become unavailable.
+
+*For a detailed account of navigating extension compatibility during version upgrades, including practical troubleshooting steps and downgrade procedures, see my companion post: "[Navigating DuckDB Extension Updates: A Lesson from Upgrading](/posts/duckdb-upgrades-extension/)".*
 
 ## Why This Matters
 
