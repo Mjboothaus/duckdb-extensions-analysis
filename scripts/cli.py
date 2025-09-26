@@ -234,9 +234,9 @@ def analyze_all(cache_hours, with_issues):
 # Report commands
 @report.command('generate')
 @click.option('--format', 'formats', multiple=True, 
-              type=click.Choice(['markdown', 'csv', 'excel']), 
+              type=click.Choice(['markdown', 'csv', 'excel', 'url_validation_csv']), 
               default=['markdown'],
-              help='Output format(s) - can specify multiple times')
+              help='Output format(s) - can specify multiple times. url_validation_csv generates CSV of URL validation results.')
 @click.option('--with-issues', is_flag=True,
               help='Enable GitHub issues analysis (slower, may hit rate limits)')
 @click.option('--cache-hours', type=int, default=None,
@@ -267,7 +267,7 @@ def database_save(cache_hours):
 # Shortcut commands (for backward compatibility and convenience)
 @cli.command('quick')
 @click.option('--format', 'formats', multiple=True,
-              type=click.Choice(['markdown', 'csv', 'excel']),
+              type=click.Choice(['markdown', 'csv', 'excel', 'url_validation_csv']),
               default=['markdown'],
               help='Output format(s)')
 def quick_report(formats):

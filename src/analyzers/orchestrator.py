@@ -253,11 +253,46 @@ class AnalysisOrchestrator:
             logger.info(f"Validated {len(docs_urls_to_validate)} documentation URLs with content checking")
         
         if validation_results:
-            logger.info(f"Total validated {len(validation_results)} URLs")
-            return validation_results
+            # Post-process results to normalize status field
+            normalized_results = self._normalize_validation_results(validation_results)
+            logger.info(f"Total validated {len(normalized_results)} URLs")
+            return normalized_results
         else:
             logger.info("No URLs found to validate")
             return {}
+    
+    def _normalize_validation_results(self, validation_results: Dict[str, Dict]) -> Dict[str, Dict]:
+        """Normalize validation results to have consistent status field."""
+        normalized = {}
+        
+        for key, result in validation_results.items():
+            normalized_result = result.copy()
+            
+            # Determine status based on validation results
+            if result.get('is_valid', False):
+                # URL is accessible
+                content_validation = result.get('content_validation')
+                extension_name_found = result.get('extension_name_found')
+                
+                if content_validation == 'likely_wrong' or extension_name_found is False:
+                    normalized_result['status'] = 'LIKELY_WRONG'
+                else:
+                    normalized_result['status'] = 'OK'
+            else:
+                # URL is not accessible
+                normalized_result['status'] = 'BROKEN'
+            
+            # Ensure consistent fields
+            if 'response_time' not in normalized_result:
+                normalized_result['response_time'] = None
+            if 'content_validation' not in normalized_result:
+                normalized_result['content_validation'] = False
+            if 'extension_name_found' not in normalized_result:
+                normalized_result['extension_name_found'] = None
+            
+            normalized[key] = normalized_result
+        
+        return normalized
     
     async def analyze_full_historical(self, as_of_date: str) -> AnalysisResult:
         """Perform full analysis as of a specific historical date."""
@@ -337,6 +372,11 @@ class AnalysisOrchestrator:
                 elif format_type.lower() == "excel":
                     filepath = await self.report_generator.generate_excel(analysis_result)
                     results[format_type] = filepath
+                    
+                elif format_type.lower() == "url_validation_csv":
+                    filepath = await self.report_generator.generate_url_validation_csv(analysis_result)
+                    if filepath:
+                        results[format_type] = filepath
                     
                 else:
                     logger.warning(f"Unsupported format: {format_type}")

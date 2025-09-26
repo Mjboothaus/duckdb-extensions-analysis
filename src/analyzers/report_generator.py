@@ -543,6 +543,58 @@ class ReportGenerator(BaseReportGenerator):
         logger.info(f"Excel report saved: {excel_path}")
         return str(excel_path)
     
+    async def generate_url_validation_csv(self, analysis_result: AnalysisResult) -> str:
+        """Generate CSV report of URL validation results for easy correction."""
+        logger.info("Generating URL validation CSV report")
+        
+        validation_results = getattr(analysis_result, 'url_validation_results', {})
+        if not validation_results:
+            logger.warning("No URL validation results found")
+            return None
+        
+        rows = []
+        for url_key, result in validation_results.items():
+            # Parse extension name and URL type from key
+            if '_' in url_key:
+                extension_name = url_key.rsplit('_', 1)[0]
+                url_type = url_key.rsplit('_', 1)[1]
+            else:
+                extension_name = url_key
+                url_type = 'unknown'
+            
+            rows.append({
+                "Extension Name": extension_name,
+                "URL Type": url_type,
+                "Current URL": result.get('url', ''),
+                "Status": result.get('status', 'UNKNOWN'),
+                "HTTP Status Code": result.get('status_code', ''),
+                "Error Message": result.get('error_message', ''),
+                "Extension Name Found": result.get('extension_name_found', ''),
+                "Content Validated": result.get('content_validation', ''),
+                "Corrected URL": '',  # Empty column for user to fill in
+                "Notes": ''  # Empty column for user notes
+            })
+        
+        # Sort by status (broken/likely wrong first) then by extension name
+        def sort_key(row):
+            status_priority = {'BROKEN': 0, 'LIKELY_WRONG': 1, 'OK': 2}
+            return (status_priority.get(row['Status'], 3), row['Extension Name'])
+        
+        rows.sort(key=sort_key)
+        
+        # Create DataFrame and save to CSV
+        import pandas as pd
+        df = pd.DataFrame(rows)
+        timestamp = analysis_result.analysis_timestamp.strftime("%Y%m%d_%H%M%S")
+        csv_filename = f"url_validation_results_{timestamp}.csv"
+        csv_path = self.reports_dir / csv_filename
+        
+        self.config.ensure_directories()
+        df.to_csv(csv_path, index=False)
+        
+        logger.info(f"URL validation CSV saved: {csv_path}")
+        return str(csv_path)
+    
     async def generate_markdown_template(self, analysis_result: AnalysisResult, template_name: str = 'full_analysis') -> str:
         """Generate markdown report using the new template system."""
         logger.info(f"Generating markdown report using template: {template_name}")
