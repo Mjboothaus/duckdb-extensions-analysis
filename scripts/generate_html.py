@@ -10,13 +10,38 @@ def main():
     with open('reports/latest.md', 'r') as f:
         md_content = f.read()
     
-    # Extract report timestamp from markdown content
+    # Extract report timestamp from markdown content or Git
     report_timestamp = 'Loading...'
-    timestamp_match = re.search(r'\*\*Report Generated:\*\* ([\d-]+ [\d:]+ UTC)', md_content)
-    if timestamp_match:
-        report_timestamp = timestamp_match.group(1)
-    else:
-        # Fallback to current time if not found in report
+    
+    # Try to find the timestamp in the markdown first
+    timestamp_patterns = [
+        r'\*\*Report Generated:\*\* ([\d-]+ [\d:]+ UTC)',
+        r'Report Generated: ([\d-]+ [\d:]+ UTC)',
+        r'Last Updated: ([\d-]+ [\d:]+ UTC)'
+    ]
+    
+    for pattern in timestamp_patterns:
+        timestamp_match = re.search(pattern, md_content)
+        if timestamp_match:
+            report_timestamp = timestamp_match.group(1)
+            break
+    
+    # If not found in markdown, try to get from git (latest commit time)
+    if report_timestamp == 'Loading...':
+        try:
+            import subprocess
+            git_timestamp = subprocess.check_output(
+                ['git', 'log', '-1', '--format=%cd', '--date=format:%Y-%m-%d %H:%M:%S UTC', '--', 'reports/latest.md'],
+                cwd=Path.cwd(),
+                universal_newlines=True
+            ).strip()
+            if git_timestamp:
+                report_timestamp = git_timestamp
+        except Exception:
+            pass
+    
+    # Final fallback to current time
+    if report_timestamp == 'Loading...':
         report_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')
 
     # Convert markdown to HTML
