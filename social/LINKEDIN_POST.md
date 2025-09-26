@@ -6,7 +6,7 @@ After diving deep into the DuckDB ecosystem, I'm excited to share a comprehensiv
 
 **What it does:**
 📊 Daily automated analysis of core & community extensions  
-🌐 Live dashboard with beautiful visualizations  
+🌐 Live dashboard with visualisations  
 🔍 Health monitoring for installation URLs & GitHub activity  
 📈 Tracks ecosystem growth and development trends  
 

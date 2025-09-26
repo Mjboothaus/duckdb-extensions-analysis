@@ -1,0 +1,52 @@
+## URL Validation Results
+
+{% if url_validation and url_validation|length > 0 %}
+This section shows the results of validating URLs associated with extensions, including both simple HTTP status checks and enhanced content validation for documentation URLs.
+
+### Validation Summary
+
+{% set broken_count = url_validation.values() | selectattr('status', 'equalto', 'BROKEN') | list | length %}
+{% set likely_wrong_count = url_validation.values() | selectattr('status', 'equalto', 'LIKELY_WRONG') | list | length %}
+{% set ok_count = url_validation.values() | selectattr('status', 'equalto', 'OK') | list | length %}
+{% set total_count = url_validation|length %}
+
+| **Status** | **Count** | **Description** |
+|------------|-----------|-----------------|
+| ✅ **OK** | {{ ok_count }} | URLs are accessible and content is valid |
+| ⚠️ **Likely Wrong** | {{ likely_wrong_count }} | URLs are accessible but content may not match extension |
+| ❌ **Broken** | {{ broken_count }} | URLs are not accessible or return errors |
+| **Total Validated** | {{ total_count }} | Total URLs checked |
+
+{% if broken_count > 0 or likely_wrong_count > 0 %}
+### Issues Found
+
+{% for url_key, result in url_validation.items() %}
+{% if result.status in ['BROKEN', 'LIKELY_WRONG'] %}
+**{{ url_key }}**
+- Status: {% if result.status == 'BROKEN' %}❌ Broken{% else %}⚠️ Likely Wrong{% endif %}
+- URL: `{{ result.url }}`
+{% if result.status_code %}- HTTP Status: {{ result.status_code }}{% endif %}
+{% if result.error %}- Error: {{ result.error }}{% endif %}
+{% if result.content_validation_error %}- Content Issue: {{ result.content_validation_error }}{% endif %}
+{% if result.extension_name_found == false %}- Extension name not found on page{% endif %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+
+### Validation Details
+
+{% for url_key, result in url_validation.items() %}
+**{{ url_key }}**
+- URL: `{{ result.url }}`
+- Status: {% if result.status == 'OK' %}✅ OK{% elif result.status == 'LIKELY_WRONG' %}⚠️ Likely Wrong{% else %}❌ Broken{% endif %}
+{% if result.status_code %}- HTTP Status: {{ result.status_code }}{% endif %}
+{% if result.response_time %}- Response Time: {{ result.response_time }}ms{% endif %}
+{% if result.content_validation == true %}- Content validation performed{% endif %}
+{% if result.extension_name_found == true %}- Extension name found on page{% elif result.extension_name_found == false %}- Extension name NOT found on page{% endif %}
+
+{% endfor %}
+
+{% else %}
+No URL validation results available. URL validation may be disabled or no URLs were found to validate.
+{% endif %}
