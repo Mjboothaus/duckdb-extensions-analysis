@@ -130,7 +130,7 @@ def main():
         
         // Add timezone info tooltip after tables are initialized
         setTimeout(function() {
-            $('#local-time').attr('title', 'Shows the report generation time converted to your local timezone');
+            $('#local-time').attr('title', 'Report time in your local timezone');
         }, 100);
     });
     '''
@@ -239,8 +239,7 @@ def main():
     <div class="header-info">
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
-        <p><strong>Last Updated:</strong> <code id="utc-time">{report_timestamp}</code></p>
-        <p><strong>Your Local Time:</strong> <code id="local-time">Loading...</code></p>
+        <p><strong>Last Updated:</strong> <code id="utc-time">{report_timestamp}</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
         <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
     </div>
     {html_content}
