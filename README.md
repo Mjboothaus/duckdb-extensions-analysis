@@ -4,11 +4,11 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 ## Latest Analysis
 
-**Last Updated:** 2025-09-26 01:17:45 UTC
+**Last Updated:** 2025-09-26 03:47:37 UTC
 
 [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
 [![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-107-blue)](./reports/latest.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025-09-26%2001:17:45%20UTC-lightgrey)](./reports/latest.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025-09-26%2003:47:37%20UTC-lightgrey)](./reports/latest.md)
 
 ### Quick Summary
 
@@ -20,8 +20,8 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 | **Community Extensions** | 83 |
 | **Featured Extensions** | 41 |
 | **Total Extensions** | 107 |
-| **Recently Active** (≤30 days) | 59 |
-| **Very Active** (≤7 days) | 52 |
+| **Recently Active** (≤ 30 days) | 59 |
+| **Very Active** (≤ 7 days) | 52 |
 
 **DuckDB Version:** v1.4.0  
 **Release Date:** 2025-09-16
@@ -42,12 +42,6 @@ See [QUICKSTART.md](./QUICKSTART.md) for setup and usage instructions.
 
 This repository automatically runs daily analysis at 6 AM UTC via GitHub Actions.
 The reports track extension status, GitHub activity, and installation health across the DuckDB ecosystem.
-
-## Related Work
-
-During the creation of this tool the following related work was discovered:
-
-- https://github.com/mehd-io/duckdb-extension-radar
 
 ---
 *Generated automatically by [GitHub Actions](.github/workflows/daily-extensions-report.yml)*
