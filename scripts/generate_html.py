@@ -21,12 +21,16 @@ def main():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DuckDB Extensions Analysis</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #24292f;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
             background-color: #ffffff;
@@ -123,6 +127,29 @@ def main():
         <p><em>Generated automatically by <a href="https://github.com/Mjboothaus/duckdb-extensions-analysis/actions">GitHub Actions</a></em></p>
         <p><a href="https://github.com/Mjboothaus/duckdb-extensions-analysis">📊 View Source & Data</a></p>
     </footer>
+    
+    <!-- DataTables JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script>
+    $(document).ready(function() {{
+        // Make all tables interactive
+        $('table').addClass('table table-striped table-hover');
+        $('table').DataTable({{
+            "pageLength": 25,
+            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            "order": [],
+            "columnDefs": [
+                {{ "orderable": true, "targets": "_all" }}
+            ],
+            "responsive": true,
+            "dom": '<"top"lf>rt<"bottom"ip><"clear">'
+        }});
+    }});
+    </script>
 </body>
 </html>'''
 
