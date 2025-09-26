@@ -140,8 +140,8 @@ Third-party extensions maintained by the community
 | 57 | [eeagrid](https://duckdb.org/docs/extensions/community_extensions.html#eeagrid) | [duckdb-eeagrid](https://github.com/ahuarte47/duckdb-eeagrid) | 🟢 Ongoing | 15 days ago | 0 | C++ | Functions for transforming XY coordinates to and from the EEA Reference Grid... | ⭐ |
 | 58 | [gsheets](https://duckdb.org/docs/extensions/community_extensions.html#gsheets) | [duckdb_gsheets](https://github.com/evidence-dev/duckdb_gsheets) | 🟢 Ongoing | 16 days ago | 298 | C++ | DuckDB extension to read and write Google Sheets using SQL | ⭐ |
 | 59 | [faiss](https://duckdb.org/docs/extensions/community_extensions.html#faiss) | [duckdb-faiss-ext](https://github.com/duckdb-faiss-ext/duckdb-faiss-ext) | 🟢 Ongoing | 17 days ago | 25 | Go | DuckDB wrapper for FAISS - Experimental |  |
-| 60 | [geotiff](https://duckdb.org/docs/extensions/community_extensions.html#geotiff) | [duckdb-geotiff](https://github.com/babaknaimi/duckdb-geotiff) | 🟢 Ongoing | 36 days ago | 2 | C++ | Duckdb extension to read GeoTiffs directly with duckdb database |  |
-| 61 | [geography](https://duckdb.org/docs/extensions/community_extensions.html#geography) | [duckdb-geography](https://github.com/paleolimbot/duckdb-geography) | 🟢 Ongoing | 37 days ago | 32 | C++ | Geospatial data extension by paleolimbot |  |
+| 60 | [geography](https://duckdb.org/docs/extensions/community_extensions.html#geography) | [duckdb-geography](https://github.com/paleolimbot/duckdb-geography) | 🟢 Ongoing | 37 days ago | 32 | C++ | Geospatial data extension by paleolimbot |  |
+| 61 | [geotiff](https://duckdb.org/docs/extensions/community_extensions.html#geotiff) | [duckdb-geotiff](https://github.com/babaknaimi/duckdb-geotiff) | 🟢 Ongoing | 37 days ago | 2 | C++ | Duckdb extension to read GeoTiffs directly with duckdb database |  |
 | 62 | [highs](https://duckdb.org/docs/extensions/community_extensions.html#highs) | [HiGHS-duckdb](https://github.com/fhk/HiGHS-duckdb) | 🟢 Ongoing | 40 days ago | 0 | C++ | Run the solver in the database! |  |
 | 63 | [rusty_sheet](https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet) | [rusty-sheet](https://github.com/redraiment/rusty-sheet) | 🟢 Ongoing | 42 days ago | 17 | Rust | An Excel/OpenDocument Spreadsheets file reader for DuckDB |  |
 | 64 | [webbed](https://duckdb.org/docs/extensions/community_extensions.html#webbed) | [duckdb_webbed](https://github.com/teaguesterling/duckdb_webbed) | 🟢 Ongoing | 44 days ago | 14 | C++ | Web/HTTP functionality extension by teaguesterling |  |
@@ -551,11 +551,11 @@ This section shows the results of validating URLs associated with extensions, in
 **faiss_repository**
 - URL: `https://github.com/duckdb-faiss-ext/duckdb-faiss-ext`
 - Status: ❌ Broken- HTTP Status: 200
-**geotiff_repository**
-- URL: `https://github.com/babaknaimi/duckdb-geotiff`
-- Status: ❌ Broken- HTTP Status: 200
 **geography_repository**
 - URL: `https://github.com/paleolimbot/duckdb-geography`
+- Status: ❌ Broken- HTTP Status: 200
+**geotiff_repository**
+- URL: `https://github.com/babaknaimi/duckdb-geotiff`
 - Status: ❌ Broken- HTTP Status: 200
 **highs_repository**
 - URL: `https://github.com/fhk/HiGHS-duckdb`
@@ -872,11 +872,11 @@ This section shows the results of validating URLs associated with extensions, in
 **faiss_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#faiss`
 - Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
-**geotiff_documentation**
-- URL: `https://duckdb.org/docs/extensions/community_extensions.html#geotiff`
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
 **geography_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#geography`
+- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+**geotiff_documentation**
+- URL: `https://duckdb.org/docs/extensions/community_extensions.html#geotiff`
 - Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
 **highs_documentation**
 - URL: `https://duckdb.org/docs/extensions/community_extensions.html#highs`
