@@ -5,7 +5,7 @@
 
   [tables.core_extensions]
   title = "Core Extensions"
-  description = "Built-in extensions that are part of the main DuckDB release"
+description = "Core extensions maintained by the DuckDB team and distributed via the official extension repository"
   sort_by = "extension_name"
   columns = [
     "ref_no",

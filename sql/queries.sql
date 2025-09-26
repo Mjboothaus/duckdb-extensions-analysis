@@ -32,10 +32,10 @@ ORDER BY name;
 -- Categorises extensions by activity level
 SELECT 
     CASE 
-        WHEN last_push_days <= 7 THEN 'Very Active (≤7d)'
-        WHEN last_push_days <= 30 THEN 'Active (≤30d)'
-        WHEN last_push_days <= 90 THEN 'Moderate (≤90d)'
-        WHEN last_push_days <= 365 THEN 'Low (≤1y)'
+        WHEN last_push_days <= 7 THEN 'Very Active (≤ 7d)'
+        WHEN last_push_days <= 30 THEN 'Active (≤ 30d)'
+        WHEN last_push_days <= 90 THEN 'Moderate (≤ 90d)'
+        WHEN last_push_days <= 365 THEN 'Low (≤ 1y)'
         ELSE 'Inactive (>1y)'
     END AS activity_level,
     COUNT(*) as count,

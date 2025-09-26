@@ -156,22 +156,46 @@ def main():
         updateLocalTime();
         setInterval(updateLocalTime, 1000);
         
-        // Make all tables interactive
+        // Make tables interactive with appropriate configurations
         $('table').addClass('table table-striped table-hover');
-        $('table').DataTable({{
-            "pageLength": 25,
-            "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            "order": [],
-            "columnDefs": [
-                {{ "orderable": true, "targets": "_all" }}
-            ],
-            "responsive": true,
-            "dom": '<"top"lf>rt<"bottom"ip><"clear">',
-            "initComplete": function() {{
-                // Add timezone info tooltip
-                $('#local-time').attr('title', 'This time updates automatically and shows your browser\'s timezone');
+        
+        // Configure static tables (Summary, Historical Releases) differently
+        $('table').each(function() {{
+            const $table = $(this);
+            const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
+                                 $table.closest('h2, h3').prev().text().includes('Historical Releases');
+            
+            if (isStaticTable) {{
+                // Static tables: no pagination, no length menu, but keep search for Historical
+                const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
+                $table.DataTable({{
+                    "paging": false,
+                    "lengthChange": false,
+                    "info": false,
+                    "searching": isHistorical,
+                    "order": [],
+                    "responsive": true,
+                    "dom": isHistorical ? 'ft' : 't'
+                }});
+            }} else {{
+                // Interactive tables: full functionality
+                $table.DataTable({{
+                    "pageLength": 25,
+                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                    "order": [],
+                    "columnDefs": [
+                        {{ "orderable": true, "targets": "_all" }}
+                    ],
+                    "responsive": true,
+                    "dom": '<"top"lf>rt<"bottom"ip><"clear">'
+                }});
             }}
         }});
+        
+        // Add timezone info tooltip after tables are initialized
+        setTimeout(function() {{
+            $('#local-time').attr('title', 'This time updates automatically and shows your browser\'s timezone');
+        }}, 100);
     }});
     </script>
 </body>

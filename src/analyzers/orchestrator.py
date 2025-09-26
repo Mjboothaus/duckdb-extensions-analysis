@@ -200,34 +200,60 @@ class AnalysisOrchestrator:
         """Validate all URLs in extension data and return validation results."""
         logger.info(f"Validating URLs for {len(extensions)} extensions")
         
-        urls_to_validate = {}
+        standard_urls_to_validate = {}  # For standard HTTP validation
+        docs_urls_to_validate = {}      # For enhanced content validation
+        
+        # Import report generator to get access to documentation URLs
+        from .report_generator import ReportGenerator
+        report_generator = ReportGenerator(self.config)
+        extension_urls = report_generator._discover_core_extension_urls()
         
         for ext in extensions:
-            # Collect all URLs from the extension
+            # Collect repository URLs for standard validation
             if hasattr(ext, 'repository') and ext.repository:
                 if ext.repository.startswith('http'):
-                    urls_to_validate[f"{ext.name}_repository"] = ext.repository
+                    standard_urls_to_validate[f"{ext.name}_repository"] = ext.repository
                 elif '/' in ext.repository and not ext.repository.startswith('integrated_core'):
                     # For core extensions, only validate if it's NOT the main duckdb/duckdb repo
                     # since that will always be valid
                     if ext.repository != 'duckdb/duckdb':
-                        urls_to_validate[f"{ext.name}_repository"] = f"https://github.com/{ext.repository}"
+                        standard_urls_to_validate[f"{ext.name}_repository"] = f"https://github.com/{ext.repository}"
             
-            # Check documentation URLs if available
-            if hasattr(ext, 'documentation_url') and ext.documentation_url:
-                urls_to_validate[f"{ext.name}_documentation"] = ext.documentation_url
+            # Get documentation URLs based on extension type
+            docs_url = None
+            if ext.type == 'core':
+                # For core extensions, use the discovered URLs
+                docs_url = extension_urls.get(ext.name.lower())
+            elif ext.type == 'community':
+                # For community extensions, use the standard pattern
+                docs_url = f"https://duckdb.org/docs/extensions/community_extensions.html#{ext.name}"
+            
+            # Add documentation URLs for enhanced validation
+            if docs_url:
+                docs_urls_to_validate[f"{ext.name}_documentation"] = (docs_url, ext.name)
                 
             # Check metadata for additional URLs
             if hasattr(ext, 'metadata') and ext.metadata:
                 # Check for external repository URLs
                 if isinstance(ext.metadata, dict) and 'external_repository' in ext.metadata:
                     repo_url = f"https://github.com/{ext.metadata['external_repository']}"
-                    urls_to_validate[f"{ext.name}_external_repo"] = repo_url
+                    standard_urls_to_validate[f"{ext.name}_external_repo"] = repo_url
         
-        # Validate all collected URLs
-        if urls_to_validate:
-            validation_results = await self.url_validator.validate_urls_batch(urls_to_validate)
-            logger.info(f"Validated {len(urls_to_validate)} URLs")
+        # Validate standard URLs (repositories, etc.)
+        validation_results = {}
+        if standard_urls_to_validate:
+            standard_results = await self.url_validator.validate_urls_batch(standard_urls_to_validate)
+            validation_results.update(standard_results)
+            logger.info(f"Validated {len(standard_urls_to_validate)} standard URLs")
+        
+        # Validate documentation URLs with content checking
+        if docs_urls_to_validate:
+            docs_results = await self.url_validator.validate_urls_with_content_batch(docs_urls_to_validate)
+            validation_results.update(docs_results)
+            logger.info(f"Validated {len(docs_urls_to_validate)} documentation URLs with content checking")
+        
+        if validation_results:
+            logger.info(f"Total validated {len(validation_results)} URLs")
             return validation_results
         else:
             logger.info("No URLs found to validate")

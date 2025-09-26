@@ -43,5 +43,11 @@ See [QUICKSTART.md](./QUICKSTART.md) for setup and usage instructions.
 This repository automatically runs daily analysis at 6 AM UTC via GitHub Actions.
 The reports track extension status, GitHub activity, and installation health across the DuckDB ecosystem.
 
+## Related Work
+
+During the creation of this tool the following related work was discovered:
+
+- https://github.com/mehd-io/duckdb-extension-radar
+
 ---
 *Generated automatically by [GitHub Actions](.github/workflows/daily-extensions-report.yml)*

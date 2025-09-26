@@ -33,17 +33,17 @@ spatial = { repository = "duckdb/duckdb-spatial", description = "Geospatial data
 sqlite = { repository = "duckdb/duckdb-sqlite", description = "SQLite database connectivity" }
 vss = { repository = "duckdb/duckdb-vss", description = "Vector similarity search" }
 
-# Manual overrides for extensions that should point to main DuckDB repo instead of broken subpaths
+# Manual overrides for extensions that should point to specific directories in the main DuckDB repo
 [core_extensions.repository_overrides]
-# These extensions don't have separate repositories and should point to main DuckDB repo
-autocomplete = "duckdb/duckdb"
-icu = "duckdb/duckdb"
-jemalloc = "duckdb/duckdb"
-json = "duckdb/duckdb"
-parquet = "duckdb/duckdb"
-tpcds = "duckdb/duckdb"
-tpch = "duckdb/duckdb"
-ducklake = "duckdb/duckdb"
+# These extensions don't have separate repositories and should point to specific directories
+autocomplete = "https://github.com/duckdb/duckdb/tree/main/extension/autocomplete"
+icu = "https://github.com/duckdb/duckdb/tree/main/extension/icu"
+jemalloc = "https://github.com/duckdb/duckdb/tree/main/extension/jemalloc"
+json = "https://github.com/duckdb/duckdb/tree/main/extension/json"
+parquet = "https://github.com/duckdb/duckdb/tree/main/extension/parquet"
+tpcds = "https://github.com/duckdb/duckdb/tree/main/extension/tpcds"
+tpch = "https://github.com/duckdb/duckdb/tree/main/extension/tpch"
+ducklake = "https://github.com/duckdb/ducklake"
 
 # Extensions integrated into core DuckDB without dedicated directories
 [core_extensions.integrated_core]

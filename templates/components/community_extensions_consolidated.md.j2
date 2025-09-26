@@ -3,22 +3,10 @@
 
 Third-party extensions maintained by the community
 
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description | Featured |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|----------|
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
 {% for ext in community_extensions -%}
-| {{ loop.index }} | [{{ ext.name }}]({{ ext.docs_url }}) | {% if ext.repository %}[{{ ext.repository.split('/')[1] if '/' in ext.repository else ext.repository }}](https://github.com/{{ ext.repository }}){% else %}N/A{% endif %} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} | {% if ext.featured %}⭐{% else %}{% endif %} |
+| {{ loop.index }} | [{{ ext.name }}]({{ ext.docs_url }}) | {% if ext.repository %}[{{ ext.repository.split('/')[1] if '/' in ext.repository else ext.repository }}](https://github.com/{{ ext.repository }}){% else %}N/A{% endif %} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
 {% endfor %}
 
-**Total:** {{ community_extensions|length }} extensions  
-**Featured:** {{ community_extensions | selectattr('featured', 'equalto', true) | list | length }} extensions (marked with ⭐)
-
----
-## Featured Extensions Summary
-
-The following {{ community_extensions | selectattr('featured', 'equalto', true) | list | length }} extensions are prominently featured on the [DuckDB Community Extensions](https://community-extensions.duckdb.org/) page:
-
-{% for ext in community_extensions | selectattr('featured', 'equalto', true) | sort(attribute='stars', reverse=true) -%}
-**{{ loop.index }}. [{{ ext.name }}]({{ ext.docs_url }})** ([GitHub](https://github.com/{{ ext.repository }}))⭐ {{ ext.stars | number_format }} stars • {{ ext.language }}  
-{{ ext.description }}
-
-{% endfor %}
+**Total:** {{ community_extensions|length }} extensions
