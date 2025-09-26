@@ -225,8 +225,8 @@ class AnalysisOrchestrator:
                 # For core extensions, use the discovered URLs
                 docs_url = extension_urls.get(ext.name.lower())
             elif ext.type == 'community':
-                # For community extensions, use the standard pattern
-                docs_url = f"https://duckdb.org/docs/extensions/community_extensions.html#{ext.name}"
+                # For community extensions, use the correct community documentation pattern
+                docs_url = f"https://duckdb.org/community_extensions/extensions/{ext.name}.html"
             
             # Add documentation URLs for enhanced validation
             if docs_url:

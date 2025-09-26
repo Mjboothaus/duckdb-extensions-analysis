@@ -108,9 +108,9 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
             links["issues"] = f"https://github.com/{repo}/issues"
             links["releases"] = f"https://github.com/{repo}/releases"
 
-        # DuckDB installation link
+        # DuckDB documentation link
         links["install"] = (
-            f"https://duckdb.org/docs/extensions/community_extensions.html#{ext_name}"
+            f"https://duckdb.org/community_extensions/extensions/{ext_name}.html"
         )
 
         return links

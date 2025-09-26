@@ -676,7 +676,7 @@ class ReportGenerator(BaseReportGenerator):
                 community_ext = {
                     'name': ext.name,
                     'repository': ext.repository,
-                    'docs_url': f"https://duckdb.org/docs/extensions/community_extensions.html#{ext.name}",
+                    'docs_url': f"https://duckdb.org/community_extensions/extensions/{ext.name}.html",
                     'status': self._parse_status(ext.metadata.get('status', '❌ Error') if ext.metadata else '❌ Error'),
                     'last_push_days': ext.days_ago,
                     'stars': ext.stars or 0,
