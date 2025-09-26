@@ -3,10 +3,11 @@
 
 Third-party extensions maintained by the community
 
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description | Featured |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|----------|
 {% for ext in community_extensions -%}
-| {{ loop.index }} | [{{ ext.name }}]({{ ext.docs_url }}) | {% if ext.repository %}[{{ ext.repository.split('/')[1] if '/' in ext.repository else ext.repository }}](https://github.com/{{ ext.repository }}){% else %}N/A{% endif %} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} | {% if ext.featured %}⭐{% else %}{% endif %} |
 {% endfor %}
 
-**Total:** {{ community_extensions|length }} extensions
+**Total:** {{ community_extensions|length }} extensions  
+**Featured:** {{ community_extensions | selectattr('featured') | list | length }} extensions (marked with ⭐)

@@ -9,9 +9,5 @@
 | **Recently Active** (≤ 30 days) | {{ stats.recently_active_count }} |
 | **Very Active** (≤ 7 days) | {{ stats.very_active_count }} |
 
-{% if duckdb.version %}
-**DuckDB Version:** {{ duckdb.version }}  
-**Release Date:** {{ duckdb.release_date | strftime('%Y-%m-%d') }}
-{% endif %}
 
 ---

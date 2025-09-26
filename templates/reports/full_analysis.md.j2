@@ -1,9 +1,15 @@
 # {{ report.name }}
 
+🦆 **Automated monitoring and analysis of DuckDB's extension ecosystem**
+
 {% if metadata.show_timestamps %}
-**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}  
-**Tool Version:** {{ tool.version }}{% if metadata.version_link %} ([Source]({{ metadata.version_link }})){% endif %}
+**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}{% if duckdb.version %} | **DuckDB Version:** {{ duckdb.version }} ({{ duckdb.release_date | strftime('%Y-%m-%d') }}){% endif %}  
+**Analysis Tool:** {{ tool.version }}{% if metadata.version_link %} ([Source Code]({{ metadata.version_link }})){% endif %}
 {% endif %}
+
+[Jump to Summary](#summary) | [Core Extensions](#core-extensions) | [Community Extensions](#community-extensions) | [URL Validation](#url-validation-results)
+
+---
 
 {% include 'components/report_header.md.j2' %}
 
