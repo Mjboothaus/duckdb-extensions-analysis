@@ -16,6 +16,12 @@ from tqdm import tqdm
 from .base import BaseAnalyzer, ExtensionInfo
 from .github_api import GitHubAPIClient
 
+# Import deprecation detection functionality
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../scripts'))
+from detect_deprecated_extensions import DeprecationDetector, RepositoryCache
+
 
 class CommunityExtensionAnalyzer(BaseAnalyzer):
     """Analyzer for DuckDB community extensions."""
@@ -25,6 +31,14 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         self.github_client = github_client
         self.community_extensions: List[str] = []
         self.extension_data: List[Dict] = []
+        
+        # Initialize deprecation detector with caching
+        cache_dir = config.cache_dir / 'deprecation_detector' if hasattr(config, 'cache_dir') else None
+        deprecation_cache = RepositoryCache(cache_dir=cache_dir, cache_days=cache_hours * 24, enabled=True)
+        self.deprecation_detector = DeprecationDetector(
+            github_token=config.github_token if hasattr(config, 'github_token') else None,
+            cache=deprecation_cache
+        )
     
     async def get_community_extensions_list(self, client: httpx.AsyncClient) -> List[str]:
         """Fetch community extensions list from GitHub."""
@@ -169,6 +183,34 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
 
         return " ".join(improved_desc)
     
+    async def analyze_extension_deprecation(
+        self, client: httpx.AsyncClient, ext_name: str, repo_url: str, ce_metadata: Optional[Dict] = None
+    ) -> Optional[Dict]:
+        """Analyze an extension for deprecation indicators using the deprecation detector."""
+        try:
+            # Run deprecation analysis
+            deprecation_result = await self.deprecation_detector.analyze_extension(
+                client, ext_name, repo_url, ce_metadata
+            )
+            
+            if deprecation_result.get('status') == 'analyzed':
+                return {
+                    'deprecation_score': deprecation_result.get('deprecation_score', 0.0),
+                    'recommendation': deprecation_result.get('recommendation', 'ACTIVE'),
+                    'deprecation_indicators': deprecation_result.get('deprecation_indicators', []),
+                    'warning_indicators': deprecation_result.get('warning_indicators', []),
+                    'active_indicators': deprecation_result.get('active_indicators', []),
+                    'repository_archived': deprecation_result.get('repository_archived', False),
+                    'analysis_timestamp': deprecation_result.get('analysis_timestamp')
+                }
+            else:
+                logger.debug(f"Deprecation analysis failed for {ext_name}: {deprecation_result.get('error', 'Unknown error')}")
+                return None
+                
+        except Exception as e:
+            logger.debug(f"Error during deprecation analysis for {ext_name}: {e}")
+            return None
+    
     async def analyze_community_extensions(
         self, client: httpx.AsyncClient
     ) -> Tuple[List[Dict], Dict]:
@@ -245,7 +287,15 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                                 "description_yml_url": f"https://github.com/duckdb/community-extensions/blob/main/extensions/{ext}/description.yml"
                             }
                         
-                        # Determine status based on configuration and repo state
+                        # Perform automated deprecation analysis
+                        repo_url = f"https://github.com/{repo}"
+                        deprecation_analysis = await self.analyze_extension_deprecation(
+                            client, ext, repo_url, metadata
+                        )
+                        if deprecation_analysis:
+                            ext_info["deprecation_analysis"] = deprecation_analysis
+                        
+                        # Determine status based on configuration, repo state, and deprecation analysis
                         if metadata_helper.is_deprecated_extension(ext):
                             ext_info["status"] = "⚠️ Deprecated"
                             ext_info["deprecated_info"] = metadata_helper.get_deprecated_extension_info(ext)
@@ -257,6 +307,14 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                             ext_info["template_info"] = metadata_helper.get_template_extension_info(ext)
                         elif repo_info["archived"]:
                             ext_info["status"] = "🔴 Discontinued"
+                        elif deprecation_analysis and deprecation_analysis.get('deprecation_score', 0) >= 5.0:
+                            # High deprecation score from automated analysis
+                            ext_info["status"] = "⚠️ Likely Deprecated"
+                            ext_info["auto_deprecation_detected"] = True
+                        elif deprecation_analysis and deprecation_analysis.get('deprecation_score', 0) >= 3.0:
+                            # Medium deprecation score from automated analysis
+                            ext_info["status"] = "⚠️ Review Recommended"
+                            ext_info["auto_review_recommended"] = True
                         else:
                             ext_info["status"] = "✅ Ongoing"
                     else:
@@ -285,11 +343,15 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
             "active": sum(1 for ext in extension_data if ext["status"] == "✅ Ongoing"),
             "deprecated": sum(1 for ext in extension_data if ext["status"] == "⚠️ Deprecated"),
             "review_required": sum(1 for ext in extension_data if ext["status"] == "⚠️ Review Required"),
+            "likely_deprecated": sum(1 for ext in extension_data if ext["status"] == "⚠️ Likely Deprecated"),
+            "review_recommended": sum(1 for ext in extension_data if ext["status"] == "⚠️ Review Recommended"),
             "templates": sum(1 for ext in extension_data if ext["status"] == "🔧 Template"),
             "discontinued": sum(
                 1 for ext in extension_data if ext["status"] == "🔴 Discontinued"
             ),
             "errors": sum(1 for ext in extension_data if ext["status"] == "❌ Error"),
+            "auto_deprecation_detected": sum(1 for ext in extension_data if ext.get("auto_deprecation_detected", False)),
+            "auto_review_recommended": sum(1 for ext in extension_data if ext.get("auto_review_recommended", False)),
         }
 
         self.extension_data = extension_data
@@ -318,12 +380,19 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                     ext_info.last_push = repo_info.get("last_push")
                     ext_info.days_ago = ext_data.get("last_push_days")
                 
-                # Add metadata
+                # Add metadata including CE metadata and deprecation analysis
                 ext_info.metadata = {
                     "status": ext_data["status"],
                     "error": ext_data.get("error"),
                     "repo_info": repo_info,
-                    "metadata": ext_data.get("metadata")
+                    "metadata": ext_data.get("metadata"),
+                    "ce_metadata": ext_data.get("ce_metadata"),
+                    "deprecation_analysis": ext_data.get("deprecation_analysis"),
+                    "deprecated_info": ext_data.get("deprecated_info"),
+                    "review_info": ext_data.get("review_info"),
+                    "template_info": ext_data.get("template_info"),
+                    "auto_deprecation_detected": ext_data.get("auto_deprecation_detected", False),
+                    "auto_review_recommended": ext_data.get("auto_review_recommended", False)
                 }
                 
                 extension_infos.append(ext_info)
