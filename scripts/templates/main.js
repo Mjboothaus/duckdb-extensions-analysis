@@ -49,16 +49,15 @@ $(document).ready(function() {
             // Check if date is valid
             if (utcDate && !isNaN(utcDate.getTime())) {
                 try {
-                    // Convert to local time
-                    const localTimeString = utcDate.toLocaleString('en-AU', {
-                        year: 'numeric',
-                        month: '2-digit', 
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        timeZoneName: 'short'
-                    });
+                    // Convert to local time with same format as UTC
+                    const year = utcDate.getFullYear();
+                    const month = String(utcDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(utcDate.getDate()).padStart(2, '0');
+                    const hour = String(utcDate.getHours()).padStart(2, '0');
+                    const minute = String(utcDate.getMinutes()).padStart(2, '0');
+                    const second = String(utcDate.getSeconds()).padStart(2, '0');
+                    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    const localTimeString = `${year}-${month}-${day} ${hour}:${minute}:${second} ${timeZone}`;
                     $('#local-time').text(localTimeString);
                     console.log('Local time set:', localTimeString);
                     return;
@@ -129,5 +128,8 @@ $(document).ready(function() {
     // Add timezone info tooltip after tables are initialized
     setTimeout(function() {
         $('#local-time').attr('title', 'Report time in your local timezone');
+        
+        // Make all links in tables open in new tabs
+        $('table a').attr('target', '_blank').attr('rel', 'noopener noreferrer');
     }, 100);
 });
