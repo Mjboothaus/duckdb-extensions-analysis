@@ -192,19 +192,37 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
     ) -> Optional[Dict]:
         """Get GitHub information for extensions with external repositories."""
         try:
+            # Get repository information including stars
+            repo_info = await self.github_client.get_repository_info(client, external_repo)
+            
+            # Get latest commit
             commits = await self.github_client.get_repository_commits(
                 client, external_repo, limit=1
             )
 
+            result = {
+                "repository_path": f"external:{external_repo}",
+                "external_repository": external_repo
+            }
+            
+            if repo_info:
+                result.update({
+                    "stars": repo_info.get("stargazers_count", 0),
+                    "forks": repo_info.get("forks_count", 0),
+                    "language": repo_info.get("language"),
+                    "description": repo_info.get("description")
+                })
+            
             if commits and len(commits) > 0:
                 last_commit = commits[0]
-                return {
+                result.update({
                     "last_commit_date": last_commit["commit"]["committer"]["date"],
                     "last_commit_sha": last_commit["sha"],
-                    "last_commit_message": last_commit["commit"]["message"][:100],
-                    "repository_path": f"external:{external_repo}",
-                    "external_repository": external_repo
-                }
+                    "last_commit_message": last_commit["commit"]["message"][:100]
+                })
+                
+            return result
+            
         except Exception as e:
             logger.debug(
                 f"Could not get GitHub info for {ext_name} at external repo {external_repo}: {e}"
@@ -212,64 +230,7 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
 
         return {"repository_path": f"external:{external_repo}", "external_repository": external_repo}
     
-    async def get_featured_extensions(self, client: httpx.AsyncClient) -> set[str]:
-        """Get the list of featured community extensions from the official DuckDB website."""
-        try:
-            logger.info("Fetching featured extensions list from DuckDB website")
-            featured_extensions = set()
-
-            for url in self.config.featured_extensions_pages:
-                try:
-                    html = self.web_client.fetch_cached(url, cache_hours=self.cache_hours)
-                    soup = BeautifulSoup(html, "html.parser")
-
-                    # Look for extension names in various formats
-                    for element in soup.find_all(["code", "strong", "b"]):
-                        text = element.get_text(strip=True)
-                        # Filter for extension-like names
-                        if self._is_valid_extension_name(text):
-                            featured_extensions.add(text.lower())
-
-                    # Also look for extension names in links
-                    for link in soup.find_all("a", href=True):
-                        href = link["href"]
-                        if "extension" in href.lower() or "community" in href.lower():
-                            text = link.get_text(strip=True)
-                            if self._is_valid_extension_name(text):
-                                featured_extensions.add(text.lower())
-
-                except Exception as e:
-                    logger.debug(f"Failed to fetch from {url}: {e}")
-                    continue
-
-            # If we can't find featured extensions dynamically, use the configured popular list
-            if len(featured_extensions) < 5:
-                logger.warning(
-                    "Could not detect featured extensions dynamically, using configured popular list"
-                )
-                featured_extensions = set(self.config.popular_extensions)
-
-            logger.info(f"Found {len(featured_extensions)} featured extensions")
-            return featured_extensions
-
-        except Exception as e:
-            logger.warning(f"Failed to get featured extensions: {e}")
-            return set(self.config.popular_extensions)
     
-    def _is_valid_extension_name(self, text: str) -> bool:
-        """Check if a text string looks like a valid extension name."""
-        return (
-            text
-            and len(text) > 2
-            and len(text) < 30
-            and text.replace("_", "")
-            .replace("-", "")
-            .replace(".", "")
-            .isalnum()
-            and not text.startswith("http")
-            and "/" not in text
-            and " " not in text
-        )
     
     async def analyze(self) -> List[ExtensionInfo]:
         """Analyze core extensions and return ExtensionInfo objects."""
@@ -293,6 +254,14 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                 if github_info:
                     ext_info.metadata = github_info
                     ext_info.last_push = github_info.get("last_commit_date")
+                    
+                    # Set stars - either from external repo or "N/A (part of core DuckDB repo)"
+                    if "stars" in github_info:
+                        ext_info.stars = github_info["stars"]
+                    elif github_info.get("repository_path") == "integrated_core":
+                        ext_info.stars = None  # Will display as "N/A (part of core)"
+                    else:
+                        ext_info.stars = None  # Will display as "N/A (part of core DuckDB repo)"
                 
                 extension_infos.append(ext_info)
         
@@ -435,6 +404,12 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                 if github_info:
                     ext_info.metadata = github_info
                     ext_info.last_push = github_info.get("last_commit_date")
+                    
+                    # Set stars - either from external repo or None for display as "N/A (part of core DuckDB repo)"
+                    if "stars" in github_info:
+                        ext_info.stars = github_info["stars"]
+                    else:
+                        ext_info.stars = None  # Will display as "N/A (part of core DuckDB repo)"
                 
                 # Add platform availability information
                 ext_info.platform_availability = platform_availability

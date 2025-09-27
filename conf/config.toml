@@ -30,12 +30,6 @@ core_extensions_url = "https://duckdb.org/docs/stable/core_extensions/overview.h
 enable_issues_analysis = false  # Set to true to enable GitHub issues analysis (may hit rate limits)
 issues_analysis_days_back = 90  # How many days back to search for issues
 
-# Pages to check for featured extensions (automatic detection)
-featured_extensions_pages = [
-    "https://duckdb.org/docs/stable/extensions/community_extensions.html",
-    "https://duckdb.org/community_extensions/list_of_extensions",
-    "https://duckdb.org/docs/extensions/community_extensions.html"
-]
 
 # Fallback popular extensions if dynamic detection fails
 popular_extensions = [

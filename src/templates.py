@@ -62,6 +62,7 @@ class TemplateEngine:
         """Register custom Jinja2 filters."""
         self.env.filters['strftime'] = self._filter_strftime
         self.env.filters['relative_date'] = self._filter_relative_date
+        self.env.filters['datetime_with_relative'] = self._filter_datetime_with_relative
         self.env.filters['status_badge'] = self._filter_status_badge
         self.env.filters['number_format'] = self._filter_number_format
         self.env.filters['github_link'] = self._filter_github_link
@@ -114,10 +115,37 @@ class TemplateEngine:
         
         return f"{days} days ago"
     
+    def _filter_datetime_with_relative(self, days_ago: Union[int, str], last_push: Optional[str] = None) -> str:
+        """Format datetime with both relative time and full timestamp."""
+        # Get relative time
+        relative_time = self._filter_relative_date(days_ago)
+        
+        # If we have the actual datetime, add it in parentheses
+        if last_push:
+            try:
+                # Parse the datetime string
+                if isinstance(last_push, str):
+                    # Handle ISO format with Z suffix
+                    if last_push.endswith('Z'):
+                        dt = datetime.fromisoformat(last_push.rstrip('Z'))
+                    else:
+                        dt = datetime.fromisoformat(last_push.replace('Z', '+00:00'))
+                    
+                    # Format the full datetime
+                    full_datetime = dt.strftime('%Y-%m-%d %H:%M:%S UTC')
+                    return f"{relative_time} ({full_datetime})"
+                    
+            except Exception as e:
+                logger.debug(f"Failed to parse datetime {last_push}: {e}")
+        
+        # Return just relative time if no datetime available
+        return relative_time
+    
     def _filter_status_badge(self, status: str) -> str:
         """Convert status to emoji badge."""
         status_mapping = self.format_config.get('formatting', {}).get('status', {
             'ongoing': '🟢 Ongoing',
+            'deprecated': '⚠️ Deprecated',
             'archived': '🟡 Archived', 
             'discontinued': '🔴 Discontinued',
             'unknown': '❓ Unknown'
@@ -125,8 +153,10 @@ class TemplateEngine:
         
         return status_mapping.get(status.lower(), f"❓ {status}")
     
-    def _filter_number_format(self, number: Union[int, str]) -> str:
-        """Format numbers with comma separators."""
+    def _filter_number_format(self, number: Union[int, str, None]) -> str:
+        """Format numbers with comma separators. Handle None for core extension stars."""
+        if number is None:
+            return "N/A (part of core DuckDB repo)"
         try:
             return f"{int(number):,}"
         except (ValueError, TypeError):
@@ -158,8 +188,8 @@ class TemplateEngine:
         
         return f"[{repo_name}]({full_url})"
     
-    def _filter_extension_link(self, name: str, url: Optional[str] = None, validation_results: Dict = None, ext_name: str = "") -> str:
-        """Format extension name as link if URL is provided, with validation."""
+    def _filter_extension_link(self, name: str, url: Optional[str] = None, validation_results: Dict = None, ext_name: str = "", repository: Optional[str] = None) -> str:
+        """Format extension name as link if URL is provided, with validation and repository fallback."""
         if not url:
             return name
             
@@ -169,6 +199,11 @@ class TemplateEngine:
             if url_key in validation_results:
                 validation_result = validation_results[url_key]
                 if not validation_result.get('is_valid', True):
+                    # If documentation URL is broken but we have a repository, use that instead
+                    if repository:
+                        repo_url = repository if repository.startswith('http') else f"https://github.com/{repository}"
+                        return f"[{name}]({repo_url})"
+                    # Otherwise show the broken link with error
                     error_msg = validation_result.get('error_message', 'URL validation failed')
                     return f"~~[{name}]({url})~~ **NOT FOUND:** {url} ({error_msg})"
             
@@ -216,7 +251,6 @@ class TemplateEngine:
         duckdb_info = analysis_result.get('duckdb_version_info', {})
         
         # Calculate statistics
-        featured_extensions = [ext for ext in community_extensions if ext.get('featured', False)]
         recently_active = self._count_recent_activity(community_extensions, 30)
         very_active = self._count_recent_activity(community_extensions, 7)
         
@@ -236,14 +270,12 @@ class TemplateEngine:
             'stats': {
                 'core_count': len(core_extensions),
                 'community_count': len(community_extensions),
-                'featured_count': len(featured_extensions),
                 'total_count': len(core_extensions) + len(community_extensions),
                 'recently_active_count': recently_active,
                 'very_active_count': very_active
             },
             'core_extensions': self._prepare_extensions_data(core_extensions),
             'community_extensions': self._prepare_extensions_data(community_extensions),
-            'featured_extensions': self._prepare_extensions_data(featured_extensions),
             'duckdb': {
                 'version': duckdb_info.get('version'),
                 'release_date': duckdb_info.get('release_date')
@@ -269,11 +301,11 @@ class TemplateEngine:
                 'repository': ext.get('repository', ''),
                 'docs_url': ext.get('docs_url', ''),
                 'status': ext.get('status', 'unknown'),
-                'last_activity': ext.get('last_push_days', 0),
+                'last_activity': ext.get('last_push_days') or ext.get('days_ago', 0),  # Handle both field names
+                'last_push': ext.get('last_push'),  # Include actual datetime
                 'stars': ext.get('stars', 0),
                 'language': ext.get('language', 'N/A'),
                 'description': ext.get('description', 'No description available'),
-                'featured': ext.get('featured', False),
                 'version': ext.get('version', ''),
                 'topics': ext.get('topics', [])
             }

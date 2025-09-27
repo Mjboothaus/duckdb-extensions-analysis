@@ -19,7 +19,6 @@ class ExtensionInfo:
     last_push: Optional[str] = None
     days_ago: Optional[int] = None
     stage: Optional[str] = None  # For core extensions
-    featured: bool = False
     links: Optional[Dict[str, str]] = None
     metadata: Optional[Dict[str, Any]] = None
     # Platform availability information (for core extensions)
@@ -33,7 +32,6 @@ class AnalysisResult:
     """Data class representing analysis results."""
     core_extensions: List[ExtensionInfo]
     community_extensions: List[ExtensionInfo]
-    featured_extensions: set[str]
     duckdb_version: Optional[str] = None
     duckdb_release_date: Optional[datetime] = None
     analysis_timestamp: datetime = None

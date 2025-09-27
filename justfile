@@ -156,6 +156,83 @@ cache-cleanup-stashes:
 
 # === UTILITIES ===
 
+# Detect deprecated extensions by analyzing repositories
+deprecation:
+    #!/usr/bin/env bash
+    echo "🔍 Analyzing extension repositories for deprecation indicators..."
+    echo "This may take a few minutes as we scan all community extensions..."
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    output_file="reports/deprecation_analysis_${timestamp}.md"
+    
+    # Try to get GitHub token from various sources
+    if [ -z "$GITHUB_TOKEN" ]; then
+        if command -v gh >/dev/null 2>&1; then
+            echo "📝 Getting GitHub token from gh CLI..."
+            export GITHUB_TOKEN=$(gh auth token 2>/dev/null)
+        elif [ -f ".env" ]; then
+            echo "📝 Loading GitHub token from .env file..."
+            source .env
+        fi
+    fi
+    
+    if [ -z "$GITHUB_TOKEN" ]; then
+        echo "⚠️  No GitHub token found. Analysis will proceed with rate limits."
+        echo "   Run 'gh auth login' or set GITHUB_TOKEN environment variable for better API limits."
+    else
+        echo "✅ Using GitHub token for enhanced API limits"
+    fi
+    
+    uv run scripts/detect_deprecated_extensions.py --format markdown --output "$output_file"
+    echo "📄 Report saved to: $output_file"
+    echo "🎯 Review the report to identify extensions that should be marked as deprecated in conf/extensions_metadata.toml"
+
+# Detect deprecated extensions and output to console
+deprecation-quick:
+    #!/usr/bin/env bash
+    echo "🔍 Quick deprecation analysis (output to console)..."
+    
+    # Try to get GitHub token from gh CLI
+    if [ -z "$GITHUB_TOKEN" ] && command -v gh >/dev/null 2>&1; then
+        export GITHUB_TOKEN=$(gh auth token 2>/dev/null)
+    fi
+    
+    if [ -n "$GITHUB_TOKEN" ]; then
+        echo "✅ Using GitHub token for enhanced API limits"
+    else
+        echo "⚠️  No GitHub token found - proceeding with rate limits"
+        echo "   Run 'gh auth login' for better API limits"
+    fi
+    
+    uv run scripts/detect_deprecated_extensions.py --format markdown
+
+# Detect deprecated extensions in JSON format for processing
+deprecation-json:
+    #!/usr/bin/env bash
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    output_file="reports/deprecation_analysis_${timestamp}.json"
+    
+    # Try to get GitHub token from gh CLI
+    if [ -z "$GITHUB_TOKEN" ] && command -v gh >/dev/null 2>&1; then
+        export GITHUB_TOKEN=$(gh auth token 2>/dev/null)
+    fi
+    
+    uv run scripts/detect_deprecated_extensions.py --format json --output "$output_file"
+    echo "📄 JSON report saved to: $output_file"
+
+# Detect deprecated extensions in CSV format for spreadsheet analysis
+deprecation-csv:
+    #!/usr/bin/env bash
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    output_file="reports/deprecation_analysis_${timestamp}.csv"
+    
+    # Try to get GitHub token from gh CLI
+    if [ -z "$GITHUB_TOKEN" ] && command -v gh >/dev/null 2>&1; then
+        export GITHUB_TOKEN=$(gh auth token 2>/dev/null)
+    fi
+    
+    uv run scripts/detect_deprecated_extensions.py --format csv --output "$output_file"
+    echo "📄 CSV report saved to: $output_file"
+
 # Format and lint code
 check:
     uv run ruff format scripts/ conf/ src/

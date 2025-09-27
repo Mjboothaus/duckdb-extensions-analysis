@@ -1,0 +1,3245 @@
+[
+  {
+    "extension": "airport",
+    "repository": "https://github.com/query-farm/airport",
+    "owner": "query-farm",
+    "repo_name": "airpor",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:30.715701",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/airport/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "arrow",
+    "repository": "https://github.com/duckdb/duckdb-extension-alias",
+    "owner": "duckdb",
+    "repo_name": "duckdb-extension-alias",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "As an example, assume you want to locally build an aliased exte"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "To execute the tests, you can run:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "`RUN_TEST=1 make test_release`"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-05-09T08:56:07Z",
+    "description": null,
+    "readme_content": "# DuckDB Extension Alias\nThis DuckDB extension creates an alias for an existing community extension.\nIt does so by setting `EXTENSION_NAME` to the alias and `EXTENSION_CANONICAL` to the name of the original community extension.\n\nIt uses only the DuckDB C API, and when the aliased extension is loaded, it installs and loads the canonical community extension under the hood.\n\n\n## Example\nAs an example, assume you want to locally build an aliased extension on top of the `nanoarrow` community extension. To build it locally, you can run:\n`EXTENSION_CANONICAL=nanoarrow make`\n\nTo execute the tests, you can run:\n`RUN_TEST=1 make test_release`",
+    "analysis_timestamp": "2025-09-27T14:42:30.816731",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/arrow/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "bigquery",
+    "repository": "https://github.com/hafenkran/duckdb-bigquery",
+    "owner": "hafenkran",
+    "repo_name": "duckdb-bigquery",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "| `bq_experimental_filter_pushdown`         | [EXPERIMENTAL] - Whether or not to use filter pushdown"
+      },
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "| `bq_experimental_use_info_schema`         | [EXPERIMENTAL] - Use information schema to fetch catalog info ("
+      },
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "| `bq_experimental_enable_bigquery_options` | [EXPERIMENTAL] - Whether to enable BigQuery OPTIONS in CREATE s"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "TIALS` environment variable to the file path. For example:"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "e of your actual Google Cloud Project. Here is an example:"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "overview of supported functionalities and include examples for interacting with BigQuery:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ps://cloud.google.com/sdk/gcloud). Download the latest version from the [Google Cloud CLI installation p"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ear_cache` to update the cache and retrieve the latest schema information:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Install Latest Updates from Custom Repository"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "maintained",
+        "source": "readme",
+        "context": "\ufe0f Disclaimer**: This is an independent, community-maintained open-source project and is not affiliated with, e"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "h the [spatial extension](https://duckdb.org/docs/stable/core_extensions/spatial/overview.html) installed"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-21T12:30:17Z",
+    "description": "Integrates DuckDB with Google BigQuery, allowing direct querying and management of BigQuery datasets",
+    "readme_content": "# DuckDB BigQuery Extension\n\nThis community extension allows [DuckDB](https://duckdb.org) to query data from Google BigQuery using a mix of BigQuery Storage (Read/Write) and REST API. It enables users to access, manage, and manipulate their BigQuery datasets/tables directly from DuckDB using standard SQL queries. Inspired by official DuckDB RDBMS extensions like [MySQL](https://duckdb.org/docs/extensions/mysql.html), [PostgreSQL](https://github.com/duckdb/postgres_scanner), and [SQLite](https://github.com/duckdb/sqlite_scanner), this extension offers a similar feel. See [Important Notes](#important-notes-on-using-google-bigquery) for disclaimers and usage information.\n\n> This extension supports the following builds: `linux_amd64`, `linux_arm64`, `linux_amd64_musl`, `osx_amd64`, `osx_arm64`, and `windows_amd64`. The builds `wasm_mvp`, `wasm_eh`, `wasm_threads`, and `windows_amd64_mingw` are not supported.\n\n## Preliminaries\n\n### Authentication Option 1: Configure ADC with your Google Acc",
+    "analysis_timestamp": "2025-09-27T14:42:30.919183",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/bigquery/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "bitfilters",
+    "repository": "https://github.com/query-farm/bitfilters",
+    "owner": "query-farm",
+    "repo_name": "bitfilters",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "test",
+        "source": "repo_description",
+        "context": "abilistic data structures for fast set membership testing and approximate duplicate detection. This exte"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:15:18Z",
+    "description": "A high-performance DuckDB extension providing probabilistic data structures for fast set membership testing and approximate duplicate detection. This extension implements state-of-the-art filter algorithms including Quotient filters, XOR filters, Binary Fuse filters, and soon Bloom filters.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:31.062579",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/bitfilters/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "blockduck",
+    "repository": "https://github.com/luohaha/BlockDuck",
+    "owner": "luohaha",
+    "repo_name": "BlockDuck",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-03-26T15:14:51Z",
+    "description": "Live SQL Queries on Blockchain",
+    "readme_content": "![image](https://github.com/user-attachments/assets/e3cc6ee3-9ed4-4841-9617-3aecbd5be4e5)\n                                                                 \n\n## What is BlockDuck\n\nBlockDuck's core design philosophy is: \n\n**Live SQL Queries on Blockchain**\n\nBlockDuck is a tool for blockchain data analysis based on DuckDB's flexible extension mechanism. BlockDuck allows users to query blockchain directly in a way that is similar to querying a traditional SQL database.\n\n## Data Pipeline\n\nBefore introducing BlockDuck, the current blockchain data pipeline is roughly as follows:\n\n![image](https://github.com/user-attachments/assets/a672d217-3c06-4b5f-8a8f-26e08f02bd04)\n\nAfter introducing BlockDuck, we can simplify the blockchain data pipeline:\n\n![image](https://github.com/user-attachments/assets/7403f71e-453f-4ef6-8b83-b7bd005a0b41)\nETL can be handled within BlockDuck using SQL. And also, since DuckDB supports an in-process execution mode, we can also run BlockDuck inside the API service.\n\n## ",
+    "analysis_timestamp": "2025-09-27T14:42:31.165333",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/blockduck/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "cache_httpfs",
+    "repository": "https://github.com/dentiny/duck-read-cache-fs",
+    "owner": "dentiny",
+    "repo_name": "duck-read-cache-fs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Example usage"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "For more example usage, checkout [example usage](/doc/example_usage.md)"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "-- Or upgrade to latest version with `FORCE INSTALL cache_httpfs from com"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-23T10:09:53Z",
+    "description": "This repository is made as read-only filesystem for remote access.",
+    "readme_content": "# duck-read-cache-fs\n\nA DuckDB extension for remote filesystem access cache.\n\n## Loading cache httpfs\nSince DuckDB v1.0.0, cache httpfs can be loaded as a community extension without requiring the `unsigned` flag. From any DuckDB instance, the following two commands will allow you to install and load the extension:\n```sql\nINSTALL cache_httpfs from community;\n-- Or upgrade to latest version with `FORCE INSTALL cache_httpfs from community;`\nLOAD cache_httpfs;\n```\nSee the [cache httpfs community extension page](https://community-extensions.duckdb.org/extensions/cache_httpfs.html) for more information.\n\n## Introduction\n\nThis repository is made as read-only filesystem for remote access, which serves as cache layer above duckdb [httpfs](https://github.com/duckdb/duckdb-httpfs).\n\nKey features:\n- Caching for data, which adds support for remote file access to improve IO performance and reduce egress cost; several caching options and entities are supported\n  + in-memory, cache fetched file conte",
+    "analysis_timestamp": "2025-09-27T14:42:31.267471",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/cache_httpfs/description.yml",
+    "deprecation_score": 3.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "capi_quack",
+    "repository": "https://github.com/duckdb/extension-template-c",
+    "owner": "duckdb",
+    "repo_name": "extension-template-c",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "repo_description",
+        "context": "(Experimental) C/C++ template for DuckDB extensions based on th"
+      },
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "This is an **experimental** template for C/C++ based extensions that link w"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "a Python venv is set up with DuckDB and DuckDB's test runner installed. Additionally, depending on conf"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "This extension uses the DuckDB Python client for testing. This should be automatically installed in the"
+      },
+      {
+        "keyword": "unstable",
+        "source": "readme",
+        "context": "### Using unstable Extension C API functionality"
+      },
+      {
+        "keyword": "unstable",
+        "source": "readme",
+        "context": "e DuckDB Extension C API has a stable part and an unstable part. By default, this template only allows usage"
+      },
+      {
+        "keyword": "unstable",
+        "source": "readme",
+        "context": "part of the API. To switch it to allow using the unstable part, take the following steps:"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "### Using unstable Extension C API functionality"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "The DuckDB Extension C API has a stable part and an unstable part. By default, this templ"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "ate only allows usage of the stable"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-07-17T16:11:51Z",
+    "description": "(Experimental) C/C++ template for DuckDB extensions based on the C API",
+    "readme_content": "# DuckDB C/C++ extension template\nThis is an **experimental** template for C/C++ based extensions that link with the **C Extension API** of DuckDB. Note that this\nis different from https://github.com/duckdb/extension-template, which links against the C++ API of DuckDB.\n\nFeatures:\n- No DuckDB build required\n- CI/CD chain preconfigured\n- (Coming soon) Works with community extensions\n\n## Cloning\nClone the repo with submodules\n\n```shell\ngit clone --recurse-submodules <repo>\n```\n\n## Dependencies\nIn principle, compiling this template only requires a C/C++ toolchain. However, this template relies on some additional\ntooling to make life a little easier and to be able to share CI/CD infrastructure with extension templates for other languages:\n\n- Python3\n- Python3-venv\n- [Make](https://www.gnu.org/software/make)\n- CMake\n- Git\n- (Optional) Ninja + ccache\n\nInstalling these dependencies will vary per platform:\n- For Linux, these come generally pre-installed or are available through the distro-speci",
+    "analysis_timestamp": "2025-09-27T14:42:31.372214",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/capi_quack/description.yml",
+    "deprecation_score": 2.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "chaos",
+    "repository": "https://github.com/taniabogatsch/duckdb-chaos",
+    "owner": "taniabogatsch",
+    "repo_name": "duckdb-chaos",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "work in progress",
+        "source": "readme",
+        "context": "### \ud83d\udea7 WORK IN PROGRESS \ud83d\udea7"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-19T11:42:23Z",
+    "description": null,
+    "readme_content": "# DuckdbChaos\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\n### \ud83d\udea7 WORK IN PROGRESS \ud83d\udea7\n\nDuckDBChaos allow you to invoke exceptions and signals.\n\n#### Exceptions\n\n```sql\nSELECT chaos_exception('hello', 'CATALOG');\nCatalog Error:\nhello\n```\n\n```sql\nSELECT chaos_exception('hello', 'INTERNAL');\nINTERNAL Error:\nhello\n\nStack Trace:\n\n0        duckdb::Exception::Exception(duckdb::ExceptionType, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) + 64\n1        duckdb::DuckDBChaosExceptionFun(duckdb::DataChunk&, duckdb::ExpressionState&, duckdb::Vector&)::'lambda'(duckdb::string_t, duckdb::string_t)::operator()(duckdb::string_t, duckdb::string_t) const + 376\n...\n```\n\n```sql\nSELECT chaos_exception('hello', 'FATAL');\nFATAL Error:\nFailed: database has been invalidated because of a previous fatal error. The database must be restarted prior to being used again",
+    "analysis_timestamp": "2025-09-27T14:42:31.477523",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/chaos/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "chsql",
+    "repository": "https://github.com/quackscience/duckdb-extension-clickhouse-sql",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-clickhouse-sql",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:31.582702",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/chsql/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "chsql_native",
+    "repository": "https://github.com/quackscience/duckdb-extension-clickhouse-native",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-clickhouse-native",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:32.063928",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/chsql_native/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "cronjob",
+    "repository": "https://github.com/quackscience/duckdb-extension-cronjob",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-cronjob",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:32.583163",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/cronjob/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "crypto",
+    "repository": "https://github.com/query-farm/crypto",
+    "owner": "query-farm",
+    "repo_name": "crypto",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "select crypto_hash('sha2-256', 'test');"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "\u2502                 crypto_hash('sha2-256', 'test')                  \u2502"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "select crypto_hash('md5', 'test');"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:15:27Z",
+    "description": "DuckDB Extension for cryptographic hash functions and HMAC",
+    "readme_content": "# Crypto Hash/HMAC Extension for DuckDB\n\nThis extension, `crypto`, adds cryptographic hash functions and the ability to calculate HMAC codes to DuckDB.\n\nDuckDB already includes a few functions to calculate hash values, but this extension adds additional hashing algorithms.\n\n## Installation\n\n**`crypto` is a [DuckDB Community Extension](https://github.com/duckdb/community-extensions).**\n\nYou can now use this by using this SQL:\n\n```sql\ninstall crypto from community;\nload crypto;\n```\n\n## Hash Digests\n\n```sql\n-- Calculate some hash digest values.\n select crypto_hash('sha2-256', 'test');\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502                 crypto_hash('sha2-256', 'test')                  \u2502\n\u2502                             varchar                              \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08 \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+    "analysis_timestamp": "2025-09-27T14:42:32.985588",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/crypto/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "cwiqduck",
+    "repository": "https://github.com/cwiq-os/cwiqduck",
+    "owner": "cwiq-os",
+    "repo_name": "cwiqduck",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-22T02:39:48Z",
+    "description": "DuckDB extensions for CWIQ",
+    "readme_content": "# cwiqduck\n\n## What is cwiqduck?\ncwiqduck extension overrides DuckDB's Filesystem Interface. When loaded, this extension changes the behavior of read operations within [CWIQ FS](https://www.codewilling.com/product/cwiq-fs/).\n\n## How does cwiqduck work?\nOnce loaded, cwiqduck checks if the file in question is within CWIQ FS. If so, the extension redirects DuckDB to the blob storage URL for that file. Then, the httpfs module does the read for that file instead. Diagram below visualizes the extension's capabilities.\n\n<img width=\"1238\" height=\"715\" alt=\"duckdb_illustration\" src=\"https://github.com/user-attachments/assets/4ca55517-d811-45be-849e-84251856e559\" />\n\n## Getting Started\ncwiqduck currently does not add any user-defined function. Instead, it tries to convert DuckDB's reads within CWIQ FS to a URL provided by the blob storage provider (such as Amazon S3).\n\n<pre> \nINSTALL httpfs;\nINSTALL cwiqduck FROM community;\nLOAD cwiqduck;\ncwiqduck extension enabled\n</pre>\n\n## Dependencies\n- http",
+    "analysis_timestamp": "2025-09-27T14:42:33.090150",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/cwiqduck/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "datasketches",
+    "repository": "https://github.com/query-farm/datasketches",
+    "owner": "query-farm",
+    "repo_name": "datasketches",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:15:36Z",
+    "description": "Integrates DuckDB with the high-performance Apache DataSketches library. This extension enables users to perform approximate analytics on large-scale datasets using state-of-the-art streaming algorithms, all from within DuckDB.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:33.192411",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/datasketches/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "duck_tails",
+    "repository": "https://github.com/teaguesterling/duck_tails",
+    "owner": "teaguesterling",
+    "repo_name": "duck_tails",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## \ud83d\udccb Examples"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "and diff analysis capabilities with comprehensive test coverage."
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "# Run tests to verify everything works"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "make test"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "new features",
+        "source": "readme",
+        "context": "All new features should include comprehensive tests. Our test suit"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-07-19T17:26:47Z",
+    "description": "A DuckDB extension for exploring and reading git history.",
+    "readme_content": "# Duck Tails \ud83e\udd86\n\n**Smart Development Intelligence for DuckDB**\n\nDuck Tails is a DuckDB extension that brings git-aware data analysis capabilities to your database. Query your git history, access files at any revision, and perform version-aware data analysis - all with SQL.\n\n**Status: Functional** - Git filesystem access and diff analysis capabilities with comprehensive test coverage.\n\n## \u2728 Features\n\n### \ud83d\uddc2\ufe0f Git Filesystem\nAccess any file in your git repository at any commit, branch, or tag using the `git://` protocol:\n\n```sql\n-- Read a CSV file from the current HEAD\nSELECT * FROM read_csv('git://data/sales.csv@HEAD');\n\n-- Compare data between commits\nSELECT * FROM read_csv('git://data/sales.csv@HEAD~1');\n\n-- Access files from a specific branch\nSELECT * FROM read_csv('git://config.json@feature-branch');\n\n-- Load data from a tagged release\nSELECT * FROM read_csv('git://metrics.csv@v1.0.0');\n```\n\n### \ud83d\udcca Git Table Functions\nQuery your git repository metadata directly with clean, simple syntax",
+    "analysis_timestamp": "2025-09-27T14:42:33.294492",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/duck_tails/description.yml",
+    "deprecation_score": 2.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "duckdb_mcp",
+    "repository": "https://github.com/teaguesterling/duckdb_mcp",
+    "owner": "teaguesterling",
+    "repo_name": "duckdb_mcp",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Configuration Examples"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "# Run test suite"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "make test"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-07-26T16:26:59Z",
+    "description": "A simple MCP server extension for DuckDB",
+    "readme_content": "# DuckDB MCP Extension\n\nA Model Context Protocol (MCP) extension for DuckDB that enables seamless integration between SQL databases and MCP servers. This extension allows DuckDB to both consume MCP resources and serve as an MCP server.\n\n## Overview\n\nThe DuckDB MCP Extension bridges SQL databases with MCP servers, enabling:\n- Direct SQL access to remote resources via MCP protocol\n- Tool execution from within SQL queries \n- Database serving as an MCP resource provider\n- Flexible security models for development and production\n\n## Core Capabilities\n\n### Client Features\n- **Resource Access**: Query remote data sources using `mcp://` URIs with standard SQL functions\n- **Tool Execution**: Execute MCP tools directly from SQL with `mcp_call_tool()`\n- **Multiple Transports**: Connect via stdio, TCP, and WebSocket protocols\n- **Security Modes**: Permissive mode for development, strict allowlists for production\n- **Configuration Support**: JSON-based server configuration files\n\n### Server Features",
+    "analysis_timestamp": "2025-09-27T14:42:33.401649",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/duckdb_mcp/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "duckpgq",
+    "repository": "https://github.com/cwida/duckpgq-extension",
+    "owner": "cwida",
+    "repo_name": "duckpgq-extension",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "work in progress",
+        "source": "readme",
+        "context": "repository is currently a research project and a work in progress. Feel free to play around with it and give us fee"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "cy management, just skip this step. Note that the example extension uses VCPKG to build with a dependency f"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- Unit tests: `./build/release/test/unittest`"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- Unit tests: `./build/debug/test/unittest`"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-07-22T10:16:14Z",
+    "description": "DuckDB extension that adds support for SQL/PGQ and graph algorithms",
+    "readme_content": "# DuckPGQ\nA DuckDB extension for graph workloads that supports the SQL/PGQ standard. For more information, please see the [documentation page](https://duckpgq.org/).\n\n[![Discord](https://discordapp.com/api/guilds/1225369321077866496/widget.png?style=banner3)](https://discord.gg/8X95XHhQB7)\n## WIP Disclaimer\nThis repository is currently a research project and a work in progress. Feel free to play around with it and give us feedback.\n\n---\n\n## Loading DuckPGQ \nSince DuckDB v1.0.0, DuckPGQ can be loaded as a community extension without requiring the `unsigned` flag. From any DuckDB instance, the following two commands will allow you to install and load DuckPGQ:\n```sql\ninstall duckpgq from community;\nload duckpgq;\n```\nSee the [DuckPGQ community extension page](https://community-extensions.duckdb.org/extensions/duckpgq.html) for more information.\n\nFor older DuckDB versions there are two ways to install the DuckPGQ extension. \nBoth ways require DuckDB to be launched in the `unsigned` mode.\nTh",
+    "analysis_timestamp": "2025-09-27T14:42:33.506804",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/duckpgq/description.yml",
+    "deprecation_score": 6.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "eeagrid",
+    "repository": "https://github.com/ahuarte47/duckdb-eeagrid",
+    "owner": "ahuarte47",
+    "repo_name": "duckdb-eeagrid",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Example Usage"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "### Running the tests"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "Different tests can be created for DuckDB extensions. The primar"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "y way of testing DuckDB extensions should be the SQL tests in `"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "maintained",
+        "source": "readme",
+        "context": "environmental data analysis and reporting. It is maintained by the [European Environment Agency](https://www."
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-10T20:27:02Z",
+    "description": "Functions for transforming XY coordinates to and from the EEA Reference Grid (EPSG:3035)",
+    "readme_content": "# DuckDB EEA Reference Grid Extension\n\n## What is this?\n\nThis is an extension for DuckDB that adds support for working with the [EEA Reference Grid System](https://sdi.eea.europa.eu/catalogue/srv/api/records/aac8379a-5c4e-445c-b2ef-23a6a2701ef0/attachments/eea_reference_grid_v1.pdf).\n\nThe **EEA Reference Grid** is a standardized spatial grid system used across Europe for environmental data analysis and reporting. It is maintained by the [European Environment Agency](https://www.eea.europa.eu/en) (EEA) and forms the basis for aggregating and exchanging geospatial data in a consistent format:\n\n* `Coordinate Reference System (CRS)`: ETRS89 / LAEA Europe ([EPSG:3035](https://epsg.io/3035)), which minimizes area distortion across Europe. The Geodetic Datum is the European Terrestrial Reference System 1989 (EPSG:6258). The Lambert Azimuthal Equal Area (LAEA) projection is\ncentred at 10\u00b0E, 52\u00b0N. Coordinates are based on a false Easting of 4321000 meters, and a false Northing of 3210000 meters",
+    "analysis_timestamp": "2025-09-27T14:42:33.622386",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/eeagrid/description.yml",
+    "deprecation_score": 3.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "evalexpr_rhai",
+    "repository": "https://github.com/query-farm/evalexpr_rhai",
+    "owner": "query-farm",
+    "repo_name": "evalexpr_rha",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:33.727521",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/evalexpr_rhai/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "faiss",
+    "repository": "https://github.com/duckdb-faiss-ext/duckdb-faiss-ext",
+    "owner": "duckdb-faiss-ext",
+    "repo_name": "duckdb-faiss-ex",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:33.829359",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/faiss/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "file_dialog",
+    "repository": "https://github.com/yutannihilation/duckdb-ext-file-dialog",
+    "owner": "yutannihilation",
+    "repo_name": "duckdb-ext-file-dialo",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:33.932853",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/file_dialog/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "flock",
+    "repository": "https://github.com/dais-polymtl/flock",
+    "owner": "dais-polymtl",
+    "repo_name": "flock",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### \ud83d\udd27 Example Query"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "n semantic analysis tasks directly in DuckDB. For example:"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Explore more usage examples in the [documentation](https://dais-polymtl.gith"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-19T15:11:32Z",
+    "description": "Flock: multimodal querying for DuckDB",
+    "readme_content": "<a id=\"readme-top\"></a>\n\n<br />\n\n<div align=\"center\">\n  <a href=\"https://dais-polymtl.github.io/flock/\">\n    <img src=\"docs/static/flock-square-readme.png\" alt=\"Logo\" height=\"300\">\n  </a>\n  <br /><br />\n  <p align=\"center\">\n    DBMS extension for multimodal query processing and optimization.\n    <br />\n    <a href=\"https://dais-polymtl.github.io/flock/docs/what-is-flock\"><strong>Explore the docs \u00bb</strong></a>\n    <br />\n    <br />\n    <a href=\"https://dais-polymtl.github.io/flock/\">Landing Page</a>\n    |\n    <a href=\"https://github.com/dais-polymtl/flock/issues/new?labels=bug&template=bug-report.md\">Report Bug</a>\n    |\n    <a href=\"https://github.com/dais-polymtl/flock/issues/new?labels=enhancement&template=feature-request.md\">Request Feature</a>\n  </p>\n</div>\n\n<details>\n  <summary>\n    <h2>Table of Contents</h2>\n  </summary>\n  <ol>\n    <li><a href=\"#-about-the-project\">About The Project</a></li>\n    <li><a href=\"#-features\">Features</a></li>\n    <li>\n      <a href=\"#-getting-started",
+    "analysis_timestamp": "2025-09-27T14:42:34.034923",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/flock/description.yml",
+    "deprecation_score": 3.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "fuzzycomplete",
+    "repository": "https://github.com/query-farm/fuzzycomplete",
+    "owner": "query-farm",
+    "repo_name": "fuzzycomplete",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "bucket.s3.us-east-1.amazonaws.com/fuzzycomplete/latest';"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:17:51Z",
+    "description": "DuckDB Extension for fuzzy string matching based autocompletion",
+    "readme_content": "# fuzzycomplete Extension for DuckDB\n\n![A duck trying to complete a crossword puzzle](./docs/duckdb-fuzzycompletion.jpeg)\n\nThis `fuzzycomplete` extension serves as an alternative to DuckDB's [autocomplete](https://duckdb.org/docs/api/cli/autocomplete.html) extension, with several key differences:\n\n**Algorithm:** Unlike the [autocomplete extension](https://duckdb.org/docs/extensions/autocomplete.html), which uses edit distance as its metric, the fuzzycomplete extension employs a fuzzy string matching algorithm derived from Visual Studio Code. This provides more intuitive and flexible completion suggestions.\n\n**Scope:** The `fuzzycomplete` extension can complete table names across different databases and schemas. It respects the current search path and offers suggestions accordingly, even when multiple databases are attached.\n\nIt may not yet be the best solution for SQL completion, but it has proven to be useful to the author.\n\n## Installation\n\n**`fuzzycomplete` is a [DuckDB Community Ex",
+    "analysis_timestamp": "2025-09-27T14:42:34.138876",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/fuzzycomplete/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "gcs",
+    "repository": "https://github.com/northpolesec/duckdb-gcs",
+    "owner": "northpolesec",
+    "repo_name": "duckdb-gcs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "D SELECT COUNT(*) FROM 'gcss://duckdb-gcs-testing/taxi_2019_04.parquet';"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-18T20:49:06Z",
+    "description": "A GCS-native extension for DuckDB",
+    "readme_content": "# duckdb-gcs\n\n---\n\nThis DuckDB extension allows you to read files from Google Cloud Storage,\nnatively, using the Google Cloud C++ SDK.\n\nDuckDB's core httpfs extension allows reading files from GCS, but it does so\nusing the S3 compatibility API. This is not as fast as the native API and it\nrequires using HMAC keys. HMAC keys are, by default, disabled by organization\npolicy for service accounts.\n\nNote: Because the core `httpfs` extension registers itself as a handler for\n`gs://` and `gcs://` URLs, this extension also supports `gcss://` as a way to\nforce its usage.\n\n## Building\n\n### Managing dependencies\n\nDuckDB extensions uses VCPKG for dependency management. Enabling VCPKG is very\nsimple: follow the\n[installation instructions](https://vcpkg.io/en/getting-started) or just run the\nfollowing:\n\n```shell\ngit clone https://github.com/Microsoft/vcpkg.git\n./vcpkg/bootstrap-vcpkg.sh\nexport VCPKG_TOOLCHAIN_PATH=`pwd`/vcpkg/scripts/buildsystems/vcpkg.cmake\n\n```\n\n### Build steps\n\nNow to build the e",
+    "analysis_timestamp": "2025-09-27T14:42:34.243585",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/gcs/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "geography",
+    "repository": "https://github.com/paleolimbot/duckdb-geography",
+    "owner": "paleolimbot",
+    "repo_name": "duckdb-geography",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "work in progress",
+        "source": "readme",
+        "context": "](docs/function-reference.md). Documentation is a work in progress!"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "be documented when stable such that other libraries can decode the value"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "Note that all types listed above are implicitly castable to `GEOGRAPHY` such that"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-08-19T14:12:08Z",
+    "description": null,
+    "readme_content": "# DuckDB Geography\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThis extension, geography, allows you leverage [Google's s2geometry library](https://github.com/google/s2geometry) via the [s2geography wrapper library](https://github.com/paleolimbot/s2geography) that also powers S2 integration as an [R package](https://r-spatial.github.io/s2) and a [Python library](https://github.com/benbovy/spherely). It is preliminary and not currently published as a community extension.\n\nIn general, the functions are the same as those implemented in the [spatial extension](https://duckdb.org/docs/extensions/spatial/functions.html) except they are prefixed with `s2_` instead of `st_`. See [the function reference](docs/function-reference.md) for a complete list with documentation.\n\n```\nLOAD geography;\n\nD CREATE TABLE countries as SELECT name, s2_prepare(geog) as geog FROM s2_data_countries();\nD SELE",
+    "analysis_timestamp": "2025-09-27T14:42:34.346856",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/geography/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "geotiff",
+    "repository": "https://github.com/babaknaimi/duckdb-geotiff",
+    "owner": "babaknaimi",
+    "repo_name": "duckdb-geotiff",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### R example:"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-08-20T05:12:15Z",
+    "description": "Duckdb extension to read GeoTiffs directly with duckdb database",
+    "readme_content": "# geotiff (DuckDB Community Extension)\n\n`geotiff` lets DuckDB read GeoTIFF rasters via GDAL and expose them as a table function.\n\n## Install\n\n```sql\nINSTALL geotiff FROM community;\nLOAD geotiff;\n```\n\n\n(If you installed an older copy locally and want to refresh:)\n\n```sql\nFORCE INSTALL geotiff FROM community;\nLOAD geotiff;\n```\n\n# Usage\n\n## Single band (long form)\n\nReturns two columns:\n\n- cell_id BIGINT \u2014 0-based linear index in row-major order (row * width + col)\n\n- value DOUBLE \u2014 pixel value (NULL for NoData)\n\n```sql\nSELECT * FROM read_geotiff('cea.tif', band := 1) LIMIT 5;\n```\n\n## Multiple bands (wide form)\n\nReturns one row per cell with one column per requested band:\n\n```sql\nSELECT * FROM read_geotiff('cea.tif', band := [1,2,3]) LIMIT 5;\n-- schema: (cell_id BIGINT, band1 DOUBLE, band2 DOUBLE, band3 DOUBLE)\n\n```\n\n## Typical patterns\n\n### Create a wide table from a multi-band raster:\n\n```sql\nCREATE TABLE r_chelsa AS\nSELECT * FROM read_geotiff('cea.tif', band := [1,2,3]);\nCREATE INDEX id",
+    "analysis_timestamp": "2025-09-27T14:42:34.458047",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/geotiff/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "gsheets",
+    "repository": "https://github.com/evidence-dev/duckdb_gsheets",
+    "owner": "evidence-dev",
+    "repo_name": "duckdb_gsheets",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "**\ud83d\udea7 Experimental \ud83d\udea7** Here be dragons"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "The latest version of [DuckDB](https://duckdb.org/docs/insta"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "maintained",
+        "source": "readme",
+        "context": "ith Google or DuckDB, it is a community extension maintained by [Evidence](https://evidence.dev)._"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-09T21:14:54Z",
+    "description": "DuckDB extension to read and write Google Sheets using SQL",
+    "readme_content": "---\ntitle: DuckDB GSheets\ndescription: A DuckDB extension for reading and writing Google Sheets with SQL.\nhide_title: true\n---\n\n<h1 class=\"markdown flex items-center gap-2\"><img src=\"icon-512.png\" style=\"height: 1em;\"/> DuckDB GSheets</h1>\n\n<Alert status=\"warning\">\n\n**\ud83d\udea7 Experimental \ud83d\udea7** Here be dragons\n \n</Alert>\n\n\nA DuckDB extension for reading and writing Google Sheets with SQL.\n\n_Note: This project is not affliated with Google or DuckDB, it is a community extension maintained by [Evidence](https://evidence.dev)._\n\n## Install\n\n```sql\nINSTALL gsheets FROM community;\nLOAD gsheets;\n```\n\nThe latest version of [DuckDB](https://duckdb.org/docs/installation) (currently 1.4.0) is supported.\n\n## Usage \n\n### Authenticate\n\n```sql\n-- Authenticate with Google Account in the browser (default)\nCREATE SECRET (TYPE gsheet);\n\n\n-- OR create a secret with your Google API access token (boring, see below guide)\nCREATE SECRET (\n    TYPE gsheet, \n    PROVIDER access_token, \n    TOKEN '<your_token>'\n);\n\n\n-- ",
+    "analysis_timestamp": "2025-09-27T14:42:34.561195",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/gsheets/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "h3",
+    "repository": "https://github.com/isaacbrodsky/h3-duckdb",
+    "owner": "isaacbrodsky",
+    "repo_name": "h3-duckdb",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "| `h3_polygon_wkt_to_cells_experimental` | Convert polygon WKT to a set of cells, new alg"
+      },
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "| `h3_polygon_wkt_to_cells_experimental_string` | Convert polygon WKT to a set of cells,"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "[![Extension Test](https://github.com/isaacbrodsky/h3-duckdb/action"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "s/workflows/test.yml/badge.svg)](https://github.com/isaacbrodsky/h"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "3-duckdb/actions/workflows/test.yml)"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:15:45Z",
+    "description": "Bindings for H3 to DuckDB",
+    "readme_content": "[![Extension Test](https://github.com/isaacbrodsky/h3-duckdb/actions/workflows/test.yml/badge.svg)](https://github.com/isaacbrodsky/h3-duckdb/actions/workflows/test.yml)\n[![DuckDB Version](https://img.shields.io/static/v1?label=duckdb&message=v1.4.0&color=blue)](https://github.com/duckdb/duckdb/releases/tag/v1.4.0)\n[![H3 Version](https://img.shields.io/static/v1?label=h3&message=v4.3.0&color=blue)](https://github.com/uber/h3/releases/tag/v4.3.0)\n[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)\n\nThis is a [DuckDB](https://duckdb.org) extension that adds support for the [H3 discrete global grid system](https://github.com/uber/h3/), so you can index points and geometries to hexagons in SQL.\n\n# Get started\n\nLoad from the [community extensions repository](https://community-extensions.duckdb.org/extensions/h3.html):\n```SQL\nINSTALL h3 FROM community;\nLOAD h3;\n```\n\nTest running an H3 function:\n```SQL\nSELECT h3_cell_to_latlng('822d57fffffffff');\n```\n\nOr, using t",
+    "analysis_timestamp": "2025-09-27T14:42:34.668421",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/h3/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "hashfuncs",
+    "repository": "https://github.com/query-farm/hashfuncs",
+    "owner": "query-farm",
+    "repo_name": "hashfuncs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:01Z",
+    "description": "A DuckDB extension that supplies non-cryptographic hash functions.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:34.773969",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/hashfuncs/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "hdf5",
+    "repository": "https://github.com/Berrysoft/duckdb-hdf5",
+    "owner": "Berrysoft",
+    "repo_name": "duckdb-hdf5",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "FROM read_hdf5(\"example_file.h5\", \"dataset_name\");"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-08-07T07:29:26Z",
+    "description": "HDF5 plugin for duckdb",
+    "readme_content": "# DuckDB HDF5 extension\nThis is a community extension to read HDF5 files.\n\n## The `read_hdf5` function\nIt reads a dataset from an HDF5 file.\n```sql\nFROM read_hdf5(\"example_file.h5\", \"dataset_name\");\n```\n",
+    "analysis_timestamp": "2025-09-27T14:42:34.875952",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/hdf5/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "highs",
+    "repository": "https://github.com/fhk/highs-duckdb",
+    "owner": "fhk",
+    "repo_name": "highs-duckdb",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-08-16T06:41:18Z",
+    "description": "Run the solver in the database!",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:34.978753",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/highs/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "hostfs",
+    "repository": "https://github.com/gropaul/hostFS",
+    "owner": "gropaul",
+    "repo_name": "hostFS",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Example 1: Navigate to the workspace and list the files."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Example 2: List the top 3 file types by total size, with"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Example 3: Find the files you were working on last to con"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-03-10T22:28:46Z",
+    "description": null,
+    "readme_content": "\n<img src=\"https://github.com/user-attachments/assets/fa806574-9120-474f-8cb4-b17b1fbc3cd1\" width=250 />\n\n# HostFS\n![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https://tinyurl.com/duckstats&label=Downloads&color=blue&query=%24.hostfs)\n\nHostFS allows you to navigate and explore the host filesystem from DuckDB.\n\nInstall via \n```plaintext\nINSTALL hostfs FROM community;\nLOAD hostfs;\n```\n\nExample 1: Navigate to the workspace and list the files.\n```plaintext\nD PRAGMA cd('/Users/paul/workspace');\nD PRAGMA ls;\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502             path              \u2502\n\u2502            varchar            \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502 ./duckdb                      \u2502\n\u2502 ./playground                  \u2502\n\u2502 ./hostfs                      \u2502\n...\n```\nExample 2: List the top 3 file types by total size, with file count, ordered by size.\n```plaintext\nD SELECT size, count, file_extension AS \"type\"\n  FROM (\n      SELECT SUM(file_size(path)) AS size_raw, hsize(size_raw) AS si",
+    "analysis_timestamp": "2025-09-27T14:42:35.081404",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/hostfs/description.yml",
+    "deprecation_score": 7.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "http_client",
+    "repository": "https://github.com/quackscience/duckdb-extension-httpclient",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-httpclien",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:35.187798",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/http_client/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "httpserver",
+    "repository": "https://github.com/Query-farm/duckdb-extension-httpserver",
+    "owner": "Query-farm",
+    "repo_name": "duckdb-extension-httpserver",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:35.290517",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/httpserver/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "jwt",
+    "repository": "https://github.com/GalvinGao/duckdb_jwt",
+    "owner": "GalvinGao",
+    "repo_name": "duckdb_jw",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:35.752239",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/jwt/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "lindel",
+    "repository": "https://github.com/query-farm/lindel",
+    "owner": "query-farm",
+    "repo_name": "lindel",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "TO 'example.parquet' (FORMAT PARQUET)"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": ") TO 'example.parquet' (FORMAT PARQUET)"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### Encoding examples"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "rustup toolchain install stable"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "# Use rustc stable version by default"
+      },
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "rustup default stable"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:12Z",
+    "description": "DuckDB Extension Linearization/Delinearization, Z-Order, Hilbert and Morton Curves",
+    "readme_content": "# Lindel (linearizer-delinearizer) Extension for DuckDB\n\n![Ducks filling Space-Filling Curves](./docs/space-filling-curve-ducks.jpg)\n\nThis `lindel` extension adds functions for the [linearization](https://en.wikipedia.org/wiki/Linearization) and delinearization of numeric arrays in [DuckDB](https://www.duckdb.org).  It allows you to order multi-dimensional data using space-filling curves.\n\n## Installation\n\n**`lindel` is a [DuckDB Community Extension](https://github.com/duckdb/community-extensions).**\n\nYou can now use this by using this SQL:\n\n```sql\ninstall lindel from community;\nload lindel;\n```\n\n## What is linearization?\n\n<image align=\"right\" src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Hilbert-curve_rounded-gradient-animated.gif/440px-Hilbert-curve_rounded-gradient-animated.gif\" alt=\"An animation of the Hilbert Curve from Wikipedia\" width=\"200px\"/>\n\n[Linearization](https://en.wikipedia.org/wiki/Linearization) maps multi-dimensional data into a one-dimensional sequen",
+    "analysis_timestamp": "2025-09-27T14:42:35.854891",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/lindel/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "lua",
+    "repository": "https://github.com/isaacbrodsky/duckdb-lua",
+    "owner": "isaacbrodsky",
+    "repo_name": "duckdb-lua",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "cy management, just skip this step. Note that the example extension uses VCPKG to build with a dependency f"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "[![Extension Test](https://github.com/isaacbrodsky/duckdb-lua/actio"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-17T03:46:00Z",
+    "description": "DuckDB extension to evaluate Lua expressions.",
+    "readme_content": "[![Extension Test](https://github.com/isaacbrodsky/duckdb-lua/actions/workflows/MainDistributionPipeline.yml/badge.svg)](https://github.com/isaacbrodsky/duckdb-lua/actions/workflows/MainDistributionPipeline.yml)\n[![DuckDB Version](https://img.shields.io/static/v1?label=duckdb&message=v1.4.0&color=blue)](https://github.com/duckdb/duckdb/releases/tag/v1.4.0)\n[![Lua Version](https://img.shields.io/static/v1?label=lua&message=v5.4.8&color=blue)](https://lua.org/home.html)\n[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)\n\n# Lua\n\nThis extension adds the embedded scripting language [Lua](https://lua.org) to [DuckDB](https://duckdb.org/). Lua is a powerful, small, embedded, and free scripting language.\n\nInstall via community extensions:\n\n```sql\nINSTALL lua FROM community; -- First time only\nLOAD loa;\n```\n\nEvaluate a Lua expression in SQL:\n```sql\nSELECT lua('return \"aa\" .. context', \"bb\");\n```\n\nReturns `\"aabb\"`.\n\nFor the context parameter, you can pass in string",
+    "analysis_timestamp": "2025-09-27T14:42:35.968571",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/lua/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "magic",
+    "repository": "https://github.com/carlopi/duckdb_magic",
+    "owner": "carlopi",
+    "repo_name": "duckdb_magic",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Example, discover which mime_types is a given [remote] fi"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Example, read any file with autodetection (on the content"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ubusercontent.com/duckdb/duckdb/main/data/parquet-testing/adam_genotypes.parquet');"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ubusercontent.com/duckdb/duckdb/main/data/parquet-testing/adam_genotypes.parquet');"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-22T08:48:10Z",
+    "description": "Auto-detect file types via `libmagic` (`file` utility)",
+    "readme_content": "# magic\n\nThis extension, Magic, allow you to examine files and determine their type, based on https://man7.org/linux/man-pages/man3/libmagic.3.html linux utility.\n\n\n```sql\n--- Install (once)\nINSTALL magic FROM community;\n\n--- Update (to check for updates)\nUPDATE EXTENSIONS (magic);\n\n--- Load\nLOAD magic;\n```\n\nExample, discover which mime_types is a given [remote] file[s]:\n```sql\n--- Discover autodetected types for files in your current folder\nSELECT magic_mime(file), magic_type(file), file\n    FROM glob('*');\n\n--- Needs to be performed once per session to query remote files\nLOAD httpfs;\n\n--- Discover autodetected types for a remote file\nSELECT magic_mime(file), magic_type(file), file\n    FROM glob('https://raw.githubusercontent.com/duckdb/duckdb/main/data/parquet-testing/adam_genotypes.parquet');\n```\n\nExample, read any file with autodetection (on the content or the name):\n```sql\n--- Needs to be performed once per session to query remote files\nLOAD httpfs;\n\nFROM read_any('https://raw.git",
+    "analysis_timestamp": "2025-09-27T14:42:36.073154",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/magic/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "marisa",
+    "repository": "https://github.com/query-farm/marisa",
+    "owner": "query-farm",
+    "repo_name": "marisa",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:22Z",
+    "description": "The Marisa extension by Query.Farm integrates the fast, space-efficient MARISA trie into DuckDB, enabling high-performance string lookups, prefix searches, and autocomplete functionality.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:36.176588",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/marisa/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "markdown",
+    "repository": "https://github.com/teaguesterling/duckdb_markdown",
+    "owner": "teaguesterling",
+    "repo_name": "duckdb_markdown",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "len(md_extract_code_blocks(content)) as code_examples,"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### Document Processing Examples"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "-- Find all Python examples in documentation"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "make test"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "SELECT md_stats('# Test\\nContent');  -- VARCHAR automatically cast to MAR"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- Full test suite with 218+ passing assertions"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-07-10T23:23:13Z",
+    "description": "Heirarchical markdown parsing for DuckDB",
+    "readme_content": "# DuckDB Markdown Extension\n\nThis extension adds Markdown processing capabilities to DuckDB, enabling structured analysis of Markdown documents and content extraction for documentation analysis, content auditing, and knowledge base processing.\n\n## Features\n\n- **Markdown Content Extraction**: Extract code blocks, links, images, and tables from Markdown text\n- **Documentation Analysis**: Analyze large documentation repositories with SQL queries\n- **Cross-Platform Support**: Works on Linux, macOS, and WebAssembly (Windows support in development)\n- **GitHub Flavored Markdown**: Uses cmark-gfm for accurate parsing of modern Markdown\n- **High Performance**: Process thousands of documents efficiently with robust glob pattern support\n\n## Installation\n\n### Loading the Extension\n\n```sql\n-- Install from community extensions (when available)\nINSTALL markdown FROM community;\nLOAD markdown;\n```\n\n### Building from Source\n\n```bash\ngit clone https://github.com/teaguesterling/duckdb_markdown\ncd duckdb_m",
+    "analysis_timestamp": "2025-09-27T14:42:36.279214",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/markdown/description.yml",
+    "deprecation_score": 6.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "mooncake",
+    "repository": "https://github.com/Mooncake-Labs/duckdb_mooncake",
+    "owner": "Mooncake-Labs",
+    "repo_name": "duckdb_mooncake",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "The example below attaches to the moonlink database `'postgre"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-19T03:19:58Z",
+    "description": "Read Iceberg tables written by moonlink in real time",
+    "readme_content": "# duckdb_mooncake\n\nduckdb_mooncake is a DuckDB extension to read Iceberg tables written by [moonlink][moonlink-link] in real time.\n\n## Installation\n\nduckdb_mooncake can be installed using the `INSTALL` command:\n```sql\nINSTALL duckdb_mooncake FROM community;\n```\n\n## Usage\n\nMooncake databases can be attached using the `ATTACH` command, after which tables can be queried using standard SQL.\n\nThe example below attaches to the moonlink database `'postgres'`, from a moonlink instance listening at `'/var/lib/postgresql/data/pg_mooncake/moonlink.sock'`. This moonlink instance comes prepopulated with a table named `public.c`:\n```sql\nD ATTACH DATABASE 'mooncake' (TYPE mooncake, URI '/var/lib/postgresql/data/pg_mooncake/moonlink.sock', DATABASE 'postgres');\nD SELECT * FROM mooncake.public.c;\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502  id   \u2502   val   \u2502\n\u2502 int32 \u2502 varchar \u2502\n\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524\n\u2502     1 \u2502 Hello   \u2502\n\u2502     2 \u2502 World   \u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n```\n\n## Building\n\nTo build, type:\n```\ngit submodule update --init --r",
+    "analysis_timestamp": "2025-09-27T14:42:36.386519",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/mooncake/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "msolap",
+    "repository": "https://github.com/Hugoberry/duckdb-msolap-extension",
+    "owner": "Hugoberry",
+    "repo_name": "duckdb-msolap-extension",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-24T16:33:46Z",
+    "description": null,
+    "readme_content": "# MSOLAP Scanner Extension for DuckDB\n\nThis extension allows DuckDB to connect to Microsoft SQL Server Analysis Services (SSAS) and other OLAP data sources using the MSOLAP provider. It enables querying multidimensional and tabular models with DAX queries directly from DuckDB.\n\n## Features\n\n- Connect to MSOLAP sources (SSAS, Power BI, etc.)\n- Scan tables/cubes from OLAP databases\n- Execute raw DAX queries\n\n## Requirements\n\n- Windows environment (due to MSOLAP COM dependencies)\n- Microsoft OLEDB provider for Analysis Services installed `MSOLAP.8`\n- DuckDB development environment\n\n## Building\n\n1. Clone this repository\n2. Make sure you have DuckDB development environment set up\n3. Build the extension using CMake:\n\n```bash\nmkdir build\ncd build\ncmake ..\ncmake --build . --config Release\n```\nor given repo location `c:/git/hub/duckdb-msolap-extension/`\n```bash\nmake release -e EXT_CONFIG='c:/git/hub/duckdb-msolap-extension/extension_config.cmake'\n```\n## Installation\n\n```sql\nINSTALL msolap FROM ",
+    "analysis_timestamp": "2025-09-27T14:42:36.489404",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/msolap/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "nanoarrow",
+    "repository": "https://github.com/paleolimbot/duckdb-nanoarrow",
+    "owner": "paleolimbot",
+    "repo_name": "duckdb-nanoarrow",
+    "status": "analyzed",
+    "deprecation_indicators": [
+      {
+        "keyword": "deprecated",
+        "source": "readme",
+        "context": "and files. It serves a similar purpose as the now-deprecated [Arrow DuckDB core extension](https://github.com/"
+      }
+    ],
+    "warning_indicators": [
+      {
+        "keyword": "demo",
+        "source": "readme",
+        "context": "In this section, we will demonstrate how to use the Python API, but you can fin"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Below is a complete example of how to use our extension to read an Arrow IPC"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "s done using the COPY statement Below is a simple example of how you can use DuckDB to create such a file."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "sume the file using the `read_arrow` scanner. For example, to read the file we just created, you could run:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ality to query Arrow IPC files and is much better tested. This extension is released as a DuckDB Communi"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "980\u2026  \u2502 GH-20127: [Python][CI] Remove legacy hdfs tests from hdfs and hypothesis setup (#40363)   \u2502"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "45ad491af98a5bf18\u2026  \u2502 GH-40153: [C++][Python] Fix test_gdb failures on 32-bit (#40293)"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-17T18:31:44Z",
+    "description": null,
+    "readme_content": "# nanoarrow for DuckDB\n\nThis extension, nanoarrow, allows you to read Arrow IPC streams and files. It serves a similar purpose as the now-deprecated [Arrow DuckDB core extension](https://github.com/duckdb/arrow).\nHowever, it comes with the added functionality to query Arrow IPC files and is much better tested. This extension is released as a DuckDB Community Extension.\nFor compatibility reasons with the previous Arrow core extension, this extension is also aliased as `arrow`.\n\nYou can install and load it as:\n\n```sql\n-- arrow would also be a suitable name\nINSTALL nanoarrow FROM community;\nLOAD nanoarrow;\n```\n\n## Usage\nBelow is a complete example of how to use our extension to read an Arrow IPC file.\nIn addition to our extension, you will also need the `httpfs` extension installed and loaded to fetch the data directly from GitHub.\n\n```sql\nLOAD httpfs;\nLOAD nanoarrow;\nSELECT\n    commit, message\n  FROM\n    'https://github.com/apache/arrow-experiments/raw/refs/heads/main/data/arrow-commits/",
+    "analysis_timestamp": "2025-09-27T14:42:36.591369",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/nanoarrow/description.yml",
+    "deprecation_score": 10.0,
+    "recommendation": "LIKELY DEPRECATED - High confidence"
+  },
+  {
+    "extension": "nanodbc",
+    "repository": "https://github.com/Hugoberry/duckdb-nanodbc-extension",
+    "owner": "Hugoberry",
+    "repo_name": "duckdb-nanodbc-extension",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-24T19:44:52Z",
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:36.704437",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/nanodbc/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "netquack",
+    "repository": "https://github.com/hatamiarash7/duckdb-netquack",
+    "owner": "hatamiarash7",
+    "repo_name": "duckdb-netquack",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "> It's an experimental function."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "- [Usage Examples \ud83d\udcda](#usage-examples-)"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Usage Examples \ud83d\udcda"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "D SELECT extract_domain('a.example.com') AS domain;"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "ithub.com/hatamiarash7/duckdb-netquack/releases/latest)"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "D SELECT extract_subdomain('test.example.com.ac') AS dns_record;"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "\u2502 test       \u2502"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-24T07:00:11Z",
+    "description": "DuckDB extension for parsing, extracting, and analyzing domains, URIs, and paths with ease.",
+    "readme_content": "# DuckDB Netquack Extension\n\n[![DuckDB Badge](https://img.shields.io/badge/Built_With-DuckDB-fff100)](https://duckdb.org/community_extensions/extensions/netquack.html) [![GitHub License](https://img.shields.io/github/license/hatamiarash7/duckdb-netquack)](https://github.com/hatamiarash7/duckdb-netquack/blob/main/LICENSE) [![GitHub Release](https://img.shields.io/github/v/release/hatamiarash7/duckdb-netquack)](https://github.com/hatamiarash7/duckdb-netquack/releases/latest)\n\n![logo](./.github/netquack.webp)\n\nThis extension is designed to simplify working with domains, URIs, and web paths directly within your database queries. Whether you're extracting top-level domains (TLDs), parsing URI components, or analyzing web paths, Netquack provides a suite of intuitive functions to handle all your network tasks efficiently. Built for data engineers, analysts, and developers.\n\nWith Netquack, you can unlock deeper insights from your web-related datasets without the need for external tools or com",
+    "analysis_timestamp": "2025-09-27T14:42:36.806862",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/netquack/description.yml",
+    "deprecation_score": 7.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "observefs",
+    "repository": "https://github.com/dentiny/duckdb-filesystem-observability",
+    "owner": "dentiny",
+    "repo_name": "duckdb-filesystem-observability",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "Y filesystem which is compatible with duckdb, for example, azure filesystem."
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-23T10:07:15Z",
+    "description": "Provides observability for duckdb filesystem.",
+    "readme_content": "# ObserveFS - DuckDB Filesystem Observability Extension\n\n## What is ObserveFS?\n\n`observefs` is a powerful DuckDB extension that provides comprehensive **filesystem observability** for your data operations. It transparently wraps httpfs (HTTP, S3, Hugging Face) with monitoring capabilities, giving you detailed insights into I/O performance, latency patterns, and usage metrics.\n\nWhether you're optimizing data pipelines, debugging performance issues, or understanding access patterns, ObserveFS gives you the visibility you need.\n\n## Usage\n```sql\n-- Install and load the ObserveFS extension\nFORCE INSTALL observefs;\nLOAD observefs;\n\n-- Query remote data (automatically monitored)\nSELECT count(*) FROM 'https://huggingface.co/datasets/open-r1/OpenR1-Math-220k/resolve/main/data/train-00003-of-00010.parquet';\n\n-- View detailed performance metrics\nCOPY (SELECT observefs_get_profile()) TO '/tmp/output.txt';\n\n-- Clear metrics for fresh analysis\nSELECT observefs_clear();\n\n-- Wrap ANY filesystem which ",
+    "analysis_timestamp": "2025-09-27T14:42:36.916875",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/observefs/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "ofquack",
+    "repository": "https://github.com/krokozyab/ofquack",
+    "owner": "krokozyab",
+    "repo_name": "ofquack",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "**username/password:** Credentials e.g. user@example.com / MySecretPass123."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "cy management, just skip this step. Note that the example extension uses VCPKG to build with a dependency f"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-04-22T12:24:17Z",
+    "description": "Oracle Fusion DuckDB extension ",
+    "readme_content": "# Ofquack Extension for DuckDB\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThe **Ofquack** extension provides seamless integration between DuckDB and Oracle Fusion via WSDL-based SOAP calls. It allows you to run arbitrary SQL queries against Oracle Fusion database directly from DuckDB, inferring column names at runtime and returning all data as VARCHAR columns\u2014as native DuckDB tables and as resultsets that can be directly consumed by downstream applications.\n\n---\n## Features\n\n**Dynamic Schema Inference:** Automatically parses XML report output, inferring column names at runtime (all columns returned as VARCHAR).\n\n**Table Function Interface:** Exposes a simple table function oracle_fusion_wsdl_query(...) in DuckDB CLI and clients.\n\n**Credential Handling: Securely** sends Basic\u2011auth credentials over SOAP.\n\n**Chunked Results:** Efficiently streams large result sets in vectorized chun",
+    "analysis_timestamp": "2025-09-27T14:42:37.019873",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/ofquack/description.yml",
+    "deprecation_score": 6.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "open_prompt",
+    "repository": "https://github.com/quackscience/duckdb-extension-openprompt",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-openpromp",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:37.125162",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/open_prompt/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "parser_tools",
+    "repository": "https://github.com/zfarrell/duckdb_extension_parser_tools",
+    "owner": "zfarrell",
+    "repo_name": "duckdb_extension_parser_tools",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "An experimental DuckDB extension that exposes functionality from"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "#### Simple example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "#### CTE Example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "##### Example"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "SELECT parse_table_names('with cte_test as(select 1) select * from MyTable, cte_test', fa"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "[cte_test, MyTable, cte_test]"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "SELECT parse_statements('SELECT 1; INSERT INTO test VALUES (2); SELECT 3;');"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "See [Writing Tests](https://duckdb.org/docs/stable/dev/sqllogictest/writing_tests.html) to learn mor"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-24T17:46:33Z",
+    "description": "Parse sql - with sql!",
+    "readme_content": "# Parser Tools\n\nAn experimental DuckDB extension that exposes functionality from DuckDB's native SQL parser.\n\n## Overview\n\n`parser_tools` is a DuckDB extension designed to provide SQL parsing capabilities within the database. It allows you to analyze SQL queries and extract structural information directly in SQL. This extension provides parsing functions for tables, WHERE clauses, function calls, and statements.\n\n## Features\n\n- **Extract table references** from a SQL query with context information (e.g. `FROM`, `JOIN`, etc.)\n- **Extract function calls** from a SQL query with context information (e.g. `SELECT`, `WHERE`, `HAVING`, etc.)\n- **Parse WHERE clauses** to extract conditions and operators\n- **Parse multi-statement SQL** to extract individual statements or count the number of statements\n- Support for **window functions**, **nested functions**, and **CTEs**\n- Includes **schema**, **name**, and **context** information for all extractions\n- Built on DuckDB's native SQL parser\n- Simp",
+    "analysis_timestamp": "2025-09-27T14:42:37.227704",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/parser_tools/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "pbix",
+    "repository": "https://github.com/Hugoberry/duckdb-pbix-extension",
+    "owner": "Hugoberry",
+    "repo_name": "duckdb-pbix-extension",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T17:59:35Z",
+    "description": "Duckdb extension for parsing the metadata and contents of the embedded data mode in PowerBI pbix files",
+    "readme_content": "# pbix\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThis duckdb extension, pbix, allows you to parse the data model embedded in PowerBI (pbix) files.\n\nFor a pure Python implementation of the pbix parser, check out this library \ud83d\udc49 [PBIXray](https://github.com/Hugoberry/pbixray).\n\n## Building\n### Build steps\nNow to build the extension, run:\n```sh\nmake\n```\nThe main binaries that will be built are:\n```sh\n./build/release/duckdb\n./build/release/test/unittest\n./build/release/extension/pbix/pbix.duckdb_extension\n```\n- `duckdb` is the binary for the duckdb shell with the extension code automatically loaded.\n- `unittest` is the test runner of duckdb. Again, the extension is already linked into the binary.\n- `pbix.duckdb_extension` is the loadable binary as it would be distributed.\n\n## Running the extension\nTo run the extension code, start the shell with `./build/release/duckdb`.\n\nNow we can u",
+    "analysis_timestamp": "2025-09-27T14:42:37.341532",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/pbix/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "pcap_reader",
+    "repository": "https://github.com/quackscience/duckdb-extension-pcap",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-pcap",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:37.446582",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/pcap_reader/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "pivot_table",
+    "repository": "https://github.com/Alex-Monahan/pivot_table",
+    "owner": "Alex-Monahan",
+    "repo_name": "pivot_table",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "For a full example, please see below."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "s, so it is designed to be useful as more than an example, but it is brand new as of 2024-09-16 so please b"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "cy management, just skip this step. Note that the example extension uses VCPKG to build with a dependency f"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "This extension contains many tests, so it is designed to be useful as more than an"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2024-09-22T21:18:45Z",
+    "description": "Full spreadsheet-style pivot table through SQL macros. Just specify values, rows, columns, and filters!",
+    "readme_content": "# Pivot_table\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThis extension, pivot_table, allow you to pivot your data using a spreadsheet-like pivot API.\nIt is also similar to the Pandas `pivot_table` function. \nIt does this solely through SQL macros - there are no C++ functions as a part of this extension.\n\nSupporting this API means that depending on the parameters, sometimes the DuckDB `PIVOT` function is needed, and other times, a `GROUP BY` will suffice. \nThis extension will dynamically generate the required SQL (in a manner that is safe from SQL injection) and then produce the desired output.\n\nThe main function is `pivot_table`, but it also relies on the creation of an enum `columns_parameter_enum` using the `build_my_enum` function.\nFor a full example, please see below.\n\nThe `pivot_table` function accepts the parameters:\n* table_names\n* values \n* rows\n* columns\n* filters\n* sub",
+    "analysis_timestamp": "2025-09-27T14:42:37.854225",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/pivot_table/description.yml",
+    "deprecation_score": 8.0,
+    "recommendation": "LIKELY DEPRECATED - High confidence"
+  },
+  {
+    "extension": "prql",
+    "repository": "https://github.com/ywelsch/duckdb-prql",
+    "owner": "ywelsch",
+    "repo_name": "duckdb-prql",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "or for example:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "thubusercontent.com/PRQL/prql/0.8.0/prql-compiler/tests/integration/data/chinook/invoices.csv'\""
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "thubusercontent.com/PRQL/prql/0.8.0/prql-compiler/tests/integration/data/chinook/customers.csv'\""
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "thubusercontent.com/PRQL/prql/0.8.0/prql-compiler/tests/integration/data/chinook/invoices.csv'))"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-22T18:45:53Z",
+    "description": "PRQL as a DuckDB extension",
+    "readme_content": "# PRQL as a DuckDB extension\n\nExtension to [DuckDB](https://duckdb.org) that allows running [PRQL](https://prql-lang.org) commands directly within DuckDB.\n\n## Running the extension\n\nThe PRQL extension is a [DuckDB community extension](https://community-extensions.duckdb.org/extensions/prql.html), and can simply be installed with\n\n```sql\ninstall prql from community;\n```\n\nand subsequently loaded with\n\n```\nload prql;\n```\n\nAfter loading the extension you can directly query DuckDB using PRQL, the [Piped Relational Query Language](https://prql-lang.org). Both PRQL and SQL commands are supported within the same shell.\n\nLet's query using PRQL:\n\n```sql\nlet invoices = s\"select * from 'https://raw.githubusercontent.com/PRQL/prql/0.8.0/prql-compiler/tests/integration/data/chinook/invoices.csv'\"\nlet customers = s\"select * from 'https://raw.githubusercontent.com/PRQL/prql/0.8.0/prql-compiler/tests/integration/data/chinook/customers.csv'\"\n\nfrom invoices\nfilter invoice_date >= @1970-01-16\nderive {\n  t",
+    "analysis_timestamp": "2025-09-27T14:42:37.961699",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/prql/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "psql",
+    "repository": "https://github.com/ywelsch/duckdb-psql",
+    "owner": "ywelsch",
+    "repo_name": "duckdb-psql",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "o compose your SQL queries in a very natural way (example inspired by PRQL):"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "aw.githubusercontent.com/ywelsch/duckdb-psql/main/example/invoices.csv' |>"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "aw.githubusercontent.com/ywelsch/duckdb-psql/main/example/customers.csv'"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-22T18:45:44Z",
+    "description": "A piped SQL for DuckDB",
+    "readme_content": "# PSQL: a piped SQL for DuckDB\n\nPSQL extends [DuckDB](https://duckdb.org)'s SQL with a pipe syntax to provide simple composable queries. It's a lightweight variant of piped languages such as [PRQL](https://prql-lang.org) and [Kusto](https://docs.microsoft.com/azure/data-explorer/kusto/query/samples?pivots=azuredataexplorer), yet leveraging the full power of DuckDB's SQL.\n\nPipes allow you to compose your SQL queries in a very natural way (example inspired by PRQL):\n\n```sql\nfrom 'https://raw.githubusercontent.com/ywelsch/duckdb-psql/main/example/invoices.csv' |>\nwhere invoice_date >= date '1970-01-16' |>\nselect\n  *, \n  0.8 as transaction_fees,\n  total - transaction_fees as income |>\nwhere income > 1 |>\nselect\n  customer_id, \n  avg(total), \n  sum(income) as sum_income, \n  count() as ct\n  group by customer_id |>\norder by sum_income desc |>\nlimit 10 |>\nas invoices\n  join 'https://raw.githubusercontent.com/ywelsch/duckdb-psql/main/example/customers.csv'\n    as customers\n  on invoices.custome",
+    "analysis_timestamp": "2025-09-27T14:42:38.066178",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/psql/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "pyroscope",
+    "repository": "https://github.com/quackscience/duckdb-extension-pyroscope",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-pyroscope",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:38.170659",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/pyroscope/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "quack",
+    "repository": "https://github.com/duckdb/extension-template",
+    "owner": "duckdb",
+    "repo_name": "extension-template",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "test",
+        "source": "repo_description",
+        "context": "mplate for DuckDB extensions to help you develop, test and deploy a custom extension"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T07:47:31Z",
+    "description": "Template for DuckDB extensions to help you develop, test and deploy a custom extension",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:38.560109",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/quack/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "quackformers",
+    "repository": "https://github.com/martin-conur/quackformers",
+    "owner": "martin-conur",
+    "repo_name": "quackformers",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "work in progress",
+        "source": "readme",
+        "context": "edding functionality. This feature is currently a work in progress (WIP) and will be available soon."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### Example: RAG with Just DUCKDB"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "For more examples, check out the [examples folder](examples/)."
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "a Python venv is set up with DuckDB and DuckDB's test runner installed. Additionally, depending on conf"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "This extension uses the DuckDB Python client for testing. This should be automatically installed in the"
+      },
+      {
+        "keyword": "broken",
+        "source": "readme",
+        "context": "ons produced by this template may (or may not) be broken on windows on python3.11"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-05-31T18:22:45Z",
+    "description": "DuckDB NLP extension.",
+    "readme_content": "# Quackformers: A DuckDB Extension for LLM-Related Functionality\n\n**Quackformers**, a DuckDB extension for LLM-related tasks. For embedding and RAG-like features on DuckDB:\n\n```sql\nLOAD 'build/debug/quackformers.duckdb_extension'; -- IF BUILDING LOCALLY\n\n-- IMPORTING FROM DUCKDB COMMUNITY\nINSTALL quackformers fROM  community;\nLOAD quackformers;\n\n-- IMPORTING FROM GITHUB REPO\nLOAD quackformers FROM 'https://github.com/martin-conur/quackformers';\n\nCREATE TEMP TABLE QUESTIONS(random_questions) AS\nVALUES\n    ('What is the capital of France?'),\n    ('How does a car engine work?'),\n    ('What is the tallest mountain in the world?'),\n    ('How do airplanes stay in the air?'),\n    ('What is the speed of light?')\n;\n\nSELECT embed(RANDOM_QUESTIONS)::FLOAT[384] embedded_questions FROM QUESTIONS;\n```\n\n### Example: RAG with Just DUCKDB\n\n```sql\nINSTALL quackformers FROM  community;\nLOAD quackformers;\n\nINSTALL vss;\nLOAD vss;\n\nCREATE TABLE vector_table AS\nSELECT *, embed(text)::FLOAT[384] as embedded_t",
+    "analysis_timestamp": "2025-09-27T14:42:38.661932",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/quackformers/description.yml",
+    "deprecation_score": 7.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "quickjs",
+    "repository": "https://github.com/quackscience/duckdb-quickjs",
+    "owner": "quackscience",
+    "repo_name": "duckdb-quickjs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:38.768452",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/quickjs/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "radio",
+    "repository": "https://github.com/query-farm/radio",
+    "owner": "query-farm",
+    "repo_name": "radio",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:34Z",
+    "description": "Radio is a DuckDB extension by Query.Farm that brings real-time event streams into your SQL workflows. It enables DuckDB to receive and send events over systems like WebSocket and Redis Pub/Sub.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:39.166845",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/radio/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "rapidfuzz",
+    "repository": "https://github.com/query-farm/rapidfuzz",
+    "owner": "query-farm",
+    "repo_name": "rapidfuzz",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:45Z",
+    "description": "DuckDB Community Extension adding RapidFuzz algorithms for search, deduplication, and record linkage.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:39.270163",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/rapidfuzz/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "read_stat",
+    "repository": "https://github.com/mettekou/duckdb-read-stat",
+    "owner": "mettekou",
+    "repo_name": "duckdb-read-sta",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:39.372031",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/read_stat/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "redis",
+    "repository": "https://github.com/quackscience/duckdb-extension-redis",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-redis",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:39.474888",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/redis/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "rusty_quack",
+    "repository": "https://github.com/duckdb/extension-template-rs",
+    "owner": "duckdb",
+    "repo_name": "extension-template-rs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "experimental",
+        "source": "repo_description",
+        "context": "(Experimental) Template for Rust-based DuckDB extensions"
+      },
+      {
+        "keyword": "experimental",
+        "source": "readme",
+        "context": "This is an **experimental** template for Rust based extensions based on the"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "a Python venv is set up with DuckDB and DuckDB's test runner installed. Additionally, depending on conf"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "This extension uses the DuckDB Python client for testing. This should be automatically installed in the"
+      },
+      {
+        "keyword": "broken",
+        "source": "readme",
+        "context": "ons produced by this template may (or may not) be broken on windows on python3.11"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "stable",
+        "source": "readme",
+        "context": "turn this eventually into a stable basis for pure-Rust DuckDB extensions that can be"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-18T09:13:21Z",
+    "description": "(Experimental) Template for Rust-based DuckDB extensions",
+    "readme_content": "# DuckDB Rust extension template\nThis is an **experimental** template for Rust based extensions based on the C Extension API of DuckDB. The goal is to\nturn this eventually into a stable basis for pure-Rust DuckDB extensions that can be submitted to the Community extensions\nrepository\n\nFeatures:\n- No DuckDB build required\n- No C++ or C code required\n- CI/CD chain preconfigured\n- (Coming soon) Works with community extensions\n\n## Cloning\n\nClone the repo with submodules\n\n```shell\ngit clone --recurse-submodules <repo>\n```\n\n## Dependencies\nIn principle, these extensions can be compiled with the Rust toolchain alone. However, this template relies on some additional\ntooling to make life a little easier and to be able to share CI/CD infrastructure with extension templates for other languages:\n\n- Python3\n- Python3-venv\n- [Make](https://www.gnu.org/software/make)\n- Git\n\nInstalling these dependencies will vary per platform:\n- For Linux, these come generally pre-installed or are available through t",
+    "analysis_timestamp": "2025-09-27T14:42:39.871675",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/rusty_quack/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "rusty_sheet",
+    "repository": "https://github.com/redraiment/rusty-sheet",
+    "owner": "redraiment",
+    "repo_name": "rusty-shee",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:39.977289",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/rusty_sheet/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "scrooge",
+    "repository": "https://github.com/pdet/Scrooge-McDuck",
+    "owner": "pdet",
+    "repo_name": "Scrooge-McDuck",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [
+      {
+        "keyword": "maintained",
+        "source": "readme",
+        "context": "dmap for the next version of Scrooge is currently maintained as a discussion. You can find it [here](https://g"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-04-14T11:16:07Z",
+    "description": null,
+    "readme_content": "# Scrooge McDuck Extension\n\nScrooge McDuck is a third-party financial extension for [DuckDB](https://www.duckdb.org). The main goal of this extension is to support a set of aggregation functions and data scanners for financial data. It currently supports access to the logs of Ethereum nodes and stock information from Yahoo Finance. \n\nThis extension is still under development, with no official version released yet.\n\nYou can find more details on the [supported scanners](https://github.com/pdet/Scrooge-McDuck/wiki/Data-Scanners), [custom functions](https://github.com/pdet/Scrooge-McDuck/wiki/Custom-Functions), and [usage](https://github.com/pdet/Scrooge-McDuck/wiki/Usage) in the Scrooge wiki.\n\n> **Disclaimer:**  This extension is in no way affiliated with the [DuckDB Foundation](https://duckdb.org/foundation/) or [DuckDB Labs](https://duckdblabs.com/). Therefore, any binaries produced and distributed of this extension are unsigned.\n\n## Roadmap\nA roadmap for the next version of Scrooge is ",
+    "analysis_timestamp": "2025-09-27T14:42:40.080288",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/scrooge/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "sheetreader",
+    "repository": "https://github.com/polydbms/sheetreader-duckdb",
+    "owner": "polydbms",
+    "repo_name": "sheetreader-duckdb",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "FROM sheetreader('test.xlsx');"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "D CREATE TABLE test AS FROM sheetreader("
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "'test.xlsx',"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2024-10-15T17:10:39Z",
+    "description": null,
+    "readme_content": "# SheetReader DuckDB extension\n\n`sheetreader` is a DuckDB extension that allows reading XLSX files into DuckDB tables with SheetReader, our blazingly fast XLSX parser (https://github.com/polydbms/sheetreader-core).\n\n---\n\nThis repository is based on https://github.com/duckdb/extension-template.\n\n## Table of Contents\n\n- [SheetReader DuckDB extension](#sheetreader-duckdb-extension)\n  - [Table of Contents](#table-of-contents)\n  - [Usage](#usage)\n    - [Parameters](#parameters)\n  - [More information on SheetReader](#more-information-on-sheetreader)\n  - [Benchmarks](#benchmarks)\n  - [Building yourself](#building-yourself)\n    - [Running the extension](#running-the-extension)\n\n## Usage\n\nBefore using SheetReader, you need to install it from the [community extensions](https://community-extensions.duckdb.org/extensions/sheetreader.html) and load it into your DuckDB-environment:\n\n```sql\nINSTALL sheetreader FROM community;\nLOAD sheetreader;\n```\n\nNow, you can run your first query:\n\n```sql\nD SELECT ",
+    "analysis_timestamp": "2025-09-27T14:42:40.183318",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/sheetreader/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "shellfs",
+    "repository": "https://github.com/query-farm/shellfs",
+    "owner": "query-farm",
+    "repo_name": "shellfs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:18:56Z",
+    "description": "DuckDB extension allowing shell commands to be used for input and output.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:40.289105",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/shellfs/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "snowflake",
+    "repository": "https://github.com/iqea-ai/duckdb-snowflake",
+    "owner": "iqea-ai",
+    "repo_name": "duckdb-snowflake",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "- Usage examples"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Usage Examples"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "//github.com/your-org/duckdb-snowflake/releases/latest/download/snowflake.duckdb_extension"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "Test that the driver is found:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "-- Test connection"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T16:25:35Z",
+    "description": "A powerful DuckDB extension that enables seamless querying of Snowflake databases using Arrow ADBC drivers with runtime loading capabilities.",
+    "readme_content": "# DuckDB Snowflake Extension\n\nA powerful DuckDB extension that enables seamless querying of Snowflake databases using Arrow ADBC drivers. This extension provides efficient, columnar data transfer between DuckDB and Snowflake, making it ideal for analytics, ETL pipelines, and cross-database operations.\n\n## Quick Start\n\n### Installation\n\n```sql\n-- Install and load the extension\nINSTALL snowflake FROM community;\nLOAD snowflake;\n```\n\n### Basic Usage\n\n```sql\n-- 1. Create a Snowflake profile\nCREATE SECRET my_snowflake_secret (\n    TYPE snowflake,\n    ACCOUNT 'your_account.snowflakecomputing.com',\n    USER 'your_username',\n    PASSWORD 'your_password',\n    DATABASE 'your_database',\n    WAREHOUSE 'your_warehouse'\n);\n\n-- 2.1 Query Snowflake data using pass through query\nSELECT * FROM snowflake_scan(\n    'SELECT * FROM customers WHERE state = ''CA''',\n    'my_snowflake_secret'\n);\n\n-- 2.2 Query Snowflake data using local duckdb SQL syntax\nATTACH '' AS snow_db (TYPE snowflake, SECRET my_snowflake_",
+    "analysis_timestamp": "2025-09-27T14:42:40.391638",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/snowflake/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "splink_udfs",
+    "repository": "https://github.com/moj-analytical-services/splink_udfs",
+    "owner": "moj-analytical-services",
+    "repo_name": "splink_udfs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "work in progress",
+        "source": "readme",
+        "context": "The `splink_udfs` extension is work in progress. It aims to offer a variety of function"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "ndex ignores non-ascii chacters.  This means, for example, that `soundex('\u00c9milie')` returns M400, which is"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "ks from a string using Unicode normalization. For example, `J\u00fcrgen` becomes `Jurgen`. This function does no"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "For full example code, see [here](https://github.com/moj-analytica"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "This extension uses [SQLLogicTests](https://duckdb.org/dev/sqllogictest/intro.html)"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "To run the tests:"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-24T10:21:04Z",
+    "description": null,
+    "readme_content": "# Splink UDFs Extension for DuckDB\n\nThe `splink_udfs` extension is work in progress. It aims to offer a variety of function\n\n\n\nThis repo is based on the [DuckDB Extension Template](https://github.com/duckdb/extension-template)\n## Installation\n\nThis is a custom DuckDB extension and not (yet) part of the official community extensions.\n\nOnce built and compiled locally, you can load it like this:\n\n```sql\n.load '/path/to/splink_udfs.duckdb_extension';\n```\n\nIf you're using the DuckDB CLI or embedded DuckDB in your project, simply run:\n\n```sql\nSELECT soundex('Robert'); -- returns 'R163'\n```\n\n## API\n\n### `soundex(VARCHAR) \u2192 VARCHAR`\n\nComputes the Soundex code of a string. Always returns a 4-character string (e.g., `S540`, `J200`, `0000` for empty input).\n\nNote that soundex ignores non-ascii chacters.  This means, for example, that `soundex('\u00c9milie')` returns M400, which is the same as `soundex('milie')`.\n\nIf you have diacritics or other special characters, you should wrap you call like `sounde",
+    "analysis_timestamp": "2025-09-27T14:42:40.499485",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/splink_udfs/description.yml",
+    "deprecation_score": 7.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "st_read_multi",
+    "repository": "https://github.com/yutannihilation/duckdb-ext-st-read-multi",
+    "owner": "yutannihilation",
+    "repo_name": "duckdb-ext-st-read-mul",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:40.608988",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/st_read_multi/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "stochastic",
+    "repository": "https://github.com/query-farm/stochastic",
+    "owner": "query-farm",
+    "repo_name": "stochastic",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:19:06Z",
+    "description": "A DuckDB extension that add comprehensive statistical distribution functions to DuckDB, enabling advanced statistical analysis, probability calculations, and random sampling directly within SQL queries.",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:40.711074",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/stochastic/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "substrait",
+    "repository": "https://github.com/substrait-io/duckdb-substrait-extension",
+    "owner": "substrait-io",
+    "repo_name": "duckdb-substrait-extension",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "### Examples"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-06-29T02:00:00Z",
+    "description": null,
+    "readme_content": "# DuckDB Substrait Extension\n\nThe DuckDB Substrait Extension is a [DuckDB Community Extension](https://duckdb.org/community_extensions/) that provides [Substrait](https://substrait.io) support to [DuckDB](https://www.duckdb.org).\nWith this extension, DuckDB can produce Substrait plans from DuckDB queries as well as consume Substrait plans and execute them with DuckDB.\n\n## Building\n\nTo build the extension, first clone this repository and initialize git submodules by running:\n\n```sh\ngit submodule update --init\n```\n\nThen run:\n\n```sh\nmake\n```\n\nTo use the newly-built extension, run the bundled `duckdb` shell:\n\n```sh\n ./build/release/duckdb\n```\n\nAnd load the extension like so:\n\n```sql\nLOAD 'build/release/extension/substrait/substrait.duckdb_extension';\n```\n\n## Usage\n\nThis extension provides four new functions to DuckDB:\n\n- `get_substrait`: Converts the provided query into a binary Substrait plan\n- `get_substrait_json`: Converts the provided query into a Substrait plan in JSON\n- `from_substra",
+    "analysis_timestamp": "2025-09-27T14:42:40.813244",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/substrait/description.yml",
+    "deprecation_score": 1.0,
+    "recommendation": "MONITOR - Minor concerns detected"
+  },
+  {
+    "extension": "tarfs",
+    "repository": "https://github.com/Maxxen/duckdb_tarfs",
+    "owner": "Maxxen",
+    "repo_name": "duckdb_tarfs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Example usage"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "For example, given a tar file ab.tar containing two csv's, a."
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "ing the `tar://` and `http://` prefixes. Heres an example:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "om/duckdb/community-extensions). To install the latest version simply run the following SQL statement fr"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "the extension installed, you can upgrade to the latest version by running the following SQL statement."
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "For more examples, see the [tests](test/sql/tarfs.sql) included in this repository."
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2024-08-26T11:01:47Z",
+    "description": null,
+    "readme_content": "# TARFS DuckDB Extension\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThis extension, `tarfs`, provides a duckdb file-system abstraction to read and glob files within __uncompressed__ tar archives.\n\n## Install from the community repository\n\nThis extension is (soon) available from the [DuckDB community extension repository](https://github.com/duckdb/community-extensions). To install the latest version simply run the following SQL statement from within a running DuckDB process.\n```sql\n    INSTALL tarfs FROM 'community';\n```\n\nIf you already have an older version of the extension installed, you can upgrade to the latest version by running the following SQL statement.\n```sql\n    FORCE INSTALL tarfs FROM 'community';\n```\n\nFor more information regarding community extensions, see the [blog post](https://duckdb.org/2024/07/05/community-extensions.html)\n\n## Example usage\n\nFor example, given ",
+    "analysis_timestamp": "2025-09-27T14:42:40.917870",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/tarfs/description.yml",
+    "deprecation_score": 8.0,
+    "recommendation": "LIKELY DEPRECATED - High confidence"
+  },
+  {
+    "extension": "textplot",
+    "repository": "https://github.com/query-farm/textplot",
+    "owner": "query-farm",
+    "repo_name": "textplo",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": "",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:41.022777",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/textplot/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "tributary",
+    "repository": "https://github.com/query-farm/tributary",
+    "owner": "query-farm",
+    "repo_name": "tributary",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T22:19:37Z",
+    "description": "A DuckDB Extension for Kafka",
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:41.124728",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/tributary/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "tsid",
+    "repository": "https://github.com/quackscience/duckdb-extension-tsid",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-tsid",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:41.227013",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/tsid/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "ulid",
+    "repository": "https://github.com/Maxxen/duckdb_ulid",
+    "owner": "Maxxen",
+    "repo_name": "duckdb_ulid",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "atures from the extension directly in DuckDB, for example by creating a new ULID using the `ulid()` scalar"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2024-07-09T09:35:50Z",
+    "description": null,
+    "readme_content": "# DuckDB ULID\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n\nThis extension adds a new `ULID` data type to DuckDB, based on [this specification](https://github.com/ulid/spec).\nA `ULID` is similar to a `UUID` except that it also contains a timestamp component, which makes it more suitable for use cases where the order of creation is important.\n\nThe extension provides the following functions:\n\n- `ulid()`: Returns a new `ULID` value based on the current system time.\n- `ulid_timestamp(ulid)`: Returns the timestamp component of a `ULID` value.\n- `ulid_epoch_ms(ulid)`: Returns the timestamp component of a `ULID` value in milliseconds since the Unix epoch.\n\nAdditionally, the extension provides cast functions to convert between `ULID` and the `VARCHAR` and `UHUGEINT` types.\nA pair of `ULID`s will always sort the same regardless if it is cast to `VARCHAR` or `UHUGEINT`.\n\nYou can also cast bac",
+    "analysis_timestamp": "2025-09-27T14:42:41.693536",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/ulid/description.yml",
+    "deprecation_score": 6.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "vortex",
+    "repository": "https://github.com/vortex-data/duckdb-vortex",
+    "owner": "vortex-data",
+    "repo_name": "duckdb-vortex",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "cy management, just skip this step. Note that the example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "this will depend on the client you're using. Some examples:"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-26T20:53:25Z",
+    "description": "DuckDB extension allowing reading/writing of vortex files",
+    "readme_content": "# VortexDuckdb\n\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship\nyour own DuckDB extension.\n\n---\n\nThis extension, VortexDuckdb, allow you to ... <extension_goal>.\n\n## Building\n\n### Install required system dependencies\n\n#### MacOS\n\n```shell\nbrew install pkg-config\n```\n\n### Managing dependencies\n\nDuckDB extensions uses VCPKG for dependency management. Enabling VCPKG is very simple: follow\nthe [installation instructions](https://vcpkg.io/en/getting-started) or just run the following:\n\n```shell\ngit clone https://github.com/Microsoft/vcpkg.git\n./vcpkg/bootstrap-vcpkg.sh\nexport VCPKG_TOOLCHAIN_PATH=`pwd`/vcpkg/scripts/buildsystems/vcpkg.cmake\n```\n\nNote: VCPKG is only required for extensions that want to rely on it for dependency management. If you want to develop an\nextension without dependencies, or want to do your own dependency management, just skip this step. Note that the example\nextension uses VCPKG to build with a dep",
+    "analysis_timestamp": "2025-09-27T14:42:41.795898",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/vortex/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "webbed",
+    "repository": "https://github.com/teaguesterling/duckdb_webbed",
+    "owner": "teaguesterling",
+    "repo_name": "duckdb_webbed",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "| Function | Description | Example |"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "| Function | Description | Example |"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "| Function | Description | Example |"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- 100% test coverage"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "| Alias for xml_valid | `SELECT xml_well_formed('<test/>')` |"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "\"alt\": \"Test Image\","
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "production ready",
+        "source": "readme",
+        "context": "### \ud83d\udee0 **Production Ready**"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-08-13T02:24:15Z",
+    "description": null,
+    "readme_content": "# DuckDB XML Extension\n\nA comprehensive XML and HTML processing extension for DuckDB that enables SQL-native analysis of structured documents with intelligent schema inference and powerful XPath-based data extraction.\n\n## Features Overview\n\n### \ud83d\udd0d **XML & HTML Processing**\n- Parse and validate XML/HTML documents\n- Extract data using XPath expressions\n- Convert between XML, HTML, and JSON formats\n- Read files directly into DuckDB tables\n\n### \ud83d\udcca **Smart Schema Inference** \n- Automatically flatten XML documents into relational tables\n- Intelligent type detection (dates, numbers, booleans)\n- Configurable element and attribute handling\n\n### \ud83d\udee0 **Production Ready**\n- Built on libxml2 for robust parsing\n- Comprehensive error handling\n- Memory-safe RAII implementation\n- 100% test coverage\n\n---\n\n## Quick Start\n\n```sql\n-- Load the extension\nLOAD webbed;\n\n-- Read XML files directly\nSELECT * FROM 'data.xml';\nSELECT * FROM 'config/*.xml';\n\n-- Parse and extract from XML content\nSELECT xml_extract_text(",
+    "analysis_timestamp": "2025-09-27T14:42:41.899521",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/webbed/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "webmacro",
+    "repository": "https://github.com/quackscience/duckdb-extension-webmacro",
+    "owner": "quackscience",
+    "repo_name": "duckdb-extension-webmacro",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": null,
+    "description": null,
+    "readme_content": null,
+    "analysis_timestamp": "2025-09-27T14:42:42.010422",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/webmacro/description.yml",
+    "deprecation_score": 0.0,
+    "recommendation": "ACTIVE - No significant deprecation indicators"
+  },
+  {
+    "extension": "wireduck",
+    "repository": "https://github.com/hyehudai/wireduck",
+    "owner": "hyehudai",
+    "repo_name": "wireduck",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "## Examples"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "for example:"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "files directly from e.g. HTTP or S3 sources. For example"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "./build/release/test/unittest"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "- `unittest` is the test runner of duckdb. Again, the extension is already"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Running the tests"
+      }
+    ],
+    "active_indicators": [
+      {
+        "keyword": "maintained",
+        "source": "readme",
+        "context": "The roadmap for the next version is maintained as a discussion. you can find it [here](https://g"
+      }
+    ],
+    "repository_archived": false,
+    "last_push": "2025-09-23T21:22:03Z",
+    "description": "Duckdb extension to read pcap files",
+    "readme_content": "\nThis repository is based on https://github.com/duckdb/extension-template, check it out if you want to build and ship your own DuckDB extension.\n\n---\n# DuckDB Wireduck Extension\n#### Dissection is the first step to analysis.  ><(((('>\n\n![Description](./docs/wireduck.jpg)\n\n\n## What is this tool good for ?\nThis extension, Wireduck, allow reading PCAP files using duckdb.\n\n[Wireshark](https://www.wireshark.org/) is the leading open source tool for network traffic analysis, [tshark](https://www.wireshark.org/docs/man-pages/tshark.html), Wireshark's CLI, allows filterting and fetching netework data.\nHowerver, when analytics, aggregation, joining and other data wrangleing tasks are in order things gets a little more complex. This is where this extension can help by harnessing the argonomity of duckdb and SQL.\n\nIn addiiton, while duckdb supports leading data format (parquet ,json, delta, etc) wireshark supports over 3000 protocols. from IoT to Telcom to financial protocols.\nSo any new dissecto",
+    "analysis_timestamp": "2025-09-27T14:42:42.443004",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/wireduck/description.yml",
+    "deprecation_score": 4.0,
+    "recommendation": "REVIEW - Some deprecation indicators found"
+  },
+  {
+    "extension": "yaml",
+    "repository": "https://github.com/teaguesterling/duckdb_yaml",
+    "owner": "teaguesterling",
+    "repo_name": "duckdb_yaml",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "-- Type detection example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "# Multi-document example"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "# Sequence example"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "# To run tests"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "make test"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "## Testing"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-11T19:55:25Z",
+    "description": " A DuckDB to read and work with YAML files in a similar way to JSON files (also an exploration of AI-guided development) Resources",
+    "readme_content": "[![DuckDB Community Extension](https://img.shields.io/badge/yaml-DuckDB_Community_Extension-blue?logo=duckdb)](https://duckdb.org/community_extensions/extensions/yaml.html)\n\n# YAML Extension for DuckDB\n\nThis extension allows DuckDB to read YAML files directly into tables and provides full YAML type support with conversion functions. It enables seamless integration of YAML data within SQL queries.\n\n## Installation\n\n### From Community Extensions\n\n```sql\nINSTALL yaml FROM community;\nLOAD yaml;\n```\n\n### From GitHub Release\n\n```sql\n-- Install directly from GitHub releases\nINSTALL yaml FROM 'https://github.com/teaguesterling/duckdb_yaml/releases/download/v0.1.0/yaml.duckdb_extension';\nLOAD yaml;\n```\n\n### From Source\n\n```bash\ngit clone https://github.com/teaguesterling/duckdb_yaml\ncd duckdb_yaml\nmake\n\n# To run tests\nmake test\n```\n\n## AI-written Extension\nClaude.ai wrote 99% of the code in this project as an experiment. The original working version was written over the course of a weekend and ",
+    "analysis_timestamp": "2025-09-27T14:42:42.558269",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/yaml/description.yml",
+    "deprecation_score": 6.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  },
+  {
+    "extension": "zipfs",
+    "repository": "https://github.com/isaacbrodsky/duckdb-zipfs",
+    "owner": "isaacbrodsky",
+    "repo_name": "duckdb-zipfs",
+    "status": "analyzed",
+    "deprecation_indicators": [],
+    "warning_indicators": [
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "SELECT * FROM 'zip://examples/a.zip/a.csv';"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "torageaccount.blob.core.windows.net/yourcontainer/examples/a.zip/a.csv';"
+      },
+      {
+        "keyword": "example",
+        "source": "readme",
+        "context": "SELECT * FROM 'zip://examples/a.zip/*.csv';"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "[![Extension Test](https://github.com/isaacbrodsky/duckdb-zipfs/act"
+      },
+      {
+        "keyword": "test",
+        "source": "readme",
+        "context": "make test_release"
+      }
+    ],
+    "active_indicators": [],
+    "repository_archived": false,
+    "last_push": "2025-09-27T01:00:01Z",
+    "description": "DuckDB extension to read files within zip archives.",
+    "readme_content": "[![Extension Test](https://github.com/isaacbrodsky/duckdb-zipfs/actions/workflows/MainDistributionPipeline.yml/badge.svg)](https://github.com/isaacbrodsky/duckdb-zipfs/actions/workflows/MainDistributionPipeline.yml)\n[![DuckDB Version](https://img.shields.io/static/v1?label=duckdb&message=v1.4.0&color=blue)](https://github.com/duckdb/duckdb/releases/tag/v1.4.0)\n[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n\nThis is a [DuckDB](https://duckdb.org) extension that adds support for reading files from within [zip archives](https://en.wikipedia.org/wiki/ZIP_(file_format)).\n\n# Get started\n\nLoad from the [community extensions repository](https://community-extensions.duckdb.org/extensions/zipfs.html):\n```SQL\nINSTALL zipfs FROM community;\nLOAD zipfs;\n```\n\nTo read a file:\n```SQL\nSELECT * FROM 'zip://examples/a.zip/a.csv';\n```\n\nTo read a file from azure blob storage (or other file system):\n```SQL\nSELECT * FROM 'zip://az://yourstorageaccount.blob.core.windows.net/yourcontai",
+    "analysis_timestamp": "2025-09-27T14:42:42.668104",
+    "metadata": {},
+    "official_description": "",
+    "official_version": "",
+    "language": "",
+    "maintainers": [],
+    "license": "",
+    "description_yml_url": "https://github.com/duckdb/community-extensions/blob/main/extensions/zipfs/description.yml",
+    "deprecation_score": 5.0,
+    "recommendation": "POSSIBLY DEPRECATED - Manual review recommended"
+  }
+]

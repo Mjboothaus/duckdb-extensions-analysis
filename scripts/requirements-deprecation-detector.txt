@@ -1,0 +1,4 @@
+# Requirements for deprecation detector script
+httpx>=0.24.0
+loguru>=0.7.0
+pyyaml>=6.0

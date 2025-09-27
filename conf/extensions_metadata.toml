@@ -65,6 +65,26 @@ overview_extensions = ["httpfs", "iceberg", "spatial"]
 # Community extension repositories with special handling
 [community_extensions]
 
+# Extensions that are deprecated but not yet archived
+[community_extensions.deprecated]
+arrow = { reason = "Superseded by DuckDB's native Arrow integration", alternative = "Use DuckDB's built-in Arrow functionality" }
+nanoarrow = { reason = "Explicitly states it replaces 'now-deprecated Arrow DuckDB core extension'", alternative = "Use DuckDB's built-in Arrow functionality", confidence = "high" }
+
+# Extensions with high deprecation risk requiring manual verification
+[community_extensions.review_required]
+pivot_table = { reason = "Multiple example-only indicators, low activity since Sept 2024", score = 8.0, last_activity = "2024-09-22" }
+tarfs = { reason = "Multiple example-only indicators, low activity since Aug 2024", score = 8.0, last_activity = "2024-08-26" }
+hostfs = { reason = "Multiple example-only indicators", score = 7.0 }
+netquack = { reason = "Marked as experimental with example-only indicators", score = 7.0 }
+quackformers = { reason = "Work in progress status", score = 7.0 }
+splink_udfs = { reason = "Work in progress status", score = 7.0 }
+
+# Template extensions (likely not for production use)
+[community_extensions.templates]
+rusty_quack = { reason = "Extension template for Rust", template_type = "rust" }
+capi_quack = { reason = "Extension template for C API", template_type = "c" }
+quack = { reason = "Generic extension template", template_type = "generic" }
+
 # Extensions that might need special GitHub API handling
 [community_extensions.special_repos]
 # Add any community extensions that need special handling here

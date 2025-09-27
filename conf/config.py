@@ -171,9 +171,6 @@ class Config:
     def core_extensions_url(self) -> str:
         return self.config_data["analysis"]["core_extensions_url"]
 
-    @property
-    def featured_extensions_pages(self) -> List[str]:
-        return self.config_data["analysis"]["featured_extensions_pages"]
 
     @property
     def popular_extensions(self) -> List[str]:

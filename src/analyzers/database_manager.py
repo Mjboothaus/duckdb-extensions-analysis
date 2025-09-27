@@ -112,7 +112,6 @@ class DatabaseManager(BaseDatabaseManager):
                 )
 
             # Insert analysis run record
-            featured_count = len(analysis_result.featured_extensions)
             sql = self._load_sql("insert_analysis_run.sql")
             conn.execute(
                 sql,
@@ -122,8 +121,8 @@ class DatabaseManager(BaseDatabaseManager):
                     self.config.version_full,
                     len(analysis_result.core_extensions),
                     len(analysis_result.community_extensions),
-                    featured_count,
-                    "Enhanced schema with historical tracking, featured extensions, and improved descriptions",
+                    0,  # featured_count (deprecated)
+                    "Enhanced schema with CE metadata integration and deprecation analysis",
                 ],
             )
 

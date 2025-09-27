@@ -125,6 +125,36 @@ class ExtensionMetadata:
         
         return None
     
+    def is_deprecated_extension(self, extension_name: str) -> bool:
+        """Check if a community extension is deprecated."""
+        deprecated = self.metadata.get("community_extensions", {}).get("deprecated", {})
+        return extension_name in deprecated
+    
+    def get_deprecated_extension_info(self, extension_name: str) -> Optional[Dict]:
+        """Get deprecation information for an extension."""
+        deprecated = self.metadata.get("community_extensions", {}).get("deprecated", {})
+        return deprecated.get(extension_name)
+    
+    def is_review_required_extension(self, extension_name: str) -> bool:
+        """Check if a community extension requires review for deprecation."""
+        review_required = self.metadata.get("community_extensions", {}).get("review_required", {})
+        return extension_name in review_required
+    
+    def get_review_required_extension_info(self, extension_name: str) -> Optional[Dict]:
+        """Get review information for an extension."""
+        review_required = self.metadata.get("community_extensions", {}).get("review_required", {})
+        return review_required.get(extension_name)
+    
+    def is_template_extension(self, extension_name: str) -> bool:
+        """Check if a community extension is a template extension."""
+        templates = self.metadata.get("community_extensions", {}).get("templates", {})
+        return extension_name in templates
+    
+    def get_template_extension_info(self, extension_name: str) -> Optional[Dict]:
+        """Get template information for an extension."""
+        templates = self.metadata.get("community_extensions", {}).get("templates", {})
+        return templates.get(extension_name)
+    
     def reload_metadata(self) -> None:
         """Reload metadata from file."""
         self.metadata = self._load_metadata()

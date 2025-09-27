@@ -660,7 +660,8 @@ class ReportGenerator(BaseReportGenerator):
                     'docs_url': extension_urls.get(ext.name.lower()),
                     'status': 'ongoing',
                     'last_push_days': last_activity_days,
-                    'stars': 0,  # Not applicable for core
+                    'last_push': ext.last_push,  # Include actual datetime
+                    'stars': ext.stars,  # Include actual stars from external repos
                     'language': 'C++',
                     'description': description,
                     'featured': False,
@@ -679,6 +680,7 @@ class ReportGenerator(BaseReportGenerator):
                     'docs_url': f"https://duckdb.org/community_extensions/extensions/{ext.name}.html",
                     'status': self._parse_status(ext.metadata.get('status', '❌ Error') if ext.metadata else '❌ Error'),
                     'last_push_days': ext.days_ago,
+                    'last_push': ext.last_push,  # Include actual datetime
                     'stars': ext.stars or 0,
                     'language': repo_info.get('language', 'N/A'),
                     'description': ext.description or 'No description available',

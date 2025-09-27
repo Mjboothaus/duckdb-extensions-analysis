@@ -156,3 +156,53 @@ th:last-child, td:last-child {
 .content h1:first-child + p + p {
     display: none;
 }
+
+/* Fix DataTables pagination spacing issues */
+.dataTables_wrapper {
+    margin-bottom: 3rem !important;
+    overflow: visible;
+}
+
+.dataTables_info, .dataTables_paginate {
+    margin-top: 1rem !important;
+    clear: both;
+    display: block;
+}
+
+/* Ensure proper spacing between tables and other content */
+table.dataTable {
+    margin-bottom: 2rem !important;
+}
+
+/* Fix potential z-index issues with pagination */
+.dataTables_wrapper .dataTables_paginate {
+    z-index: 1;
+    position: relative;
+}
+
+/* Additional fixes for bottom section spacing */
+.dataTables_wrapper .bottom {
+    margin-top: 1.5rem !important;
+    padding-top: 1rem;
+    clear: both;
+    width: 100%;
+}
+
+/* Ensure pagination buttons don't overlap with other content */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    margin: 0 2px;
+    padding: 6px 12px;
+    display: inline-block;
+}
+
+/* Add breathing room after DataTables */
+.dataTables_wrapper + * {
+    margin-top: 2rem !important;
+}
+
+/* Fix any potential float clearing issues */
+.dataTables_wrapper:after {
+    content: "";
+    display: table;
+    clear: both;
+}

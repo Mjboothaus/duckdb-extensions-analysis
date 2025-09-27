@@ -3,11 +3,10 @@
 
 Third-party extensions maintained by the community
 
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description | Featured |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|----------|
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
 {% for ext in community_extensions -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | relative_date }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} | {% if ext.featured %}⭐{% else %}{% endif %} |
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
 {% endfor %}
 
-**Total:** {{ community_extensions|length }} extensions  
-**Featured:** {{ community_extensions | selectattr('featured') | list | length }} extensions (marked with ⭐)
+**Total:** {{ community_extensions|length }} extensions

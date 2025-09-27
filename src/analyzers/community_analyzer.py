@@ -170,7 +170,7 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         return " ".join(improved_desc)
     
     async def analyze_community_extensions(
-        self, client: httpx.AsyncClient, featured_extensions: set[str]
+        self, client: httpx.AsyncClient
     ) -> Tuple[List[Dict], Dict]:
         """Analyze community extensions and return detailed data and statistics."""
         extensions = await self.get_community_extensions_list(client)
@@ -202,7 +202,6 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                     "error": None,
                     "status": "❌ Error",
                     "last_push_days": None,
-                    "featured": ext.lower() in featured_extensions,
                     "urls": {},
                     "improved_description": None,
                 }
@@ -230,7 +229,33 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                             repo_info.get("topics", []),
                         )
 
-                        if repo_info["archived"]:
+                        # Check extension status using metadata configuration
+                        from .extension_metadata import ExtensionMetadata
+                        metadata_helper = ExtensionMetadata(self.config.config_dir)
+                        
+                        # Add CE metadata to extension info
+                        if metadata:
+                            ext_info["ce_metadata"] = {
+                                "official_description": metadata.get("extension", {}).get("description"),
+                                "version": metadata.get("extension", {}).get("version"),
+                                "language": metadata.get("extension", {}).get("language"),
+                                "maintainers": metadata.get("extension", {}).get("maintainers", []),
+                                "license": metadata.get("extension", {}).get("license"),
+                                "build_system": metadata.get("extension", {}).get("build"),
+                                "description_yml_url": f"https://github.com/duckdb/community-extensions/blob/main/extensions/{ext}/description.yml"
+                            }
+                        
+                        # Determine status based on configuration and repo state
+                        if metadata_helper.is_deprecated_extension(ext):
+                            ext_info["status"] = "⚠️ Deprecated"
+                            ext_info["deprecated_info"] = metadata_helper.get_deprecated_extension_info(ext)
+                        elif metadata_helper.is_review_required_extension(ext):
+                            ext_info["status"] = "⚠️ Review Required"
+                            ext_info["review_info"] = metadata_helper.get_review_required_extension_info(ext)
+                        elif metadata_helper.is_template_extension(ext):
+                            ext_info["status"] = "🔧 Template"
+                            ext_info["template_info"] = metadata_helper.get_template_extension_info(ext)
+                        elif repo_info["archived"]:
                             ext_info["status"] = "🔴 Discontinued"
                         else:
                             ext_info["status"] = "✅ Ongoing"
@@ -258,6 +283,9 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         stats = {
             "total": len(extension_data),
             "active": sum(1 for ext in extension_data if ext["status"] == "✅ Ongoing"),
+            "deprecated": sum(1 for ext in extension_data if ext["status"] == "⚠️ Deprecated"),
+            "review_required": sum(1 for ext in extension_data if ext["status"] == "⚠️ Review Required"),
+            "templates": sum(1 for ext in extension_data if ext["status"] == "🔧 Template"),
             "discontinued": sum(
                 1 for ext in extension_data if ext["status"] == "🔴 Discontinued"
             ),
@@ -267,13 +295,10 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         self.extension_data = extension_data
         return extension_data, stats
     
-    async def analyze(self, featured_extensions: set[str] = None) -> List[ExtensionInfo]:
+    async def analyze(self) -> List[ExtensionInfo]:
         """Analyze community extensions and return ExtensionInfo objects."""
         async with httpx.AsyncClient() as client:
-            if featured_extensions is None:
-                featured_extensions = set()
-            
-            extension_data, stats = await self.analyze_community_extensions(client, featured_extensions)
+            extension_data, stats = await self.analyze_community_extensions(client)
             extension_infos = []
             
             for ext_data in extension_data:
@@ -281,7 +306,6 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                 ext_info = ExtensionInfo(
                     name=ext_data["name"],
                     type="community",
-                    featured=ext_data["featured"],
                     links=ext_data["urls"],
                     description=ext_data.get("improved_description")
                 )

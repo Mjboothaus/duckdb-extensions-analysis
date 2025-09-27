@@ -46,15 +46,11 @@ class AnalysisOrchestrator:
         else:
             return await self.core_analyzer.analyze()
     
-    async def analyze_community_extensions(self, featured_extensions: Optional[set[str]] = None) -> List[ExtensionInfo]:
+    async def analyze_community_extensions(self) -> List[ExtensionInfo]:
         """Analyze community extensions only."""
         logger.info("Starting community extensions analysis")
         
-        if featured_extensions is None:
-            async with httpx.AsyncClient() as client:
-                featured_extensions = await self.core_analyzer.get_featured_extensions(client)
-        
-        return await self.community_analyzer.analyze(featured_extensions)
+        return await self.community_analyzer.analyze()
     
     async def analyze_core_extensions_historical(self, duckdb_version: str, cutoff_date) -> List[ExtensionInfo]:
         """Analyze core extensions as of a specific historical date."""
@@ -98,12 +94,12 @@ class AnalysisOrchestrator:
         logger.info(f"Historical core analysis: {len(historical_extensions)} of {len(current_extensions)} core extensions were active as of {cutoff_date.strftime('%Y-%m-%d')}")
         return historical_extensions
     
-    async def analyze_community_extensions_historical(self, featured_extensions: set, cutoff_date) -> List[ExtensionInfo]:
+    async def analyze_community_extensions_historical(self, cutoff_date) -> List[ExtensionInfo]:
         """Analyze community extensions as of a specific historical date."""
         logger.info(f"Starting historical community extensions analysis as of {cutoff_date.strftime('%Y-%m-%d')}")
         
         # Get current community extensions first
-        current_extensions = await self.community_analyzer.analyze(featured_extensions)
+        current_extensions = await self.community_analyzer.analyze()
         
         # Filter extensions based on their last activity relative to cutoff date
         historical_extensions = []
@@ -148,16 +144,12 @@ class AnalysisOrchestrator:
             duckdb_version, duckdb_release_date = await self.github_client.get_latest_duckdb_release(client)
             logger.info(f"Found latest DuckDB release: {duckdb_version} (published {duckdb_release_date.strftime('%Y-%m-%d')})")
             
-            # Get featured extensions
-            featured_extensions = await self.core_analyzer.get_featured_extensions(client)
-            logger.info(f"Found {len(featured_extensions)} featured extensions")
-            
             # Analyze core extensions with platform availability checking
             core_extensions = await self.analyze_core_extensions(duckdb_version)
             logger.info(f"Analyzed {len(core_extensions)} core extensions")
             
             # Analyze community extensions
-            community_extensions = await self.analyze_community_extensions(featured_extensions)
+            community_extensions = await self.analyze_community_extensions()
             logger.info(f"Analyzed {len(community_extensions)} community extensions")
             
             # Analyze GitHub issues for all extensions (if enabled)
@@ -181,7 +173,6 @@ class AnalysisOrchestrator:
             analysis_result = AnalysisResult(
                 core_extensions=core_extensions,
                 community_extensions=community_extensions,
-                featured_extensions=featured_extensions,
                 duckdb_version=duckdb_version,
                 duckdb_release_date=duckdb_release_date
             )
@@ -192,7 +183,7 @@ class AnalysisOrchestrator:
             analysis_result.url_validation_results = url_validation_results
             
             # Log comprehensive analysis summary for persistent tracking
-            logger.info(f"ANALYSIS SUMMARY: DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
+            logger.info(f"ANALYSIS SUMMARY: DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
             
             return analysis_result
     
@@ -309,15 +300,12 @@ class AnalysisOrchestrator:
             duckdb_version, duckdb_release_date = await self.github_client.get_latest_duckdb_release(client)
             logger.info(f"Using DuckDB release: {duckdb_version} for historical context")
             
-            # Get featured extensions (this will be current list)
-            featured_extensions = await self.core_analyzer.get_featured_extensions(client)
-            
             # Analyze core extensions with historical context
             core_extensions = await self.analyze_core_extensions_historical(duckdb_version, cutoff_date)
             logger.info(f"Analyzed {len(core_extensions)} core extensions as of {as_of_date}")
             
             # Analyze community extensions with historical context  
-            community_extensions = await self.analyze_community_extensions_historical(featured_extensions, cutoff_date)
+            community_extensions = await self.analyze_community_extensions_historical(cutoff_date)
             logger.info(f"Analyzed {len(community_extensions)} community extensions as of {as_of_date}")
             
             # Skip GitHub issues analysis for historical mode
@@ -331,7 +319,6 @@ class AnalysisOrchestrator:
             analysis_result = AnalysisResult(
                 core_extensions=core_extensions,
                 community_extensions=community_extensions,
-                featured_extensions=featured_extensions,
                 duckdb_version=duckdb_version,
                 duckdb_release_date=duckdb_release_date
             )
@@ -344,7 +331,7 @@ class AnalysisOrchestrator:
             analysis_result.installation_results = installation_results
             
             # Log comprehensive analysis summary for historical tracking
-            logger.info(f"HISTORICAL ANALYSIS SUMMARY ({as_of_date}): DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Featured: {len(featured_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
+            logger.info(f"HISTORICAL ANALYSIS SUMMARY ({as_of_date}): DuckDB {duckdb_version} | Core: {len(core_extensions)} | Community: {len(community_extensions)} | Total: {len(core_extensions) + len(community_extensions)}")
             
             return analysis_result
     
@@ -408,7 +395,6 @@ class AnalysisOrchestrator:
             analysis_result = AnalysisResult(
                 core_extensions=core_extensions,
                 community_extensions=[],
-                featured_extensions=set(),
                 duckdb_version=duckdb_version,
                 duckdb_release_date=duckdb_release_date
             )
@@ -422,8 +408,7 @@ class AnalysisOrchestrator:
             community_extensions = await self.analyze_community_extensions()
             return AnalysisResult(
                 core_extensions=[],
-                community_extensions=community_extensions,
-                featured_extensions=set()
+                community_extensions=community_extensions
             )
         
         elif mode == "full":
@@ -460,10 +445,9 @@ class AnalysisOrchestrator:
         # Add all core extensions
         extensions_to_test.update(ext.name for ext in core_extensions)
         
-        # Add featured community extensions
-        for ext in community_extensions:
-            if getattr(ext, 'featured', False):
-                extensions_to_test.add(ext.name)
+        # Add some community extensions (limit to avoid excessive runtime)
+        for ext in community_extensions[:10]:  # Take first 10
+            extensions_to_test.add(ext.name)
         
         # Limit the number of tests to avoid excessive runtime
         extensions_to_test = list(extensions_to_test)[:25]
@@ -508,7 +492,6 @@ class AnalysisOrchestrator:
         print(f"\n=== Analysis Summary ===")
         print(f"Core Extensions: {len(analysis_result.core_extensions)}")
         print(f"Community Extensions: {len(analysis_result.community_extensions)}")
-        print(f"Featured Extensions: {len(analysis_result.featured_extensions)}")
         if analysis_result.duckdb_version:
             print(f"DuckDB Version: {analysis_result.duckdb_version}")
         print(f"Analysis Timestamp: {analysis_result.analysis_timestamp}")
