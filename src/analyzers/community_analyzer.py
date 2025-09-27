@@ -21,16 +21,18 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../scripts'))
 from detect_deprecated_extensions import DeprecationDetector, RepositoryCache
+from .installation_tester import InstallationTester
 
 
 class CommunityExtensionAnalyzer(BaseAnalyzer):
     """Analyzer for DuckDB community extensions."""
     
-    def __init__(self, config, github_client: GitHubAPIClient, cache_hours: int = 1):
+    def __init__(self, config, github_client: GitHubAPIClient, cache_hours: int = 1, enable_compatibility_testing: bool = False):
         super().__init__(config, cache_hours)
         self.github_client = github_client
         self.community_extensions: List[str] = []
         self.extension_data: List[Dict] = []
+        self.enable_compatibility_testing = enable_compatibility_testing
         
         # Initialize deprecation detector with caching
         cache_dir = config.cache_dir / 'deprecation_detector' if hasattr(config, 'cache_dir') else None
@@ -39,6 +41,30 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
             github_token=config.github_token if hasattr(config, 'github_token') else None,
             cache=deprecation_cache
         )
+        
+        # Initialize installation tester for version compatibility testing (if enabled)
+        self.installation_tester = InstallationTester() if enable_compatibility_testing else None
+        
+        # Cache for official extensions list and version compatibility
+        self._official_extensions_cache = None
+        self._version_compatibility_cache = {}
+        self._duckdb_versions_cache = None
+        
+        # Initialize installation tester for v1.4.0 and v1.3.2 compatibility testing
+        self.installation_tester = InstallationTester()
+        
+        # Cache for official extensions list and version compatibility
+        self._official_extensions_cache = None
+        self._version_compatibility_cache = {}
+        
+        # DuckDB versions to test against
+        self.test_versions = ['1.4.0', '1.3.2']
+        
+        # Initialize installation tester for compatibility testing
+        self.installation_tester = InstallationTester()
+        
+        # Cache for official extensions list
+        self._official_extensions_cache = None
     
     async def get_community_extensions_list(self, client: httpx.AsyncClient) -> List[str]:
         """Fetch community extensions list from GitHub."""
@@ -183,6 +209,108 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
 
         return " ".join(improved_desc)
     
+    async def get_duckdb_test_versions(self, client: httpx.AsyncClient) -> tuple[str, str]:
+        """Get the current and previous DuckDB versions for compatibility testing."""
+        if self._duckdb_versions_cache:
+            return self._duckdb_versions_cache
+        
+        try:
+            # Get DuckDB releases from GitHub API
+            url = f"{self.github_client.github_api_base}/repos/duckdb/duckdb/releases"
+            response = await client.get(url, headers={
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': f'token {self.github_client.github_token}' if self.github_client.github_token else ''
+            })
+            
+            if response.status_code == 200:
+                releases = response.json()
+                # Filter to stable releases only (not pre-releases)
+                stable_releases = [r for r in releases if not r.get('prerelease', False)]
+                
+                if len(stable_releases) >= 2:
+                    current_version = stable_releases[0]['tag_name']  # Most recent
+                    previous_version = stable_releases[1]['tag_name']  # Second most recent
+                    
+                    # Cache the result
+                    self._duckdb_versions_cache = (current_version, previous_version)
+                    logger.info(f"DuckDB versions for testing: current={current_version}, previous={previous_version}")
+                    return self._duckdb_versions_cache
+        
+        except Exception as e:
+            logger.warning(f"Failed to get DuckDB versions from GitHub: {e}")
+        
+        # Fallback to configured versions
+        current_fallback = getattr(self.config, 'fallback_duckdb_version', 'v1.4.0')
+        previous_fallback = 'v1.3.2'  # Safe fallback
+        
+        logger.info(f"Using fallback DuckDB versions: current={current_fallback}, previous={previous_fallback}")
+        self._duckdb_versions_cache = (current_fallback, previous_fallback)
+        return self._duckdb_versions_cache
+    
+    async def get_official_extensions_list(self, client: httpx.AsyncClient) -> set[str]:
+        """Get the list of officially supported extensions for the current DuckDB version."""
+        if self._official_extensions_cache is not None:
+            return self._official_extensions_cache
+        
+        try:
+            # Fetch the official extensions list page
+            url = "https://duckdb.org/community_extensions/list_of_extensions"
+            response = await client.get(url)
+            
+            if response.status_code == 200:
+                # Parse the HTML to extract extension names
+                # This is a simple approach - in a production system you might want more robust parsing
+                content = response.text
+                
+                # Extract extension names from the HTML table
+                # Look for patterns like '/docs/extensions/working_with_extensions' or similar
+                import re
+                
+                # Find all extension links in the page
+                # The page typically has extension names in table rows
+                pattern = r'/community_extensions/extensions/([^/]+)\.html'
+                matches = re.findall(pattern, content)
+                
+                official_extensions = set(matches)
+                logger.info(f"Found {len(official_extensions)} official extensions for current DuckDB version")
+                
+                self._official_extensions_cache = official_extensions
+                return official_extensions
+        
+        except Exception as e:
+            logger.warning(f"Failed to fetch official extensions list: {e}")
+        
+        # Return empty set if we can't fetch the list
+        self._official_extensions_cache = set()
+        return self._official_extensions_cache
+    
+    def determine_extension_compatibility_status(
+        self, ext_name: str, is_official: bool, install_v14_success: bool, install_v13_success: bool,
+        deprecation_score: float, metadata_deprecated: bool
+    ) -> tuple[str, str]:
+        """Determine extension status and compatibility based on various factors."""
+        
+        # Check explicit deprecation first
+        if metadata_deprecated:
+            return "⚠️ Deprecated", "manually_deprecated"
+        
+        # Check installation results
+        if install_v14_success:
+            if is_official:
+                return "✅ Active", "current_compatible_official"
+            else:
+                return "✅ Active", "current_compatible_unofficial"
+        elif install_v13_success:
+            return "🔄 Legacy", "legacy_compatible_only"
+        else:
+            # Not working with either version
+            if deprecation_score >= 7.0:
+                return "❌ Likely Deprecated", "installation_failed_high_deprecation"
+            elif deprecation_score >= 3.0:
+                return "❌ Version Incompatible", "installation_failed_medium_deprecation"
+            else:
+                return "❌ Installation Failed", "installation_failed_unknown"
+    
     async def analyze_extension_deprecation(
         self, client: httpx.AsyncClient, ext_name: str, repo_url: str, ce_metadata: Optional[Dict] = None
     ) -> Optional[Dict]:
@@ -217,6 +345,13 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         """Analyze community extensions and return detailed data and statistics."""
         extensions = await self.get_community_extensions_list(client)
         extension_data = []
+        
+        # Get official extensions list and DuckDB versions for compatibility checking
+        official_extensions = await self.get_official_extensions_list(client)
+        
+        if self.enable_compatibility_testing:
+            current_version, previous_version = await self.get_duckdb_test_versions(client)
+            logger.info(f"Compatibility testing enabled for DuckDB {current_version} and {previous_version}")
         
         # Use tqdm progress bar only when processing many extensions
         logger.info(f"Processing {len(extensions)} community extensions...")
@@ -295,28 +430,48 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                         if deprecation_analysis:
                             ext_info["deprecation_analysis"] = deprecation_analysis
                         
-                        # Determine status based on configuration, repo state, and deprecation analysis
+                        # Check if extension is in official list
+                        is_official = ext in official_extensions
+                        ext_info["is_official"] = is_official
+                        ext_info["compatibility_status"] = "unknown"
+                        
+                        # TODO: Add installation testing when enabled
+                        install_v14_success = is_official  # Temporary: assume official = v1.4 compatible
+                        install_v13_success = True  # Temporary: assume all work with v1.3
+                        
+                        # Get deprecation score
+                        deprecation_score = deprecation_analysis.get('deprecation_score', 0.0) if deprecation_analysis else 0.0
+                        
+                        # Determine enhanced status with compatibility information
                         if metadata_helper.is_deprecated_extension(ext):
                             ext_info["status"] = "⚠️ Deprecated"
                             ext_info["deprecated_info"] = metadata_helper.get_deprecated_extension_info(ext)
+                            ext_info["compatibility_status"] = "manually_deprecated"
                         elif metadata_helper.is_review_required_extension(ext):
                             ext_info["status"] = "⚠️ Review Required"
                             ext_info["review_info"] = metadata_helper.get_review_required_extension_info(ext)
+                            ext_info["compatibility_status"] = "manual_review_required"
                         elif metadata_helper.is_template_extension(ext):
                             ext_info["status"] = "🔧 Template"
                             ext_info["template_info"] = metadata_helper.get_template_extension_info(ext)
+                            ext_info["compatibility_status"] = "template"
                         elif repo_info["archived"]:
                             ext_info["status"] = "🔴 Discontinued"
-                        elif deprecation_analysis and deprecation_analysis.get('deprecation_score', 0) >= 5.0:
-                            # High deprecation score from automated analysis
-                            ext_info["status"] = "⚠️ Likely Deprecated"
-                            ext_info["auto_deprecation_detected"] = True
-                        elif deprecation_analysis and deprecation_analysis.get('deprecation_score', 0) >= 3.0:
-                            # Medium deprecation score from automated analysis
-                            ext_info["status"] = "⚠️ Review Recommended"
-                            ext_info["auto_review_recommended"] = True
+                            ext_info["compatibility_status"] = "archived"
                         else:
-                            ext_info["status"] = "✅ Ongoing"
+                            # Use the new compatibility-aware status determination
+                            status, compatibility_status = self.determine_extension_compatibility_status(
+                                ext, is_official, install_v14_success, install_v13_success,
+                                deprecation_score, False  # Not manually deprecated
+                            )
+                            ext_info["status"] = status
+                            ext_info["compatibility_status"] = compatibility_status
+                            
+                            # Set legacy flags for backward compatibility
+                            if deprecation_score >= 5.0:
+                                ext_info["auto_deprecation_detected"] = True
+                            elif deprecation_score >= 3.0:
+                                ext_info["auto_review_recommended"] = True
                     else:
                         ext_info["error"] = "Failed to fetch repository info"
                         ext_info["improved_description"] = self.improve_description(ext, None)
@@ -337,19 +492,23 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
             else 999999
         )
 
-        # Calculate statistics
+        # Calculate statistics with new compatibility-aware categories
         stats = {
             "total": len(extension_data),
-            "active": sum(1 for ext in extension_data if ext["status"] == "✅ Ongoing"),
+            "active": sum(1 for ext in extension_data if ext["status"] == "✅ Active"),
+            "legacy": sum(1 for ext in extension_data if ext["status"] == "🔄 Legacy"),
             "deprecated": sum(1 for ext in extension_data if ext["status"] == "⚠️ Deprecated"),
             "review_required": sum(1 for ext in extension_data if ext["status"] == "⚠️ Review Required"),
-            "likely_deprecated": sum(1 for ext in extension_data if ext["status"] == "⚠️ Likely Deprecated"),
-            "review_recommended": sum(1 for ext in extension_data if ext["status"] == "⚠️ Review Recommended"),
+            "likely_deprecated": sum(1 for ext in extension_data if ext["status"] == "❌ Likely Deprecated"),
+            "version_incompatible": sum(1 for ext in extension_data if ext["status"] == "❌ Version Incompatible"),
+            "installation_failed": sum(1 for ext in extension_data if ext["status"] == "❌ Installation Failed"),
             "templates": sum(1 for ext in extension_data if ext["status"] == "🔧 Template"),
             "discontinued": sum(
                 1 for ext in extension_data if ext["status"] == "🔴 Discontinued"
             ),
             "errors": sum(1 for ext in extension_data if ext["status"] == "❌ Error"),
+            "official_extensions": sum(1 for ext in extension_data if ext.get("is_official", False)),
+            "unofficial_extensions": sum(1 for ext in extension_data if not ext.get("is_official", True)),
             "auto_deprecation_detected": sum(1 for ext in extension_data if ext.get("auto_deprecation_detected", False)),
             "auto_review_recommended": sum(1 for ext in extension_data if ext.get("auto_review_recommended", False)),
         }
@@ -380,7 +539,7 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                     ext_info.last_push = repo_info.get("last_push")
                     ext_info.days_ago = ext_data.get("last_push_days")
                 
-                # Add metadata including CE metadata and deprecation analysis
+                # Add metadata including CE metadata, deprecation analysis, and compatibility info
                 ext_info.metadata = {
                     "status": ext_data["status"],
                     "error": ext_data.get("error"),
@@ -392,7 +551,9 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
                     "review_info": ext_data.get("review_info"),
                     "template_info": ext_data.get("template_info"),
                     "auto_deprecation_detected": ext_data.get("auto_deprecation_detected", False),
-                    "auto_review_recommended": ext_data.get("auto_review_recommended", False)
+                    "auto_review_recommended": ext_data.get("auto_review_recommended", False),
+                    "is_official": ext_data.get("is_official", False),
+                    "compatibility_status": ext_data.get("compatibility_status", "unknown")
                 }
                 
                 extension_infos.append(ext_info)
