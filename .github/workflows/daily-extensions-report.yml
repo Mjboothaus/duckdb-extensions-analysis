@@ -80,7 +80,7 @@ jobs:
           pip install markdown
           
           # Generate HTML using external script
-          python scripts/generate_html.py
+          python scripts/build_report_site.py
           
           # Copy CSV and Excel files for download
           cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
