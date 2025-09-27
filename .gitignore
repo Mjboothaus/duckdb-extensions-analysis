@@ -178,3 +178,7 @@ logs/
 # Cache stashes and backups
 .cache_stash_*
 .cache_backup_*
+
+# Blog symbolic links to external repositories (keep in git for reference)
+# These link to the actual blog posts in the zola-databooth repository
+# blog/*_LIVE.md
