@@ -104,3 +104,55 @@ a:hover {
     color: #6b7280;
     font-size: 0.9em;
 }
+
+/* Improve list formatting in Data Sources section */
+ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Better formatting for Data Sources section */
+.data-sources ul {
+    list-style-type: disc;
+    margin-left: 0;
+}
+
+.data-sources li {
+    margin-bottom: 0.3rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Break long URLs and links nicely */
+a {
+    word-break: break-all;
+}
+
+/* But don't break words in regular text */
+p, td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Improve table cell text wrapping */
+td {
+    max-width: 200px;
+    white-space: normal;
+}
+
+/* Make description column wider */
+th:last-child, td:last-child {
+    max-width: 300px;
+}
+
+/* Hide markdown headers that duplicate our template header */
+.content h1:first-child,
+.content h1:first-child + p,
+.content h1:first-child + p + p {
+    display: none;
+}

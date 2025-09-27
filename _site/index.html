@@ -114,34 +114,92 @@ a:hover {
     color: #6b7280;
     font-size: 0.9em;
 }
+
+/* Improve list formatting in Data Sources section */
+ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Better formatting for Data Sources section */
+.data-sources ul {
+    list-style-type: disc;
+    margin-left: 0;
+}
+
+.data-sources li {
+    margin-bottom: 0.3rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Break long URLs and links nicely */
+a {
+    word-break: break-all;
+}
+
+/* But don't break words in regular text */
+p, td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Improve table cell text wrapping */
+td {
+    max-width: 200px;
+    white-space: normal;
+}
+
+/* Make description column wider */
+th:last-child, td:last-child {
+    max-width: 300px;
+}
+
+/* Hide markdown headers that duplicate our template header */
+.content h1:first-child,
+.content h1:first-child + p,
+.content h1:first-child + p + p {
+    display: none;
+}
+
     </style>
 </head>
 <body>
     <div class="header-info">
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
-        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-26 06:09:37 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
-        <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a> | <a href="#url-validation-results">URL Validation</a></p>
+        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-27 00:20:01 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
+        <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
     </div>
     
-    <h1 id="duckdb-extensions-analysis">DuckDB Extensions Analysis</h1>
+    <div class="content data-sources">
+        <h1 id="duckdb-extensions-analysis">DuckDB Extensions Analysis</h1>
 <p>🦆 <strong>Automated monitoring and analysis of DuckDB's extension ecosystem</strong></p>
-<p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a> | <a href="#url-validation-results">URL Validation</a></p>
+<p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
 <hr />
 <p>This report provides a comprehensive analysis of DuckDB extensions, including both core extensions (built into DuckDB) and community-contributed extensions.</p>
 <h2 id="data-sources">Data Sources</h2>
 <p>This analysis is based on the following authoritative sources:</p>
-<p><strong>Core Extensions</strong>
-- <strong>Overview</strong>: <a href="https://duckdb.org/docs/stable/extensions/overview.html">DuckDB Extensions</a>
-- <strong>Core Extensions</strong>: <a href="https://duckdb.org/docs/stable/core_extensions/overview.html">Core Extensions Documentation</a>
-- <strong>Versioning</strong>: <a href="https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html">Extension Versioning</a>
-- <strong>Repository</strong>: <a href="https://github.com/duckdb/duckdb">duckdb/duckdb</a>
-- <strong>Releases</strong>: <a href="https://github.com/duckdb/duckdb/releases">GitHub Releases</a></p>
-<p><strong>Community Extensions</strong>
-- <strong>Registry</strong>: <a href="https://github.com/duckdb/community-extensions">Community Extensions Repository</a>
-- <strong>Directory</strong>: <a href="https://github.com/duckdb/community-extensions/tree/main/extensions">Extensions Folder</a>
-- <strong>Featured</strong>: <a href="https://community-extensions.duckdb.org/">Community Extensions Page</a>
-- <strong>Individual Repositories</strong>: GitHub repositories linked in the extensions directory</p>
+<p><strong>Core Extensions</strong></p>
+<ul>
+<li><strong>Overview</strong>: <a href="https://duckdb.org/docs/stable/extensions/overview.html">DuckDB Extensions</a></li>
+<li><strong>Core Extensions</strong>: <a href="https://duckdb.org/docs/stable/core_extensions/overview.html">Core Extensions Documentation</a></li>
+<li><strong>Versioning</strong>: <a href="https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html">Extension Versioning</a></li>
+<li><strong>Repository</strong>: <a href="https://github.com/duckdb/duckdb">duckdb/duckdb</a></li>
+<li><strong>Releases</strong>: <a href="https://github.com/duckdb/duckdb/releases">GitHub Releases</a></li>
+</ul>
+<p><strong>Community Extensions</strong></p>
+<ul>
+<li><strong>Registry</strong>: <a href="https://github.com/duckdb/community-extensions">Community Extensions Repository</a></li>
+<li><strong>Directory</strong>: <a href="https://github.com/duckdb/community-extensions/tree/main/extensions">Extensions Folder</a></li>
+<li><strong>Featured</strong>: <a href="https://community-extensions.duckdb.org/">Community Extensions Page</a></li>
+<li><strong>Individual Repositories</strong>: GitHub repositories linked in the extensions directory</li>
+</ul>
 <hr />
 <h2 id="summary">Summary</h2>
 <table>
@@ -162,7 +220,7 @@ a:hover {
 </tr>
 <tr>
 <td><strong>Featured Extensions</strong></td>
-<td>41</td>
+<td>42</td>
 </tr>
 <tr>
 <td><strong>Total Extensions</strong></td>
@@ -174,7 +232,7 @@ a:hover {
 </tr>
 <tr>
 <td><strong>Very Active</strong> (≤ 7 days)</td>
-<td>52</td>
+<td>48</td>
 </tr>
 </tbody>
 </table>
@@ -200,7 +258,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/autocomplete.html">autocomplete</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/autocomplete">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>9 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: autocomplete</td>
@@ -210,7 +268,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/avro.html">avro</a></td>
 <td><a href="https://github.com/duckdb/duckdb-avro">duckdb-avro</a></td>
 <td>🟢 Ongoing</td>
-<td>37 days ago</td>
+<td>38 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Apache Avro format support</td>
@@ -220,7 +278,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/aws.html">aws</a></td>
 <td><a href="https://github.com/duckdb/duckdb-aws">duckdb-aws</a></td>
 <td>🟢 Ongoing</td>
-<td>17 days ago</td>
+<td>18 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>AWS S3 integration</td>
@@ -230,7 +288,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/azure.html">azure</a></td>
 <td><a href="https://github.com/duckdb/duckdb-azure">duckdb-azure</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
+<td>today</td>
 <td>0</td>
 <td>C++</td>
 <td>Azure Blob Storage integration</td>
@@ -250,7 +308,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/ducklake.html">ducklake</a></td>
 <td><a href="https://github.com/duckdb/ducklake">duckdb/ducklake</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>11 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Delta Lake support via DuckLake (different from delta extension)</td>
@@ -260,7 +318,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/encodings.html">encodings</a></td>
 <td><a href="https://github.com/duckdb/duckdb-encodings">duckdb-encodings</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>9 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Character encoding support</td>
@@ -270,7 +328,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/excel.html">excel</a></td>
 <td><a href="https://github.com/duckdb/duckdb-excel">duckdb-excel</a></td>
 <td>🟢 Ongoing</td>
-<td>22 days ago</td>
+<td>23 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Excel file format support</td>
@@ -280,7 +338,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/full_text_search.html">fts</a></td>
 <td><a href="https://github.com/duckdb/duckdb-fts">duckdb-fts</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>10 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Full-text search functionality</td>
@@ -300,7 +358,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/iceberg/overview.html">iceberg</a></td>
 <td><a href="https://github.com/duckdb/duckdb-iceberg">duckdb-iceberg</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
+<td>2 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Apache Iceberg format support</td>
@@ -310,7 +368,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/icu.html">icu</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/icu">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>10 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: icu</td>
@@ -320,7 +378,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/inet.html">inet</a></td>
 <td><a href="https://github.com/duckdb/duckdb-inet">duckdb-inet</a></td>
 <td>🟢 Ongoing</td>
-<td>6 days ago</td>
+<td>7 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Internet address data types</td>
@@ -330,7 +388,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/jemalloc.html">jemalloc</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/jemalloc">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>110 days ago</td>
+<td>111 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: jemalloc</td>
@@ -340,7 +398,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/data/json/overview.html">json</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/json">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>16 days ago</td>
+<td>17 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: json</td>
@@ -350,7 +408,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/mysql.html">mysql</a></td>
 <td><a href="https://github.com/duckdb/duckdb-mysql">duckdb-mysql</a></td>
 <td>🟢 Ongoing</td>
-<td>18 days ago</td>
+<td>today</td>
 <td>0</td>
 <td>C++</td>
 <td>MySQL database connectivity</td>
@@ -360,7 +418,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/data/parquet/overview.html">parquet</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/parquet">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
+<td>3 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: parquet</td>
@@ -370,7 +428,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/postgres.html">postgres</a></td>
 <td><a href="https://github.com/duckdb/duckdb-postgres">duckdb-postgres</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>10 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>PostgreSQL database connectivity</td>
@@ -380,7 +438,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/spatial/overview.html">spatial</a></td>
 <td><a href="https://github.com/duckdb/duckdb-spatial">duckdb-spatial</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
+<td>2 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Geospatial data types and functions</td>
@@ -390,7 +448,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/sqlite.html">sqlite</a></td>
 <td><a href="https://github.com/duckdb/duckdb-sqlite">duckdb-sqlite</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>10 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>SQLite database connectivity</td>
@@ -400,7 +458,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/tpcds.html">tpcds</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/tpcds">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>51 days ago</td>
+<td>52 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: tpcds</td>
@@ -410,7 +468,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/tpch.html">tpch</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/tpch">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>51 days ago</td>
+<td>52 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Core DuckDB extension: tpch</td>
@@ -430,7 +488,7 @@ a:hover {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/vss.html">vss</a></td>
 <td><a href="https://github.com/duckdb/duckdb-vss">duckdb-vss</a></td>
 <td>🟢 Ongoing</td>
-<td>20 days ago</td>
+<td>21 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Vector similarity search</td>
@@ -458,18 +516,62 @@ a:hover {
 <tbody>
 <tr>
 <td>1</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#datasketches">datasketches</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/airport.html">airport</a></td>
+<td><a href="https://github.com/Query-farm/airport">airport</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>299</td>
+<td>C++</td>
+<td>The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/bitfilters.html">bitfilters</a></td>
+<td><a href="https://github.com/Query-farm/bitfilters">bitfilters</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>2</td>
+<td>C++</td>
+<td>A high-performance DuckDB extension providing probabilistic data structures f...</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/crypto.html">crypto</a></td>
+<td><a href="https://github.com/Query-farm/crypto">crypto</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>22</td>
+<td>C++</td>
+<td>DuckDB Extension for cryptographic hash functions and HMAC</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/datasketches.html">datasketches</a></td>
 <td><a href="https://github.com/Query-farm/datasketches">datasketches</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
-<td>27</td>
+<td>30</td>
 <td>C++</td>
 <td>Integrates DuckDB with the high-performance Apache DataSketches library. This...</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>2</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#fuzzycomplete">fuzzycomplete</a></td>
+<td>5</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/evalexpr_rhai.html">evalexpr_rhai</a></td>
+<td><a href="https://github.com/Query-farm/evalexpr_rhai">evalexpr_rhai</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>21</td>
+<td>C++</td>
+<td>A DuckDB extension to evaluate the Rhai scripting language as part of SQL.</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/fuzzycomplete.html">fuzzycomplete</a></td>
 <td><a href="https://github.com/Query-farm/fuzzycomplete">fuzzycomplete</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -479,8 +581,8 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>3</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#h3">h3</a></td>
+<td>7</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/h3.html">h3</a></td>
 <td><a href="https://github.com/isaacbrodsky/h3-duckdb">h3-duckdb</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -490,8 +592,8 @@ a:hover {
 <td></td>
 </tr>
 <tr>
-<td>4</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#hashfuncs">hashfuncs</a></td>
+<td>8</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/hashfuncs.html">hashfuncs</a></td>
 <td><a href="https://github.com/Query-farm/hashfuncs">hashfuncs</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -501,8 +603,8 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>5</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#lindel">lindel</a></td>
+<td>9</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/lindel.html">lindel</a></td>
 <td><a href="https://github.com/Query-farm/lindel">lindel</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -512,8 +614,8 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>6</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#marisa">marisa</a></td>
+<td>10</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/marisa.html">marisa</a></td>
 <td><a href="https://github.com/Query-farm/marisa">marisa</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -523,8 +625,8 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>7</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#pbix">pbix</a></td>
+<td>11</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pbix.html">pbix</a></td>
 <td><a href="https://github.com/Hugoberry/duckdb-pbix-extension">duckdb-pbix-extension</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -534,107 +636,8 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>8</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#stochastic">stochastic</a></td>
-<td><a href="https://github.com/Query-farm/stochastic">stochastic</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>11</td>
-<td>C++</td>
-<td>A DuckDB extension that add comprehensive statistical distribution functions...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>9</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#textplot">textplot</a></td>
-<td><a href="https://github.com/Query-farm/textplot">textplot</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>10</td>
-<td>C++</td>
-<td>A DuckDB community extension that enables text-based data visualization direc...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>10</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#tributary">tributary</a></td>
-<td><a href="https://github.com/Query-farm/tributary">tributary</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>30</td>
-<td>C++</td>
-<td>A DuckDB Extension for Kafka</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>11</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#vortex">vortex</a></td>
-<td><a href="https://github.com/vortex-data/duckdb-vortex">duckdb-vortex</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>24</td>
-<td>Shell</td>
-<td>DuckDB extension allowing reading/writing of vortex files</td>
-<td></td>
-</tr>
-<tr>
 <td>12</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#httpserver">httpserver</a></td>
-<td><a href="https://github.com/Query-farm/httpserver">httpserver</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>231</td>
-<td>HTML</td>
-<td>DuckDB HTTP API Server and Query Interface in a  Community Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>13</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#msolap">msolap</a></td>
-<td><a href="https://github.com/Hugoberry/duckdb-msolap-extension">duckdb-msolap-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>8</td>
-<td>C++</td>
-<td>DuckDB extension: msolap by Hugoberry</td>
-<td></td>
-</tr>
-<tr>
-<td>14</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#nanodbc">nanodbc</a></td>
-<td><a href="https://github.com/Hugoberry/duckdb-nanodbc-extension">duckdb-nanodbc-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>37</td>
-<td>C++</td>
-<td>Database connectivity extension by Hugoberry</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>15</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#netquack">netquack</a></td>
-<td><a href="https://github.com/hatamiarash7/duckdb-netquack">duckdb-netquack</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>17</td>
-<td>C++</td>
-<td>DuckDB extension for parsing, extracting, and analyzing domains, URIs, and pa...</td>
-<td></td>
-</tr>
-<tr>
-<td>16</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#parser_tools">parser_tools</a></td>
-<td><a href="https://github.com/zfarrell/duckdb_extension_parser_tools">duckdb_extension_parser_tools</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>15</td>
-<td>C++</td>
-<td>Parse sql - with sql!</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>17</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#radio">radio</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/radio.html">radio</a></td>
 <td><a href="https://github.com/Query-farm/radio">radio</a></td>
 <td>🟢 Ongoing</td>
 <td>today</td>
@@ -644,187 +647,242 @@ a:hover {
 <td>⭐</td>
 </tr>
 <tr>
-<td>18</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#splink_udfs">splink_udfs</a></td>
-<td><a href="https://github.com/moj-analytical-services/splink_udfs">splink_udfs</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>9</td>
-<td>C++</td>
-<td>DuckDB extension: splink_udfs by moj-analytical-services</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>19</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#airport">airport</a></td>
-<td><a href="https://github.com/Query-farm/airport">airport</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>299</td>
-<td>C++</td>
-<td>The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>20</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#bitfilters">bitfilters</a></td>
-<td><a href="https://github.com/Query-farm/bitfilters">bitfilters</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>2</td>
-<td>C++</td>
-<td>A high-performance DuckDB extension providing probabilistic data structures f...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>21</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#cache_httpfs">cache_httpfs</a></td>
-<td><a href="https://github.com/dentiny/duck-read-cache-fs">duck-read-cache-fs</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>97</td>
-<td>C++</td>
-<td>This repository is made as read-only filesystem for remote access.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>22</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#chsql">chsql</a></td>
-<td><a href="https://github.com/Query-farm/clickhouse-sql">clickhouse-sql</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>72</td>
-<td>C++</td>
-<td>DuckDB Community Extension implementing ClickHouse SQL Dialect macros and Cus...</td>
-<td></td>
-</tr>
-<tr>
-<td>23</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#chsql_native">chsql_native</a></td>
-<td><a href="https://github.com/Query-farm/clickhouse-native">clickhouse-native</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>16</td>
-<td>Rust</td>
-<td>Experimental ClickHouse Native Client and Native file reader Extension for Du...</td>
-<td></td>
-</tr>
-<tr>
-<td>24</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#cronjob">cronjob</a></td>
-<td><a href="https://github.com/Query-farm/cronjob">cronjob</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>41</td>
-<td>C++</td>
-<td>DuckDB CronJob Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>25</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#crypto">crypto</a></td>
-<td><a href="https://github.com/Query-farm/crypto">crypto</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>22</td>
-<td>C++</td>
-<td>DuckDB Extension for cryptographic hash functions and HMAC</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>26</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#evalexpr_rhai">evalexpr_rhai</a></td>
-<td><a href="https://github.com/Query-farm/evalexpr_rhai">evalexpr_rhai</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>21</td>
-<td>C++</td>
-<td>A DuckDB extension to evaluate the Rhai scripting language as part of SQL.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>27</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#http_client">http_client</a></td>
-<td><a href="https://github.com/Query-farm/httpclient">httpclient</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>71</td>
-<td>C++</td>
-<td>DuckDB HTTP GET/POST Client in a Community Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>28</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#observefs">observefs</a></td>
-<td><a href="https://github.com/dentiny/duckdb-filesystem-observability">duckdb-filesystem-observability</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>1</td>
-<td>C++</td>
-<td>Provides observability for duckdb filesystem.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>29</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#open_prompt">open_prompt</a></td>
-<td><a href="https://github.com/Query-farm/openprompt">openprompt</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>50</td>
-<td>C++</td>
-<td>DuckDB Community Extension to prompt LLMs from SQL</td>
-<td></td>
-</tr>
-<tr>
-<td>30</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#pcap_reader">pcap_reader</a></td>
-<td><a href="https://github.com/Query-farm/pcap">pcap</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>11</td>
-<td>Rust</td>
-<td>DuckDB PCAP Reader Extension made in Rust</td>
-<td></td>
-</tr>
-<tr>
-<td>31</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#pyroscope">pyroscope</a></td>
-<td><a href="https://github.com/Query-farm/pyroscope">pyroscope</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>19</td>
-<td>Rust</td>
-<td>DuckDB Pyroscope Extension for Continuous Profiling</td>
-<td></td>
-</tr>
-<tr>
-<td>32</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#quickjs">quickjs</a></td>
-<td><a href="https://github.com/Query-farm/quickjs">quickjs</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>8</td>
-<td>C++</td>
-<td>DuckDB extension: quickjs by quackscience</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>33</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz">rapidfuzz</a></td>
+<td>13</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/rapidfuzz.html">rapidfuzz</a></td>
 <td><a href="https://github.com/Query-farm/rapidfuzz">rapidfuzz</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
+<td>today</td>
 <td>3</td>
 <td>C++</td>
 <td>DuckDB Community Extension adding RapidFuzz algorithms for search, deduplicat...</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>34</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#redis">redis</a></td>
-<td><a href="https://github.com/Query-farm/redis">redis</a></td>
+<td>14</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/shellfs.html">shellfs</a></td>
+<td><a href="https://github.com/Query-farm/shellfs">shellfs</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>81</td>
+<td>C++</td>
+<td>DuckDB extension allowing shell commands to be used for input and output.</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/snowflake.html">snowflake</a></td>
+<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>12</td>
+<td>C++</td>
+<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/stochastic.html">stochastic</a></td>
+<td><a href="https://github.com/Query-farm/stochastic">stochastic</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>11</td>
+<td>C++</td>
+<td>A DuckDB extension that add comprehensive statistical distribution functions...</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/textplot.html">textplot</a></td>
+<td><a href="https://github.com/Query-farm/textplot">textplot</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>10</td>
+<td>C++</td>
+<td>A DuckDB community extension that enables text-based data visualization direc...</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/tributary.html">tributary</a></td>
+<td><a href="https://github.com/Query-farm/tributary">tributary</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>30</td>
+<td>C++</td>
+<td>A DuckDB Extension for Kafka</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/vortex.html">vortex</a></td>
+<td><a href="https://github.com/vortex-data/duckdb-vortex">duckdb-vortex</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>24</td>
+<td>Shell</td>
+<td>DuckDB extension allowing reading/writing of vortex files</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>20</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/quack.html">quack</a></td>
+<td><a href="https://github.com/duckdb/extension-template">extension-template</a></td>
+<td>🟢 Ongoing</td>
+<td>today</td>
+<td>222</td>
+<td>Python</td>
+<td>Template for DuckDB extensions to help you develop, test and deploy a custom...</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>21</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/httpserver.html">httpserver</a></td>
+<td><a href="https://github.com/Query-farm/httpserver">httpserver</a></td>
 <td>🟢 Ongoing</td>
 <td>2 days ago</td>
+<td>231</td>
+<td>HTML</td>
+<td>DuckDB HTTP API Server and Query Interface in a  Community Extension</td>
+<td></td>
+</tr>
+<tr>
+<td>22</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/msolap.html">msolap</a></td>
+<td><a href="https://github.com/Hugoberry/duckdb-msolap-extension">duckdb-msolap-extension</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago</td>
+<td>8</td>
+<td>C++</td>
+<td>DuckDB extension: msolap by Hugoberry</td>
+<td></td>
+</tr>
+<tr>
+<td>23</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/nanodbc.html">nanodbc</a></td>
+<td><a href="https://github.com/Hugoberry/duckdb-nanodbc-extension">duckdb-nanodbc-extension</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago</td>
+<td>37</td>
+<td>C++</td>
+<td>Database connectivity extension by Hugoberry</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>24</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/parser_tools.html">parser_tools</a></td>
+<td><a href="https://github.com/zfarrell/duckdb_extension_parser_tools">duckdb_extension_parser_tools</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago</td>
+<td>15</td>
+<td>C++</td>
+<td>Parse sql - with sql!</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>25</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chsql.html">chsql</a></td>
+<td><a href="https://github.com/Query-farm/clickhouse-sql">clickhouse-sql</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>73</td>
+<td>C++</td>
+<td>DuckDB Community Extension implementing ClickHouse SQL Dialect macros and Cus...</td>
+<td></td>
+</tr>
+<tr>
+<td>26</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chsql_native.html">chsql_native</a></td>
+<td><a href="https://github.com/Query-farm/clickhouse-native">clickhouse-native</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>16</td>
+<td>Rust</td>
+<td>Experimental ClickHouse Native Client and Native file reader Extension for Du...</td>
+<td></td>
+</tr>
+<tr>
+<td>27</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cronjob.html">cronjob</a></td>
+<td><a href="https://github.com/Query-farm/cronjob">cronjob</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>41</td>
+<td>C++</td>
+<td>DuckDB CronJob Extension</td>
+<td></td>
+</tr>
+<tr>
+<td>28</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/http_client.html">http_client</a></td>
+<td><a href="https://github.com/Query-farm/httpclient">httpclient</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>71</td>
+<td>C++</td>
+<td>DuckDB HTTP GET/POST Client in a Community Extension</td>
+<td></td>
+</tr>
+<tr>
+<td>29</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/netquack.html">netquack</a></td>
+<td><a href="https://github.com/hatamiarash7/duckdb-netquack">duckdb-netquack</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>17</td>
+<td>C++</td>
+<td>DuckDB extension for parsing, extracting, and analyzing domains, URIs, and pa...</td>
+<td></td>
+</tr>
+<tr>
+<td>30</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/open_prompt.html">open_prompt</a></td>
+<td><a href="https://github.com/Query-farm/openprompt">openprompt</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>50</td>
+<td>C++</td>
+<td>DuckDB Community Extension to prompt LLMs from SQL</td>
+<td></td>
+</tr>
+<tr>
+<td>31</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pcap_reader.html">pcap_reader</a></td>
+<td><a href="https://github.com/Query-farm/pcap">pcap</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>11</td>
+<td>Rust</td>
+<td>DuckDB PCAP Reader Extension made in Rust</td>
+<td></td>
+</tr>
+<tr>
+<td>32</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pyroscope.html">pyroscope</a></td>
+<td><a href="https://github.com/Query-farm/pyroscope">pyroscope</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>19</td>
+<td>Rust</td>
+<td>DuckDB Pyroscope Extension for Continuous Profiling</td>
+<td></td>
+</tr>
+<tr>
+<td>33</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/quickjs.html">quickjs</a></td>
+<td><a href="https://github.com/Query-farm/quickjs">quickjs</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>8</td>
+<td>C++</td>
+<td>DuckDB extension: quickjs by quackscience</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>34</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/redis.html">redis</a></td>
+<td><a href="https://github.com/Query-farm/redis">redis</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
 <td>7</td>
 <td>C++</td>
 <td>DuckDB Redis Client community extension</td>
@@ -832,21 +890,21 @@ a:hover {
 </tr>
 <tr>
 <td>35</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#shellfs">shellfs</a></td>
-<td><a href="https://github.com/Query-farm/shellfs">shellfs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/splink_udfs.html">splink_udfs</a></td>
+<td><a href="https://github.com/moj-analytical-services/splink_udfs">splink_udfs</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>81</td>
+<td>3 days ago</td>
+<td>9</td>
 <td>C++</td>
-<td>DuckDB extension allowing shell commands to be used for input and output.</td>
+<td>DuckDB extension: splink_udfs by moj-analytical-services</td>
 <td>⭐</td>
 </tr>
 <tr>
 <td>36</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#tsid">tsid</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/tsid.html">tsid</a></td>
 <td><a href="https://github.com/Query-farm/tsid">tsid</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
+<td>3 days ago</td>
 <td>5</td>
 <td>C++</td>
 <td>TSID Extension for DuckDB</td>
@@ -854,10 +912,10 @@ a:hover {
 </tr>
 <tr>
 <td>37</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#webmacro">webmacro</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/webmacro.html">webmacro</a></td>
 <td><a href="https://github.com/Query-farm/webmacro">webmacro</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
+<td>3 days ago</td>
 <td>13</td>
 <td>C++</td>
 <td>DuckDB WebMacro: Share and Load your SQL Macros via gists</td>
@@ -865,10 +923,10 @@ a:hover {
 </tr>
 <tr>
 <td>38</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#wireduck">wireduck</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/wireduck.html">wireduck</a></td>
 <td><a href="https://github.com/hyehudai/wireduck">wireduck</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
+<td>3 days ago</td>
 <td>46</td>
 <td>C++</td>
 <td>Duckdb extension to read pcap files</td>
@@ -876,65 +934,65 @@ a:hover {
 </tr>
 <tr>
 <td>39</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#magic">magic</a></td>
-<td><a href="https://github.com/carlopi/duckdb_magic">duckdb_magic</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cache_httpfs.html">cache_httpfs</a></td>
+<td><a href="https://github.com/dentiny/duck-read-cache-fs">duck-read-cache-fs</a></td>
 <td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>7</td>
+<td>4 days ago</td>
+<td>98</td>
 <td>C++</td>
-<td>Auto-detect file types via <code>libmagic</code> (<code>file</code> utility)</td>
+<td>This repository is made as read-only filesystem for remote access.</td>
 <td>⭐</td>
 </tr>
 <tr>
 <td>40</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#prql">prql</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/observefs.html">observefs</a></td>
+<td><a href="https://github.com/dentiny/duckdb-filesystem-observability">duckdb-filesystem-observability</a></td>
+<td>🟢 Ongoing</td>
+<td>4 days ago</td>
+<td>1</td>
+<td>C++</td>
+<td>Provides observability for duckdb filesystem.</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>41</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/prql.html">prql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-prql">duckdb-prql</a></td>
 <td>🟢 Ongoing</td>
-<td>3 days ago</td>
+<td>4 days ago</td>
 <td>297</td>
 <td>C++</td>
 <td>PRQL as a DuckDB extension</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>41</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#psql">psql</a></td>
+<td>42</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/psql.html">psql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-psql">duckdb-psql</a></td>
 <td>🟢 Ongoing</td>
-<td>3 days ago</td>
+<td>4 days ago</td>
 <td>92</td>
 <td>C++</td>
 <td>A piped SQL for DuckDB</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>42</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#snowflake">snowflake</a></td>
-<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>12</td>
-<td>C++</td>
-<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
-<td>⭐</td>
-</tr>
-<tr>
 <td>43</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#bigquery">bigquery</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/bigquery.html">bigquery</a></td>
 <td><a href="https://github.com/hafenkran/duckdb-bigquery">duckdb-bigquery</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
-<td>131</td>
+<td>5 days ago</td>
+<td>132</td>
 <td>C++</td>
 <td>Integrates DuckDB with Google BigQuery, allowing direct querying and manageme...</td>
 <td>⭐</td>
 </tr>
 <tr>
 <td>44</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck">cwiqduck</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cwiqduck.html">cwiqduck</a></td>
 <td><a href="https://github.com/cwiq-os/cwiqduck">cwiqduck</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
+<td>5 days ago</td>
 <td>1</td>
 <td>C++</td>
 <td>DuckDB extensions for CWIQ</td>
@@ -942,54 +1000,54 @@ a:hover {
 </tr>
 <tr>
 <td>45</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#zipfs">zipfs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/magic.html">magic</a></td>
+<td><a href="https://github.com/carlopi/duckdb_magic">duckdb_magic</a></td>
+<td>🟢 Ongoing</td>
+<td>5 days ago</td>
+<td>7</td>
+<td>C++</td>
+<td>Auto-detect file types via <code>libmagic</code> (<code>file</code> utility)</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>46</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/zipfs.html">zipfs</a></td>
 <td><a href="https://github.com/isaacbrodsky/duckdb-zipfs">duckdb-zipfs</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
+<td>5 days ago</td>
 <td>41</td>
 <td>C++</td>
 <td>DuckDB extension to read files within zip archives.</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>46</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#chaos">chaos</a></td>
+<td>47</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chaos.html">chaos</a></td>
 <td><a href="https://github.com/taniabogatsch/duckdb-chaos">duckdb-chaos</a></td>
 <td>🟢 Ongoing</td>
-<td>6 days ago</td>
+<td>7 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>DuckDB extension: chaos by taniabogatsch</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>47</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#flock">flock</a></td>
+<td>48</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/flock.html">flock</a></td>
 <td><a href="https://github.com/dais-polymtl/flock">flock</a></td>
 <td>🟢 Ongoing</td>
-<td>6 days ago</td>
+<td>7 days ago</td>
 <td>269</td>
 <td>C++</td>
-<td>FlockMTL: DuckDB extension for multimodal querying using language models (LMs...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>48</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#file_dialog">file_dialog</a></td>
-<td><a href="https://github.com/yutannihilation/duckdb-ext-file-dialog">duckdb-ext-file-dialog</a></td>
-<td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>14</td>
-<td>Rust</td>
-<td>A DuckDB extension to choose file interactively using native file open dialogs</td>
+<td>Flock: multimodal querying for DuckDB</td>
 <td>⭐</td>
 </tr>
 <tr>
 <td>49</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#gcs">gcs</a></td>
+<td>~~<a href="https://duckdb.org/community_extensions/extensions/gcs.html">gcs</a>~~ <strong>NOT FOUND:</strong> https://duckdb.org/community_extensions/extensions/gcs.html (HTTP 404)</td>
 <td><a href="https://github.com/northpolesec/duckdb-gcs">duckdb-gcs</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
+<td>8 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>A GCS-native extension for DuckDB</td>
@@ -997,10 +1055,10 @@ a:hover {
 </tr>
 <tr>
 <td>50</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#mooncake">mooncake</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/mooncake.html">mooncake</a></td>
 <td><a href="https://github.com/Mooncake-Labs/duckdb_mooncake">duckdb_mooncake</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
+<td>8 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Read Iceberg tables written by moonlink in real time</td>
@@ -1008,65 +1066,65 @@ a:hover {
 </tr>
 <tr>
 <td>51</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#rusty_quack">rusty_quack</a></td>
-<td><a href="https://github.com/duckdb/extension-template-rs">extension-template-rs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/file_dialog.html">file_dialog</a></td>
+<td><a href="https://github.com/yutannihilation/duckdb-ext-file-dialog">duckdb-ext-file-dialog</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>80</td>
+<td>9 days ago</td>
+<td>14</td>
 <td>Rust</td>
-<td>(Experimental) Template for Rust-based DuckDB extensions</td>
-<td></td>
-</tr>
-<tr>
-<td>52</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#st_read_multi">st_read_multi</a></td>
-<td><a href="https://github.com/yutannihilation/duckdb-ext-st-read-multi">duckdb-ext-st-read-multi</a></td>
-<td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>3</td>
-<td>Rust</td>
-<td>A DuckDB extension to import multiple geospatial files with <code>ST_Read_Multi()</code></td>
+<td>A DuckDB extension to choose file interactively using native file open dialogs</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>53</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#nanoarrow">nanoarrow</a></td>
+<td>52</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/nanoarrow.html">nanoarrow</a></td>
 <td><a href="https://github.com/paleolimbot/duckdb-nanoarrow">duckdb-nanoarrow</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>9 days ago</td>
 <td>46</td>
 <td>C++</td>
 <td>DuckDB extension: nanoarrow by paleolimbot</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>54</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#lua">lua</a></td>
-<td><a href="https://github.com/isaacbrodsky/duckdb-lua">duckdb-lua</a></td>
+<td>53</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/rusty_quack.html">rusty_quack</a></td>
+<td><a href="https://github.com/duckdb/extension-template-rs">extension-template-rs</a></td>
 <td>🟢 Ongoing</td>
 <td>9 days ago</td>
+<td>80</td>
+<td>Rust</td>
+<td>(Experimental) Template for Rust-based DuckDB extensions</td>
+<td></td>
+</tr>
+<tr>
+<td>54</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/st_read_multi.html">st_read_multi</a></td>
+<td><a href="https://github.com/yutannihilation/duckdb-ext-st-read-multi">duckdb-ext-st-read-multi</a></td>
+<td>🟢 Ongoing</td>
+<td>9 days ago</td>
+<td>3</td>
+<td>Rust</td>
+<td>A DuckDB extension to import multiple geospatial files with <code>ST_Read_Multi()</code></td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>55</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/lua.html">lua</a></td>
+<td><a href="https://github.com/isaacbrodsky/duckdb-lua">duckdb-lua</a></td>
+<td>🟢 Ongoing</td>
+<td>10 days ago</td>
 <td>5</td>
 <td>C++</td>
 <td>DuckDB extension to evaluate Lua expressions.</td>
 <td>⭐</td>
 </tr>
 <tr>
-<td>55</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#quack">quack</a></td>
-<td><a href="https://github.com/duckdb/extension-template">extension-template</a></td>
-<td>🟢 Ongoing</td>
-<td>9 days ago</td>
-<td>222</td>
-<td>Python</td>
-<td>Template for DuckDB extensions to help you develop, test and deploy a custom...</td>
-<td>⭐</td>
-</tr>
-<tr>
 <td>56</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#yaml">yaml</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/yaml.html">yaml</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_yaml">duckdb_yaml</a></td>
 <td>🟢 Ongoing</td>
-<td>14 days ago</td>
+<td>15 days ago</td>
 <td>9</td>
 <td>C++</td>
 <td>A DuckDB to read and work with YAML files in a similar way to JSON files (al...</td>
@@ -1074,10 +1132,10 @@ a:hover {
 </tr>
 <tr>
 <td>57</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#eeagrid">eeagrid</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/eeagrid.html">eeagrid</a></td>
 <td><a href="https://github.com/ahuarte47/duckdb-eeagrid">duckdb-eeagrid</a></td>
 <td>🟢 Ongoing</td>
-<td>15 days ago</td>
+<td>16 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Functions for transforming XY coordinates to and from the EEA Reference Grid...</td>
@@ -1085,10 +1143,10 @@ a:hover {
 </tr>
 <tr>
 <td>58</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#gsheets">gsheets</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/gsheets.html">gsheets</a></td>
 <td><a href="https://github.com/evidence-dev/duckdb_gsheets">duckdb_gsheets</a></td>
 <td>🟢 Ongoing</td>
-<td>16 days ago</td>
+<td>17 days ago</td>
 <td>298</td>
 <td>C++</td>
 <td>DuckDB extension to read and write Google Sheets using SQL</td>
@@ -1096,10 +1154,10 @@ a:hover {
 </tr>
 <tr>
 <td>59</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#faiss">faiss</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/faiss.html">faiss</a></td>
 <td><a href="https://github.com/duckdb-faiss-ext/duckdb-faiss-ext">duckdb-faiss-ext</a></td>
 <td>🟢 Ongoing</td>
-<td>17 days ago</td>
+<td>18 days ago</td>
 <td>25</td>
 <td>Go</td>
 <td>DuckDB wrapper for FAISS - Experimental</td>
@@ -1107,10 +1165,10 @@ a:hover {
 </tr>
 <tr>
 <td>60</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#geography">geography</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/geography.html">geography</a></td>
 <td><a href="https://github.com/paleolimbot/duckdb-geography">duckdb-geography</a></td>
 <td>🟢 Ongoing</td>
-<td>37 days ago</td>
+<td>38 days ago</td>
 <td>32</td>
 <td>C++</td>
 <td>Geospatial data extension by paleolimbot</td>
@@ -1118,10 +1176,10 @@ a:hover {
 </tr>
 <tr>
 <td>61</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#geotiff">geotiff</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/geotiff.html">geotiff</a></td>
 <td><a href="https://github.com/babaknaimi/duckdb-geotiff">duckdb-geotiff</a></td>
 <td>🟢 Ongoing</td>
-<td>37 days ago</td>
+<td>38 days ago</td>
 <td>2</td>
 <td>C++</td>
 <td>Duckdb extension to read GeoTiffs directly with duckdb database</td>
@@ -1129,10 +1187,10 @@ a:hover {
 </tr>
 <tr>
 <td>62</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#highs">highs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/highs.html">highs</a></td>
 <td><a href="https://github.com/fhk/HiGHS-duckdb">HiGHS-duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>40 days ago</td>
+<td>42 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>Run the solver in the database!</td>
@@ -1140,10 +1198,10 @@ a:hover {
 </tr>
 <tr>
 <td>63</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet">rusty_sheet</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/rusty_sheet.html">rusty_sheet</a></td>
 <td><a href="https://github.com/redraiment/rusty-sheet">rusty-sheet</a></td>
 <td>🟢 Ongoing</td>
-<td>42 days ago</td>
+<td>43 days ago</td>
 <td>17</td>
 <td>Rust</td>
 <td>An Excel/OpenDocument Spreadsheets file reader for DuckDB</td>
@@ -1151,21 +1209,21 @@ a:hover {
 </tr>
 <tr>
 <td>64</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#webbed">webbed</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/webbed.html">webbed</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_webbed">duckdb_webbed</a></td>
 <td>🟢 Ongoing</td>
-<td>44 days ago</td>
-<td>14</td>
+<td>45 days ago</td>
+<td>15</td>
 <td>C++</td>
 <td>Web/HTTP functionality extension by teaguesterling</td>
 <td></td>
 </tr>
 <tr>
 <td>65</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#read_stat">read_stat</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/read_stat.html">read_stat</a></td>
 <td><a href="https://github.com/mettekou/duckdb-read-stat">duckdb-read-stat</a></td>
 <td>🟢 Ongoing</td>
-<td>45 days ago</td>
+<td>47 days ago</td>
 <td>22</td>
 <td>C</td>
 <td>Read data sets from SAS, Stata, and SPSS from DuckDB with ReadStat</td>
@@ -1173,10 +1231,10 @@ a:hover {
 </tr>
 <tr>
 <td>66</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#hdf5">hdf5</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/hdf5.html">hdf5</a></td>
 <td><a href="https://github.com/Berrysoft/duckdb-hdf5">duckdb-hdf5</a></td>
 <td>🟢 Ongoing</td>
-<td>49 days ago</td>
+<td>51 days ago</td>
 <td>9</td>
 <td>Rust</td>
 <td>HDF5 plugin for duckdb</td>
@@ -1184,10 +1242,10 @@ a:hover {
 </tr>
 <tr>
 <td>67</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#duckdb_mcp">duckdb_mcp</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/duckdb_mcp.html">duckdb_mcp</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_mcp">duckdb_mcp</a></td>
 <td>🟢 Ongoing</td>
-<td>61 days ago</td>
+<td>62 days ago</td>
 <td>6</td>
 <td>C++</td>
 <td>A simple MCP server extension for DuckDB</td>
@@ -1195,10 +1253,10 @@ a:hover {
 </tr>
 <tr>
 <td>68</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#duckpgq">duckpgq</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/duckpgq.html">duckpgq</a></td>
 <td><a href="https://github.com/cwida/duckpgq-extension">duckpgq-extension</a></td>
 <td>🟢 Ongoing</td>
-<td>65 days ago</td>
+<td>67 days ago</td>
 <td>264</td>
 <td>C++</td>
 <td>DuckDB extension that adds support for SQL/PGQ and graph algorithms</td>
@@ -1206,10 +1264,10 @@ a:hover {
 </tr>
 <tr>
 <td>69</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#duck_tails">duck_tails</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/duck_tails.html">duck_tails</a></td>
 <td><a href="https://github.com/teaguesterling/duck_tails">duck_tails</a></td>
 <td>🟢 Ongoing</td>
-<td>68 days ago</td>
+<td>69 days ago</td>
 <td>2</td>
 <td>C++</td>
 <td>A DuckDB extension for exploring and reading git history.</td>
@@ -1217,10 +1275,10 @@ a:hover {
 </tr>
 <tr>
 <td>70</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#capi_quack">capi_quack</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/capi_quack.html">capi_quack</a></td>
 <td><a href="https://github.com/duckdb/extension-template-c">extension-template-c</a></td>
 <td>🟢 Ongoing</td>
-<td>70 days ago</td>
+<td>71 days ago</td>
 <td>17</td>
 <td>C</td>
 <td>(Experimental) C/C++ template for DuckDB extensions based on the C API</td>
@@ -1228,10 +1286,10 @@ a:hover {
 </tr>
 <tr>
 <td>71</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#markdown">markdown</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/markdown.html">markdown</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_markdown">duckdb_markdown</a></td>
 <td>🟢 Ongoing</td>
-<td>77 days ago</td>
+<td>78 days ago</td>
 <td>5</td>
 <td>C++</td>
 <td>Heirarchical markdown parsing for DuckDB</td>
@@ -1239,10 +1297,10 @@ a:hover {
 </tr>
 <tr>
 <td>72</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#jwt">jwt</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/jwt.html">jwt</a></td>
 <td><a href="https://github.com/GalvinGao/duckdb_jwt">duckdb_jwt</a></td>
 <td>🟢 Ongoing</td>
-<td>79 days ago</td>
+<td>80 days ago</td>
 <td>0</td>
 <td>C++</td>
 <td>DuckDB extension: jwt by GalvinGao</td>
@@ -1250,10 +1308,10 @@ a:hover {
 </tr>
 <tr>
 <td>73</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#substrait">substrait</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/substrait.html">substrait</a></td>
 <td><a href="https://github.com/substrait-io/duckdb-substrait-extension">duckdb-substrait-extension</a></td>
 <td>🟢 Ongoing</td>
-<td>89 days ago</td>
+<td>90 days ago</td>
 <td>48</td>
 <td>C++</td>
 <td>DuckDB extension: substrait by substrait-io</td>
@@ -1261,10 +1319,10 @@ a:hover {
 </tr>
 <tr>
 <td>74</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#quackformers">quackformers</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/quackformers.html">quackformers</a></td>
 <td><a href="https://github.com/martin-conur/quackformers">quackformers</a></td>
 <td>🟢 Ongoing</td>
-<td>117 days ago</td>
+<td>118 days ago</td>
 <td>6</td>
 <td>Rust</td>
 <td>DuckDB NLP extension.</td>
@@ -1272,10 +1330,10 @@ a:hover {
 </tr>
 <tr>
 <td>75</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#arrow">arrow</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/arrow.html">arrow</a></td>
 <td><a href="https://github.com/duckdb/duckdb-extension-alias">duckdb-extension-alias</a></td>
 <td>🟢 Ongoing</td>
-<td>139 days ago</td>
+<td>141 days ago</td>
 <td>4</td>
 <td>C</td>
 <td>DuckDB extension: arrow</td>
@@ -1283,10 +1341,10 @@ a:hover {
 </tr>
 <tr>
 <td>76</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#ofquack">ofquack</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/ofquack.html">ofquack</a></td>
 <td><a href="https://github.com/krokozyab/ofquack">ofquack</a></td>
 <td>🟢 Ongoing</td>
-<td>156 days ago</td>
+<td>157 days ago</td>
 <td>5</td>
 <td>C++</td>
 <td>Oracle Fusion DuckDB extension</td>
@@ -1294,10 +1352,10 @@ a:hover {
 </tr>
 <tr>
 <td>77</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#scrooge">scrooge</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/scrooge.html">scrooge</a></td>
 <td><a href="https://github.com/pdet/Scrooge-McDuck">Scrooge-McDuck</a></td>
 <td>🟢 Ongoing</td>
-<td>164 days ago</td>
+<td>165 days ago</td>
 <td>148</td>
 <td>C++</td>
 <td>DuckDB extension: scrooge by pdet</td>
@@ -1305,10 +1363,10 @@ a:hover {
 </tr>
 <tr>
 <td>78</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#blockduck">blockduck</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/blockduck.html">blockduck</a></td>
 <td><a href="https://github.com/luohaha/BlockDuck">BlockDuck</a></td>
 <td>🟢 Ongoing</td>
-<td>183 days ago</td>
+<td>184 days ago</td>
 <td>8</td>
 <td>C++</td>
 <td>Live SQL Queries on Blockchain</td>
@@ -1316,10 +1374,10 @@ a:hover {
 </tr>
 <tr>
 <td>79</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#hostfs">hostfs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/hostfs.html">hostfs</a></td>
 <td><a href="https://github.com/gropaul/hostFS">hostFS</a></td>
 <td>🟢 Ongoing</td>
-<td>199 days ago</td>
+<td>200 days ago</td>
 <td>23</td>
 <td>C++</td>
 <td>DuckDB extension: hostfs by gropaul</td>
@@ -1327,10 +1385,10 @@ a:hover {
 </tr>
 <tr>
 <td>80</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#sheetreader">sheetreader</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/sheetreader.html">sheetreader</a></td>
 <td><a href="https://github.com/polydbms/sheetreader-duckdb">sheetreader-duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>345 days ago</td>
+<td>346 days ago</td>
 <td>55</td>
 <td>Jupyter Notebook</td>
 <td>DuckDB extension: sheetreader by polydbms</td>
@@ -1338,7 +1396,7 @@ a:hover {
 </tr>
 <tr>
 <td>81</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#pivot_table">pivot_table</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pivot_table.html">pivot_table</a></td>
 <td><a href="https://github.com/Alex-Monahan/pivot_table">pivot_table</a></td>
 <td>🟢 Ongoing</td>
 <td>over a year ago</td>
@@ -1349,7 +1407,7 @@ a:hover {
 </tr>
 <tr>
 <td>82</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#tarfs">tarfs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/tarfs.html">tarfs</a></td>
 <td><a href="https://github.com/Maxxen/duckdb_tarfs">duckdb_tarfs</a></td>
 <td>🟢 Ongoing</td>
 <td>over a year ago</td>
@@ -1360,7 +1418,7 @@ a:hover {
 </tr>
 <tr>
 <td>83</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#ulid">ulid</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/ulid.html">ulid</a></td>
 <td><a href="https://github.com/Maxxen/duckdb_ulid">duckdb_ulid</a></td>
 <td>🟢 Ongoing</td>
 <td>over a year ago</td>
@@ -1372,7 +1430,7 @@ a:hover {
 </tbody>
 </table>
 <p><strong>Total:</strong> 83 extensions<br />
-<strong>Featured:</strong> 41 extensions (marked with ⭐)</p>
+<strong>Featured:</strong> 42 extensions (marked with ⭐)</p>
 <hr />
 <h2 id="appendix-duckdb-release-information">Appendix: DuckDB Release Information</h2>
 <h3 id="current-release-context">Current Release Context</h3>
@@ -1645,981 +1703,7 @@ a:hover {
 <li><strong>🛠️ Development Roadmap</strong>: <a href="https://duckdb.org/roadmap.html">duckdb.org/roadmap.html</a></li>
 </ul>
 <p><em>Data sourced from the official <a href="https://duckdb.org/data/duckdb-releases.csv">DuckDB releases CSV</a>. For the most current information, always check the <a href="https://duckdb.org/release_calendar.html">release calendar</a>.</em></p>
-<h2 id="url-validation-results">URL Validation Results</h2>
-<p>This section shows the results of validating URLs associated with extensions, including both simple HTTP status checks and enhanced content validation for documentation URLs.</p>
-<h3 id="validation-summary">Validation Summary</h3>
-<table>
-<thead>
-<tr>
-<th><strong>Status</strong></th>
-<th><strong>Count</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>✅ <strong>OK</strong></td>
-<td>147</td>
-<td>URLs are accessible and content is valid</td>
-</tr>
-<tr>
-<td>⚠️ <strong>Likely Wrong</strong></td>
-<td>83</td>
-<td>URLs are accessible but content may not match extension</td>
-</tr>
-<tr>
-<td>❌ <strong>Broken</strong></td>
-<td>0</td>
-<td>URLs are not accessible or return errors</td>
-</tr>
-<tr>
-<td><strong>Total Validated</strong></td>
-<td>230</td>
-<td>Total URLs checked</td>
-</tr>
-</tbody>
-</table>
-<h3 id="issues-found">Issues Found</h3>
-<p><strong>datasketches_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#datasketches</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>fuzzycomplete_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#fuzzycomplete</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>h3_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#h3</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>hashfuncs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hashfuncs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>lindel_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lindel</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>marisa_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#marisa</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>pbix_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pbix</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>stochastic_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#stochastic</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>textplot_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#textplot</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>tributary_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tributary</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>vortex_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#vortex</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>httpserver_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#httpserver</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>msolap_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#msolap</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>nanodbc_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanodbc</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>netquack_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#netquack</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>parser_tools_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#parser_tools</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>radio_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#radio</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>splink_udfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#splink_udfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>airport_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#airport</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>bitfilters_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bitfilters</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>cache_httpfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cache_httpfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>chsql_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>chsql_native_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql_native</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>cronjob_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cronjob</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>crypto_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#crypto</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>evalexpr_rhai_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#evalexpr_rhai</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>http_client_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#http_client</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>observefs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#observefs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>open_prompt_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#open_prompt</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>pcap_reader_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pcap_reader</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>pyroscope_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pyroscope</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>quickjs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quickjs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>rapidfuzz_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>redis_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#redis</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>shellfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#shellfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>tsid_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tsid</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>webmacro_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webmacro</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>wireduck_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#wireduck</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>magic_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#magic</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>prql_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#prql</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>psql_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#psql</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>snowflake_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#snowflake</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>bigquery_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bigquery</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>cwiqduck_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>zipfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#zipfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>chaos_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chaos</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>flock_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#flock</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>file_dialog_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#file_dialog</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>gcs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gcs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>mooncake_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#mooncake</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>rusty_quack_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_quack</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>st_read_multi_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#st_read_multi</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>nanoarrow_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanoarrow</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>lua_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lua</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>quack_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quack</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>yaml_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#yaml</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>eeagrid_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#eeagrid</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>gsheets_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gsheets</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>faiss_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#faiss</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>geography_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geography</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>geotiff_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geotiff</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>highs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#highs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>rusty_sheet_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>webbed_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webbed</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>read_stat_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#read_stat</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>hdf5_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hdf5</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>duckdb_mcp_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckdb_mcp</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>duckpgq_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckpgq</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>duck_tails_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duck_tails</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>capi_quack_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#capi_quack</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>markdown_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#markdown</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>jwt_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#jwt</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>substrait_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#substrait</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>quackformers_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quackformers</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>arrow_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#arrow</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>ofquack_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ofquack</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>scrooge_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#scrooge</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>blockduck_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#blockduck</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>hostfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hostfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>sheetreader_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#sheetreader</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>pivot_table_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pivot_table</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>tarfs_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tarfs</code>
-- HTTP Status: 200- Extension name not found on page
-<strong>ulid_documentation</strong>
-- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ulid</code>
-- HTTP Status: 200- Extension name not found on page</p>
-<h3 id="validation-details">Validation Details</h3>
-<p><strong>autocomplete_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/autocomplete</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>avro_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-avro</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>avro_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-avro</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>aws_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-aws</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>aws_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-aws</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>azure_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-azure</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>azure_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-azure</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>delta_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-delta</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>delta_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-delta</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>ducklake_repository</strong>
-- URL: <code>https://github.com/duckdb/ducklake</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>encodings_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-encodings</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>encodings_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-encodings</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>excel_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-excel</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>excel_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-excel</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>fts_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-fts</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>fts_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-fts</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>httpfs_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-httpfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>httpfs_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-httpfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>iceberg_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-iceberg</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>iceberg_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-iceberg</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>icu_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/icu</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>inet_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-inet</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>inet_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-inet</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>jemalloc_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/jemalloc</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>json_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/json</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>mysql_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-mysql</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>mysql_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-mysql</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>parquet_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/parquet</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>postgres_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-postgres</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>postgres_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-postgres</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>spatial_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-spatial</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>spatial_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-spatial</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>sqlite_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-sqlite</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>sqlite_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-sqlite</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>tpcds_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/tpcds</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>tpch_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/tpch</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>ui_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-ui</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>ui_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-ui</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>vss_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-vss</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>vss_external_repo</strong>
-- URL: <code>https://github.com/duckdb/duckdb-vss</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>datasketches_repository</strong>
-- URL: <code>https://github.com/Query-farm/datasketches</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>fuzzycomplete_repository</strong>
-- URL: <code>https://github.com/Query-farm/fuzzycomplete</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>h3_repository</strong>
-- URL: <code>https://github.com/isaacbrodsky/h3-duckdb</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>hashfuncs_repository</strong>
-- URL: <code>https://github.com/Query-farm/hashfuncs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>lindel_repository</strong>
-- URL: <code>https://github.com/Query-farm/lindel</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>marisa_repository</strong>
-- URL: <code>https://github.com/Query-farm/marisa</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>pbix_repository</strong>
-- URL: <code>https://github.com/Hugoberry/duckdb-pbix-extension</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>stochastic_repository</strong>
-- URL: <code>https://github.com/Query-farm/stochastic</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>textplot_repository</strong>
-- URL: <code>https://github.com/Query-farm/textplot</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>tributary_repository</strong>
-- URL: <code>https://github.com/Query-farm/tributary</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>vortex_repository</strong>
-- URL: <code>https://github.com/vortex-data/duckdb-vortex</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>httpserver_repository</strong>
-- URL: <code>https://github.com/Query-farm/httpserver</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>msolap_repository</strong>
-- URL: <code>https://github.com/Hugoberry/duckdb-msolap-extension</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>nanodbc_repository</strong>
-- URL: <code>https://github.com/Hugoberry/duckdb-nanodbc-extension</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>netquack_repository</strong>
-- URL: <code>https://github.com/hatamiarash7/duckdb-netquack</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>parser_tools_repository</strong>
-- URL: <code>https://github.com/zfarrell/duckdb_extension_parser_tools</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>radio_repository</strong>
-- URL: <code>https://github.com/Query-farm/radio</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>splink_udfs_repository</strong>
-- URL: <code>https://github.com/moj-analytical-services/splink_udfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>airport_repository</strong>
-- URL: <code>https://github.com/Query-farm/airport</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>bitfilters_repository</strong>
-- URL: <code>https://github.com/Query-farm/bitfilters</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>cache_httpfs_repository</strong>
-- URL: <code>https://github.com/dentiny/duck-read-cache-fs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>chsql_repository</strong>
-- URL: <code>https://github.com/Query-farm/clickhouse-sql</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>chsql_native_repository</strong>
-- URL: <code>https://github.com/Query-farm/clickhouse-native</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>cronjob_repository</strong>
-- URL: <code>https://github.com/Query-farm/cronjob</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>crypto_repository</strong>
-- URL: <code>https://github.com/Query-farm/crypto</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>evalexpr_rhai_repository</strong>
-- URL: <code>https://github.com/Query-farm/evalexpr_rhai</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>http_client_repository</strong>
-- URL: <code>https://github.com/Query-farm/httpclient</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>observefs_repository</strong>
-- URL: <code>https://github.com/dentiny/duckdb-filesystem-observability</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>open_prompt_repository</strong>
-- URL: <code>https://github.com/Query-farm/openprompt</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>pcap_reader_repository</strong>
-- URL: <code>https://github.com/Query-farm/pcap</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>pyroscope_repository</strong>
-- URL: <code>https://github.com/Query-farm/pyroscope</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>quickjs_repository</strong>
-- URL: <code>https://github.com/Query-farm/quickjs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>rapidfuzz_repository</strong>
-- URL: <code>https://github.com/Query-farm/rapidfuzz</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>redis_repository</strong>
-- URL: <code>https://github.com/Query-farm/redis</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>shellfs_repository</strong>
-- URL: <code>https://github.com/Query-farm/shellfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>tsid_repository</strong>
-- URL: <code>https://github.com/Query-farm/tsid</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>webmacro_repository</strong>
-- URL: <code>https://github.com/Query-farm/webmacro</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>wireduck_repository</strong>
-- URL: <code>https://github.com/hyehudai/wireduck</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>magic_repository</strong>
-- URL: <code>https://github.com/carlopi/duckdb_magic</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>prql_repository</strong>
-- URL: <code>https://github.com/ywelsch/duckdb-prql</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>psql_repository</strong>
-- URL: <code>https://github.com/ywelsch/duckdb-psql</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>snowflake_repository</strong>
-- URL: <code>https://github.com/iqea-ai/duckdb-snowflake</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>bigquery_repository</strong>
-- URL: <code>https://github.com/hafenkran/duckdb-bigquery</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>cwiqduck_repository</strong>
-- URL: <code>https://github.com/cwiq-os/cwiqduck</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>zipfs_repository</strong>
-- URL: <code>https://github.com/isaacbrodsky/duckdb-zipfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>chaos_repository</strong>
-- URL: <code>https://github.com/taniabogatsch/duckdb-chaos</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>flock_repository</strong>
-- URL: <code>https://github.com/dais-polymtl/flock</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>file_dialog_repository</strong>
-- URL: <code>https://github.com/yutannihilation/duckdb-ext-file-dialog</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>gcs_repository</strong>
-- URL: <code>https://github.com/northpolesec/duckdb-gcs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>mooncake_repository</strong>
-- URL: <code>https://github.com/Mooncake-Labs/duckdb_mooncake</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>rusty_quack_repository</strong>
-- URL: <code>https://github.com/duckdb/extension-template-rs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>st_read_multi_repository</strong>
-- URL: <code>https://github.com/yutannihilation/duckdb-ext-st-read-multi</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>nanoarrow_repository</strong>
-- URL: <code>https://github.com/paleolimbot/duckdb-nanoarrow</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>lua_repository</strong>
-- URL: <code>https://github.com/isaacbrodsky/duckdb-lua</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>quack_repository</strong>
-- URL: <code>https://github.com/duckdb/extension-template</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>yaml_repository</strong>
-- URL: <code>https://github.com/teaguesterling/duckdb_yaml</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>eeagrid_repository</strong>
-- URL: <code>https://github.com/ahuarte47/duckdb-eeagrid</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>gsheets_repository</strong>
-- URL: <code>https://github.com/evidence-dev/duckdb_gsheets</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>faiss_repository</strong>
-- URL: <code>https://github.com/duckdb-faiss-ext/duckdb-faiss-ext</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>geography_repository</strong>
-- URL: <code>https://github.com/paleolimbot/duckdb-geography</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>geotiff_repository</strong>
-- URL: <code>https://github.com/babaknaimi/duckdb-geotiff</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>highs_repository</strong>
-- URL: <code>https://github.com/fhk/HiGHS-duckdb</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>rusty_sheet_repository</strong>
-- URL: <code>https://github.com/redraiment/rusty-sheet</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>webbed_repository</strong>
-- URL: <code>https://github.com/teaguesterling/duckdb_webbed</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>read_stat_repository</strong>
-- URL: <code>https://github.com/mettekou/duckdb-read-stat</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>hdf5_repository</strong>
-- URL: <code>https://github.com/Berrysoft/duckdb-hdf5</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>duckdb_mcp_repository</strong>
-- URL: <code>https://github.com/teaguesterling/duckdb_mcp</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>duckpgq_repository</strong>
-- URL: <code>https://github.com/cwida/duckpgq-extension</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>duck_tails_repository</strong>
-- URL: <code>https://github.com/teaguesterling/duck_tails</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>capi_quack_repository</strong>
-- URL: <code>https://github.com/duckdb/extension-template-c</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>markdown_repository</strong>
-- URL: <code>https://github.com/teaguesterling/duckdb_markdown</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>jwt_repository</strong>
-- URL: <code>https://github.com/GalvinGao/duckdb_jwt</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>substrait_repository</strong>
-- URL: <code>https://github.com/substrait-io/duckdb-substrait-extension</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>quackformers_repository</strong>
-- URL: <code>https://github.com/martin-conur/quackformers</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>arrow_repository</strong>
-- URL: <code>https://github.com/duckdb/duckdb-extension-alias</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>ofquack_repository</strong>
-- URL: <code>https://github.com/krokozyab/ofquack</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>scrooge_repository</strong>
-- URL: <code>https://github.com/pdet/Scrooge-McDuck</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>blockduck_repository</strong>
-- URL: <code>https://github.com/luohaha/BlockDuck</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>hostfs_repository</strong>
-- URL: <code>https://github.com/gropaul/hostFS</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>sheetreader_repository</strong>
-- URL: <code>https://github.com/polydbms/sheetreader-duckdb</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>pivot_table_repository</strong>
-- URL: <code>https://github.com/Alex-Monahan/pivot_table</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>tarfs_repository</strong>
-- URL: <code>https://github.com/Maxxen/duckdb_tarfs</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>ulid_repository</strong>
-- URL: <code>https://github.com/Maxxen/duckdb_ulid</code>
-- Status: ✅ OK- HTTP Status: 200
-<strong>autocomplete_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/autocomplete.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>avro_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/avro.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>aws_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/aws.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>azure_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/azure.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>delta_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/delta.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>ducklake_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/ducklake.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>encodings_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/encodings.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>excel_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/excel.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>fts_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/full_text_search.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>httpfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/httpfs/overview.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>iceberg_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/iceberg/overview.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>icu_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/icu.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>inet_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/inet.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>jemalloc_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/jemalloc.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>json_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/data/json/overview.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>mysql_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/mysql.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>parquet_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/data/parquet/overview.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>postgres_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/postgres.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>spatial_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/spatial/overview.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>sqlite_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/sqlite.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>tpcds_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/tpcds.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>tpch_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/tpch.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>ui_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/ui.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>vss_documentation</strong>
-- URL: <code>https://duckdb.org/docs/stable/core_extensions/vss.html</code>
-- Status: ✅ OK- HTTP Status: 200- Extension name found on page
-<strong>datasketches_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#datasketches</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>fuzzycomplete_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#fuzzycomplete</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>h3_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#h3</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>hashfuncs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hashfuncs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>lindel_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lindel</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>marisa_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#marisa</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>pbix_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pbix</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>stochastic_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#stochastic</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>textplot_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#textplot</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>tributary_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tributary</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>vortex_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#vortex</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>httpserver_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#httpserver</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>msolap_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#msolap</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>nanodbc_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanodbc</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>netquack_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#netquack</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>parser_tools_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#parser_tools</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>radio_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#radio</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>splink_udfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#splink_udfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>airport_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#airport</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>bitfilters_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bitfilters</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>cache_httpfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cache_httpfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>chsql_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>chsql_native_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql_native</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>cronjob_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cronjob</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>crypto_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#crypto</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>evalexpr_rhai_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#evalexpr_rhai</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>http_client_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#http_client</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>observefs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#observefs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>open_prompt_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#open_prompt</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>pcap_reader_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pcap_reader</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>pyroscope_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pyroscope</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>quickjs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quickjs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>rapidfuzz_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>redis_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#redis</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>shellfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#shellfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>tsid_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tsid</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>webmacro_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webmacro</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>wireduck_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#wireduck</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>magic_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#magic</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>prql_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#prql</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>psql_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#psql</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>snowflake_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#snowflake</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>bigquery_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bigquery</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>cwiqduck_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>zipfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#zipfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>chaos_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chaos</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>flock_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#flock</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>file_dialog_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#file_dialog</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>gcs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gcs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>mooncake_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#mooncake</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>rusty_quack_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_quack</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>st_read_multi_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#st_read_multi</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>nanoarrow_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanoarrow</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>lua_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lua</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>quack_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quack</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>yaml_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#yaml</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>eeagrid_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#eeagrid</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>gsheets_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gsheets</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>faiss_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#faiss</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>geography_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geography</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>geotiff_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geotiff</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>highs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#highs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>rusty_sheet_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>webbed_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webbed</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>read_stat_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#read_stat</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>hdf5_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hdf5</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>duckdb_mcp_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckdb_mcp</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>duckpgq_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckpgq</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>duck_tails_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duck_tails</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>capi_quack_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#capi_quack</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>markdown_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#markdown</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>jwt_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#jwt</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>substrait_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#substrait</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>quackformers_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quackformers</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>arrow_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#arrow</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>ofquack_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ofquack</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>scrooge_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#scrooge</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>blockduck_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#blockduck</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>hostfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hostfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>sheetreader_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#sheetreader</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>pivot_table_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pivot_table</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>tarfs_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tarfs</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
-<strong>ulid_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ulid</code>
-- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page</p>
+    </div>
     
     <hr style="margin-top: 3rem;">
     <footer style="text-align: center; color: #6b7280; font-size: 0.875rem;">
@@ -2637,35 +1721,75 @@ a:hover {
     // Display user's local time based on the report's UTC timestamp
     function updateLocalTime() {
         // Extract UTC time from the report
-        const utcTimeText = $('#utc-time').text();
-        // Match pattern like "2025-09-26 05:05:43 UTC"
-        const utcMatch = utcTimeText.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/);
+        const utcTimeText = $('#utc-time').text().trim();
+        console.log('UTC time text:', utcTimeText);
         
-        if (utcMatch) {
-            // Parse the UTC time from the report
-            const utcTimeString = utcMatch[1];
-            // Create date object by adding 'T' and 'Z' for proper ISO format
-            const isoString = utcTimeString.replace(' ', 'T') + 'Z';
-            const utcDate = new Date(isoString);
+        // Try multiple patterns for timestamp matching
+        const patterns = [
+            /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/,  // "2025-09-26 05:05:43 UTC"
+            /(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/,      // "2025-09-26 05:05:43" (assume UTC)
+            /Report Generated:\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/,
+            /Last Updated:\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/
+        ];
+        
+        let utcTimeString = null;
+        for (const pattern of patterns) {
+            const match = utcTimeText.match(pattern);
+            if (match) {
+                utcTimeString = match[1];
+                console.log('Matched timestamp:', utcTimeString);
+                break;
+            }
+        }
+        
+        if (utcTimeString) {
+            // Try different parsing methods
+            let utcDate = null;
+            
+            // Method 1: ISO format with Z
+            try {
+                const isoString = utcTimeString.replace(' ', 'T') + 'Z';
+                utcDate = new Date(isoString);
+                console.log('Parsed ISO:', isoString, utcDate);
+            } catch (e) {
+                console.log('ISO parsing failed:', e);
+            }
+            
+            // Method 2: Direct parsing with explicit UTC
+            if (!utcDate || isNaN(utcDate.getTime())) {
+                try {
+                    utcDate = new Date(utcTimeString + ' UTC');
+                    console.log('Parsed with UTC suffix:', utcDate);
+                } catch (e) {
+                    console.log('UTC suffix parsing failed:', e);
+                }
+            }
             
             // Check if date is valid
-            if (!isNaN(utcDate.getTime())) {
-                // Convert to local time
-                const localTimeString = utcDate.toLocaleString('en-AU', {
-                    year: 'numeric',
-                    month: '2-digit', 
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZoneName: 'short'
-                });
-                $('#local-time').text(localTimeString);
-            } else {
-                $('#local-time').text('Invalid date format');
+            if (utcDate && !isNaN(utcDate.getTime())) {
+                try {
+                    // Convert to local time
+                    const localTimeString = utcDate.toLocaleString('en-AU', {
+                        year: 'numeric',
+                        month: '2-digit', 
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short'
+                    });
+                    $('#local-time').text(localTimeString);
+                    console.log('Local time set:', localTimeString);
+                    return;
+                } catch (e) {
+                    console.log('Locale formatting failed:', e);
+                }
             }
-        } else {
-            // Fallback - show current time if we can't parse the report time
+        }
+        
+        // Fallback - show current time if parsing fails
+        console.log('Using fallback current time');
+        try {
             const now = new Date();
             const localTimeString = now.toLocaleString('en-AU', {
                 year: 'numeric',
@@ -2677,6 +1801,8 @@ a:hover {
                 timeZoneName: 'short'
             });
             $('#local-time').text(localTimeString + ' (current)');
+        } catch (e) {
+            $('#local-time').text('Time unavailable');
         }
     }
     

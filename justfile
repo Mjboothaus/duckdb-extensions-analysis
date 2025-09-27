@@ -190,3 +190,11 @@ workflow-issues:
     just report-all-issues
     just database
     @echo "✅ Issues workflow complete"
+
+# Complete workflow including HTML site generation
+workflow-site:
+    just analyze all
+    just report-all
+    just site
+    just database
+    @echo "✅ Site workflow complete"
