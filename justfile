@@ -46,6 +46,10 @@ report-all:
 report-all-issues:
     uv run scripts/cli.py report generate --format markdown --format csv --format excel --with-issues
 
+# Generate HTML site from latest report
+site:
+    uv run scripts/build_report_site.py
+
 # === DATABASE ===
 
 # Save analysis to database

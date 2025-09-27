@@ -7,103 +7,123 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #24292f;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-        }
-        h1, h2, h3, h4, h5, h6 {
-            color: #1f2937;
-            border-bottom: 1px solid #e1e5e9;
-            padding-bottom: 0.5rem;
-            margin-top: 2rem;
-        }
-        h1 { font-size: 2rem; }
-        h2 { font-size: 1.5rem; }
-        h3 { font-size: 1.25rem; }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 1rem 0;
-            background-color: #fff;
-        }
-        th, td {
-            border: 1px solid #d1d5db;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f9fafb;
-            font-weight: 600;
-            color: #374151;
-        }
-        tr:nth-child(even) {
-            background-color: #f9fafb;
-        }
-        tr:hover {
-            background-color: #f3f4f6;
-        }
-        code {
-            background-color: #f1f5f9;
-            color: #1e293b;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Liberation Mono', 'Courier New', monospace;
-        }
-        pre {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 16px;
-            overflow-x: auto;
-        }
-        a {
-            color: #0969da;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .status-ongoing { color: #059669; }
-        .status-discontinued { color: #dc2626; }
-        .status-issues { color: #d97706; }
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: #f1f5f9;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            margin-right: 8px;
-        }
-        .toc {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 16px;
-            margin-bottom: 2rem;
-        }
-        .header-info {
-            background-color: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 6px;
-            padding: 16px;
-            margin-bottom: 2rem;
-        }
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #24292f;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1f2937;
+    border-bottom: 1px solid #e1e5e9;
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    background-color: #fff;
+}
+
+th, td {
+    border: 1px solid #d1d5db;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+tr:hover {
+    background-color: #f3f4f6;
+}
+
+code {
+    background-color: #f1f5f9;
+    color: #1e293b;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Liberation Mono', 'Courier New', monospace;
+}
+
+pre {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    overflow-x: auto;
+}
+
+a {
+    color: #0969da;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.status-ongoing { color: #059669; }
+.status-discontinued { color: #dc2626; }
+.status-issues { color: #d97706; }
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-right: 8px;
+}
+
+.toc {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 2rem;
+}
+
+.header-info {
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 2rem;
+}
+
+.text-muted {
+    color: #6b7280;
+    font-size: 0.9em;
+}
     </style>
 </head>
 <body>
     <div class="header-info">
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
-        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-26 04:29:28 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
-        <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
+        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-26 06:09:37 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
+        <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a> | <a href="#url-validation-results">URL Validation</a></p>
     </div>
+    
     <h1 id="duckdb-extensions-analysis">DuckDB Extensions Analysis</h1>
 <p>🦆 <strong>Automated monitoring and analysis of DuckDB's extension ecosystem</strong></p>
 <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a> | <a href="#url-validation-results">URL Validation</a></p>
@@ -111,21 +131,17 @@
 <p>This report provides a comprehensive analysis of DuckDB extensions, including both core extensions (built into DuckDB) and community-contributed extensions.</p>
 <h2 id="data-sources">Data Sources</h2>
 <p>This analysis is based on the following authoritative sources:</p>
-<h3 id="core-extensions">Core Extensions</h3>
-<ul>
-<li><strong>Overview</strong>: <a href="https://duckdb.org/docs/stable/extensions/overview.html">DuckDB Extensions</a></li>
-<li><strong>Core Extensions</strong>: <a href="https://duckdb.org/docs/stable/core_extensions/overview.html">Core Extensions Documentation</a></li>
-<li><strong>Versioning</strong>: <a href="https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html">Extension Versioning</a></li>
-<li><strong>Repository</strong>: <a href="https://github.com/duckdb/duckdb">duckdb/duckdb</a></li>
-<li><strong>Releases</strong>: <a href="https://github.com/duckdb/duckdb/releases">GitHub Releases</a></li>
-</ul>
-<h3 id="community-extensions">Community Extensions</h3>
-<ul>
-<li><strong>Registry</strong>: <a href="https://github.com/duckdb/community-extensions">Community Extensions Repository</a></li>
-<li><strong>Directory</strong>: <a href="https://github.com/duckdb/community-extensions/tree/main/extensions">Extensions Folder</a></li>
-<li><strong>Featured</strong>: <a href="https://community-extensions.duckdb.org/">Community Extensions Page</a></li>
-<li><strong>Individual Repositories</strong>: GitHub repositories linked in the extensions directory</li>
-</ul>
+<p><strong>Core Extensions</strong>
+- <strong>Overview</strong>: <a href="https://duckdb.org/docs/stable/extensions/overview.html">DuckDB Extensions</a>
+- <strong>Core Extensions</strong>: <a href="https://duckdb.org/docs/stable/core_extensions/overview.html">Core Extensions Documentation</a>
+- <strong>Versioning</strong>: <a href="https://duckdb.org/docs/stable/extensions/versioning_of_extensions.html">Extension Versioning</a>
+- <strong>Repository</strong>: <a href="https://github.com/duckdb/duckdb">duckdb/duckdb</a>
+- <strong>Releases</strong>: <a href="https://github.com/duckdb/duckdb/releases">GitHub Releases</a></p>
+<p><strong>Community Extensions</strong>
+- <strong>Registry</strong>: <a href="https://github.com/duckdb/community-extensions">Community Extensions Repository</a>
+- <strong>Directory</strong>: <a href="https://github.com/duckdb/community-extensions/tree/main/extensions">Extensions Folder</a>
+- <strong>Featured</strong>: <a href="https://community-extensions.duckdb.org/">Community Extensions Page</a>
+- <strong>Individual Repositories</strong>: GitHub repositories linked in the extensions directory</p>
 <hr />
 <h2 id="summary">Summary</h2>
 <table>
@@ -163,7 +179,7 @@
 </tbody>
 </table>
 <hr />
-<h2 id="core-extensions_1">Core Extensions</h2>
+<h2 id="core-extensions">Core Extensions</h2>
 <p>Core extensions maintained by the DuckDB team and distributed via the official extension repository</p>
 <table>
 <thead>
@@ -423,7 +439,7 @@
 </table>
 <p><strong>Total:</strong> 24 extensions</p>
 <h2 id="-">---</h2>
-<h2 id="community-extensions_1">Community Extensions</h2>
+<h2 id="community-extensions">Community Extensions</h2>
 <p>Third-party extensions maintained by the community</p>
 <table>
 <thead>
@@ -827,17 +843,6 @@
 </tr>
 <tr>
 <td>36</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#snowflake">snowflake</a></td>
-<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>12</td>
-<td>C++</td>
-<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>37</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#tsid">tsid</a></td>
 <td><a href="https://github.com/Query-farm/tsid">tsid</a></td>
 <td>🟢 Ongoing</td>
@@ -848,7 +853,7 @@
 <td></td>
 </tr>
 <tr>
-<td>38</td>
+<td>37</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#webmacro">webmacro</a></td>
 <td><a href="https://github.com/Query-farm/webmacro">webmacro</a></td>
 <td>🟢 Ongoing</td>
@@ -859,7 +864,7 @@
 <td></td>
 </tr>
 <tr>
-<td>39</td>
+<td>38</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#wireduck">wireduck</a></td>
 <td><a href="https://github.com/hyehudai/wireduck">wireduck</a></td>
 <td>🟢 Ongoing</td>
@@ -870,7 +875,7 @@
 <td>⭐</td>
 </tr>
 <tr>
-<td>40</td>
+<td>39</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#magic">magic</a></td>
 <td><a href="https://github.com/carlopi/duckdb_magic">duckdb_magic</a></td>
 <td>🟢 Ongoing</td>
@@ -881,7 +886,7 @@
 <td>⭐</td>
 </tr>
 <tr>
-<td>41</td>
+<td>40</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#prql">prql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-prql">duckdb-prql</a></td>
 <td>🟢 Ongoing</td>
@@ -892,7 +897,7 @@
 <td>⭐</td>
 </tr>
 <tr>
-<td>42</td>
+<td>41</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#psql">psql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-psql">duckdb-psql</a></td>
 <td>🟢 Ongoing</td>
@@ -900,6 +905,17 @@
 <td>92</td>
 <td>C++</td>
 <td>A piped SQL for DuckDB</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td>42</td>
+<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#snowflake">snowflake</a></td>
+<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
+<td>🟢 Ongoing</td>
+<td>3 days ago</td>
+<td>12</td>
+<td>C++</td>
+<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
 <td>⭐</td>
 </tr>
 <tr>
@@ -1091,17 +1107,6 @@
 </tr>
 <tr>
 <td>60</td>
-<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#geotiff">geotiff</a></td>
-<td><a href="https://github.com/babaknaimi/duckdb-geotiff">duckdb-geotiff</a></td>
-<td>🟢 Ongoing</td>
-<td>36 days ago</td>
-<td>2</td>
-<td>C++</td>
-<td>Duckdb extension to read GeoTiffs directly with duckdb database</td>
-<td></td>
-</tr>
-<tr>
-<td>61</td>
 <td><a href="https://duckdb.org/docs/extensions/community_extensions.html#geography">geography</a></td>
 <td><a href="https://github.com/paleolimbot/duckdb-geography">duckdb-geography</a></td>
 <td>🟢 Ongoing</td>
@@ -1109,6 +1114,17 @@
 <td>32</td>
 <td>C++</td>
 <td>Geospatial data extension by paleolimbot</td>
+<td></td>
+</tr>
+<tr>
+<td>61</td>
+<td><a href="https://duckdb.org/docs/extensions/community_extensions.html#geotiff">geotiff</a></td>
+<td><a href="https://github.com/babaknaimi/duckdb-geotiff">duckdb-geotiff</a></td>
+<td>🟢 Ongoing</td>
+<td>37 days ago</td>
+<td>2</td>
+<td>C++</td>
+<td>Duckdb extension to read GeoTiffs directly with duckdb database</td>
 <td></td>
 </tr>
 <tr>
@@ -1643,12 +1659,12 @@
 <tbody>
 <tr>
 <td>✅ <strong>OK</strong></td>
-<td>0</td>
+<td>147</td>
 <td>URLs are accessible and content is valid</td>
 </tr>
 <tr>
 <td>⚠️ <strong>Likely Wrong</strong></td>
-<td>0</td>
+<td>83</td>
 <td>URLs are accessible but content may not match extension</td>
 </tr>
 <tr>
@@ -1663,697 +1679,948 @@
 </tr>
 </tbody>
 </table>
+<h3 id="issues-found">Issues Found</h3>
+<p><strong>datasketches_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#datasketches</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>fuzzycomplete_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#fuzzycomplete</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>h3_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#h3</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>hashfuncs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hashfuncs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>lindel_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lindel</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>marisa_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#marisa</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>pbix_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pbix</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>stochastic_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#stochastic</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>textplot_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#textplot</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>tributary_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tributary</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>vortex_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#vortex</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>httpserver_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#httpserver</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>msolap_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#msolap</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>nanodbc_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanodbc</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>netquack_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#netquack</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>parser_tools_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#parser_tools</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>radio_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#radio</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>splink_udfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#splink_udfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>airport_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#airport</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>bitfilters_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bitfilters</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>cache_httpfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cache_httpfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>chsql_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>chsql_native_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql_native</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>cronjob_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cronjob</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>crypto_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#crypto</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>evalexpr_rhai_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#evalexpr_rhai</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>http_client_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#http_client</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>observefs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#observefs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>open_prompt_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#open_prompt</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>pcap_reader_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pcap_reader</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>pyroscope_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pyroscope</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>quickjs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quickjs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>rapidfuzz_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>redis_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#redis</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>shellfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#shellfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>tsid_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tsid</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>webmacro_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webmacro</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>wireduck_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#wireduck</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>magic_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#magic</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>prql_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#prql</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>psql_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#psql</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>snowflake_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#snowflake</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>bigquery_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bigquery</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>cwiqduck_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>zipfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#zipfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>chaos_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chaos</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>flock_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#flock</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>file_dialog_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#file_dialog</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>gcs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gcs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>mooncake_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#mooncake</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>rusty_quack_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_quack</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>st_read_multi_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#st_read_multi</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>nanoarrow_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanoarrow</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>lua_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lua</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>quack_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quack</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>yaml_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#yaml</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>eeagrid_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#eeagrid</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>gsheets_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gsheets</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>faiss_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#faiss</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>geography_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geography</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>geotiff_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geotiff</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>highs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#highs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>rusty_sheet_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>webbed_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webbed</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>read_stat_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#read_stat</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>hdf5_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hdf5</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>duckdb_mcp_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckdb_mcp</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>duckpgq_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckpgq</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>duck_tails_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duck_tails</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>capi_quack_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#capi_quack</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>markdown_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#markdown</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>jwt_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#jwt</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>substrait_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#substrait</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>quackformers_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quackformers</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>arrow_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#arrow</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>ofquack_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ofquack</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>scrooge_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#scrooge</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>blockduck_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#blockduck</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>hostfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hostfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>sheetreader_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#sheetreader</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>pivot_table_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pivot_table</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>tarfs_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tarfs</code>
+- HTTP Status: 200- Extension name not found on page
+<strong>ulid_documentation</strong>
+- Status: ⚠️ Likely Wrong- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ulid</code>
+- HTTP Status: 200- Extension name not found on page</p>
 <h3 id="validation-details">Validation Details</h3>
 <p><strong>autocomplete_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/autocomplete</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>avro_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-avro</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>avro_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-avro</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>aws_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-aws</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>aws_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-aws</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>azure_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-azure</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>azure_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-azure</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>delta_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-delta</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>delta_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-delta</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>ducklake_repository</strong>
 - URL: <code>https://github.com/duckdb/ducklake</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>encodings_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-encodings</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>encodings_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-encodings</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>excel_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-excel</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>excel_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-excel</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>fts_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-fts</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>fts_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-fts</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>httpfs_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-httpfs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>httpfs_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-httpfs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>iceberg_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-iceberg</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>iceberg_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-iceberg</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>icu_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/icu</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>inet_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-inet</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>inet_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-inet</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>jemalloc_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/jemalloc</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>json_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/json</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>mysql_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-mysql</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>mysql_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-mysql</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>parquet_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/parquet</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>postgres_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-postgres</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>postgres_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-postgres</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>spatial_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-spatial</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>spatial_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-spatial</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>sqlite_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-sqlite</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>sqlite_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-sqlite</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>tpcds_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/tpcds</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>tpch_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb/tree/main/extension/tpch</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>ui_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-ui</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>ui_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-ui</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>vss_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-vss</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>vss_external_repo</strong>
 - URL: <code>https://github.com/duckdb/duckdb-vss</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>datasketches_repository</strong>
 - URL: <code>https://github.com/Query-farm/datasketches</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>fuzzycomplete_repository</strong>
 - URL: <code>https://github.com/Query-farm/fuzzycomplete</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>h3_repository</strong>
 - URL: <code>https://github.com/isaacbrodsky/h3-duckdb</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>hashfuncs_repository</strong>
 - URL: <code>https://github.com/Query-farm/hashfuncs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>lindel_repository</strong>
 - URL: <code>https://github.com/Query-farm/lindel</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>marisa_repository</strong>
 - URL: <code>https://github.com/Query-farm/marisa</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>pbix_repository</strong>
 - URL: <code>https://github.com/Hugoberry/duckdb-pbix-extension</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>stochastic_repository</strong>
 - URL: <code>https://github.com/Query-farm/stochastic</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>textplot_repository</strong>
 - URL: <code>https://github.com/Query-farm/textplot</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>tributary_repository</strong>
 - URL: <code>https://github.com/Query-farm/tributary</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>vortex_repository</strong>
 - URL: <code>https://github.com/vortex-data/duckdb-vortex</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>httpserver_repository</strong>
 - URL: <code>https://github.com/Query-farm/httpserver</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>msolap_repository</strong>
 - URL: <code>https://github.com/Hugoberry/duckdb-msolap-extension</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>nanodbc_repository</strong>
 - URL: <code>https://github.com/Hugoberry/duckdb-nanodbc-extension</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>netquack_repository</strong>
 - URL: <code>https://github.com/hatamiarash7/duckdb-netquack</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>parser_tools_repository</strong>
 - URL: <code>https://github.com/zfarrell/duckdb_extension_parser_tools</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>radio_repository</strong>
 - URL: <code>https://github.com/Query-farm/radio</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>splink_udfs_repository</strong>
 - URL: <code>https://github.com/moj-analytical-services/splink_udfs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>airport_repository</strong>
 - URL: <code>https://github.com/Query-farm/airport</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>bitfilters_repository</strong>
 - URL: <code>https://github.com/Query-farm/bitfilters</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>cache_httpfs_repository</strong>
 - URL: <code>https://github.com/dentiny/duck-read-cache-fs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>chsql_repository</strong>
 - URL: <code>https://github.com/Query-farm/clickhouse-sql</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>chsql_native_repository</strong>
 - URL: <code>https://github.com/Query-farm/clickhouse-native</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>cronjob_repository</strong>
 - URL: <code>https://github.com/Query-farm/cronjob</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>crypto_repository</strong>
 - URL: <code>https://github.com/Query-farm/crypto</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>evalexpr_rhai_repository</strong>
 - URL: <code>https://github.com/Query-farm/evalexpr_rhai</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>http_client_repository</strong>
 - URL: <code>https://github.com/Query-farm/httpclient</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>observefs_repository</strong>
 - URL: <code>https://github.com/dentiny/duckdb-filesystem-observability</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>open_prompt_repository</strong>
 - URL: <code>https://github.com/Query-farm/openprompt</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>pcap_reader_repository</strong>
 - URL: <code>https://github.com/Query-farm/pcap</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>pyroscope_repository</strong>
 - URL: <code>https://github.com/Query-farm/pyroscope</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>quickjs_repository</strong>
 - URL: <code>https://github.com/Query-farm/quickjs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>rapidfuzz_repository</strong>
 - URL: <code>https://github.com/Query-farm/rapidfuzz</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>redis_repository</strong>
 - URL: <code>https://github.com/Query-farm/redis</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>shellfs_repository</strong>
 - URL: <code>https://github.com/Query-farm/shellfs</code>
-- Status: ❌ Broken- HTTP Status: 200
-<strong>snowflake_repository</strong>
-- URL: <code>https://github.com/iqea-ai/duckdb-snowflake</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>tsid_repository</strong>
 - URL: <code>https://github.com/Query-farm/tsid</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>webmacro_repository</strong>
 - URL: <code>https://github.com/Query-farm/webmacro</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>wireduck_repository</strong>
 - URL: <code>https://github.com/hyehudai/wireduck</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>magic_repository</strong>
 - URL: <code>https://github.com/carlopi/duckdb_magic</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>prql_repository</strong>
 - URL: <code>https://github.com/ywelsch/duckdb-prql</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>psql_repository</strong>
 - URL: <code>https://github.com/ywelsch/duckdb-psql</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
+<strong>snowflake_repository</strong>
+- URL: <code>https://github.com/iqea-ai/duckdb-snowflake</code>
+- Status: ✅ OK- HTTP Status: 200
 <strong>bigquery_repository</strong>
 - URL: <code>https://github.com/hafenkran/duckdb-bigquery</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>cwiqduck_repository</strong>
 - URL: <code>https://github.com/cwiq-os/cwiqduck</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>zipfs_repository</strong>
 - URL: <code>https://github.com/isaacbrodsky/duckdb-zipfs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>chaos_repository</strong>
 - URL: <code>https://github.com/taniabogatsch/duckdb-chaos</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>flock_repository</strong>
 - URL: <code>https://github.com/dais-polymtl/flock</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>file_dialog_repository</strong>
 - URL: <code>https://github.com/yutannihilation/duckdb-ext-file-dialog</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>gcs_repository</strong>
 - URL: <code>https://github.com/northpolesec/duckdb-gcs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>mooncake_repository</strong>
 - URL: <code>https://github.com/Mooncake-Labs/duckdb_mooncake</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>rusty_quack_repository</strong>
 - URL: <code>https://github.com/duckdb/extension-template-rs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>st_read_multi_repository</strong>
 - URL: <code>https://github.com/yutannihilation/duckdb-ext-st-read-multi</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>nanoarrow_repository</strong>
 - URL: <code>https://github.com/paleolimbot/duckdb-nanoarrow</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>lua_repository</strong>
 - URL: <code>https://github.com/isaacbrodsky/duckdb-lua</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>quack_repository</strong>
 - URL: <code>https://github.com/duckdb/extension-template</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>yaml_repository</strong>
 - URL: <code>https://github.com/teaguesterling/duckdb_yaml</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>eeagrid_repository</strong>
 - URL: <code>https://github.com/ahuarte47/duckdb-eeagrid</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>gsheets_repository</strong>
 - URL: <code>https://github.com/evidence-dev/duckdb_gsheets</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>faiss_repository</strong>
 - URL: <code>https://github.com/duckdb-faiss-ext/duckdb-faiss-ext</code>
-- Status: ❌ Broken- HTTP Status: 200
-<strong>geotiff_repository</strong>
-- URL: <code>https://github.com/babaknaimi/duckdb-geotiff</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>geography_repository</strong>
 - URL: <code>https://github.com/paleolimbot/duckdb-geography</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
+<strong>geotiff_repository</strong>
+- URL: <code>https://github.com/babaknaimi/duckdb-geotiff</code>
+- Status: ✅ OK- HTTP Status: 200
 <strong>highs_repository</strong>
 - URL: <code>https://github.com/fhk/HiGHS-duckdb</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>rusty_sheet_repository</strong>
 - URL: <code>https://github.com/redraiment/rusty-sheet</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>webbed_repository</strong>
 - URL: <code>https://github.com/teaguesterling/duckdb_webbed</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>read_stat_repository</strong>
 - URL: <code>https://github.com/mettekou/duckdb-read-stat</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>hdf5_repository</strong>
 - URL: <code>https://github.com/Berrysoft/duckdb-hdf5</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>duckdb_mcp_repository</strong>
 - URL: <code>https://github.com/teaguesterling/duckdb_mcp</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>duckpgq_repository</strong>
 - URL: <code>https://github.com/cwida/duckpgq-extension</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>duck_tails_repository</strong>
 - URL: <code>https://github.com/teaguesterling/duck_tails</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>capi_quack_repository</strong>
 - URL: <code>https://github.com/duckdb/extension-template-c</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>markdown_repository</strong>
 - URL: <code>https://github.com/teaguesterling/duckdb_markdown</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>jwt_repository</strong>
 - URL: <code>https://github.com/GalvinGao/duckdb_jwt</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>substrait_repository</strong>
 - URL: <code>https://github.com/substrait-io/duckdb-substrait-extension</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>quackformers_repository</strong>
 - URL: <code>https://github.com/martin-conur/quackformers</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>arrow_repository</strong>
 - URL: <code>https://github.com/duckdb/duckdb-extension-alias</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>ofquack_repository</strong>
 - URL: <code>https://github.com/krokozyab/ofquack</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>scrooge_repository</strong>
 - URL: <code>https://github.com/pdet/Scrooge-McDuck</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>blockduck_repository</strong>
 - URL: <code>https://github.com/luohaha/BlockDuck</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>hostfs_repository</strong>
 - URL: <code>https://github.com/gropaul/hostFS</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>sheetreader_repository</strong>
 - URL: <code>https://github.com/polydbms/sheetreader-duckdb</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>pivot_table_repository</strong>
 - URL: <code>https://github.com/Alex-Monahan/pivot_table</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>tarfs_repository</strong>
 - URL: <code>https://github.com/Maxxen/duckdb_tarfs</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>ulid_repository</strong>
 - URL: <code>https://github.com/Maxxen/duckdb_ulid</code>
-- Status: ❌ Broken- HTTP Status: 200
+- Status: ✅ OK- HTTP Status: 200
 <strong>autocomplete_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/autocomplete.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>avro_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/avro.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>aws_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/aws.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>azure_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/azure.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>delta_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/delta.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>ducklake_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/ducklake.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>encodings_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/encodings.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>excel_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/excel.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>fts_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/full_text_search.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>httpfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/httpfs/overview.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>iceberg_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/iceberg/overview.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>icu_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/icu.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>inet_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/inet.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>jemalloc_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/jemalloc.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>json_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/data/json/overview.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>mysql_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/mysql.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>parquet_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/data/parquet/overview.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>postgres_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/postgres.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>spatial_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/spatial/overview.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>sqlite_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/sqlite.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>tpcds_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/tpcds.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>tpch_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/tpch.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>ui_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/ui.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>vss_documentation</strong>
 - URL: <code>https://duckdb.org/docs/stable/core_extensions/vss.html</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name found on page
+- Status: ✅ OK- HTTP Status: 200- Extension name found on page
 <strong>datasketches_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#datasketches</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>fuzzycomplete_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#fuzzycomplete</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>h3_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#h3</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>hashfuncs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hashfuncs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>lindel_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lindel</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>marisa_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#marisa</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>pbix_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pbix</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>stochastic_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#stochastic</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>textplot_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#textplot</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>tributary_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tributary</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>vortex_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#vortex</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>httpserver_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#httpserver</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>msolap_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#msolap</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>nanodbc_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanodbc</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>netquack_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#netquack</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>parser_tools_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#parser_tools</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>radio_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#radio</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>splink_udfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#splink_udfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>airport_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#airport</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>bitfilters_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bitfilters</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>cache_httpfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cache_httpfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>chsql_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>chsql_native_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chsql_native</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>cronjob_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cronjob</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>crypto_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#crypto</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>evalexpr_rhai_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#evalexpr_rhai</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>http_client_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#http_client</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>observefs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#observefs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>open_prompt_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#open_prompt</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>pcap_reader_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pcap_reader</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>pyroscope_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pyroscope</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>quickjs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quickjs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>rapidfuzz_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rapidfuzz</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>redis_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#redis</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>shellfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#shellfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
-<strong>snowflake_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#snowflake</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>tsid_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tsid</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>webmacro_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webmacro</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>wireduck_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#wireduck</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>magic_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#magic</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>prql_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#prql</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>psql_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#psql</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
+<strong>snowflake_documentation</strong>
+- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#snowflake</code>
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>bigquery_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#bigquery</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>cwiqduck_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#cwiqduck</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>zipfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#zipfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>chaos_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#chaos</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>flock_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#flock</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>file_dialog_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#file_dialog</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>gcs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gcs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>mooncake_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#mooncake</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>rusty_quack_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_quack</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>st_read_multi_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#st_read_multi</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>nanoarrow_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#nanoarrow</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>lua_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#lua</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>quack_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quack</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>yaml_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#yaml</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>eeagrid_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#eeagrid</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>gsheets_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#gsheets</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>faiss_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#faiss</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
-<strong>geotiff_documentation</strong>
-- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geotiff</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>geography_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geography</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
+<strong>geotiff_documentation</strong>
+- URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#geotiff</code>
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>highs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#highs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>rusty_sheet_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#rusty_sheet</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>webbed_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#webbed</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>read_stat_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#read_stat</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>hdf5_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hdf5</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>duckdb_mcp_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckdb_mcp</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>duckpgq_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duckpgq</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>duck_tails_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#duck_tails</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>capi_quack_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#capi_quack</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>markdown_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#markdown</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>jwt_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#jwt</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>substrait_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#substrait</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>quackformers_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#quackformers</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>arrow_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#arrow</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>ofquack_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ofquack</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>scrooge_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#scrooge</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>blockduck_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#blockduck</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>hostfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#hostfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>sheetreader_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#sheetreader</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>pivot_table_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#pivot_table</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>tarfs_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#tarfs</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page
 <strong>ulid_documentation</strong>
 - URL: <code>https://duckdb.org/docs/extensions/community_extensions.html#ulid</code>
-- Status: ❌ Broken- HTTP Status: 200- Extension name NOT found on page</p>
+- Status: ⚠️ Likely Wrong- HTTP Status: 200- Extension name NOT found on page</p>
+    
     <hr style="margin-top: 3rem;">
     <footer style="text-align: center; color: #6b7280; font-size: 0.875rem;">
         <p><em>Generated automatically by <a href="https://github.com/Mjboothaus/duckdb-extensions-analysis/actions">GitHub Actions</a></em></p>
@@ -2365,21 +2632,24 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    
     <script>
-    
-    $(document).ready(function() {
-        // Display user's local time based on the report's UTC timestamp
-        function updateLocalTime() {
-            // Extract UTC time from the report
-            const utcTimeText = $('#utc-time').text();
-            const utcMatch = utcTimeText.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/);
+        $(document).ready(function() {
+    // Display user's local time based on the report's UTC timestamp
+    function updateLocalTime() {
+        // Extract UTC time from the report
+        const utcTimeText = $('#utc-time').text();
+        // Match pattern like "2025-09-26 05:05:43 UTC"
+        const utcMatch = utcTimeText.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) UTC/);
+        
+        if (utcMatch) {
+            // Parse the UTC time from the report
+            const utcTimeString = utcMatch[1];
+            // Create date object by adding 'T' and 'Z' for proper ISO format
+            const isoString = utcTimeString.replace(' ', 'T') + 'Z';
+            const utcDate = new Date(isoString);
             
-            if (utcMatch) {
-                // Parse the UTC time from the report
-                const utcTimeString = utcMatch[1];
-                const utcDate = new Date(utcTimeString + ' UTC');
-                
+            // Check if date is valid
+            if (!isNaN(utcDate.getTime())) {
                 // Convert to local time
                 const localTimeString = utcDate.toLocaleString('en-AU', {
                     year: 'numeric',
@@ -2392,66 +2662,68 @@
                 });
                 $('#local-time').text(localTimeString);
             } else {
-                // Fallback to current time if parsing fails
-                const now = new Date();
-                const localTimeString = now.toLocaleString('en-AU', {
-                    year: 'numeric',
-                    month: '2-digit', 
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZoneName: 'short'
-                });
-                $('#local-time').text(localTimeString + ' (current)');
+                $('#local-time').text('Invalid date format');
             }
+        } else {
+            // Fallback - show current time if we can't parse the report time
+            const now = new Date();
+            const localTimeString = now.toLocaleString('en-AU', {
+                year: 'numeric',
+                month: '2-digit', 
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            });
+            $('#local-time').text(localTimeString + ' (current)');
         }
+    }
+    
+    // Update local time once (it's static based on report time)
+    updateLocalTime();
+    
+    // Make tables interactive with appropriate configurations
+    $('table').addClass('table table-striped table-hover');
+    
+    // Configure static tables (Summary, Historical Releases) differently
+    $('table').each(function() {
+        const $table = $(this);
+        const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
+                             $table.closest('h2, h3').prev().text().includes('Historical Releases');
         
-        // Update local time once (it's static based on report time)
-        updateLocalTime();
-        
-        // Make tables interactive with appropriate configurations
-        $('table').addClass('table table-striped table-hover');
-        
-        // Configure static tables (Summary, Historical Releases) differently
-        $('table').each(function() {
-            const $table = $(this);
-            const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
-                                 $table.closest('h2, h3').prev().text().includes('Historical Releases');
-            
-            if (isStaticTable) {
-                // Static tables: no pagination, no length menu, but keep search for Historical
-                const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
-                $table.DataTable({
-                    "paging": false,
-                    "lengthChange": false,
-                    "info": false,
-                    "searching": isHistorical,
-                    "order": [],
-                    "responsive": true,
-                    "dom": isHistorical ? 'ft' : 't'
-                });
-            } else {
-                // Interactive tables: full functionality
-                $table.DataTable({
-                    "pageLength": 25,
-                    "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                    "order": [],
-                    "columnDefs": [
-                        { "orderable": true, "targets": "_all" }
-                    ],
-                    "responsive": true,
-                    "dom": '<"top"lf>rt<"bottom"ip><"clear">'
-                });
-            }
-        });
-        
-        // Add timezone info tooltip after tables are initialized
-        setTimeout(function() {
-            $('#local-time').attr('title', 'Report time in your local timezone');
-        }, 100);
+        if (isStaticTable) {
+            // Static tables: no pagination, no length menu, but keep search for Historical
+            const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
+            $table.DataTable({
+                "paging": false,
+                "lengthChange": false,
+                "info": false,
+                "searching": isHistorical,
+                "order": [],
+                "responsive": true,
+                "dom": isHistorical ? 'ft' : 't'
+            });
+        } else {
+            // Interactive tables: full functionality
+            $table.DataTable({
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "order": [],
+                "columnDefs": [
+                    { "orderable": true, "targets": "_all" }
+                ],
+                "responsive": true,
+                "dom": '<"top"lf>rt<"bottom"ip><"clear">'
+            });
+        }
     });
     
+    // Add timezone info tooltip after tables are initialized
+    setTimeout(function() {
+        $('#local-time').attr('title', 'Report time in your local timezone');
+    }, 100);
+});
     </script>
 </body>
 </html>
