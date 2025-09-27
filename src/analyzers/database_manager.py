@@ -249,7 +249,7 @@ class DatabaseManager(BaseDatabaseManager):
                         repo_info.get("archived", False),
                         created_at,
                         updated_at,
-                        ext.featured,
+                        False,  # featured (deprecated)
                         github_url,
                         community_repo_url,
                         install_url,
@@ -274,7 +274,7 @@ class DatabaseManager(BaseDatabaseManager):
                         status,
                         error_msg,
                         ext.description,
-                        ext.featured,
+                        False,  # featured (deprecated)
                         community_repo_url,
                         install_url,
                         analysis_result.duckdb_version,

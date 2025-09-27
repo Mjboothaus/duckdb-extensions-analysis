@@ -460,7 +460,7 @@ class ReportGenerator(BaseReportGenerator):
                 "Stars": "N/A",
                 "Language": "C++",
                 "Description": "Core DuckDB extension",
-                "Featured": False,
+                "Featured": False,  # deprecated
             })
         
         # Add community extensions
@@ -477,7 +477,7 @@ class ReportGenerator(BaseReportGenerator):
                 "Stars": ext.stars or 0,
                 "Language": repo_info.get("language", "N/A") if repo_info else "N/A",
                 "Description": ext.description or "No description",
-                "Featured": ext.featured,
+                "Featured": False,  # deprecated
             })
         
         # Create DataFrame and save to CSV
@@ -511,7 +511,7 @@ class ReportGenerator(BaseReportGenerator):
                 "Stars": "N/A",
                 "Language": "C++",
                 "Description": "Core DuckDB extension",
-                "Featured": False,
+                "Featured": False,  # deprecated
             })
         
         # Add community extensions
@@ -528,7 +528,7 @@ class ReportGenerator(BaseReportGenerator):
                 "Stars": ext.stars or 0,
                 "Language": repo_info.get("language", "N/A") if repo_info else "N/A",
                 "Description": ext.description or "No description",
-                "Featured": ext.featured,
+                "Featured": False,  # deprecated
             })
         
         # Create DataFrame and save to Excel
