@@ -92,33 +92,67 @@ $(document).ready(function() {
     // Make tables interactive with appropriate configurations
     $('table').addClass('table table-striped table-hover');
     
-    // Configure static tables (Summary, Historical Releases) differently
+    // Configure tables based on their content and context  
     $('table').each(function() {
         const $table = $(this);
-        const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
-                             $table.closest('h2, h3').prev().text().includes('Historical Releases');
+        
+        // Find the preceding heading to determine table type
+        const $prevHeading = $table.prevAll('h1, h2, h3, h4').first();
+        const headingText = $prevHeading.text() || '';
+        
+        // Check number of columns in header
+        const numCols = $table.find('thead tr:first th').length;
+        
+        // Determine if this is a static table (Summary, Historical Releases)
+        const isStaticTable = headingText.includes('Summary') || 
+                             headingText.includes('Historical Releases') || 
+                             headingText.includes('Current Release Context') ||
+                             numCols <= 3;
+        
+        console.log(`Table under "${headingText}" has ${numCols} columns, isStatic: ${isStaticTable}`);
         
         if (isStaticTable) {
-            // Static tables: no pagination, no length menu, but keep search for Historical
-            const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
+            // Static tables: minimal functionality
+            const needsSearch = headingText.includes('Historical');
             $table.DataTable({
                 "paging": false,
                 "lengthChange": false,
                 "info": false,
-                "searching": isHistorical,
+                "searching": needsSearch,
                 "order": [],
                 "responsive": true,
-                "dom": isHistorical ? 'ft' : 't'
+                "dom": needsSearch ? 'ft' : 't'
             });
         } else {
-            // Interactive tables: full functionality
+            // Interactive extension tables: full functionality
+            let columnDefs = [{ "orderable": true, "targets": "_all" }];
+            
+            // Add special sorting for Status column if present
+            if (numCols >= 4) {
+                columnDefs.push({
+                    // Status column is typically at index 3
+                    "targets": [3],
+                    "type": "string",
+                    "render": function(data, type, row) {
+                        if (type === 'sort' || type === 'type') {
+                            if (data && typeof data === 'string') {
+                                if (data.includes('🟢')) return '1-Ongoing';
+                                if (data.includes('❓')) return '2-Unknown';
+                                if (data.includes('🔴')) return '3-Discontinued';
+                                if (data.includes('⚠️')) return '4-Issues';
+                                return '5-Other';
+                            }
+                        }
+                        return data;
+                    }
+                });
+            }
+            
             $table.DataTable({
                 "pageLength": 25,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 "order": [],
-                "columnDefs": [
-                    { "orderable": true, "targets": "_all" }
-                ],
+                "columnDefs": columnDefs,
                 "responsive": true,
                 "dom": '<"top"lf>rt<"bottom"ip><"clear">'
             });

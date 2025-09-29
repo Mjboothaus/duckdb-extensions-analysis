@@ -201,17 +201,21 @@ def cache_info():
 @analyze.command('community')
 @click.option('--cache-hours', type=int, default=None, 
               help='Cache duration in hours (0 to bypass cache)')
-def analyze_community(cache_hours):
+@click.option('--with-compatibility-testing', is_flag=True,
+              help='Enable extension installation testing for version compatibility (slower, requires DuckDB installations)')
+def analyze_community(cache_hours, with_compatibility_testing):
     """Analyze community extensions only."""
-    asyncio.run(_run_analysis('community', cache_hours))
+    asyncio.run(_run_analysis('community', cache_hours, with_compatibility_testing))
 
 
 @analyze.command('core')
 @click.option('--cache-hours', type=int, default=None,
               help='Cache duration in hours (0 to bypass cache)')
-def analyze_core(cache_hours):
+@click.option('--with-compatibility-testing', is_flag=True,
+              help='Enable extension installation testing for version compatibility (slower, requires DuckDB installations)')
+def analyze_core(cache_hours, with_compatibility_testing):
     """Analyze core extensions only."""
-    asyncio.run(_run_analysis('core', cache_hours))
+    asyncio.run(_run_analysis('core', cache_hours, with_compatibility_testing))
 
 
 @analyze.command('all')
@@ -219,7 +223,9 @@ def analyze_core(cache_hours):
               help='Cache duration in hours (0 to bypass cache)')
 @click.option('--with-issues', is_flag=True, 
               help='Enable GitHub issues analysis (slower, may hit rate limits)')
-def analyze_all(cache_hours, with_issues):
+@click.option('--with-compatibility-testing', is_flag=True,
+              help='Enable extension installation testing for version compatibility (slower, requires DuckDB installations)')
+def analyze_all(cache_hours, with_issues, with_compatibility_testing):
     """Analyze both core and community extensions."""
     if with_issues:
         config.enable_issues_analysis = True
@@ -228,7 +234,7 @@ def analyze_all(cache_hours, with_issues):
         config.enable_issues_analysis = False
         logger.info("Skipping GitHub issues analysis (default behavior)")
     
-    asyncio.run(_run_analysis('full', cache_hours))
+    asyncio.run(_run_analysis('full', cache_hours, with_compatibility_testing))
 
 
 # Report commands
@@ -278,14 +284,17 @@ def quick_report(formats):
 
 
 # Hidden implementation functions
-async def _run_analysis(mode: str, cache_hours: Optional[int]):
+async def _run_analysis(mode: str, cache_hours: Optional[int], with_compatibility_testing: bool = False):
     """Run analysis in specified mode."""
     cache_hours = cache_hours if cache_hours is not None else config.default_cache_hours
     
     if cache_hours == 0:
         logger.info("Bypassing cache for this run (fetching fresh data)")
     
-    orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours)
+    if with_compatibility_testing:
+        logger.info("Enabling extension compatibility testing (--with-compatibility-testing flag)")
+    
+    orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours, enable_compatibility_testing=with_compatibility_testing)
     
     try:
         analysis_result = await orchestrator.run_analysis_mode(mode)

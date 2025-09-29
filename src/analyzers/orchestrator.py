@@ -24,14 +24,15 @@ from .url_validator import URLValidator
 class AnalysisOrchestrator:
     """Main orchestrator that coordinates all analysis modules."""
     
-    def __init__(self, config, cache_hours: int = 1):
+    def __init__(self, config, cache_hours: int = 1, enable_compatibility_testing: bool = False):
         self.config = config
         self.cache_hours = cache_hours
+        self.enable_compatibility_testing = enable_compatibility_testing
         
         # Initialize all modules
         self.github_client = GitHubAPIClient(config, cache_hours)
         self.core_analyzer = CoreExtensionAnalyzer(config, self.github_client, cache_hours)
-        self.community_analyzer = CommunityExtensionAnalyzer(config, self.github_client, cache_hours)
+        self.community_analyzer = CommunityExtensionAnalyzer(config, self.github_client, cache_hours, enable_compatibility_testing)
         self.database_manager = DatabaseManager(config)
         self.report_generator = ReportGenerator(config)
         self.github_issues_tracker = GitHubIssuesTracker(self.github_client, cache_hours)

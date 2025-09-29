@@ -167,13 +167,108 @@ th:last-child, td:last-child {
     display: none;
 }
 
+/* Fix DataTables pagination spacing issues */
+.dataTables_wrapper {
+    margin-bottom: 3rem !important;
+    overflow: visible;
+}
+
+.dataTables_info, .dataTables_paginate {
+    margin-top: 1rem !important;
+    clear: both;
+    display: block;
+}
+
+/* Ensure proper spacing between tables and other content */
+table.dataTable {
+    margin-bottom: 2rem !important;
+}
+
+/* Fix potential z-index issues with pagination */
+.dataTables_wrapper .dataTables_paginate {
+    z-index: 1;
+    position: relative;
+}
+
+/* Additional fixes for bottom section spacing */
+.dataTables_wrapper .bottom {
+    margin-top: 1.5rem !important;
+    padding-top: 1rem;
+    clear: both;
+    width: 100%;
+}
+
+/* Ensure pagination buttons don't overlap with other content */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    margin: 0 2px;
+    padding: 6px 12px;
+    display: inline-block;
+}
+
+/* Add breathing room after DataTables */
+.dataTables_wrapper + * {
+    margin-top: 2rem !important;
+}
+
+/* Fix any potential float clearing issues */
+.dataTables_wrapper:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Additional bullet fix for DataTables navigation */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info {
+    list-style: none !important;
+}
+
+.dataTables_wrapper ul,
+.dataTables_wrapper li {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Ensure pagination controls have proper spacing */
+.dataTables_wrapper .bottom {
+    clear: both;
+    float: none;
+    display: block;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Override any inherited bullet styles */
+.dataTables_wrapper * {
+    list-style: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    margin: 0 3px !important;
+    padding: 8px 12px !important;
+    border-radius: 4px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
+
     </style>
 </head>
 <body>
     <div class="header-info">
         <h2 style="margin-top: 0; border: none;">🦆 DuckDB Extensions Analysis</h2>
         <p>Automated monitoring and analysis of DuckDB's extension ecosystem.</p>
-        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-27 01:03:27 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code> local)</span></p>
+        <p><strong>Last Updated:</strong> <code id="utc-time">2025-09-27 15:44:44 UTC</code> <span class="text-muted">(<code id="local-time">Loading...</code>)</span></p>
         <p><a href="#summary">Jump to Summary</a> | <a href="#core-extensions">Core Extensions</a> | <a href="#community-extensions">Community Extensions</a></p>
     </div>
     
@@ -219,10 +314,6 @@ th:last-child, td:last-child {
 <td>83</td>
 </tr>
 <tr>
-<td><strong>Featured Extensions</strong></td>
-<td>42</td>
-</tr>
-<tr>
 <td><strong>Total Extensions</strong></td>
 <td>107</td>
 </tr>
@@ -232,7 +323,7 @@ th:last-child, td:last-child {
 </tr>
 <tr>
 <td><strong>Very Active</strong> (≤ 7 days)</td>
-<td>49</td>
+<td>47</td>
 </tr>
 </tbody>
 </table>
@@ -258,8 +349,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/autocomplete.html">autocomplete</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/autocomplete">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
-<td>0</td>
+<td>11 days ago (2025-09-17 14:47:27 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: autocomplete</td>
 </tr>
@@ -268,8 +359,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/avro.html">avro</a></td>
 <td><a href="https://github.com/duckdb/duckdb-avro">duckdb-avro</a></td>
 <td>🟢 Ongoing</td>
-<td>38 days ago</td>
-<td>0</td>
+<td>40 days ago (2025-08-19 12:11:33 UTC)</td>
+<td>28</td>
 <td>C++</td>
 <td>Apache Avro format support</td>
 </tr>
@@ -278,8 +369,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/aws.html">aws</a></td>
 <td><a href="https://github.com/duckdb/duckdb-aws">duckdb-aws</a></td>
 <td>🟢 Ongoing</td>
-<td>18 days ago</td>
-<td>0</td>
+<td>20 days ago (2025-09-08 06:51:46 UTC)</td>
+<td>54</td>
 <td>C++</td>
 <td>AWS S3 integration</td>
 </tr>
@@ -288,28 +379,28 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/azure.html">azure</a></td>
 <td><a href="https://github.com/duckdb/duckdb-azure">duckdb-azure</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>0</td>
+<td>2 days ago (2025-09-26 07:34:33 UTC)</td>
+<td>66</td>
 <td>C++</td>
-<td>Azure Blob Storage integration</td>
+<td>Azure extension for DuckDB</td>
 </tr>
 <tr>
 <td>5</td>
 <td><a href="https://duckdb.org/docs/stable/core_extensions/delta.html">delta</a></td>
 <td><a href="https://github.com/duckdb/duckdb-delta">duckdb-delta</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>0</td>
+<td>3 days ago (2025-09-25 12:58:25 UTC)</td>
+<td>201</td>
 <td>C++</td>
-<td>Delta Lake format support</td>
+<td>DuckDB extension for Delta Lake</td>
 </tr>
 <tr>
 <td>6</td>
 <td><a href="https://duckdb.org/docs/stable/core_extensions/ducklake.html">ducklake</a></td>
 <td><a href="https://github.com/duckdb/ducklake">duckdb/ducklake</a></td>
 <td>🟢 Ongoing</td>
-<td>10 days ago</td>
-<td>0</td>
+<td>12 days ago</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Delta Lake support via DuckLake (different from delta extension)</td>
 </tr>
@@ -318,8 +409,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/encodings.html">encodings</a></td>
 <td><a href="https://github.com/duckdb/duckdb-encodings">duckdb-encodings</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
-<td>0</td>
+<td>11 days ago (2025-09-17 12:57:45 UTC)</td>
+<td>16</td>
 <td>C++</td>
 <td>Character encoding support</td>
 </tr>
@@ -328,18 +419,18 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/excel.html">excel</a></td>
 <td><a href="https://github.com/duckdb/duckdb-excel">duckdb-excel</a></td>
 <td>🟢 Ongoing</td>
-<td>23 days ago</td>
-<td>0</td>
+<td>25 days ago (2025-09-03 21:31:45 UTC)</td>
+<td>45</td>
 <td>C++</td>
-<td>Excel file format support</td>
+<td>Excel extension for DuckDB</td>
 </tr>
 <tr>
 <td>9</td>
 <td><a href="https://duckdb.org/docs/stable/core_extensions/full_text_search.html">fts</a></td>
 <td><a href="https://github.com/duckdb/duckdb-fts">duckdb-fts</a></td>
 <td>🟢 Ongoing</td>
-<td>10 days ago</td>
-<td>0</td>
+<td>12 days ago (2025-09-16 14:12:43 UTC)</td>
+<td>21</td>
 <td>C++</td>
 <td>Full-text search functionality</td>
 </tr>
@@ -348,8 +439,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/httpfs/overview.html">httpfs</a></td>
 <td><a href="https://github.com/duckdb/duckdb-httpfs">duckdb-httpfs</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>0</td>
+<td>today (2025-09-27 07:45:33 UTC)</td>
+<td>31</td>
 <td>C++</td>
 <td>HTTP/S3 filesystem support</td>
 </tr>
@@ -358,8 +449,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/iceberg/overview.html">iceberg</a></td>
 <td><a href="https://github.com/duckdb/duckdb-iceberg">duckdb-iceberg</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>0</td>
+<td>4 days ago (2025-09-24 16:04:54 UTC)</td>
+<td>323</td>
 <td>C++</td>
 <td>Apache Iceberg format support</td>
 </tr>
@@ -368,8 +459,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/icu.html">icu</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/icu">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>10 days ago</td>
-<td>0</td>
+<td>12 days ago (2025-09-16 21:21:13 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: icu</td>
 </tr>
@@ -378,8 +469,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/inet.html">inet</a></td>
 <td><a href="https://github.com/duckdb/duckdb-inet">duckdb-inet</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>0</td>
+<td>9 days ago (2025-09-19 13:38:16 UTC)</td>
+<td>9</td>
 <td>C++</td>
 <td>Internet address data types</td>
 </tr>
@@ -388,8 +479,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/jemalloc.html">jemalloc</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/jemalloc">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>111 days ago</td>
-<td>0</td>
+<td>113 days ago (2025-06-07 09:38:02 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: jemalloc</td>
 </tr>
@@ -398,8 +489,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/data/json/overview.html">json</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/json">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>17 days ago</td>
-<td>0</td>
+<td>19 days ago (2025-09-09 10:35:16 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: json</td>
 </tr>
@@ -408,8 +499,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/mysql.html">mysql</a></td>
 <td><a href="https://github.com/duckdb/duckdb-mysql">duckdb-mysql</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>0</td>
+<td>2 days ago (2025-09-26 12:25:49 UTC)</td>
+<td>76</td>
 <td>C++</td>
 <td>MySQL database connectivity</td>
 </tr>
@@ -418,8 +509,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/data/parquet/overview.html">parquet</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/parquet">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>0</td>
+<td>5 days ago (2025-09-23 07:04:20 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: parquet</td>
 </tr>
@@ -428,8 +519,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/postgres.html">postgres</a></td>
 <td><a href="https://github.com/duckdb/duckdb-postgres">duckdb-postgres</a></td>
 <td>🟢 Ongoing</td>
-<td>10 days ago</td>
-<td>0</td>
+<td>12 days ago (2025-09-16 16:11:40 UTC)</td>
+<td>312</td>
 <td>C++</td>
 <td>PostgreSQL database connectivity</td>
 </tr>
@@ -438,8 +529,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/spatial/overview.html">spatial</a></td>
 <td><a href="https://github.com/duckdb/duckdb-spatial">duckdb-spatial</a></td>
 <td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>0</td>
+<td>4 days ago (2025-09-24 10:58:36 UTC)</td>
+<td>619</td>
 <td>C++</td>
 <td>Geospatial data types and functions</td>
 </tr>
@@ -448,18 +539,18 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/sqlite.html">sqlite</a></td>
 <td><a href="https://github.com/duckdb/duckdb-sqlite">duckdb-sqlite</a></td>
 <td>🟢 Ongoing</td>
-<td>10 days ago</td>
-<td>0</td>
+<td>today (2025-09-28 07:21:39 UTC)</td>
+<td>257</td>
 <td>C++</td>
-<td>SQLite database connectivity</td>
+<td>DuckDB extension to read and write to SQLite databases</td>
 </tr>
 <tr>
 <td>21</td>
 <td><a href="https://duckdb.org/docs/stable/core_extensions/tpcds.html">tpcds</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/tpcds">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>52 days ago</td>
-<td>0</td>
+<td>54 days ago (2025-08-05 13:26:52 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: tpcds</td>
 </tr>
@@ -468,8 +559,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/tpch.html">tpch</a></td>
 <td><a href="https://github.com/duckdb/duckdb/tree/main/extension/tpch">duckdb/duckdb</a></td>
 <td>🟢 Ongoing</td>
-<td>52 days ago</td>
-<td>0</td>
+<td>54 days ago (2025-08-05 13:26:52 UTC)</td>
+<td>N/A (part of core DuckDB repo)</td>
 <td>C++</td>
 <td>Core DuckDB extension: tpch</td>
 </tr>
@@ -478,8 +569,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/ui.html">ui</a></td>
 <td><a href="https://github.com/duckdb/duckdb-ui">duckdb-ui</a></td>
 <td>🟢 Ongoing</td>
-<td>9 days ago</td>
-<td>0</td>
+<td>11 days ago (2025-09-17 02:33:57 UTC)</td>
+<td>357</td>
 <td>C++</td>
 <td>Browser-based user interface for DuckDB</td>
 </tr>
@@ -488,8 +579,8 @@ th:last-child, td:last-child {
 <td><a href="https://duckdb.org/docs/stable/core_extensions/vss.html">vss</a></td>
 <td><a href="https://github.com/duckdb/duckdb-vss">duckdb-vss</a></td>
 <td>🟢 Ongoing</td>
-<td>21 days ago</td>
-<td>0</td>
+<td>23 days ago (2025-09-05 07:04:02 UTC)</td>
+<td>216</td>
 <td>C++</td>
 <td>Vector similarity search</td>
 </tr>
@@ -510,928 +601,842 @@ th:last-child, td:last-child {
 <th>Stars</th>
 <th>Language</th>
 <th>Description</th>
-<th>Featured</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/airport.html">airport</a></td>
-<td><a href="https://github.com/Query-farm/airport">airport</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>299</td>
-<td>C++</td>
-<td>The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB</td>
-<td>⭐</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/faiss.html">faiss</a></td>
+<td><a href="https://github.com/duckdb-faiss-ext/duckdb-faiss-ext">duckdb-faiss-ext</a></td>
+<td>❓ Unknown</td>
+<td>today (2025-09-28 21:13:15 UTC)</td>
+<td>25</td>
+<td>Go</td>
+<td>DuckDB wrapper for FAISS - Experimental</td>
 </tr>
 <tr>
 <td>2</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/bitfilters.html">bitfilters</a></td>
-<td><a href="https://github.com/Query-farm/bitfilters">bitfilters</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pbix.html">pbix</a></td>
+<td><a href="https://github.com/Hugoberry/duckdb-pbix-extension">duckdb-pbix-extension</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>2</td>
+<td>today (2025-09-28 13:38:51 UTC)</td>
+<td>27</td>
 <td>C++</td>
-<td>A high-performance DuckDB extension providing probabilistic data structures f...</td>
-<td>⭐</td>
+<td>Duckdb extension for parsing the metadata and contents of the embedded data m...</td>
 </tr>
 <tr>
 <td>3</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/crypto.html">crypto</a></td>
-<td><a href="https://github.com/Query-farm/crypto">crypto</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/zipfs.html">zipfs</a></td>
+<td><a href="https://github.com/isaacbrodsky/duckdb-zipfs">duckdb-zipfs</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>22</td>
+<td>today (2025-09-28 17:31:14 UTC)</td>
+<td>43</td>
 <td>C++</td>
-<td>DuckDB Extension for cryptographic hash functions and HMAC</td>
-<td>⭐</td>
+<td>DuckDB extension to read files within zip archives.</td>
 </tr>
 <tr>
 <td>4</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/datasketches.html">datasketches</a></td>
 <td><a href="https://github.com/Query-farm/datasketches">datasketches</a></td>
 <td>🟢 Ongoing</td>
-<td>today</td>
-<td>30</td>
+<td>today (2025-09-27 20:32:00 UTC)</td>
+<td>33</td>
 <td>C++</td>
 <td>Integrates DuckDB with the high-performance Apache DataSketches library. This...</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>5</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/evalexpr_rhai.html">evalexpr_rhai</a></td>
-<td><a href="https://github.com/Query-farm/evalexpr_rhai">evalexpr_rhai</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>21</td>
-<td>C++</td>
-<td>A DuckDB extension to evaluate the Rhai scripting language as part of SQL.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>6</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/fuzzycomplete.html">fuzzycomplete</a></td>
-<td><a href="https://github.com/Query-farm/fuzzycomplete">fuzzycomplete</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>21</td>
-<td>C++</td>
-<td>DuckDB Extension for fuzzy string matching based autocompletion</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>7</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/h3.html">h3</a></td>
-<td><a href="https://github.com/isaacbrodsky/h3-duckdb">h3-duckdb</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>221</td>
-<td>C++</td>
-<td>Bindings for H3 to DuckDB</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/hashfuncs.html">hashfuncs</a></td>
-<td><a href="https://github.com/Query-farm/hashfuncs">hashfuncs</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>4</td>
-<td>C++</td>
-<td>A DuckDB extension that supplies non-cryptographic hash functions.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>9</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/lindel.html">lindel</a></td>
-<td><a href="https://github.com/Query-farm/lindel">lindel</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>50</td>
-<td>C++</td>
-<td>DuckDB Extension Linearization/Delinearization, Z-Order, Hilbert and Morton C...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>10</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/marisa.html">marisa</a></td>
-<td><a href="https://github.com/Query-farm/marisa">marisa</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>2</td>
-<td>C++</td>
-<td>The Marisa extension by Query.Farm integrates the fast, space-efficient MARIS...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>11</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/pbix.html">pbix</a></td>
-<td><a href="https://github.com/Hugoberry/duckdb-pbix-extension">duckdb-pbix-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>27</td>
-<td>C++</td>
-<td>Duckdb extension for parsing the metadata and contents of the embedded data m...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>12</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/quack.html">quack</a></td>
-<td><a href="https://github.com/duckdb/extension-template">extension-template</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>222</td>
-<td>Python</td>
-<td>Template for DuckDB extensions to help you develop, test and deploy a custom...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>13</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/radio.html">radio</a></td>
-<td><a href="https://github.com/Query-farm/radio">radio</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>30</td>
-<td>C++</td>
-<td>Radio is a DuckDB extension by Query.Farm that brings real-time event streams...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>14</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/rapidfuzz.html">rapidfuzz</a></td>
-<td><a href="https://github.com/Query-farm/rapidfuzz">rapidfuzz</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>3</td>
-<td>C++</td>
-<td>DuckDB Community Extension adding RapidFuzz algorithms for search, deduplicat...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>15</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/shellfs.html">shellfs</a></td>
-<td><a href="https://github.com/Query-farm/shellfs">shellfs</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>81</td>
-<td>C++</td>
-<td>DuckDB extension allowing shell commands to be used for input and output.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>16</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/snowflake.html">snowflake</a></td>
-<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>12</td>
-<td>C++</td>
-<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>17</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/stochastic.html">stochastic</a></td>
-<td><a href="https://github.com/Query-farm/stochastic">stochastic</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>11</td>
-<td>C++</td>
-<td>A DuckDB extension that add comprehensive statistical distribution functions...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>18</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/textplot.html">textplot</a></td>
-<td><a href="https://github.com/Query-farm/textplot">textplot</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>10</td>
-<td>C++</td>
-<td>A DuckDB community extension that enables text-based data visualization direc...</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>19</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/tributary.html">tributary</a></td>
-<td><a href="https://github.com/Query-farm/tributary">tributary</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>30</td>
-<td>C++</td>
-<td>A DuckDB Extension for Kafka</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>20</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/vortex.html">vortex</a></td>
-<td><a href="https://github.com/vortex-data/duckdb-vortex">duckdb-vortex</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>24</td>
-<td>Shell</td>
-<td>DuckDB extension allowing reading/writing of vortex files</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>21</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/zipfs.html">zipfs</a></td>
-<td><a href="https://github.com/isaacbrodsky/duckdb-zipfs">duckdb-zipfs</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>41</td>
-<td>C++</td>
-<td>DuckDB extension to read files within zip archives.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>22</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/httpserver.html">httpserver</a></td>
-<td><a href="https://github.com/Query-farm/httpserver">httpserver</a></td>
-<td>🟢 Ongoing</td>
-<td>today</td>
-<td>231</td>
-<td>HTML</td>
-<td>DuckDB HTTP API Server and Query Interface in a  Community Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>23</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/msolap.html">msolap</a></td>
-<td><a href="https://github.com/Hugoberry/duckdb-msolap-extension">duckdb-msolap-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>8</td>
-<td>C++</td>
-<td>DuckDB extension: msolap by Hugoberry</td>
-<td></td>
-</tr>
-<tr>
-<td>24</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/nanodbc.html">nanodbc</a></td>
-<td><a href="https://github.com/Hugoberry/duckdb-nanodbc-extension">duckdb-nanodbc-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>37</td>
-<td>C++</td>
-<td>Database connectivity extension by Hugoberry</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>25</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/netquack.html">netquack</a></td>
-<td><a href="https://github.com/hatamiarash7/duckdb-netquack">duckdb-netquack</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>17</td>
-<td>C++</td>
-<td>DuckDB extension for parsing, extracting, and analyzing domains, URIs, and pa...</td>
-<td></td>
-</tr>
-<tr>
-<td>26</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/parser_tools.html">parser_tools</a></td>
-<td><a href="https://github.com/zfarrell/duckdb_extension_parser_tools">duckdb_extension_parser_tools</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>15</td>
-<td>C++</td>
-<td>Parse sql - with sql!</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>27</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/splink_udfs.html">splink_udfs</a></td>
-<td><a href="https://github.com/moj-analytical-services/splink_udfs">splink_udfs</a></td>
-<td>🟢 Ongoing</td>
-<td>2 days ago</td>
-<td>9</td>
-<td>C++</td>
-<td>DuckDB extension: splink_udfs by moj-analytical-services</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>28</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/cache_httpfs.html">cache_httpfs</a></td>
-<td><a href="https://github.com/dentiny/duck-read-cache-fs">duck-read-cache-fs</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>98</td>
-<td>C++</td>
-<td>This repository is made as read-only filesystem for remote access.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>29</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/chsql.html">chsql</a></td>
-<td><a href="https://github.com/Query-farm/clickhouse-sql">clickhouse-sql</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>73</td>
-<td>C++</td>
-<td>DuckDB Community Extension implementing ClickHouse SQL Dialect macros and Cus...</td>
-<td></td>
-</tr>
-<tr>
-<td>30</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/chsql_native.html">chsql_native</a></td>
-<td><a href="https://github.com/Query-farm/clickhouse-native">clickhouse-native</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>16</td>
-<td>Rust</td>
-<td>Experimental ClickHouse Native Client and Native file reader Extension for Du...</td>
-<td></td>
-</tr>
-<tr>
-<td>31</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/cronjob.html">cronjob</a></td>
-<td><a href="https://github.com/Query-farm/cronjob">cronjob</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>41</td>
-<td>C++</td>
-<td>DuckDB CronJob Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>32</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/http_client.html">http_client</a></td>
-<td><a href="https://github.com/Query-farm/httpclient">httpclient</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>71</td>
-<td>C++</td>
-<td>DuckDB HTTP GET/POST Client in a Community Extension</td>
-<td></td>
-</tr>
-<tr>
-<td>33</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/observefs.html">observefs</a></td>
-<td><a href="https://github.com/dentiny/duckdb-filesystem-observability">duckdb-filesystem-observability</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>1</td>
-<td>C++</td>
-<td>Provides observability for duckdb filesystem.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>34</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/open_prompt.html">open_prompt</a></td>
-<td><a href="https://github.com/Query-farm/openprompt">openprompt</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>50</td>
-<td>C++</td>
-<td>DuckDB Community Extension to prompt LLMs from SQL</td>
-<td></td>
-</tr>
-<tr>
-<td>35</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/pcap_reader.html">pcap_reader</a></td>
-<td><a href="https://github.com/Query-farm/pcap">pcap</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>11</td>
-<td>Rust</td>
-<td>DuckDB PCAP Reader Extension made in Rust</td>
-<td></td>
-</tr>
-<tr>
-<td>36</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/pyroscope.html">pyroscope</a></td>
-<td><a href="https://github.com/Query-farm/pyroscope">pyroscope</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>19</td>
-<td>Rust</td>
-<td>DuckDB Pyroscope Extension for Continuous Profiling</td>
-<td></td>
-</tr>
-<tr>
-<td>37</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/quickjs.html">quickjs</a></td>
-<td><a href="https://github.com/Query-farm/quickjs">quickjs</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>8</td>
-<td>C++</td>
-<td>DuckDB extension: quickjs by quackscience</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>38</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/redis.html">redis</a></td>
-<td><a href="https://github.com/Query-farm/redis">redis</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>7</td>
-<td>C++</td>
-<td>DuckDB Redis Client community extension</td>
-<td></td>
-</tr>
-<tr>
-<td>39</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/tsid.html">tsid</a></td>
-<td><a href="https://github.com/Query-farm/tsid">tsid</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>5</td>
-<td>C++</td>
-<td>TSID Extension for DuckDB</td>
-<td></td>
-</tr>
-<tr>
-<td>40</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/webmacro.html">webmacro</a></td>
-<td><a href="https://github.com/Query-farm/webmacro">webmacro</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>13</td>
-<td>C++</td>
-<td>DuckDB WebMacro: Share and Load your SQL Macros via gists</td>
-<td></td>
-</tr>
-<tr>
-<td>41</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/wireduck.html">wireduck</a></td>
-<td><a href="https://github.com/hyehudai/wireduck">wireduck</a></td>
-<td>🟢 Ongoing</td>
-<td>3 days ago</td>
-<td>46</td>
-<td>C++</td>
-<td>Duckdb extension to read pcap files</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>42</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/cwiqduck.html">cwiqduck</a></td>
-<td><a href="https://github.com/cwiq-os/cwiqduck">cwiqduck</a></td>
-<td>🟢 Ongoing</td>
-<td>4 days ago</td>
-<td>1</td>
-<td>C++</td>
-<td>DuckDB extensions for CWIQ</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>43</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/magic.html">magic</a></td>
 <td><a href="https://github.com/carlopi/duckdb_magic">duckdb_magic</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
+<td>today (2025-09-27 18:50:32 UTC)</td>
 <td>7</td>
 <td>C++</td>
 <td>Auto-detect file types via <code>libmagic</code> (<code>file</code> utility)</td>
-<td>⭐</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/netquack.html">netquack</a></td>
+<td><a href="https://github.com/hatamiarash7/duckdb-netquack">duckdb-netquack</a></td>
+<td>❓ Unknown</td>
+<td>today (2025-09-28 04:33:36 UTC)</td>
+<td>17</td>
+<td>C++</td>
+<td>DuckDB extension for parsing, extracting, and analyzing domains, URIs, and pa...</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/snowflake.html">snowflake</a></td>
+<td><a href="https://github.com/iqea-ai/duckdb-snowflake">duckdb-snowflake</a></td>
+<td>🟢 Ongoing</td>
+<td>today (2025-09-28 04:53:57 UTC)</td>
+<td>12</td>
+<td>C++</td>
+<td>A powerful DuckDB extension that enables seamless querying of Snowflake datab...</td>
+</tr>
+<tr>
+<td>8</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/airport.html">airport</a></td>
+<td><a href="https://github.com/Query-farm/airport">airport</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:15:09 UTC)</td>
+<td>299</td>
+<td>C++</td>
+<td>The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB</td>
+</tr>
+<tr>
+<td>9</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/bitfilters.html">bitfilters</a></td>
+<td><a href="https://github.com/Query-farm/bitfilters">bitfilters</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:15:18 UTC)</td>
+<td>2</td>
+<td>C++</td>
+<td>A high-performance DuckDB extension providing probabilistic data structures f...</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/crypto.html">crypto</a></td>
+<td><a href="https://github.com/Query-farm/crypto">crypto</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:15:27 UTC)</td>
+<td>22</td>
+<td>C++</td>
+<td>DuckDB Extension for cryptographic hash functions and HMAC</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/evalexpr_rhai.html">evalexpr_rhai</a></td>
+<td><a href="https://github.com/Query-farm/evalexpr_rhai">evalexpr_rhai</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:17:42 UTC)</td>
+<td>21</td>
+<td>C++</td>
+<td>A DuckDB extension to evaluate the Rhai scripting language as part of SQL.</td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/fuzzycomplete.html">fuzzycomplete</a></td>
+<td><a href="https://github.com/Query-farm/fuzzycomplete">fuzzycomplete</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:17:51 UTC)</td>
+<td>21</td>
+<td>C++</td>
+<td>DuckDB Extension for fuzzy string matching based autocompletion</td>
+</tr>
+<tr>
+<td>13</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/h3.html">h3</a></td>
+<td><a href="https://github.com/isaacbrodsky/h3-duckdb">h3-duckdb</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:15:45 UTC)</td>
+<td>221</td>
+<td>C++</td>
+<td>Bindings for H3 to DuckDB</td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/hashfuncs.html">hashfuncs</a></td>
+<td><a href="https://github.com/Query-farm/hashfuncs">hashfuncs</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:01 UTC)</td>
+<td>4</td>
+<td>C++</td>
+<td>A DuckDB extension that supplies non-cryptographic hash functions.</td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/lindel.html">lindel</a></td>
+<td><a href="https://github.com/Query-farm/lindel">lindel</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:12 UTC)</td>
+<td>50</td>
+<td>C++</td>
+<td>DuckDB Extension Linearization/Delinearization, Z-Order, Hilbert and Morton C...</td>
+</tr>
+<tr>
+<td>16</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/marisa.html">marisa</a></td>
+<td><a href="https://github.com/Query-farm/marisa">marisa</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:22 UTC)</td>
+<td>2</td>
+<td>C++</td>
+<td>The Marisa extension by Query.Farm integrates the fast, space-efficient MARIS...</td>
+</tr>
+<tr>
+<td>17</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/radio.html">radio</a></td>
+<td><a href="https://github.com/Query-farm/radio">radio</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:34 UTC)</td>
+<td>30</td>
+<td>C++</td>
+<td>Radio is a DuckDB extension by Query.Farm that brings real-time event streams...</td>
+</tr>
+<tr>
+<td>18</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/rapidfuzz.html">rapidfuzz</a></td>
+<td><a href="https://github.com/Query-farm/rapidfuzz">rapidfuzz</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:45 UTC)</td>
+<td>3</td>
+<td>C++</td>
+<td>DuckDB Community Extension adding RapidFuzz algorithms for search, deduplicat...</td>
+</tr>
+<tr>
+<td>19</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/shellfs.html">shellfs</a></td>
+<td><a href="https://github.com/Query-farm/shellfs">shellfs</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:18:56 UTC)</td>
+<td>81</td>
+<td>C++</td>
+<td>DuckDB extension allowing shell commands to be used for input and output.</td>
+</tr>
+<tr>
+<td>20</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/stochastic.html">stochastic</a></td>
+<td><a href="https://github.com/Query-farm/stochastic">stochastic</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:19:06 UTC)</td>
+<td>11</td>
+<td>C++</td>
+<td>A DuckDB extension that add comprehensive statistical distribution functions...</td>
+</tr>
+<tr>
+<td>21</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/textplot.html">textplot</a></td>
+<td><a href="https://github.com/Query-farm/textplot">textplot</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:19:16 UTC)</td>
+<td>10</td>
+<td>C++</td>
+<td>A DuckDB community extension that enables text-based data visualization direc...</td>
+</tr>
+<tr>
+<td>22</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/tributary.html">tributary</a></td>
+<td><a href="https://github.com/Query-farm/tributary">tributary</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-26 22:19:37 UTC)</td>
+<td>31</td>
+<td>C++</td>
+<td>A DuckDB Extension for Kafka</td>
+</tr>
+<tr>
+<td>23</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/vortex.html">vortex</a></td>
+<td><a href="https://github.com/vortex-data/duckdb-vortex">duckdb-vortex</a></td>
+<td>🟢 Ongoing</td>
+<td>2 days ago (2025-09-27 08:42:20 UTC)</td>
+<td>24</td>
+<td>Shell</td>
+<td>DuckDB extension allowing reading/writing of vortex files</td>
+</tr>
+<tr>
+<td>24</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/quack.html">quack</a></td>
+<td><a href="https://github.com/duckdb/extension-template">extension-template</a></td>
+<td>❓ Unknown</td>
+<td>3 days ago (2025-09-26 07:47:31 UTC)</td>
+<td>223</td>
+<td>Python</td>
+<td>Template for DuckDB extensions to help you develop, test and deploy a custom...</td>
+</tr>
+<tr>
+<td>25</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/httpserver.html">httpserver</a></td>
+<td><a href="https://github.com/Query-farm/httpserver">httpserver</a></td>
+<td>❓ Unknown</td>
+<td>4 days ago (2025-09-25 01:14:01 UTC)</td>
+<td>231</td>
+<td>HTML</td>
+<td>DuckDB HTTP API Server and Query Interface in a  Community Extension</td>
+</tr>
+<tr>
+<td>26</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/msolap.html">msolap</a></td>
+<td><a href="https://github.com/Hugoberry/duckdb-msolap-extension">duckdb-msolap-extension</a></td>
+<td>❓ Unknown</td>
+<td>4 days ago (2025-09-24 16:33:46 UTC)</td>
+<td>8</td>
+<td>C++</td>
+<td>DuckDB extension: msolap by Hugoberry</td>
+</tr>
+<tr>
+<td>27</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/nanodbc.html">nanodbc</a></td>
+<td><a href="https://github.com/Hugoberry/duckdb-nanodbc-extension">duckdb-nanodbc-extension</a></td>
+<td>🟢 Ongoing</td>
+<td>4 days ago (2025-09-24 19:44:52 UTC)</td>
+<td>37</td>
+<td>C++</td>
+<td>Database connectivity extension by Hugoberry</td>
+</tr>
+<tr>
+<td>28</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/parser_tools.html">parser_tools</a></td>
+<td><a href="https://github.com/zfarrell/duckdb_extension_parser_tools">duckdb_extension_parser_tools</a></td>
+<td>🟢 Ongoing</td>
+<td>4 days ago (2025-09-24 17:46:33 UTC)</td>
+<td>15</td>
+<td>C++</td>
+<td>Parse sql - with sql!</td>
+</tr>
+<tr>
+<td>29</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/splink_udfs.html">splink_udfs</a></td>
+<td><a href="https://github.com/moj-analytical-services/splink_udfs">splink_udfs</a></td>
+<td>❓ Unknown</td>
+<td>4 days ago (2025-09-24 10:21:04 UTC)</td>
+<td>9</td>
+<td>C++</td>
+<td>DuckDB extension: splink_udfs by moj-analytical-services</td>
+</tr>
+<tr>
+<td>30</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cache_httpfs.html">cache_httpfs</a></td>
+<td><a href="https://github.com/dentiny/duck-read-cache-fs">duck-read-cache-fs</a></td>
+<td>🟢 Ongoing</td>
+<td>5 days ago (2025-09-23 10:09:53 UTC)</td>
+<td>98</td>
+<td>C++</td>
+<td>This repository is made as read-only filesystem for remote access.</td>
+</tr>
+<tr>
+<td>31</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chsql.html">chsql</a></td>
+<td><a href="https://github.com/Query-farm/clickhouse-sql">clickhouse-sql</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:33 UTC)</td>
+<td>73</td>
+<td>C++</td>
+<td>DuckDB Community Extension implementing ClickHouse SQL Dialect macros and Cus...</td>
+</tr>
+<tr>
+<td>32</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chsql_native.html">chsql_native</a></td>
+<td><a href="https://github.com/Query-farm/clickhouse-native">clickhouse-native</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:31 UTC)</td>
+<td>16</td>
+<td>Rust</td>
+<td>Experimental ClickHouse Native Client and Native file reader Extension for Du...</td>
+</tr>
+<tr>
+<td>33</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cronjob.html">cronjob</a></td>
+<td><a href="https://github.com/Query-farm/cronjob">cronjob</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:35 UTC)</td>
+<td>41</td>
+<td>C++</td>
+<td>DuckDB CronJob Extension</td>
+</tr>
+<tr>
+<td>34</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/http_client.html">http_client</a></td>
+<td><a href="https://github.com/Query-farm/httpclient">httpclient</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:37 UTC)</td>
+<td>71</td>
+<td>C++</td>
+<td>DuckDB HTTP GET/POST Client in a Community Extension</td>
+</tr>
+<tr>
+<td>35</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/observefs.html">observefs</a></td>
+<td><a href="https://github.com/dentiny/duckdb-filesystem-observability">duckdb-filesystem-observability</a></td>
+<td>🟢 Ongoing</td>
+<td>5 days ago (2025-09-23 10:07:15 UTC)</td>
+<td>1</td>
+<td>C++</td>
+<td>Provides observability for duckdb filesystem.</td>
+</tr>
+<tr>
+<td>36</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/open_prompt.html">open_prompt</a></td>
+<td><a href="https://github.com/Query-farm/openprompt">openprompt</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:40 UTC)</td>
+<td>50</td>
+<td>C++</td>
+<td>DuckDB Community Extension to prompt LLMs from SQL</td>
+</tr>
+<tr>
+<td>37</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pcap_reader.html">pcap_reader</a></td>
+<td><a href="https://github.com/Query-farm/pcap">pcap</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:42 UTC)</td>
+<td>11</td>
+<td>Rust</td>
+<td>DuckDB PCAP Reader Extension made in Rust</td>
+</tr>
+<tr>
+<td>38</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/pyroscope.html">pyroscope</a></td>
+<td><a href="https://github.com/Query-farm/pyroscope">pyroscope</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:44 UTC)</td>
+<td>19</td>
+<td>Rust</td>
+<td>DuckDB Pyroscope Extension for Continuous Profiling</td>
+</tr>
+<tr>
+<td>39</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/quickjs.html">quickjs</a></td>
+<td><a href="https://github.com/Query-farm/quickjs">quickjs</a></td>
+<td>🟢 Ongoing</td>
+<td>5 days ago (2025-09-23 19:24:51 UTC)</td>
+<td>8</td>
+<td>C++</td>
+<td>DuckDB extension: quickjs by quackscience</td>
+</tr>
+<tr>
+<td>40</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/redis.html">redis</a></td>
+<td><a href="https://github.com/Query-farm/redis">redis</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:45 UTC)</td>
+<td>7</td>
+<td>C++</td>
+<td>DuckDB Redis Client community extension</td>
+</tr>
+<tr>
+<td>41</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/tsid.html">tsid</a></td>
+<td><a href="https://github.com/Query-farm/tsid">tsid</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:47 UTC)</td>
+<td>5</td>
+<td>C++</td>
+<td>TSID Extension for DuckDB</td>
+</tr>
+<tr>
+<td>42</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/webmacro.html">webmacro</a></td>
+<td><a href="https://github.com/Query-farm/webmacro">webmacro</a></td>
+<td>❓ Unknown</td>
+<td>5 days ago (2025-09-23 19:24:49 UTC)</td>
+<td>13</td>
+<td>C++</td>
+<td>DuckDB WebMacro: Share and Load your SQL Macros via gists</td>
+</tr>
+<tr>
+<td>43</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/wireduck.html">wireduck</a></td>
+<td><a href="https://github.com/hyehudai/wireduck">wireduck</a></td>
+<td>🟢 Ongoing</td>
+<td>5 days ago (2025-09-23 21:22:03 UTC)</td>
+<td>46</td>
+<td>C++</td>
+<td>Duckdb extension to read pcap files</td>
 </tr>
 <tr>
 <td>44</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/prql.html">prql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-prql">duckdb-prql</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
-<td>297</td>
+<td>6 days ago (2025-09-22 18:45:53 UTC)</td>
+<td>298</td>
 <td>C++</td>
 <td>PRQL as a DuckDB extension</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>45</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/psql.html">psql</a></td>
 <td><a href="https://github.com/ywelsch/duckdb-psql">duckdb-psql</a></td>
 <td>🟢 Ongoing</td>
-<td>4 days ago</td>
+<td>6 days ago (2025-09-22 18:45:44 UTC)</td>
 <td>92</td>
 <td>C++</td>
 <td>A piped SQL for DuckDB</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>46</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/bigquery.html">bigquery</a></td>
 <td><a href="https://github.com/hafenkran/duckdb-bigquery">duckdb-bigquery</a></td>
 <td>🟢 Ongoing</td>
-<td>5 days ago</td>
+<td>7 days ago (2025-09-21 12:30:17 UTC)</td>
 <td>132</td>
 <td>C++</td>
 <td>Integrates DuckDB with Google BigQuery, allowing direct querying and manageme...</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>47</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/chaos.html">chaos</a></td>
-<td><a href="https://github.com/taniabogatsch/duckdb-chaos">duckdb-chaos</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/cwiqduck.html">cwiqduck</a></td>
+<td><a href="https://github.com/cwiq-os/cwiqduck">cwiqduck</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>0</td>
+<td>7 days ago (2025-09-22 02:39:48 UTC)</td>
+<td>1</td>
 <td>C++</td>
-<td>DuckDB extension: chaos by taniabogatsch</td>
-<td>⭐</td>
+<td>DuckDB extensions for CWIQ</td>
 </tr>
 <tr>
 <td>48</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/flock.html">flock</a></td>
-<td><a href="https://github.com/dais-polymtl/flock">flock</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/chaos.html">chaos</a></td>
+<td><a href="https://github.com/taniabogatsch/duckdb-chaos">duckdb-chaos</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>269</td>
+<td>9 days ago (2025-09-19 11:42:23 UTC)</td>
+<td>0</td>
 <td>C++</td>
-<td>Flock: multimodal querying for DuckDB</td>
-<td>⭐</td>
+<td>DuckDB extension: chaos by taniabogatsch</td>
 </tr>
 <tr>
 <td>49</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/mooncake.html">mooncake</a></td>
-<td><a href="https://github.com/Mooncake-Labs/duckdb_mooncake">duckdb_mooncake</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/flock.html">flock</a></td>
+<td><a href="https://github.com/dais-polymtl/flock">flock</a></td>
 <td>🟢 Ongoing</td>
-<td>7 days ago</td>
-<td>0</td>
+<td>9 days ago (2025-09-19 15:11:32 UTC)</td>
+<td>269</td>
 <td>C++</td>
-<td>Read Iceberg tables written by moonlink in real time</td>
-<td>⭐</td>
+<td>Flock: multimodal querying for DuckDB</td>
 </tr>
 <tr>
 <td>50</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/file_dialog.html">file_dialog</a></td>
 <td><a href="https://github.com/yutannihilation/duckdb-ext-file-dialog">duckdb-ext-file-dialog</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>10 days ago (2025-09-18 09:58:30 UTC)</td>
 <td>14</td>
 <td>Rust</td>
 <td>A DuckDB extension to choose file interactively using native file open dialogs</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>51</td>
-<td>~~<a href="https://duckdb.org/community_extensions/extensions/gcs.html">gcs</a>~~ <strong>NOT FOUND:</strong> https://duckdb.org/community_extensions/extensions/gcs.html (HTTP 404)</td>
+<td><a href="https://github.com/northpolesec/duckdb-gcs">gcs</a></td>
 <td><a href="https://github.com/northpolesec/duckdb-gcs">duckdb-gcs</a></td>
-<td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>❓ Unknown</td>
+<td>10 days ago (2025-09-18 20:49:06 UTC)</td>
 <td>0</td>
 <td>C++</td>
 <td>A GCS-native extension for DuckDB</td>
-<td></td>
 </tr>
 <tr>
 <td>52</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/rusty_quack.html">rusty_quack</a></td>
-<td><a href="https://github.com/duckdb/extension-template-rs">extension-template-rs</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/mooncake.html">mooncake</a></td>
+<td><a href="https://github.com/Mooncake-Labs/duckdb_mooncake">duckdb_mooncake</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
-<td>80</td>
-<td>Rust</td>
-<td>(Experimental) Template for Rust-based DuckDB extensions</td>
-<td></td>
+<td>10 days ago (2025-09-19 03:19:58 UTC)</td>
+<td>0</td>
+<td>C++</td>
+<td>Read Iceberg tables written by moonlink in real time</td>
 </tr>
 <tr>
 <td>53</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/st_read_multi.html">st_read_multi</a></td>
 <td><a href="https://github.com/yutannihilation/duckdb-ext-st-read-multi">duckdb-ext-st-read-multi</a></td>
 <td>🟢 Ongoing</td>
-<td>8 days ago</td>
+<td>10 days ago (2025-09-18 09:50:39 UTC)</td>
 <td>3</td>
 <td>Rust</td>
 <td>A DuckDB extension to import multiple geospatial files with <code>ST_Read_Multi()</code></td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>54</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/lua.html">lua</a></td>
-<td><a href="https://github.com/isaacbrodsky/duckdb-lua">duckdb-lua</a></td>
-<td>🟢 Ongoing</td>
-<td>9 days ago</td>
-<td>5</td>
-<td>C++</td>
-<td>DuckDB extension to evaluate Lua expressions.</td>
-<td>⭐</td>
-</tr>
-<tr>
-<td>55</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/nanoarrow.html">nanoarrow</a></td>
 <td><a href="https://github.com/paleolimbot/duckdb-nanoarrow">duckdb-nanoarrow</a></td>
-<td>🟢 Ongoing</td>
-<td>9 days ago</td>
+<td>❓ Unknown</td>
+<td>11 days ago (2025-09-17 18:31:44 UTC)</td>
 <td>46</td>
 <td>C++</td>
 <td>DuckDB extension: nanoarrow by paleolimbot</td>
-<td>⭐</td>
+</tr>
+<tr>
+<td>55</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/rusty_quack.html">rusty_quack</a></td>
+<td><a href="https://github.com/duckdb/extension-template-rs">extension-template-rs</a></td>
+<td>❓ Unknown</td>
+<td>11 days ago (2025-09-18 09:13:21 UTC)</td>
+<td>83</td>
+<td>Rust</td>
+<td>(Experimental) Template for Rust-based DuckDB extensions</td>
 </tr>
 <tr>
 <td>56</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/yaml.html">yaml</a></td>
-<td><a href="https://github.com/teaguesterling/duckdb_yaml">duckdb_yaml</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/lua.html">lua</a></td>
+<td><a href="https://github.com/isaacbrodsky/duckdb-lua">duckdb-lua</a></td>
 <td>🟢 Ongoing</td>
-<td>15 days ago</td>
-<td>9</td>
+<td>12 days ago (2025-09-17 03:46:00 UTC)</td>
+<td>5</td>
 <td>C++</td>
-<td>A DuckDB to read and work with YAML files in a similar way to JSON files (al...</td>
-<td></td>
+<td>DuckDB extension to evaluate Lua expressions.</td>
 </tr>
 <tr>
 <td>57</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/eeagrid.html">eeagrid</a></td>
-<td><a href="https://github.com/ahuarte47/duckdb-eeagrid">duckdb-eeagrid</a></td>
-<td>🟢 Ongoing</td>
-<td>16 days ago</td>
-<td>0</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/yaml.html">yaml</a></td>
+<td><a href="https://github.com/teaguesterling/duckdb_yaml">duckdb_yaml</a></td>
+<td>❓ Unknown</td>
+<td>17 days ago (2025-09-11 19:55:25 UTC)</td>
+<td>9</td>
 <td>C++</td>
-<td>Functions for transforming XY coordinates to and from the EEA Reference Grid...</td>
-<td>⭐</td>
+<td>A DuckDB to read and work with YAML files in a similar way to JSON files (al...</td>
 </tr>
 <tr>
 <td>58</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/gsheets.html">gsheets</a></td>
-<td><a href="https://github.com/evidence-dev/duckdb_gsheets">duckdb_gsheets</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/eeagrid.html">eeagrid</a></td>
+<td><a href="https://github.com/ahuarte47/duckdb-eeagrid">duckdb-eeagrid</a></td>
 <td>🟢 Ongoing</td>
-<td>17 days ago</td>
-<td>298</td>
+<td>18 days ago (2025-09-10 20:27:02 UTC)</td>
+<td>0</td>
 <td>C++</td>
-<td>DuckDB extension to read and write Google Sheets using SQL</td>
-<td>⭐</td>
+<td>Functions for transforming XY coordinates to and from the EEA Reference Grid...</td>
 </tr>
 <tr>
 <td>59</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/faiss.html">faiss</a></td>
-<td><a href="https://github.com/duckdb-faiss-ext/duckdb-faiss-ext">duckdb-faiss-ext</a></td>
+<td><a href="https://duckdb.org/community_extensions/extensions/gsheets.html">gsheets</a></td>
+<td><a href="https://github.com/evidence-dev/duckdb_gsheets">duckdb_gsheets</a></td>
 <td>🟢 Ongoing</td>
-<td>18 days ago</td>
-<td>25</td>
-<td>Go</td>
-<td>DuckDB wrapper for FAISS - Experimental</td>
-<td></td>
+<td>19 days ago (2025-09-09 21:14:54 UTC)</td>
+<td>298</td>
+<td>C++</td>
+<td>DuckDB extension to read and write Google Sheets using SQL</td>
 </tr>
 <tr>
 <td>60</td>
-<td><a href="https://duckdb.org/community_extensions/extensions/geotiff.html">geotiff</a></td>
-<td><a href="https://github.com/babaknaimi/duckdb-geotiff">duckdb-geotiff</a></td>
-<td>🟢 Ongoing</td>
-<td>37 days ago</td>
-<td>2</td>
-<td>C++</td>
-<td>Duckdb extension to read GeoTiffs directly with duckdb database</td>
-<td></td>
-</tr>
-<tr>
-<td>61</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/geography.html">geography</a></td>
 <td><a href="https://github.com/paleolimbot/duckdb-geography">duckdb-geography</a></td>
-<td>🟢 Ongoing</td>
-<td>38 days ago</td>
+<td>❓ Unknown</td>
+<td>40 days ago (2025-08-19 14:12:08 UTC)</td>
 <td>32</td>
 <td>C++</td>
 <td>Geospatial data extension by paleolimbot</td>
-<td></td>
+</tr>
+<tr>
+<td>61</td>
+<td><a href="https://duckdb.org/community_extensions/extensions/geotiff.html">geotiff</a></td>
+<td><a href="https://github.com/babaknaimi/duckdb-geotiff">duckdb-geotiff</a></td>
+<td>❓ Unknown</td>
+<td>40 days ago (2025-08-20 05:12:15 UTC)</td>
+<td>2</td>
+<td>C++</td>
+<td>Duckdb extension to read GeoTiffs directly with duckdb database</td>
 </tr>
 <tr>
 <td>62</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/highs.html">highs</a></td>
 <td><a href="https://github.com/fhk/HiGHS-duckdb">HiGHS-duckdb</a></td>
-<td>🟢 Ongoing</td>
-<td>41 days ago</td>
+<td>❓ Unknown</td>
+<td>44 days ago (2025-08-16 06:41:18 UTC)</td>
 <td>0</td>
 <td>C++</td>
 <td>Run the solver in the database!</td>
-<td></td>
 </tr>
 <tr>
 <td>63</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/rusty_sheet.html">rusty_sheet</a></td>
 <td><a href="https://github.com/redraiment/rusty-sheet">rusty-sheet</a></td>
-<td>🟢 Ongoing</td>
-<td>43 days ago</td>
+<td>❓ Unknown</td>
+<td>45 days ago (2025-08-14 10:58:41 UTC)</td>
 <td>17</td>
 <td>Rust</td>
 <td>An Excel/OpenDocument Spreadsheets file reader for DuckDB</td>
-<td></td>
 </tr>
 <tr>
 <td>64</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/webbed.html">webbed</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_webbed">duckdb_webbed</a></td>
-<td>🟢 Ongoing</td>
-<td>44 days ago</td>
+<td>❓ Unknown</td>
+<td>47 days ago (2025-08-13 02:24:15 UTC)</td>
 <td>15</td>
 <td>C++</td>
 <td>Web/HTTP functionality extension by teaguesterling</td>
-<td></td>
 </tr>
 <tr>
 <td>65</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/read_stat.html">read_stat</a></td>
 <td><a href="https://github.com/mettekou/duckdb-read-stat">duckdb-read-stat</a></td>
-<td>🟢 Ongoing</td>
-<td>46 days ago</td>
+<td>❓ Unknown</td>
+<td>49 days ago (2025-08-11 08:46:10 UTC)</td>
 <td>22</td>
 <td>C</td>
 <td>Read data sets from SAS, Stata, and SPSS from DuckDB with ReadStat</td>
-<td></td>
 </tr>
 <tr>
 <td>66</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/hdf5.html">hdf5</a></td>
 <td><a href="https://github.com/Berrysoft/duckdb-hdf5">duckdb-hdf5</a></td>
-<td>🟢 Ongoing</td>
-<td>50 days ago</td>
+<td>❓ Unknown</td>
+<td>53 days ago (2025-08-07 07:29:26 UTC)</td>
 <td>9</td>
 <td>Rust</td>
 <td>HDF5 plugin for duckdb</td>
-<td></td>
 </tr>
 <tr>
 <td>67</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/duckdb_mcp.html">duckdb_mcp</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_mcp">duckdb_mcp</a></td>
-<td>🟢 Ongoing</td>
-<td>62 days ago</td>
+<td>❓ Unknown</td>
+<td>64 days ago (2025-07-26 16:26:59 UTC)</td>
 <td>6</td>
 <td>C++</td>
 <td>A simple MCP server extension for DuckDB</td>
-<td></td>
 </tr>
 <tr>
 <td>68</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/duckpgq.html">duckpgq</a></td>
 <td><a href="https://github.com/cwida/duckpgq-extension">duckpgq-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>66 days ago</td>
+<td>❓ Unknown</td>
+<td>68 days ago (2025-07-22 10:16:14 UTC)</td>
 <td>264</td>
 <td>C++</td>
 <td>DuckDB extension that adds support for SQL/PGQ and graph algorithms</td>
-<td></td>
 </tr>
 <tr>
 <td>69</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/duck_tails.html">duck_tails</a></td>
 <td><a href="https://github.com/teaguesterling/duck_tails">duck_tails</a></td>
-<td>🟢 Ongoing</td>
-<td>69 days ago</td>
+<td>❓ Unknown</td>
+<td>71 days ago (2025-07-19 17:26:47 UTC)</td>
 <td>2</td>
 <td>C++</td>
 <td>A DuckDB extension for exploring and reading git history.</td>
-<td></td>
 </tr>
 <tr>
 <td>70</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/capi_quack.html">capi_quack</a></td>
 <td><a href="https://github.com/duckdb/extension-template-c">extension-template-c</a></td>
-<td>🟢 Ongoing</td>
-<td>71 days ago</td>
+<td>❓ Unknown</td>
+<td>73 days ago (2025-07-17 16:11:51 UTC)</td>
 <td>17</td>
 <td>C</td>
 <td>(Experimental) C/C++ template for DuckDB extensions based on the C API</td>
-<td>⭐</td>
 </tr>
 <tr>
 <td>71</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/markdown.html">markdown</a></td>
 <td><a href="https://github.com/teaguesterling/duckdb_markdown">duckdb_markdown</a></td>
-<td>🟢 Ongoing</td>
-<td>78 days ago</td>
+<td>❓ Unknown</td>
+<td>80 days ago (2025-07-10 23:23:13 UTC)</td>
 <td>5</td>
 <td>C++</td>
 <td>Heirarchical markdown parsing for DuckDB</td>
-<td></td>
 </tr>
 <tr>
 <td>72</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/jwt.html">jwt</a></td>
 <td><a href="https://github.com/GalvinGao/duckdb_jwt">duckdb_jwt</a></td>
-<td>🟢 Ongoing</td>
-<td>80 days ago</td>
+<td>❓ Unknown</td>
+<td>82 days ago (2025-07-09 00:13:56 UTC)</td>
 <td>0</td>
 <td>C++</td>
 <td>DuckDB extension: jwt by GalvinGao</td>
-<td></td>
 </tr>
 <tr>
 <td>73</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/substrait.html">substrait</a></td>
 <td><a href="https://github.com/substrait-io/duckdb-substrait-extension">duckdb-substrait-extension</a></td>
-<td>🟢 Ongoing</td>
-<td>89 days ago</td>
+<td>❓ Unknown</td>
+<td>92 days ago (2025-06-29 02:00:00 UTC)</td>
 <td>48</td>
 <td>C++</td>
 <td>DuckDB extension: substrait by substrait-io</td>
-<td></td>
 </tr>
 <tr>
 <td>74</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/quackformers.html">quackformers</a></td>
 <td><a href="https://github.com/martin-conur/quackformers">quackformers</a></td>
-<td>🟢 Ongoing</td>
-<td>118 days ago</td>
+<td>❓ Unknown</td>
+<td>120 days ago (2025-05-31 18:22:45 UTC)</td>
 <td>6</td>
 <td>Rust</td>
 <td>DuckDB NLP extension.</td>
-<td></td>
 </tr>
 <tr>
 <td>75</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/arrow.html">arrow</a></td>
 <td><a href="https://github.com/duckdb/duckdb-extension-alias">duckdb-extension-alias</a></td>
-<td>🟢 Ongoing</td>
-<td>140 days ago</td>
+<td>❓ Unknown</td>
+<td>143 days ago (2025-05-09 08:56:07 UTC)</td>
 <td>4</td>
 <td>C</td>
 <td>DuckDB extension: arrow</td>
-<td></td>
 </tr>
 <tr>
 <td>76</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/ofquack.html">ofquack</a></td>
 <td><a href="https://github.com/krokozyab/ofquack">ofquack</a></td>
-<td>🟢 Ongoing</td>
-<td>157 days ago</td>
+<td>❓ Unknown</td>
+<td>159 days ago (2025-04-22 12:24:17 UTC)</td>
 <td>5</td>
 <td>C++</td>
 <td>Oracle Fusion DuckDB extension</td>
-<td></td>
 </tr>
 <tr>
 <td>77</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/scrooge.html">scrooge</a></td>
 <td><a href="https://github.com/pdet/Scrooge-McDuck">Scrooge-McDuck</a></td>
-<td>🟢 Ongoing</td>
-<td>165 days ago</td>
+<td>❓ Unknown</td>
+<td>167 days ago (2025-04-14 11:16:07 UTC)</td>
 <td>148</td>
 <td>C++</td>
 <td>DuckDB extension: scrooge by pdet</td>
-<td></td>
 </tr>
 <tr>
 <td>78</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/blockduck.html">blockduck</a></td>
 <td><a href="https://github.com/luohaha/BlockDuck">BlockDuck</a></td>
-<td>🟢 Ongoing</td>
-<td>184 days ago</td>
+<td>❓ Unknown</td>
+<td>186 days ago (2025-03-26 15:14:51 UTC)</td>
 <td>8</td>
 <td>C++</td>
 <td>Live SQL Queries on Blockchain</td>
-<td></td>
 </tr>
 <tr>
 <td>79</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/hostfs.html">hostfs</a></td>
 <td><a href="https://github.com/gropaul/hostFS">hostFS</a></td>
-<td>🟢 Ongoing</td>
-<td>200 days ago</td>
+<td>❓ Unknown</td>
+<td>202 days ago (2025-03-10 22:28:46 UTC)</td>
 <td>23</td>
 <td>C++</td>
 <td>DuckDB extension: hostfs by gropaul</td>
-<td></td>
 </tr>
 <tr>
 <td>80</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/sheetreader.html">sheetreader</a></td>
 <td><a href="https://github.com/polydbms/sheetreader-duckdb">sheetreader-duckdb</a></td>
-<td>🟢 Ongoing</td>
-<td>346 days ago</td>
+<td>❓ Unknown</td>
+<td>348 days ago (2024-10-15 17:10:39 UTC)</td>
 <td>55</td>
 <td>Jupyter Notebook</td>
 <td>DuckDB extension: sheetreader by polydbms</td>
-<td></td>
 </tr>
 <tr>
 <td>81</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/pivot_table.html">pivot_table</a></td>
 <td><a href="https://github.com/Alex-Monahan/pivot_table">pivot_table</a></td>
-<td>🟢 Ongoing</td>
-<td>over a year ago</td>
+<td>❓ Unknown</td>
+<td>over a year ago (2024-09-22 21:18:45 UTC)</td>
 <td>15</td>
 <td>C++</td>
 <td>Full spreadsheet-style pivot table through SQL macros. Just specify values, r...</td>
-<td></td>
 </tr>
 <tr>
 <td>82</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/tarfs.html">tarfs</a></td>
 <td><a href="https://github.com/Maxxen/duckdb_tarfs">duckdb_tarfs</a></td>
-<td>🟢 Ongoing</td>
-<td>over a year ago</td>
+<td>❓ Unknown</td>
+<td>over a year ago (2024-08-26 11:01:47 UTC)</td>
 <td>10</td>
 <td>C++</td>
 <td>DuckDB extension: tarfs by Maxxen</td>
-<td></td>
 </tr>
 <tr>
 <td>83</td>
 <td><a href="https://duckdb.org/community_extensions/extensions/ulid.html">ulid</a></td>
 <td><a href="https://github.com/Maxxen/duckdb_ulid">duckdb_ulid</a></td>
-<td>🟢 Ongoing</td>
-<td>over a year ago</td>
+<td>❓ Unknown</td>
+<td>over a year ago (2024-07-09 09:35:50 UTC)</td>
 <td>24</td>
 <td>C++</td>
 <td>DuckDB extension: ulid by Maxxen</td>
-<td></td>
 </tr>
 </tbody>
 </table>
-<p><strong>Total:</strong> 83 extensions<br />
-<strong>Featured:</strong> 42 extensions (marked with ⭐)</p>
-<hr />
+<h2 id="total-83-extensions"><strong>Total:</strong> 83 extensions</h2>
 <h2 id="appendix-duckdb-release-information">Appendix: DuckDB Release Information</h2>
 <h3 id="current-release-context">Current Release Context</h3>
 <p>DuckDB follows <strong>semantic versioning</strong> with regular releases. For complete and up-to-date release information, see the official <a href="https://duckdb.org/release_calendar.html"><strong>DuckDB Release Calendar</strong></a>.</p>
@@ -1811,33 +1816,67 @@ th:last-child, td:last-child {
     // Make tables interactive with appropriate configurations
     $('table').addClass('table table-striped table-hover');
     
-    // Configure static tables (Summary, Historical Releases) differently
+    // Configure tables based on their content and context  
     $('table').each(function() {
         const $table = $(this);
-        const isStaticTable = $table.closest('h2, h3').prev().text().includes('Summary') || 
-                             $table.closest('h2, h3').prev().text().includes('Historical Releases');
+        
+        // Find the preceding heading to determine table type
+        const $prevHeading = $table.prevAll('h1, h2, h3, h4').first();
+        const headingText = $prevHeading.text() || '';
+        
+        // Check number of columns in header
+        const numCols = $table.find('thead tr:first th').length;
+        
+        // Determine if this is a static table (Summary, Historical Releases)
+        const isStaticTable = headingText.includes('Summary') || 
+                             headingText.includes('Historical Releases') || 
+                             headingText.includes('Current Release Context') ||
+                             numCols <= 3;
+        
+        console.log(`Table under "${headingText}" has ${numCols} columns, isStatic: ${isStaticTable}`);
         
         if (isStaticTable) {
-            // Static tables: no pagination, no length menu, but keep search for Historical
-            const isHistorical = $table.closest('h2, h3').prev().text().includes('Historical');
+            // Static tables: minimal functionality
+            const needsSearch = headingText.includes('Historical');
             $table.DataTable({
                 "paging": false,
                 "lengthChange": false,
                 "info": false,
-                "searching": isHistorical,
+                "searching": needsSearch,
                 "order": [],
                 "responsive": true,
-                "dom": isHistorical ? 'ft' : 't'
+                "dom": needsSearch ? 'ft' : 't'
             });
         } else {
-            // Interactive tables: full functionality
+            // Interactive extension tables: full functionality
+            let columnDefs = [{ "orderable": true, "targets": "_all" }];
+            
+            // Add special sorting for Status column if present
+            if (numCols >= 4) {
+                columnDefs.push({
+                    // Status column is typically at index 3
+                    "targets": [3],
+                    "type": "string",
+                    "render": function(data, type, row) {
+                        if (type === 'sort' || type === 'type') {
+                            if (data && typeof data === 'string') {
+                                if (data.includes('🟢')) return '1-Ongoing';
+                                if (data.includes('❓')) return '2-Unknown';
+                                if (data.includes('🔴')) return '3-Discontinued';
+                                if (data.includes('⚠️')) return '4-Issues';
+                                return '5-Other';
+                            }
+                        }
+                        return data;
+                    }
+                });
+            }
+            
             $table.DataTable({
                 "pageLength": 25,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                 "order": [],
-                "columnDefs": [
-                    { "orderable": true, "targets": "_all" }
-                ],
+                "columnDefs": columnDefs,
                 "responsive": true,
                 "dom": '<"top"lf>rt<"bottom"ip><"clear">'
             });

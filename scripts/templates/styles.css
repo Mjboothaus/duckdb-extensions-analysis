@@ -206,3 +206,48 @@ table.dataTable {
     display: table;
     clear: both;
 }
+
+/* Additional bullet fix for DataTables navigation */
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info {
+    list-style: none !important;
+}
+
+.dataTables_wrapper ul,
+.dataTables_wrapper li {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Ensure pagination controls have proper spacing */
+.dataTables_wrapper .bottom {
+    clear: both;
+    float: none;
+    display: block;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Override any inherited bullet styles */
+.dataTables_wrapper * {
+    list-style: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    margin: 0 3px !important;
+    padding: 8px 12px !important;
+    border-radius: 4px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+}
