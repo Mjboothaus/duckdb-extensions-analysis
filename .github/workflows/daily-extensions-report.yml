@@ -14,7 +14,6 @@ jobs:
   analyze-extensions:
     runs-on: ubuntu-latest
     timeout-minutes: 25  # Prevent workflows from hanging
-    timeout-minutes: 15  # Prevent workflows from running too long
     
     steps:
       - name: Checkout repository
