@@ -29,10 +29,12 @@ jobs:
       - name: Setup Python and dependencies
         run: |
           echo "🐍 Setting up Python environment with caching..."
-          echo "Python version: $(python --version)"
           echo "UV version: $(uv --version)"
+          echo "Installing Python 3.12 for better wheel support..."
+          uv python install 3.12
+          echo "Using Python: $(uv python list)"
           echo "Starting dependency installation..."
-          uv sync --verbose
+          uv sync --python 3.12 --verbose
           echo "✅ Dependencies installed successfully"
           echo "Virtual environment info:"
           uv pip list | head -10
