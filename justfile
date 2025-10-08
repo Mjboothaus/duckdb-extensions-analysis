@@ -156,6 +156,10 @@ cache-cleanup-stashes:
 
 # === UTILITIES ===
 
+# Validate release history table against GitHub releases
+validate-releases:
+    uv run scripts/validate_release_history.py
+
 # Detect deprecated extensions by analyzing repositories
 deprecation:
     #!/usr/bin/env bash

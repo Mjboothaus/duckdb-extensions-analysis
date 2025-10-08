@@ -140,6 +140,7 @@ class TestExtensionTesting:
             success=True,
             install_time=0.1,
             load_time=0.05,
+            functional_test_time=0.02,
             total_time=0.15,
             error_message=None,
             python_version='3.13',
@@ -152,6 +153,7 @@ class TestExtensionTesting:
             success=True,
             install_time=0.2,
             load_time=0.08,
+            functional_test_time=0.03,
             total_time=0.28,
             error_message=None,
             python_version='3.13',
@@ -288,7 +290,7 @@ class TestExtensionTesting:
         assert 'import time' in template
         
         # Check for main test function
-        assert 'def test_extension(extension_name):' in template
+        assert 'def test_extension(extension_name, test_query=None):' in template
         
         # Check for DuckDB operations
         assert 'duckdb.connect(' in template
@@ -312,6 +314,7 @@ class TestInstallationTestResult:
             success=True,
             install_time=0.1,
             load_time=0.05,
+            functional_test_time=0.02,
             total_time=0.15,
             error_message=None,
             python_version='3.13',
@@ -336,6 +339,7 @@ class TestInstallationTestResult:
             success=False,
             install_time=None,
             load_time=None,
+            functional_test_time=None,
             total_time=0.0,
             error_message='Extension failed to install',
             python_version='3.13',

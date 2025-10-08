@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full history for rebase
       
       - name: Install uv
         uses: astral-sh/setup-uv@v3
@@ -45,6 +47,11 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
           
+          # Ensure we are up-to-date with remote before committing
+          git fetch origin main
+          # Rebase local changes on top of remote to avoid non-fast-forward errors
+          git pull --rebase origin main || true
+          
           # Add all report files and README
           git add reports/ README.md
           
@@ -57,7 +64,8 @@ jobs:
             - Updated extension analysis for $(date -u '+%Y-%m-%d')
             - Generated markdown, CSV, and Excel reports
             - Includes GitHub issues analysis for extension health monitoring"
-            git push
+            # Try normal push first, then fallback with --force-with-lease if needed
+            git push || git push --force-with-lease
           fi
 
   deploy-to-pages:
