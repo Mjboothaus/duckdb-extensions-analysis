@@ -39,11 +39,55 @@ class GitHubAPIClient:
         # Being very conservative at 1/sec (3600/hour) avoids 403 errors from abuse detection
         # With 12-hour cache, most requests are cached anyway, so impact is minimal
         self.rate_limiter = AsyncLimiter(max_rate=1, time_period=1)
+        
+        # Track rate limit state from response headers
+        self.last_rate_limit_remaining = None
+        self.last_rate_limit_reset = None
     
     def get_cache_key(self, url: str, headers: Dict[str, str]) -> str:
         """Generate a cache key for a request."""
         key_data = f"{url}_{str(sorted(headers.items()))}"
         return hashlib.md5(key_data.encode()).hexdigest()
+    
+    def _update_rate_limit_state(self, headers: Dict[str, str]) -> None:
+        """Update rate limit state from response headers."""
+        try:
+            if 'x-ratelimit-remaining' in headers:
+                self.last_rate_limit_remaining = int(headers['x-ratelimit-remaining'])
+            if 'x-ratelimit-reset' in headers:
+                self.last_rate_limit_reset = int(headers['x-ratelimit-reset'])
+                
+            # Log warning if approaching limit
+            if self.last_rate_limit_remaining is not None:
+                if self.last_rate_limit_remaining < 100:
+                    logger.warning(
+                        f"GitHub API rate limit low: {self.last_rate_limit_remaining} requests remaining"
+                    )
+                elif self.last_rate_limit_remaining < 500:
+                    logger.info(
+                        f"GitHub API rate limit: {self.last_rate_limit_remaining} requests remaining"
+                    )
+        except (ValueError, KeyError) as e:
+            logger.debug(f"Could not parse rate limit headers: {e}")
+    
+    async def _adaptive_throttle(self) -> None:
+        """Adaptively throttle requests based on remaining rate limit.
+        
+        Implements recommendation from GitHub API best practices guide:
+        slow down when approaching limits to avoid hitting secondary limits.
+        """
+        if self.last_rate_limit_remaining is None:
+            return
+        
+        # If very low on requests, add extra delay
+        if self.last_rate_limit_remaining < 50:
+            # Critical: add 2 second delay
+            logger.warning("Rate limit critical (<50), adding 2s delay")
+            await asyncio.sleep(2)
+        elif self.last_rate_limit_remaining < 200:
+            # Low: add 1 second delay
+            logger.info("Rate limit low (<200), adding 1s delay")
+            await asyncio.sleep(1)
     
     def _should_retry(self, exception: Exception) -> bool:
         """Determine if an exception should trigger a retry."""
@@ -81,33 +125,78 @@ class GitHubAPIClient:
 
         # Check cache first
         cached_data = self.cache.get(cache_key)
+        etag = None
         if cached_data:
             cached_time, data = cached_data
+            # Extract ETag if present for conditional requests
+            if isinstance(data, dict) and '_etag' in data:
+                etag = data['_etag']
+            
             if datetime.now() - cached_time < timedelta(hours=cache_hours):
                 # Extract meaningful part of URL for cleaner logging
                 url_path = url.replace(self.github_api_base, "").lstrip("/")
                 age = (datetime.now() - cached_time).total_seconds() / 3600
                 logger.info(f"✓ Cache hit ({age:.1f}h old): {url_path}")
+                # Return data without internal _etag field
+                if isinstance(data, dict) and '_etag' in data:
+                    data_copy = data.copy()
+                    del data_copy['_etag']
+                    return data_copy
                 return data
 
         # Apply rate limiting before making request
         async with self.rate_limiter:
             # Fetch fresh data
             url_path = url.replace(self.github_api_base, "").lstrip("/")
-            logger.info(f"→ API fetch: {url_path}")
+            
+            # Use conditional request if we have an ETag (saves rate limit quota)
+            request_headers = self.headers.copy()
+            if etag:
+                request_headers['If-None-Match'] = etag
+                logger.info(f"→ Conditional fetch (ETag): {url_path}")
+            else:
+                logger.info(f"→ API fetch: {url_path}")
             
             try:
                 response = await client.get(
                     url, 
-                    headers=self.headers, 
+                    headers=request_headers, 
                     timeout=10, 
                     follow_redirects=True
                 )
+                
+                # Handle 304 Not Modified - content hasn't changed
+                if response.status_code == 304 and cached_data:
+                    logger.info(f"✓ Content unchanged (304), using cached data")
+                    cached_time, data = cached_data
+                    if isinstance(data, dict) and '_etag' in data:
+                        data_copy = data.copy()
+                        del data_copy['_etag']
+                        return data_copy
+                    return data
+                
                 response.raise_for_status()
                 data = response.json()
+                
+                # Monitor rate limit headers (best practice from GitHub API guide)
+                self._update_rate_limit_state(response.headers)
+                
+                # Adaptive throttling: slow down if approaching limit
+                await self._adaptive_throttle()
 
-                # Cache the response
+                # Store ETag for future conditional requests (saves rate limit quota)
+                if 'etag' in response.headers:
+                    if isinstance(data, dict):
+                        data['_etag'] = response.headers['etag']
+                
+                # Cache the response (including ETag)
                 self.cache.set(cache_key, (datetime.now(), data))
+                
+                # Return data without internal _etag field
+                if isinstance(data, dict) and '_etag' in data:
+                    data_copy = data.copy()
+                    del data_copy['_etag']
+                    return data_copy
                 return data
                 
             except httpx.HTTPStatusError as e:
