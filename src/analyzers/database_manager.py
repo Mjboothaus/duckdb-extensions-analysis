@@ -60,7 +60,11 @@ class DatabaseManager(BaseDatabaseManager):
                 "10_github_issues_history.sql",
                 "11_github_issues_views.sql",
                 "12_installation_test_history.sql",
-                "13_installation_test_views.sql"
+                "13_installation_test_views.sql",
+                "14_extension_trends_summary.sql",
+                "15_extension_metrics_daily.sql",
+                "16_trends_views.sql",
+                "17_duckdb_releases_enhancement.sql"
             ]
             
             for sql_file in schema_files:

@@ -16,7 +16,7 @@ sql = "sql"
 [database]
 filename = "extensions.duckdb"
 # Set to true to enable historical tracking with versioned data
-enable_history = false
+enable_history = true
 
 [caching]
 # Cache duration in hours
