@@ -257,6 +257,9 @@ class TemplateEngine:
         # Extract URL validation results if available
         url_validation_results = analysis_result.get('url_validation_results', {})
         
+        # Extract trend data if available
+        trend_data = analysis_result.get('trend_data', None)
+        
         # Prepare template data structure
         template_data = {
             'report': {
@@ -267,6 +270,7 @@ class TemplateEngine:
             'metadata': self.report_config.get('metadata', {}),
             'tables': self.table_config.get('tables', {}),
             'url_validation': url_validation_results,
+            'trend_data': trend_data,
             'stats': {
                 'core_count': len(core_extensions),
                 'community_count': len(community_extensions),

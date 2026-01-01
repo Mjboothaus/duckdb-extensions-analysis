@@ -610,6 +610,7 @@ class ReportGenerator(BaseReportGenerator):
                 },
                 'analysis_timestamp': analysis_result.analysis_timestamp,
                 'url_validation_results': getattr(analysis_result, 'url_validation_results', {}),
+                'trend_data': getattr(analysis_result, 'trend_data', None),
                 'stats': {}
             }
             

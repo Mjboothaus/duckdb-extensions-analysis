@@ -37,6 +37,7 @@ class AnalysisResult:
     analysis_timestamp: datetime = None
     github_issues: Optional[List[Any]] = None  # GitHub issues related to extensions
     installation_results: Optional[List[Any]] = None  # Installation test results
+    trend_data: Optional[Dict[str, Any]] = None  # Historical trend metrics
     
     def __post_init__(self):
         if self.analysis_timestamp is None:

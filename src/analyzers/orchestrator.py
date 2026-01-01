@@ -336,10 +336,58 @@ class AnalysisOrchestrator:
             
             return analysis_result
     
+    def _populate_trend_data(self, analysis_result: AnalysisResult) -> None:
+        """Populate trend data from database for report generation."""
+        try:
+            # Import query functions
+            import sys
+            from pathlib import Path
+            scripts_path = Path(self.config.project_root) / "scripts"
+            sys.path.insert(0, str(scripts_path))
+            
+            from query_database import (
+                get_extension_trend_summary,
+                get_ecosystem_growth_trends,
+                get_recent_extensions,
+                get_trending_extensions
+            )
+            
+            db_path = str(Path(self.config.project_root) / "data" / "extensions.duckdb")
+            
+            # Get trend summary with deltas
+            trend_summary = get_extension_trend_summary(db_path)
+            
+            # Get ecosystem growth (last 30 days)
+            ecosystem_trends = get_ecosystem_growth_trends(db_path)
+            
+            # Get recent extensions (last 30 days)
+            recent_extensions = get_recent_extensions(db_path, days=30)
+            
+            # Get trending extensions
+            trending = get_trending_extensions(db_path, limit=10)
+            
+            # Package everything into trend_data
+            analysis_result.trend_data = {
+                'summary': trend_summary,
+                'ecosystem_growth': ecosystem_trends[:30] if ecosystem_trends else [],
+                'recent_extensions': recent_extensions,
+                'trending_extensions': trending,
+            }
+            
+            logger.info("Populated trend data for report generation")
+            
+        except Exception as e:
+            logger.warning(f"Failed to populate trend data: {e}")
+            # Don't fail report generation if trends aren't available
+            analysis_result.trend_data = None
+    
     async def generate_reports(self, analysis_result: AnalysisResult, formats: List[str] = None) -> Dict[str, str]:
         """Generate reports in specified formats."""
         if formats is None:
             formats = ["markdown"]
+        
+        # Populate trend data from database before generating reports
+        self._populate_trend_data(analysis_result)
         
         results = {}
         timestamp = analysis_result.analysis_timestamp.strftime("%Y%m%d_%H%M%S")

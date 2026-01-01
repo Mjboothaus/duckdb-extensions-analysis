@@ -1,0 +1,26 @@
+{% if trend_data and trend_data.summary %}
+## 📈 Ecosystem Trends
+
+{% set summary = trend_data.summary %}
+{% if summary.total_delta is defined %}
+| **Metric** | **Current** | **Change** |
+|------------|-------------|------------|
+| **Total Extensions** | {{ summary.total_extensions }} | {% if summary.total_delta > 0 %}+{{ summary.total_delta }} 🔼{% elif summary.total_delta < 0 %}{{ summary.total_delta }} 🔽{% else %}No change{% endif %} |
+| **Community Extensions** | {{ summary.community_count }} | {% if summary.community_delta > 0 %}+{{ summary.community_delta }} 🔼{% elif summary.community_delta < 0 %}{{ summary.community_delta }} 🔽{% else %}No change{% endif %} |
+| **Active Extensions** (30d) | {{ summary.active_30d }} ({{ (summary.active_30d * 100 / summary.total_extensions) | round(1) }}%) | {% if summary.active_30d_delta > 0 %}+{{ summary.active_30d_delta }} 🔼{% elif summary.active_30d_delta < 0 %}{{ summary.active_30d_delta }} 🔽{% else %}No change{% endif %} |
+{% if summary.stars_delta is defined and summary.stars_delta %}| **Total Stars** | {{ summary.total_stars | format_number }} | {% if summary.stars_delta > 0 %}+{{ summary.stars_delta }} 🔼{% elif summary.stars_delta < 0 %}{{ summary.stars_delta }} 🔽{% else %}No change{% endif %} |{% endif %}
+
+*Changes since previous analysis*
+
+{% endif %}
+
+{% if summary.new_extensions and summary.new_extensions | length > 0 %}
+**🆕 New Extensions:** {{ summary.new_extensions | join(', ') }}
+
+{% endif %}
+{% if summary.removed_extensions and summary.removed_extensions | length > 0 %}
+**🗑️ Removed Extensions:** {{ summary.removed_extensions | join(', ') }}
+
+{% endif %}
+---
+{% endif %}
