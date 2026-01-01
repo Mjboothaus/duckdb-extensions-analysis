@@ -33,10 +33,12 @@ class GitHubAPIClient:
         self.community_repo = config.community_repo
         self.duckdb_repo = config.duckdb_repo
         
-        # Rate limiter: 5 requests per second to avoid secondary rate limits
-        # GitHub's documented limit is 5000/hour (1.4/sec), but secondary limits are stricter
-        # Being conservative at 5/sec gives good throughput while avoiding abuse detection
-        self.rate_limiter = AsyncLimiter(max_rate=5, time_period=1)
+        # Rate limiter: 1 request per second to avoid secondary rate limits
+        # GitHub's documented limit is 5000/hour (1.4/sec), but secondary limits are MUCH stricter
+        # Secondary limits detect "abuse patterns" like rapid sequential requests
+        # Being very conservative at 1/sec (3600/hour) avoids 403 errors from abuse detection
+        # With 12-hour cache, most requests are cached anyway, so impact is minimal
+        self.rate_limiter = AsyncLimiter(max_rate=1, time_period=1)
     
     def get_cache_key(self, url: str, headers: Dict[str, str]) -> str:
         """Generate a cache key for a request."""

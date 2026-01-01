@@ -242,6 +242,10 @@ check:
     uv run ruff format scripts/ conf/ src/
     uv run ruff check scripts/ conf/ src/
 
+# Check GitHub token status and API rate limits
+check-token:
+    uv run scripts/check_github_token.py
+
 # Show project status
 status:
     @echo "📊 DuckDB Extensions Analysis"
