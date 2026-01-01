@@ -53,11 +53,12 @@ class WebContentClient:
             if cached_data:
                 cached_time, content = cached_data
                 if datetime.now() - cached_time < timedelta(hours=cache_hours):
-                    logger.debug(f"Using cached web content for {url}")
+                    age = (datetime.now() - cached_time).total_seconds() / 3600
+                    logger.info(f"✓ Cache hit ({age:.1f}h old): {url}")
                     return content
 
         # Fetch fresh content
-        logger.debug(f"Fetching fresh web content from {url}")
+        logger.info(f"→ Web fetch: {url}")
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         content = response.text
@@ -236,9 +237,16 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         """Analyze core extensions and return ExtensionInfo objects."""
         extensions = self.get_core_extensions_from_docs()
         extension_infos = []
+        total = len(extensions)
+        
+        logger.info(f"Fetching GitHub metadata for {total} core extensions (rate limited to 1 req/sec)...")
         
         async with httpx.AsyncClient() as client:
-            for ext in extensions:
+            for idx, ext in enumerate(extensions, 1):
+                # Progress indicator every 5 extensions or for first/last
+                if idx == 1 or idx == total or idx % 5 == 0:
+                    logger.info(f"Processing core extension {idx}/{total}: {ext['name']}")
+                
                 # Get GitHub info if available
                 github_info = await self.get_core_extension_github_info(client, ext["name"])
                 

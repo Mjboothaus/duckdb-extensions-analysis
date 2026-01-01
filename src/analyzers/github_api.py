@@ -84,13 +84,17 @@ class GitHubAPIClient:
         if cached_data:
             cached_time, data = cached_data
             if datetime.now() - cached_time < timedelta(hours=cache_hours):
-                logger.debug(f"Using cached data for {url}")
+                # Extract meaningful part of URL for cleaner logging
+                url_path = url.replace(self.github_api_base, "").lstrip("/")
+                age = (datetime.now() - cached_time).total_seconds() / 3600
+                logger.info(f"✓ Cache hit ({age:.1f}h old): {url_path}")
                 return data
 
         # Apply rate limiting before making request
         async with self.rate_limiter:
             # Fetch fresh data
-            logger.debug(f"Fetching fresh data from {url}")
+            url_path = url.replace(self.github_api_base, "").lstrip("/")
+            logger.info(f"→ API fetch: {url_path}")
             
             try:
                 response = await client.get(
