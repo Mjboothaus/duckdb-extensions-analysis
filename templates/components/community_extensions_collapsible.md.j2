@@ -1,0 +1,71 @@
+---
+## Community Extensions
+
+Third-party extensions maintained by the community
+
+{% set very_active = community_extensions | selectattr('last_activity', 'lt', 8) | list %}
+{% set active = community_extensions | selectattr('last_activity', 'ge', 8) | selectattr('last_activity', 'lt', 31) | list %}
+{% set stable = community_extensions | selectattr('last_activity', 'ge', 31) | selectattr('last_activity', 'lt', 91) | list %}
+{% set stale = community_extensions | selectattr('last_activity', 'ge', 91) | list %}
+
+**Total:** {{ community_extensions|length }} extensions | 🔥 Very Active (≤7d): {{ very_active|length }} | ✅ Active (≤30d): {{ active|length }} | 🟡 Stable (≤90d): {{ stable|length }} | 🟠 Stale (>90d): {{ stale|length }}
+
+---
+
+### 🔥 Very Active (≤ 7 days)
+
+<details open>
+<summary>{{ very_active|length }} extensions with recent activity</summary>
+
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
+{% for ext in very_active | sort(attribute='last_activity') -%}
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+{% endfor %}
+
+</details>
+
+---
+
+### ✅ Active (≤ 30 days)
+
+<details>
+<summary>{{ active|length }} extensions with regular activity</summary>
+
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
+{% for ext in active | sort(attribute='last_activity') -%}
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+{% endfor %}
+
+</details>
+
+---
+
+### 🟡 Stable (≤ 90 days)
+
+<details>
+<summary>{{ stable|length }} extensions with moderate activity</summary>
+
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
+{% for ext in stable | sort(attribute='last_activity') -%}
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+{% endfor %}
+
+</details>
+
+---
+
+### 🟠 Stale (> 90 days)
+
+<details>
+<summary>{{ stale|length }} extensions with infrequent updates</summary>
+
+| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|---------------|-------|----------|-------------|
+{% for ext in stale | sort(attribute='last_activity') -%}
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+{% endfor %}
+
+</details>
