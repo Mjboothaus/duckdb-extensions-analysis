@@ -20,7 +20,8 @@ enable_history = true
 
 [caching]
 # Cache duration in hours
-default_hours = 1
+# 12 hours balances freshness with rate limit avoidance for daily automation
+default_hours = 12
 web_content_hours = 24
 
 [analysis]

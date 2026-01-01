@@ -36,7 +36,9 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         
         # Initialize deprecation detector with caching
         cache_dir = config.cache_dir / 'deprecation_detector' if hasattr(config, 'cache_dir') else None
-        deprecation_cache = RepositoryCache(cache_dir=cache_dir, cache_days=cache_hours * 24, enabled=True)
+        # Convert hours to days for cache TTL (cache_hours / 24)
+        cache_days = cache_hours / 24
+        deprecation_cache = RepositoryCache(cache_dir=cache_dir, cache_days=cache_days, enabled=True)
         self.deprecation_detector = DeprecationDetector(
             github_token=config.github_token if hasattr(config, 'github_token') else None,
             cache=deprecation_cache
