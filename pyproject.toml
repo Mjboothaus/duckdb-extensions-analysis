@@ -5,6 +5,7 @@ description = "Comprehensive analysis tool for DuckDB extensions with historical
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "aiolimiter>=1.2.1",
     "beautifulsoup4>=4.13.5",
     "click>=8.1.0",
     "diskcache>=5.6.3",

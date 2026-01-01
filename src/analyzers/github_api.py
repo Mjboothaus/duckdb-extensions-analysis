@@ -12,6 +12,7 @@ from typing import Dict, List, Optional, Any
 import httpx
 import diskcache as dc
 from loguru import logger
+from aiolimiter import AsyncLimiter
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -31,22 +32,48 @@ class GitHubAPIClient:
         self.github_api_base = config.github_api_base
         self.community_repo = config.community_repo
         self.duckdb_repo = config.duckdb_repo
+        
+        # Rate limiter: 5 requests per second to avoid secondary rate limits
+        # GitHub's documented limit is 5000/hour (1.4/sec), but secondary limits are stricter
+        # Being conservative at 5/sec gives good throughput while avoiding abuse detection
+        self.rate_limiter = AsyncLimiter(max_rate=5, time_period=1)
     
     def get_cache_key(self, url: str, headers: Dict[str, str]) -> str:
         """Generate a cache key for a request."""
         key_data = f"{url}_{str(sorted(headers.items()))}"
         return hashlib.md5(key_data.encode()).hexdigest()
     
+    def _should_retry(self, exception: Exception) -> bool:
+        """Determine if an exception should trigger a retry."""
+        if isinstance(exception, httpx.HTTPStatusError):
+            status = exception.response.status_code
+            # Retry on rate limit (429) and some 403 errors
+            if status in (403, 429):
+                return True
+            # Retry on server errors
+            if status >= 500:
+                return True
+        # Retry on network errors
+        if isinstance(exception, httpx.RequestError):
+            return True
+        return False
+    
     @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=1, max=10),
-        retry=retry_if_exception_type((httpx.RequestError, httpx.HTTPStatusError)),
-        before=lambda _: logger.debug("Retrying GitHub API request..."),
+        stop=stop_after_attempt(5),
+        wait=wait_exponential(multiplier=2, min=2, max=60),
+        retry=lambda retry_state: retry_state.outcome.failed and 
+              (retry_state.attempt_number == 1 or 
+               (hasattr(retry_state.outcome.exception(), 'response') and 
+                retry_state.outcome.exception().response.status_code in (403, 429, 500, 502, 503, 504))),
+        before_sleep=lambda retry_state: logger.warning(
+            f"Retry attempt {retry_state.attempt_number} for GitHub API after error: "
+            f"{retry_state.outcome.exception()}"
+        ),
     )
     async def fetch_cached(
         self, client: httpx.AsyncClient, url: str, cache_hours: Optional[int] = None
     ) -> dict:
-        """Fetch from GitHub API with intelligent caching."""
+        """Fetch from GitHub API with intelligent caching and rate limiting."""
         cache_hours = cache_hours or self.cache_hours
         cache_key = self.get_cache_key(url, self.headers)
 
@@ -58,15 +85,38 @@ class GitHubAPIClient:
                 logger.debug(f"Using cached data for {url}")
                 return data
 
-        # Fetch fresh data
-        logger.debug(f"Fetching fresh data from {url}")
-        response = await client.get(url, headers=self.headers, timeout=10, follow_redirects=True)
-        response.raise_for_status()
-        data = response.json()
+        # Apply rate limiting before making request
+        async with self.rate_limiter:
+            # Fetch fresh data
+            logger.debug(f"Fetching fresh data from {url}")
+            
+            try:
+                response = await client.get(
+                    url, 
+                    headers=self.headers, 
+                    timeout=10, 
+                    follow_redirects=True
+                )
+                response.raise_for_status()
+                data = response.json()
 
-        # Cache the response
-        self.cache.set(cache_key, (datetime.now(), data))
-        return data
+                # Cache the response
+                self.cache.set(cache_key, (datetime.now(), data))
+                return data
+                
+            except httpx.HTTPStatusError as e:
+                # Check for rate limit headers
+                if e.response.status_code in (403, 429):
+                    retry_after = e.response.headers.get('Retry-After')
+                    if retry_after:
+                        wait_time = int(retry_after)
+                        logger.warning(f"Rate limit hit, waiting {wait_time}s before retry")
+                        await asyncio.sleep(wait_time)
+                    else:
+                        # Default wait for secondary rate limits
+                        logger.warning(f"Rate limit (403/429) detected, waiting 5s")
+                        await asyncio.sleep(5)
+                raise
     
     async def get_repository_info(self, client: httpx.AsyncClient, repo_path: str) -> Optional[Dict]:
         """Get repository information from GitHub API."""
