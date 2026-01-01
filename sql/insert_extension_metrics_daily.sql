@@ -1,5 +1,5 @@
 -- Insert or update extension metrics daily
-INSERT OR REPLACE INTO extension_metrics_daily (
+INSERT INTO extension_metrics_daily (
     extension_name,
     extension_type,
     analysis_date,
@@ -10,4 +10,13 @@ INSERT OR REPLACE INTO extension_metrics_daily (
     is_active,
     is_archived,
     repository
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT (extension_name, extension_type, analysis_date) 
+DO UPDATE SET
+    stars = EXCLUDED.stars,
+    forks = EXCLUDED.forks,
+    days_since_update = EXCLUDED.days_since_update,
+    status = EXCLUDED.status,
+    is_active = EXCLUDED.is_active,
+    is_archived = EXCLUDED.is_archived,
+    repository = EXCLUDED.repository;
