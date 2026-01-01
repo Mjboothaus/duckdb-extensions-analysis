@@ -1,0 +1,52 @@
+## Summary
+
+{% if trend_data and trend_data.summary and trend_data.summary.total_delta is defined %}
+### 📊 Quick Stats (with trends)
+
+| **Metric** | **Current** | **Change** |
+|------------|-------------|------------|
+| **Total Extensions** | {{ stats.total_count }} | {% if trend_data.summary.total_delta > 0 %}+{{ trend_data.summary.total_delta }} 🔼{% elif trend_data.summary.total_delta < 0 %}{{ trend_data.summary.total_delta }} 🔽{% else %}→ No change{% endif %} |
+| **Core Extensions** | {{ stats.core_count }} | {% if trend_data.summary.core_count != stats.core_count %}Changed{% else %}→ Stable{% endif %} |
+| **Community Extensions** | {{ stats.community_count }} | {% if trend_data.summary.community_delta > 0 %}+{{ trend_data.summary.community_delta }} 🔼{% elif trend_data.summary.community_delta < 0 %}{{ trend_data.summary.community_delta }} 🔽{% else %}→ No change{% endif %} |
+| **Recently Active** (≤ 30 days) | {{ stats.recently_active_count }} ({{ (stats.recently_active_count * 100 / stats.total_count) | round(1) }}%) | {% if trend_data.summary.active_30d_delta > 0 %}+{{ trend_data.summary.active_30d_delta }} 🔼{% elif trend_data.summary.active_30d_delta < 0 %}{{ trend_data.summary.active_30d_delta }} 🔽{% else %}→ No change{% endif %} |
+| **Very Active** (≤ 7 days) | {{ stats.very_active_count }} ({{ (stats.very_active_count * 100 / stats.total_count) | round(1) }}%) | — |
+
+*Changes since previous analysis*
+
+{% if trend_data.summary.new_extensions and trend_data.summary.new_extensions | length > 0 %}
+
+### 🆕 Recent Additions
+
+{% set new_ext_count = trend_data.summary.new_extensions | length %}
+{% if new_ext_count <= 10 %}
+{{ trend_data.summary.new_extensions | join(', ') }}
+{% else %}
+{{ trend_data.summary.new_extensions[:10] | join(', ') }} *and {{ new_ext_count - 10 }} more*
+{% endif %}
+
+{% endif %}
+
+{% if trend_data.summary.removed_extensions and trend_data.summary.removed_extensions | length > 0 %}
+
+### 🗑️ Removed
+
+{{ trend_data.summary.removed_extensions | join(', ') }}
+
+{% endif %}
+
+{% else %}
+### 📊 Current Status
+
+| **Metric** | **Count** |
+|------------|-----------|
+| **Core Extensions** | {{ stats.core_count }} |
+| **Community Extensions** | {{ stats.community_count }} |
+| **Total Extensions** | {{ stats.total_count }} |
+| **Recently Active** (≤ 30 days) | {{ stats.recently_active_count }} ({{ (stats.recently_active_count * 100 / stats.total_count) | round(1) }}%) |
+| **Very Active** (≤ 7 days) | {{ stats.very_active_count }} ({{ (stats.very_active_count * 100 / stats.total_count) | round(1) }}%) |
+
+*Trend data will be available after multiple analysis runs*
+
+{% endif %}
+
+---
