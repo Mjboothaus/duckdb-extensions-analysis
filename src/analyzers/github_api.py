@@ -61,8 +61,8 @@ class GitHubAPIClient:
         return False
     
     @retry(
-        stop=stop_after_attempt(5),
-        wait=wait_exponential(multiplier=2, min=2, max=60),
+        stop=stop_after_attempt(3),  # Reduced from 5 to avoid making abuse detection worse
+        wait=wait_exponential(multiplier=3, min=5, max=120),  # Longer waits: 5s, 15s, 45s
         retry=lambda retry_state: retry_state.outcome.failed and 
               (retry_state.attempt_number == 1 or 
                (hasattr(retry_state.outcome.exception(), 'response') and 
@@ -115,9 +115,10 @@ class GitHubAPIClient:
                         logger.warning(f"Rate limit hit, waiting {wait_time}s before retry")
                         await asyncio.sleep(wait_time)
                     else:
-                        # Default wait for secondary rate limits
-                        logger.warning(f"Rate limit (403/429) detected, waiting 5s")
-                        await asyncio.sleep(5)
+                        # Default wait for secondary rate limits (increased to 15s)
+                        # This helps avoid making abuse detection worse through rapid retries
+                        logger.warning(f"Rate limit (403/429) detected, waiting 15s before retry")
+                        await asyncio.sleep(15)
                 raise
     
     async def get_repository_info(self, client: httpx.AsyncClient, repo_path: str) -> Optional[Dict]:

@@ -246,6 +246,10 @@ check:
 check-token:
     uv run scripts/check_github_token.py
 
+# Check for GitHub secondary rate limit penalties
+check-penalty:
+    uv run scripts/check_rate_limit_penalty.py
+
 # Show project status
 status:
     @echo "📊 DuckDB Extensions Analysis"

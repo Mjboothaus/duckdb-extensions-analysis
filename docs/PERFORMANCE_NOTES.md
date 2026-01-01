@@ -21,9 +21,11 @@
 - DuckDB releases
 
 **How to minimise 403s**:
-- Use `GITHUB_TOKEN` environment variable (set via `just setup-auth`)
-- Use cached data: `just workflow` (default) instead of `just workflow-fresh`
-- Increase cache TTL: `uv run scripts/cli.py analyze all --cache-hours 24`
+- ✅ Use `GITHUB_TOKEN` environment variable (set via `just setup-auth`)
+- ✅ Use cached data: `just workflow` (default 12-hour cache)
+- ❌ **NEVER use `--cache-hours 0`** - this bypasses cache and triggers abuse detection
+- ⚠️ If you get 403s: wait 30-60 minutes for GitHub's penalty to expire
+- 💡 For truly fresh data: delete cache and use default TTL: `just cache-clear && just workflow`
 
 ### 404 Errors (Repos Not Found)
 
