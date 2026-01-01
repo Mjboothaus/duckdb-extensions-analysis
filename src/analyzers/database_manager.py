@@ -146,6 +146,9 @@ class DatabaseManager(BaseDatabaseManager):
             # Insert installation test results if available
             if hasattr(analysis_result, 'installation_results') and analysis_result.installation_results:
                 await self._save_installation_results(conn, analysis_result)
+            
+            # Calculate and save trend data
+            await self._save_trend_data(conn, analysis_result)
 
             logger.info(
                 f"Successfully saved {len(analysis_result.core_extensions)} core extensions and {len(analysis_result.community_extensions)} community extensions to database"
@@ -465,3 +468,177 @@ class DatabaseManager(BaseDatabaseManager):
                 continue
         
         logger.info(f"Successfully saved installation test results to database")
+    
+    async def _save_trend_data(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+        """Calculate and save trend data for extensions."""
+        logger.info("Calculating and saving trend data")
+        
+        analysis_date = analysis_result.analysis_timestamp.date()
+        
+        # Save daily metrics for each extension
+        await self._save_extension_metrics_daily(conn, analysis_result, analysis_date)
+        
+        # Calculate and save summary trends
+        await self._save_trends_summary(conn, analysis_result, analysis_date)
+        
+        logger.info("Successfully saved trend data")
+    
+    async def _save_extension_metrics_daily(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult, analysis_date) -> None:
+        """Save daily metrics for each extension."""
+        metrics_sql = self._load_sql("insert_extension_metrics_daily.sql")
+        
+        # Save core extensions metrics
+        for ext in analysis_result.core_extensions:
+            # Core extensions don't have individual stars (part of main repo)
+            days_since_update = None
+            if hasattr(ext, 'days_ago'):
+                days_since_update = ext.days_ago
+            elif hasattr(ext, 'metadata') and ext.metadata:
+                # Try to calculate from last_commit_date
+                last_commit = ext.metadata.get('last_commit_date')
+                if last_commit:
+                    try:
+                        commit_date = self._parse_date_string(last_commit)
+                        if commit_date:
+                            days_since_update = (analysis_result.analysis_timestamp - commit_date).days
+                    except:
+                        pass
+            
+            is_active = days_since_update is not None and days_since_update <= 30
+            
+            conn.execute(
+                metrics_sql,
+                [
+                    ext.name,
+                    'core',
+                    analysis_date,
+                    None,  # stars (core don't have individual stars)
+                    None,  # forks
+                    days_since_update,
+                    ext.stage or 'Stable',
+                    is_active,
+                    False,  # is_archived
+                    ext.repository
+                ]
+            )
+        
+        # Save community extensions metrics
+        for ext in analysis_result.community_extensions:
+            days_since_update = ext.days_ago if hasattr(ext, 'days_ago') else None
+            is_active = days_since_update is not None and days_since_update <= 30
+            is_archived = False
+            
+            # Check if archived from metadata
+            if ext.metadata and isinstance(ext.metadata, dict):
+                repo_info = ext.metadata.get('repo_info', {})
+                is_archived = repo_info.get('archived', False)
+            
+            conn.execute(
+                metrics_sql,
+                [
+                    ext.name,
+                    'community',
+                    analysis_date,
+                    ext.stars,
+                    ext.metadata.get('repo_info', {}).get('forks') if ext.metadata else None,
+                    days_since_update,
+                    ext.metadata.get('status', '❓ Unknown') if ext.metadata else '❓ Unknown',
+                    is_active,
+                    is_archived,
+                    ext.repository
+                ]
+            )
+    
+    async def _save_trends_summary(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult, analysis_date) -> None:
+        """Calculate and save aggregate trend summary."""
+        # Get previous analysis for comparison
+        previous_data = conn.execute("""
+            SELECT 
+                total_extensions,
+                core_count,
+                community_count,
+                active_30d,
+                active_7d
+            FROM extension_trends_summary
+            WHERE analysis_date < ?
+            ORDER BY analysis_date DESC
+            LIMIT 1
+        """, [analysis_date]).fetchone()
+        
+        # Get list of extensions from previous analysis
+        previous_extensions = set()
+        if previous_data:
+            prev_core = conn.execute("""
+                SELECT DISTINCT extension_name 
+                FROM extension_metrics_daily
+                WHERE analysis_date < ? AND extension_type = 'core'
+                ORDER BY analysis_date DESC
+                LIMIT (SELECT COUNT(DISTINCT extension_name) FROM extension_metrics_daily 
+                       WHERE extension_type = 'core' AND analysis_date = 
+                       (SELECT MAX(analysis_date) FROM extension_metrics_daily WHERE analysis_date < ?))
+            """, [analysis_date, analysis_date]).fetchall()
+            
+            prev_community = conn.execute("""
+                SELECT DISTINCT extension_name
+                FROM extension_metrics_daily  
+                WHERE analysis_date < ? AND extension_type = 'community'
+                ORDER BY analysis_date DESC
+                LIMIT (SELECT COUNT(DISTINCT extension_name) FROM extension_metrics_daily
+                       WHERE extension_type = 'community' AND analysis_date =
+                       (SELECT MAX(analysis_date) FROM extension_metrics_daily WHERE analysis_date < ?))
+            """, [analysis_date, analysis_date]).fetchall()
+            
+            previous_extensions = {row[0] for row in prev_core + prev_community}
+        
+        # Current extensions
+        current_extensions = {ext.name for ext in analysis_result.core_extensions + analysis_result.community_extensions}
+        
+        # Calculate new and removed extensions
+        new_extensions = list(current_extensions - previous_extensions)
+        removed_extensions = list(previous_extensions - current_extensions)
+        
+        # Count active extensions
+        active_30d = sum(1 for ext in analysis_result.core_extensions + analysis_result.community_extensions 
+                        if hasattr(ext, 'days_ago') and ext.days_ago is not None and ext.days_ago <= 30)
+        active_7d = sum(1 for ext in analysis_result.core_extensions + analysis_result.community_extensions
+                       if hasattr(ext, 'days_ago') and ext.days_ago is not None and ext.days_ago <= 7)
+        
+        # Calculate average days since update
+        days_list = [ext.days_ago for ext in analysis_result.core_extensions + analysis_result.community_extensions
+                    if hasattr(ext, 'days_ago') and ext.days_ago is not None]
+        avg_days = sum(days_list) / len(days_list) if days_list else None
+        
+        # Sum stars and forks for community extensions
+        total_stars = sum(ext.stars for ext in analysis_result.community_extensions if ext.stars)
+        total_forks = sum(
+            ext.metadata.get('repo_info', {}).get('forks', 0) 
+            for ext in analysis_result.community_extensions 
+            if ext.metadata and isinstance(ext.metadata, dict)
+        )
+        
+        # Count archived
+        archived_count = sum(
+            1 for ext in analysis_result.community_extensions
+            if ext.metadata and isinstance(ext.metadata, dict) and 
+            ext.metadata.get('repo_info', {}).get('archived', False)
+        )
+        
+        # Insert summary
+        summary_sql = self._load_sql("insert_trends_summary.sql")
+        conn.execute(
+            summary_sql,
+            [
+                analysis_date,
+                len(analysis_result.core_extensions) + len(analysis_result.community_extensions),
+                len(analysis_result.core_extensions),
+                len(analysis_result.community_extensions),
+                active_30d,
+                active_7d,
+                new_extensions,
+                removed_extensions,
+                avg_days,
+                total_stars,
+                total_forks,
+                archived_count
+            ]
+        )
