@@ -200,17 +200,46 @@ class GitHubAPIClient:
                 return data
                 
             except httpx.HTTPStatusError as e:
-                # Check for rate limit headers
+                # Check for rate limit headers and log detailed error info
                 if e.response.status_code in (403, 429):
+                    # Extract and log the error message from GitHub
+                    error_body = None
+                    try:
+                        error_body = e.response.json()
+                        error_msg = error_body.get('message', 'No message')
+                        error_doc_url = error_body.get('documentation_url', '')
+                    except:
+                        error_msg = e.response.text[:200] if e.response.text else 'No body'
+                        error_doc_url = ''
+                    
+                    # Log comprehensive error details
+                    logger.error(f"\n{'='*60}")
+                    logger.error(f"GitHub API Error {e.response.status_code} for: {url_path}")
+                    logger.error(f"Message: {error_msg}")
+                    if error_doc_url:
+                        logger.error(f"Docs: {error_doc_url}")
+                    
+                    # Log relevant headers
+                    logger.error(f"Headers:")
+                    logger.error(f"  X-RateLimit-Limit: {e.response.headers.get('x-ratelimit-limit', 'N/A')}")
+                    logger.error(f"  X-RateLimit-Remaining: {e.response.headers.get('x-ratelimit-remaining', 'N/A')}")
+                    logger.error(f"  X-RateLimit-Reset: {e.response.headers.get('x-ratelimit-reset', 'N/A')}")
+                    logger.error(f"  X-RateLimit-Resource: {e.response.headers.get('x-ratelimit-resource', 'N/A')}")
+                    logger.error(f"  X-RateLimit-Used: {e.response.headers.get('x-ratelimit-used', 'N/A')}")
+                    logger.error(f"  Retry-After: {e.response.headers.get('retry-after', 'N/A')}")
+                    logger.error(f"  X-GitHub-Request-Id: {e.response.headers.get('x-github-request-id', 'N/A')}")
+                    logger.error(f"{'='*60}\n")
+                    
+                    # Wait according to Retry-After or use default
                     retry_after = e.response.headers.get('Retry-After')
                     if retry_after:
                         wait_time = int(retry_after)
-                        logger.warning(f"Rate limit hit, waiting {wait_time}s before retry")
+                        logger.warning(f"Waiting {wait_time}s as specified by Retry-After header")
                         await asyncio.sleep(wait_time)
                     else:
                         # Default wait for secondary rate limits (increased to 15s)
                         # This helps avoid making abuse detection worse through rapid retries
-                        logger.warning(f"Rate limit (403/429) detected, waiting 15s before retry")
+                        logger.warning(f"No Retry-After header, using default 15s wait")
                         await asyncio.sleep(15)
                 raise
     
