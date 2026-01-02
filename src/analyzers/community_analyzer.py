@@ -41,7 +41,8 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
         deprecation_cache = RepositoryCache(cache_dir=cache_dir, cache_days=cache_days, enabled=True)
         self.deprecation_detector = DeprecationDetector(
             github_token=config.github_token if hasattr(config, 'github_token') else None,
-            cache=deprecation_cache
+            cache=deprecation_cache,
+            github_api_client=github_client  # Pass rate-limited API client
         )
         
         # Initialize installation tester for version compatibility testing (if enabled)

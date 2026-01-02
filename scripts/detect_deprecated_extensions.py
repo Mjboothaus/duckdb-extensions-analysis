@@ -176,9 +176,10 @@ class RepositoryCache:
 class DeprecationDetector:
     """Detects potentially deprecated extensions by analyzing repository content."""
     
-    def __init__(self, github_token: Optional[str] = None, cache: Optional[RepositoryCache] = None):
+    def __init__(self, github_token: Optional[str] = None, cache: Optional[RepositoryCache] = None, github_api_client=None):
         self.github_token = github_token
         self.cache = cache or RepositoryCache(enabled=False)  # Default to no cache unless provided
+        self.github_api_client = github_api_client  # Optional rate-limited API client
         self.headers = {
             'Accept': 'application/vnd.github.v3+json',
             'User-Agent': 'DuckDB-Extensions-Analysis/1.0'
@@ -290,6 +291,16 @@ class DeprecationDetector:
     
     async def _get_repository_info(self, client: httpx.AsyncClient, owner: str, repo: str) -> Optional[Dict]:
         """Get repository metadata from GitHub API with caching."""
+        # Use GitHubAPIClient if available (respects rate limiting)
+        if self.github_api_client:
+            try:
+                repo_path = f"{owner}/{repo}"
+                return await self.github_api_client.get_repository_info(client, repo_path)
+            except Exception as e:
+                logger.debug(f"Error fetching repository info via GitHubAPIClient for {owner}/{repo}: {e}")
+                return None
+        
+        # Fallback to direct API calls (legacy behavior, no rate limiting)
         cache_key = f"repo_info_{owner}_{repo}"
         
         # Try cache first
