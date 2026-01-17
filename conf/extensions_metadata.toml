@@ -32,6 +32,7 @@ postgres = { repository = "duckdb/duckdb-postgres", description = "PostgreSQL da
 spatial = { repository = "duckdb/duckdb-spatial", description = "Geospatial data types and functions" }
 sqlite = { repository = "duckdb/duckdb-sqlite", description = "SQLite database connectivity" }
 vss = { repository = "duckdb/duckdb-vss", description = "Vector similarity search" }
+unity_catalog = { repository = "duckdb/unity_catalog", description = "Unity Catalog integration (proof-of-concept)" }
 
 # Manual overrides for extensions that should point to specific directories in the main DuckDB repo
 [core_extensions.repository_overrides]
@@ -48,6 +49,11 @@ ducklake = "https://github.com/duckdb/ducklake"
 # Extensions integrated into core DuckDB without dedicated directories
 [core_extensions.integrated_core]
 ducklake = { description = "Delta Lake support via DuckLake (different from delta extension)" }
+
+# Third-party closed-source extensions (no public repository)
+[core_extensions.closed_source]
+motherduck = { description = "MotherDuck cloud data warehouse integration", note = "Closed source - maintained by MotherDuck Inc." }
+vortex = { description = "Apache Vortex columnar format support", note = "Closed source - third-party extension" }
 
 # Special URL patterns for core extensions documentation
 [core_extensions.special_urls]
