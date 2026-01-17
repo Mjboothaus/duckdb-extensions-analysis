@@ -227,8 +227,8 @@ $(document).ready(function() {
             const defaultOrder = extensionIdx >= 0 ? [[extensionIdx, 'asc']] : [];
             
             $table.DataTable({
-                "pageLength": 25,
-                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                "pageLength": 20,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
                 "order": defaultOrder,
                 "columnDefs": columnDefs,
                 "responsive": true,
