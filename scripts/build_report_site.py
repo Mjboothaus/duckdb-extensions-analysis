@@ -44,8 +44,14 @@ def main():
     if report_timestamp == 'Loading...':
         report_timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')
 
-    # Convert markdown to HTML
-    md = markdown.Markdown(extensions=['tables', 'fenced_code', 'toc'])
+    # Convert markdown to HTML with proper handling of HTML blocks
+    # The 'md_in_html' extension allows markdown processing inside HTML tags
+    md = markdown.Markdown(extensions=[
+        'tables',
+        'fenced_code',
+        'toc',
+        'md_in_html'  # Critical: enables markdown parsing inside <details> and other HTML tags
+    ])
     html_content = md.convert(md_content)
 
     # Read template files
