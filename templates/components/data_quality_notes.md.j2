@@ -1,60 +1,28 @@
 ---
 
-## Data Quality & Limitations
+## Data quality and limitations
 
-### About This Analysis
+Short version:
+- Sources: DuckDB docs (core), community-extensions registry, GitHub API (repo metadata), DuckDB releases CSV + release calendar.
+- This report reflects what those sources provide. Where data is missing or closed, we show that clearly.
 
-This report automatically aggregates data from multiple sources to provide comprehensive coverage of the DuckDB extension ecosystem. However, users should be aware of the following limitations:
+Known issues (what "NOT FOUND" etc. usually means):
+- Closed source: Some extensions (e.g. MotherDuck, Vortex) have no public repo.
+- Moved/renamed: Upstream URLs changed after registration.
+- Private: Repositories are not public yet.
+- Metadata errors: Incorrect URLs in upstream data.
 
-#### Data Sources
-- **Core Extensions**: [DuckDB Official Documentation](https://duckdb.org/docs/stable/core_extensions/overview.html)
-- **Community Extensions**: [Community Extensions Registry](https://github.com/duckdb/community-extensions)
-- **Repository Metadata**: GitHub API (stars, activity, language, etc.)
-- **Release Information**: [DuckDB Releases CSV](https://duckdb.org/data/duckdb-releases.csv) + [Release Calendar](https://duckdb.org/release_calendar)
+Other caveats:
+- Truncated names: A few registry entries truncate repo names (e.g. query-farm/airpor). We correct known cases; some may remain until fixed upstream.
+- Activity signal: "Last Activity" = last git push; stable projects may be quiet but healthy.
+- Stars: Popularity signal, not usage or quality.
+- Install check: Verifies INSTALL succeeds; does not exercise functionality.
 
-#### Known Data Quality Issues
-
-**Repository Links Showing "NOT FOUND"**:
-Some extensions display `~~repository~~ NOT FOUND (HTTP 404)` messages. This typically indicates:
-- **Closed-source extensions**: Some third-party extensions (e.g., MotherDuck, Vortex) are proprietary and don't have public repositories
-- **Moved/renamed repositories**: Repository URLs changed after registration
-- **Private repositories**: Extensions under development or with restricted access
-- **Data quality issues**: Incorrect URLs in upstream metadata
-
-These "NOT FOUND" indicators are **informative**, not errors. They accurately reflect the availability of source code.
-
-**Truncated Repository Names**:
-Some community extensions have truncated names in the upstream registry (e.g., `query-farm/airpor` instead of `Query-farm/airport`). We apply corrections where known, but some may still appear broken until fixed upstream.
-
-**Activity Metrics**:
-- "Last Activity" is based on most recent Git commit, which may not reflect maintenance for stable extensions
-- Stars indicate interest but not production usage or quality
-- Installation tests verify `INSTALL` command succeeds but don't test functionality
-
-**Third-Party Extensions**:
-Core extensions marked as "Third Party" may have limited documentation or support compared to extensions maintained by the DuckDB team.
-
-#### How to Report Issues
-
-If you notice incorrect information:
-1. **For repository links**: Check if the extension has moved or is closed-source
-2. **For missing extensions**: Ensure they're registered in [community-extensions](https://github.com/duckdb/community-extensions)
-3. **For incorrect metadata**: Report to this project's [issue tracker]({{ metadata.links.github_repo }}/issues)
-
-#### Best Practices
-
-✅ **Do**: Use this report as a discovery tool and starting point  
-✅ **Do**: Verify extension details in official documentation before production use  
-✅ **Do**: Check individual repository READMEs for installation and usage instructions  
-
-❌ **Don't**: Assume "NOT FOUND" means the extension doesn't work  
-❌ **Don't**: Rely solely on star counts for quality assessment  
-❌ **Don't**: Use activity age to judge mature, stable extensions  
-
-### Continuous Improvement
-
-This tool is open source and welcomes contributions to improve data quality, add new data sources, or enhance analysis capabilities. The ecosystem evolves rapidly—if you notice patterns or issues not captured here, please open an issue or pull request!
+Report issues or fixes:
+- Missing/broken link? Confirm if closed source or moved.
+- Missing extension? Add/update in the community-extensions registry.
+- Anything else: open an issue here → {{ metadata.links.github_repo }}/issues
 
 ---
 
-*Last updated: {{ timestamp | strftime('%Y-%m-%d') }}*
+<p class="fine-print">Last updated: {{ timestamp | strftime('%Y-%m-%d') }}</p>

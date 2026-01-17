@@ -179,6 +179,16 @@ class ExtensionMetadata:
         
         return repo_name
     
+    def is_closed_source_extension(self, extension_name: str) -> bool:
+        """Check if a core extension is closed-source (no public repository)."""
+        closed_source = self.metadata.get("core_extensions", {}).get("closed_source", {})
+        return extension_name in closed_source
+    
+    def get_closed_source_info(self, extension_name: str) -> Optional[Dict]:
+        """Get information about a closed-source extension."""
+        closed_source = self.metadata.get("core_extensions", {}).get("closed_source", {})
+        return closed_source.get(extension_name)
+    
     def reload_metadata(self) -> None:
         """Reload metadata from file."""
         self.metadata = self._load_metadata()

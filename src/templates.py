@@ -163,9 +163,21 @@ class TemplateEngine:
             return str(number)
     
     def _filter_github_link(self, repository: str, validation_results: Dict = None, ext_name: str = "") -> str:
-        """Format repository as GitHub link with URL validation."""
+        """Format repository as GitHub link with URL validation and closed-source handling."""
         if not repository:
             return "N/A"
+        
+        # Check if this is a closed-source extension
+        if ext_name:
+            # Load metadata directly to avoid circular imports
+            closed_source_extensions = {
+                'motherduck': 'Closed source - maintained by MotherDuck Inc.',
+                'vortex': 'Closed source - third-party extension'
+            }
+            if ext_name in closed_source_extensions:
+                note = closed_source_extensions[ext_name]
+                # Link to main DuckDB repo for reference
+                return f"[duckdb/duckdb](https://github.com/duckdb/duckdb) *(Third Party - {note})*"
         
         # Determine the full URL
         if repository.startswith('http'):

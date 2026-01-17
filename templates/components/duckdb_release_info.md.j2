@@ -14,13 +14,9 @@ DuckDB follows **semantic versioning** with regular releases. For complete and u
 | {{ '**' if release.codename or release.is_future else '' }}v{{ release.version }}{{ '**' if release.codename or release.is_future else '' }}{{ ' 📅' if release.is_future else '' }} | {{ release.release_date }} | {{ release.codename if release.codename else '–' }} | {{ '*' + release.duck_species + '*' if release.duck_species != '–' else '–' }} | {{ release.lts if release.lts else '' }} | {{ release.status }} |
 {% endfor %}
 
-### Historical Releases (Pre-1.0)
+### Historical Releases (Pre‑1.0)
 
-| Version | Release Date | Codename | Named After | Status |
-|---------|--------------|----------|-------------|--------|
-{% for release in duckdb_releases[15:] if release.version.startswith('0.') -%}
-| {{ '**' if release.codename else '' }}v{{ release.version }}{{ '**' if release.codename else '' }} | {{ release.release_date }} | {{ release.codename if release.codename else '–' }} | {{ '*' + release.duck_species + '*' if release.duck_species != '–' else '–' }} | {{ release.status }} |
-{% endfor %}
+See full table in the repository: [docs/HISTORICAL_PRE_1_0_RELEASES.md](../docs/HISTORICAL_PRE_1_0_RELEASES.md)
 
 **Note:** For releases prior to v0.5.0, please refer to the [official DuckDB documentation](https://duckdb.org/docs/installation/) for historical version information.
 
@@ -44,4 +40,4 @@ DuckDB follows **semantic versioning** with regular releases. For complete and u
 - **📰 Release Notes**: [duckdb.org/news/](https://duckdb.org/news/)
 - **🛠️ Development Roadmap**: [duckdb.org/roadmap.html](https://duckdb.org/roadmap.html)
 
-*Data sourced from the official [DuckDB releases CSV](https://duckdb.org/data/duckdb-releases.csv). For the most current information, always check the [release calendar](https://duckdb.org/release_calendar.html).*
+<p class="fine-print">Data sourced from the official <a href="https://duckdb.org/data/duckdb-releases.csv">DuckDB releases CSV</a>. For the most current information, see the <a href="https://duckdb.org/release_calendar.html">release calendar</a>.</p>
