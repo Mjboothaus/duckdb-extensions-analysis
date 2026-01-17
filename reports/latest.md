@@ -71,7 +71,7 @@ Core extensions maintained by the DuckDB team and distributed via the official e
 | 13 | [inet](https://duckdb.org/docs/stable/core_extensions/inet.html) | [duckdb-inet](https://github.com/duckdb/duckdb-inet) | 🟢 Ongoing | 57 days ago (2025-11-20 22:54:12 UTC) | 15 | C++ | Internet address data types |
 | 14 | [jemalloc](https://duckdb.org/docs/stable/core_extensions/jemalloc.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/jemalloc) | 🟢 Ongoing | 223 days ago (2025-06-07 09:38:02 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: jemalloc |
 | 15 | [json](https://duckdb.org/docs/stable/data/json/overview.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/json) | 🟢 Ongoing | 9 days ago (2026-01-07 20:57:11 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: json |
-| 16 | [motherduck](https://duckdb.org/docs/stable/core_extensions/motherduck.html) | ~~[motherduck](https://github.com/duckdb/duckdb/extensions/motherduck)~~ **NOT FOUND:** https://github.com/duckdb/duckdb/extensions/motherduck (HTTP 404) | 🟢 Ongoing | 38 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: motherduck |
+| 16 | [motherduck](https://duckdb.org/docs/stable/core_extensions/motherduck.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb) *(Third Party - Closed source - maintained by MotherDuck Inc.)* | 🟢 Ongoing | 38 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: motherduck |
 | 17 | [mysql](https://duckdb.org/docs/stable/core_extensions/mysql.html) | [duckdb-mysql](https://github.com/duckdb/duckdb-mysql) | 🟢 Ongoing | 31 days ago (2025-12-16 07:32:58 UTC) | 86 | C++ | MySQL database connectivity |
 | 18 | [parquet](https://duckdb.org/docs/stable/data/parquet/overview.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/parquet) | 🟢 Ongoing | 9 days ago (2026-01-07 10:48:16 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: parquet |
 | 19 | [postgres](https://duckdb.org/docs/stable/core_extensions/postgres.html) | [duckdb-postgres](https://github.com/duckdb/duckdb-postgres) | 🟢 Ongoing | 50 days ago (2025-11-27 14:55:29 UTC) | 335 | C++ | PostgreSQL database connectivity |
@@ -81,7 +81,7 @@ Core extensions maintained by the DuckDB team and distributed via the official e
 | 23 | [tpch](https://duckdb.org/docs/stable/core_extensions/tpch.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/tpch) | 🟢 Ongoing | 16 days ago (2025-12-31 13:09:15 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: tpch |
 | 24 | [ui](https://duckdb.org/docs/stable/core_extensions/ui.html) | [duckdb-ui](https://github.com/duckdb/duckdb-ui) | 🟢 Ongoing | 2 days ago (2026-01-14 10:58:06 UTC) | 402 | C++ | Browser-based user interface for DuckDB |
 | 25 | [unity_catalog](https://duckdb.org/docs/stable/core_extensions/unity_catalog.html) | [unity_catalog](https://github.com/duckdb/unity_catalog) | 🟢 Ongoing | today (2026-01-15 10:27:04 UTC) | 95 | C++ | Proof-of-concept extension combining the delta extension with Unity Catalog |
-| 26 | [vortex](https://duckdb.org/docs/stable/core_extensions/vortex.html) | ~~[vortex](https://github.com/duckdb/duckdb/extensions/vortex)~~ **NOT FOUND:** https://github.com/duckdb/duckdb/extensions/vortex (HTTP 404) | 🟢 Ongoing | 38 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: vortex |
+| 26 | [vortex](https://duckdb.org/docs/stable/core_extensions/vortex.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb) *(Third Party - Closed source - third-party extension)* | 🟢 Ongoing | 38 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: vortex |
 | 27 | [vss](https://duckdb.org/docs/stable/core_extensions/vss.html) | [duckdb-vss](https://github.com/duckdb/duckdb-vss) | 🟢 Ongoing | 2 days ago (2026-01-14 19:27:25 UTC) | 230 | C++ | Vector similarity search |
 
 </details>
@@ -165,8 +165,8 @@ Third-party extensions maintained by the community
 | 14 | [duckgl](https://duckdb.org/community_extensions/extensions/duckgl.html) | [duckgl](https://github.com/nkwork9999/duckgl) | 🟢 Ongoing | 21 days ago (2025-12-27 04:09:47 UTC) | 1 | C++ | DuckDB extension: duckgl by nkwork9999 |
 | 15 | [poached](https://duckdb.org/community_extensions/extensions/poached.html) | [poached](https://github.com/sidequery/poached) | 🟢 Ongoing | 21 days ago (2025-12-26 21:13:19 UTC) | 7 | C++ | A DuckDB extension that exposes SQL parsing functionality for building IDEs,... |
 | 16 | [erpl_web](https://duckdb.org/community_extensions/extensions/erpl_web.html) | [erpl-web](https://github.com/DataZooDE/erpl-web) | 🟢 Ongoing | 22 days ago (2025-12-25 13:47:47 UTC) | 23 | C++ | ERPL is a DuckDB extension to connect to API based ecosystems via standard in... |
-| 17 | [llm](https://duckdb.org/community_extensions/extensions/llm.html) | [duckdb-llm](https://github.com/midwork-finds-jobs/duckdb-llm) | 🟢 Ongoing | 22 days ago (2025-12-25 05:35:42 UTC) | 1 | C++ | DuckDB extension: llm by midwork-finds-jobs |
-| 18 | [quackfix](https://duckdb.org/community_extensions/extensions/quackfix.html) | [QuackFIX](https://github.com/hyehudai/QuackFIX) | 🟢 Ongoing | 22 days ago (2025-12-25 10:36:24 UTC) | 16 | C++ | Fix log extension for duckdb |
+| 17 | [quackfix](https://duckdb.org/community_extensions/extensions/quackfix.html) | [QuackFIX](https://github.com/hyehudai/QuackFIX) | 🟢 Ongoing | 22 days ago (2025-12-25 10:36:24 UTC) | 16 | C++ | Fix log extension for duckdb |
+| 18 | [llm](https://duckdb.org/community_extensions/extensions/llm.html) | [duckdb-llm](https://github.com/midwork-finds-jobs/duckdb-llm) | 🟢 Ongoing | 23 days ago (2025-12-25 05:35:42 UTC) | 1 | C++ | DuckDB extension: llm by midwork-finds-jobs |
 | 19 | [minijinja](https://duckdb.org/community_extensions/extensions/minijinja.html) | [minijinja](https://github.com/Query-farm/minijinja) | 🟢 Ongoing | 25 days ago (2025-12-22 14:59:08 UTC) | 5 | C++ | DuckDB extension: minijinja |
 | 20 | [quackformers](https://duckdb.org/community_extensions/extensions/quackformers.html) | [quackformers](https://github.com/martin-conur/quackformers) | ❓ Unknown | 26 days ago (2025-12-21 18:43:16 UTC) | 10 | Rust | DuckDB NLP extension. |
 | 21 | [h3](https://duckdb.org/community_extensions/extensions/h3.html) | [h3-duckdb](https://github.com/isaacbrodsky/h3-duckdb) | 🟢 Ongoing | 28 days ago (2025-12-19 21:58:47 UTC) | 240 | C++ | Bindings for H3 to DuckDB |
@@ -375,7 +375,7 @@ Third-party extensions maintained by the community
 | 71 | [jwt](https://duckdb.org/community_extensions/extensions/jwt.html) | [duckdb_jwt](https://github.com/GalvinGao/duckdb_jwt) | ❓ Unknown | 192 days ago (2025-07-09 00:13:56 UTC) | 0 | C++ | DuckDB extension: jwt by GalvinGao |
 | 72 | [lance](https://duckdb.org/community_extensions/extensions/lance.html) | [lance-duckdb](https://github.com/lance-format/lance-duckdb) | 🟢 Ongoing | 9 days ago (2026-01-07 15:19:52 UTC) | 52 | C++ | The lance extensions for DuckDB enable reading and writing of lance tables. |
 | 73 | [lindel](https://duckdb.org/community_extensions/extensions/lindel.html) | [lindel](https://github.com/Query-farm/lindel) | 🟢 Ongoing | 43 days ago (2025-12-04 16:10:08 UTC) | 58 | C++ | DuckDB Extension Linearization/Delinearization, Z-Order, Hilbert and Morton C... |
-| 74 | [llm](https://duckdb.org/community_extensions/extensions/llm.html) | [duckdb-llm](https://github.com/midwork-finds-jobs/duckdb-llm) | 🟢 Ongoing | 22 days ago (2025-12-25 05:35:42 UTC) | 1 | C++ | DuckDB extension: llm by midwork-finds-jobs |
+| 74 | [llm](https://duckdb.org/community_extensions/extensions/llm.html) | [duckdb-llm](https://github.com/midwork-finds-jobs/duckdb-llm) | 🟢 Ongoing | 23 days ago (2025-12-25 05:35:42 UTC) | 1 | C++ | DuckDB extension: llm by midwork-finds-jobs |
 | 75 | [lsh](https://duckdb.org/community_extensions/extensions/lsh.html) | [lsh](https://github.com/princeton-ddss/lsh) | 🟢 Ongoing | 32 days ago (2025-12-15 18:21:36 UTC) | 10 | Rust | DuckDB community extension for locality-sensitive hashing (LSH) |
 | 76 | [lua](https://duckdb.org/community_extensions/extensions/lua.html) | [duckdb-lua](https://github.com/isaacbrodsky/duckdb-lua) | 🟢 Ongoing | 38 days ago (2025-12-09 19:09:42 UTC) | 9 | C++ | DuckDB extension to evaluate Lua expressions. |
 | 77 | [magic](https://duckdb.org/community_extensions/extensions/magic.html) | [duckdb_magic](https://github.com/carlopi/duckdb_magic) | 🟢 Ongoing | 111 days ago (2025-09-27 18:50:32 UTC) | 7 | C++ | Auto-detect file types via `libmagic` (`file` utility) |
@@ -484,50 +484,9 @@ DuckDB follows **semantic versioning** with regular releases. For complete and u
 | **v1.1.2** | 2024-10-14 | – | – |  | Active |
 | **v1.1.1** | 2024-09-24 | – | – |  | Active |
 
-### Historical Releases (Pre-1.0)
+### Historical Releases (Pre‑1.0)
 
-| Version | Release Date | Codename | Named After | Status |
-|---------|--------------|----------|-------------|--------|
-| **v0.10.3** | 2024-05-22 | – | – | Active |
-| **v0.10.2** | 2024-04-17 | – | – | Active |
-| **v0.10.1** | 2024-03-18 | – | – | Active |
-| **v0.10.0** | 2024-02-13 | Fusca | *Velvet scoter* | EOL |
-| **v0.9.2** | 2023-11-14 | – | – | Active |
-| **v0.9.1** | 2023-10-11 | – | – | Active |
-| **v0.9.0** | 2023-09-26 | Undulata | *Yellow-billed duck* | Active |
-| **v0.8.1** | 2023-06-13 | – | – | Active |
-| **v0.8.0** | 2023-05-17 | Fulvigula | *Mottled duck* | Active |
-| **v0.7.1** | 2023-02-27 | – | – | Active |
-| **v0.7.0** | 2023-02-13 | Labradorius | *Labrador duck* | Active |
-| **v0.6.1** | 2022-12-06 | – | – | Active |
-| **v0.6.0** | 2022-11-14 | Oxyura | *White-headed duck* | Active |
-| **v0.5.1** | 2022-09-19 | – | – | Active |
-| **v0.5.0** | 2022-09-05 | Pulchellus | *Green pygmy goose* | Active |
-| **v0.4.0** | 2022-06-20 | Ferruginea | *Andean duck* | Active |
-| **v0.3.4** | 2022-04-25 | – | – | Active |
-| **v0.3.3** | 2022-04-11 | Sansaniensis | *Chenoanas sansaniensis* | Active |
-| **v0.3.2** | 2022-02-07 | Gibberifrons | *Sunda teal* | Active |
-| **v0.3.1** | 2021-11-16 | Spectabilis | *King eider* | Active |
-| **v0.3.0** | 2021-10-06 | Gracilis | *Grey teal* | Active |
-| **v0.2.9** | 2021-09-06 | Platyrhynchos | *Mallard* | Active |
-| **v0.2.8** | 2021-08-02 | Ceruttii | *Histrionicus ceruttii* | Active |
-| **v0.2.7** | 2021-06-14 | Mollissima | *Common eider* | Active |
-| **v0.2.6** | 2021-05-08 | Jamaicensis | *Blue-billed ruddy duck* | Active |
-| **v0.2.5** | 2021-03-10 | Falcata | *Falcated duck* | Active |
-| **v0.2.4** | 2021-02-02 | Jubata | *Australian wood duck* | Active |
-| **v0.2.3** | 2020-12-03 | Serrator | *Red-breasted merganser* | Active |
-| **v0.2.2** | 2020-11-01 | Clypeata | *Northern shoveler* | Active |
-| **v0.2.1** | 2020-08-29 | – | – | Active |
-| **v0.2.0** | 2020-07-23 | – | – | Active |
-| **v0.1.9** | 2020-06-19 | – | – | Active |
-| **v0.1.8** | 2020-05-29 | – | – | Active |
-| **v0.1.7** | 2020-05-04 | – | – | Active |
-| **v0.1.6** | 2020-04-05 | – | – | Active |
-| **v0.1.5** | 2020-03-02 | – | – | Active |
-| **v0.1.3** | 2020-02-03 | – | – | Active |
-| **v0.1.2** | 2020-01-06 | – | – | Active |
-| **v0.1.1** | 2019-09-24 | – | – | Active |
-| **v0.1.0** | 2019-06-27 | – | – | Active |
+See full table in the repository: [docs/HISTORICAL_PRE_1_0_RELEASES.md](../docs/HISTORICAL_PRE_1_0_RELEASES.md)
 
 **Note:** For releases prior to v0.5.0, please refer to the [official DuckDB documentation](https://duckdb.org/docs/installation/) for historical version information.
 
@@ -551,64 +510,32 @@ DuckDB follows **semantic versioning** with regular releases. For complete and u
 - **📰 Release Notes**: [duckdb.org/news/](https://duckdb.org/news/)
 - **🛠️ Development Roadmap**: [duckdb.org/roadmap.html](https://duckdb.org/roadmap.html)
 
-*Data sourced from the official [DuckDB releases CSV](https://duckdb.org/data/duckdb-releases.csv). For the most current information, always check the [release calendar](https://duckdb.org/release_calendar.html).*
+<p class="fine-print">Data sourced from the official <a href="https://duckdb.org/data/duckdb-releases.csv">DuckDB releases CSV</a>. For the most current information, see the <a href="https://duckdb.org/release_calendar.html">release calendar</a>.</p>
 ---
 
-## Data Quality & Limitations
+## Data quality and limitations
 
-### About This Analysis
+Short version:
+- Sources: DuckDB docs (core), community-extensions registry, GitHub API (repo metadata), DuckDB releases CSV + release calendar.
+- This report reflects what those sources provide. Where data is missing or closed, we show that clearly.
 
-This report automatically aggregates data from multiple sources to provide comprehensive coverage of the DuckDB extension ecosystem. However, users should be aware of the following limitations:
+Known issues (what "NOT FOUND" etc. usually means):
+- Closed source: Some extensions (e.g. MotherDuck, Vortex) have no public repo.
+- Moved/renamed: Upstream URLs changed after registration.
+- Private: Repositories are not public yet.
+- Metadata errors: Incorrect URLs in upstream data.
 
-#### Data Sources
-- **Core Extensions**: [DuckDB Official Documentation](https://duckdb.org/docs/stable/core_extensions/overview.html)
-- **Community Extensions**: [Community Extensions Registry](https://github.com/duckdb/community-extensions)
-- **Repository Metadata**: GitHub API (stars, activity, language, etc.)
-- **Release Information**: [DuckDB Releases CSV](https://duckdb.org/data/duckdb-releases.csv) + [Release Calendar](https://duckdb.org/release_calendar)
+Other caveats:
+- Truncated names: A few registry entries truncate repo names (e.g. query-farm/airpor). We correct known cases; some may remain until fixed upstream.
+- Activity signal: "Last Activity" = last git push; stable projects may be quiet but healthy.
+- Stars: Popularity signal, not usage or quality.
+- Install check: Verifies INSTALL succeeds; does not exercise functionality.
 
-#### Known Data Quality Issues
-
-**Repository Links Showing "NOT FOUND"**:
-Some extensions display `~~repository~~ NOT FOUND (HTTP 404)` messages. This typically indicates:
-- **Closed-source extensions**: Some third-party extensions (e.g., MotherDuck, Vortex) are proprietary and don't have public repositories
-- **Moved/renamed repositories**: Repository URLs changed after registration
-- **Private repositories**: Extensions under development or with restricted access
-- **Data quality issues**: Incorrect URLs in upstream metadata
-
-These "NOT FOUND" indicators are **informative**, not errors. They accurately reflect the availability of source code.
-
-**Truncated Repository Names**:
-Some community extensions have truncated names in the upstream registry (e.g., `query-farm/airpor` instead of `Query-farm/airport`). We apply corrections where known, but some may still appear broken until fixed upstream.
-
-**Activity Metrics**:
-- "Last Activity" is based on most recent Git commit, which may not reflect maintenance for stable extensions
-- Stars indicate interest but not production usage or quality
-- Installation tests verify `INSTALL` command succeeds but don't test functionality
-
-**Third-Party Extensions**:
-Core extensions marked as "Third Party" may have limited documentation or support compared to extensions maintained by the DuckDB team.
-
-#### How to Report Issues
-
-If you notice incorrect information:
-1. **For repository links**: Check if the extension has moved or is closed-source
-2. **For missing extensions**: Ensure they're registered in [community-extensions](https://github.com/duckdb/community-extensions)
-3. **For incorrect metadata**: Report to this project's [issue tracker](https://github.com/duckdb/duckdb/issues)
-
-#### Best Practices
-
-✅ **Do**: Use this report as a discovery tool and starting point  
-✅ **Do**: Verify extension details in official documentation before production use  
-✅ **Do**: Check individual repository READMEs for installation and usage instructions  
-
-❌ **Don't**: Assume "NOT FOUND" means the extension doesn't work  
-❌ **Don't**: Rely solely on star counts for quality assessment  
-❌ **Don't**: Use activity age to judge mature, stable extensions  
-
-### Continuous Improvement
-
-This tool is open source and welcomes contributions to improve data quality, add new data sources, or enhance analysis capabilities. The ecosystem evolves rapidly—if you notice patterns or issues not captured here, please open an issue or pull request!
+Report issues or fixes:
+- Missing/broken link? Confirm if closed source or moved.
+- Missing extension? Add/update in the community-extensions registry.
+- Anything else: open an issue here → https://github.com/duckdb/duckdb/issues
 
 ---
 
-*Last updated: 2026-01-17*
+<p class="fine-print">Last updated: 2026-01-17</p>
