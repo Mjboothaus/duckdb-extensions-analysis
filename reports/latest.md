@@ -123,14 +123,14 @@ Third-party extensions maintained by the community
 | 17 | [otlp](https://duckdb.org/community_extensions/extensions/otlp.html) | [duckdb-otlp](https://github.com/smithclay/duckdb-otlp) | 🟢 Ongoing | 3 days ago (2026-01-14 04:35:46 UTC) | 33 | C++ | query OpenTelemetry metrics, logs, and traces (OTLP) in duckdb |
 | 18 | [st_read_multi](https://duckdb.org/community_extensions/extensions/st_read_multi.html) | [duckdb-ext-st-read-multi](https://github.com/yutannihilation/duckdb-ext-st-read-multi) | 🟢 Ongoing | 3 days ago (2026-01-13 22:41:46 UTC) | 5 | Rust | A DuckDB extension to import multiple geospatial files with `ST_Read_Multi()` |
 | 19 | [file_dialog](https://duckdb.org/community_extensions/extensions/file_dialog.html) | [duckdb-ext-file-dialog](https://github.com/yutannihilation/duckdb-ext-file-dialog) | 🟢 Ongoing | 4 days ago (2026-01-12 14:33:29 UTC) | 15 | Rust | A DuckDB extension to choose file interactively using native file open dialogs |
-| 20 | [httpd_log](https://duckdb.org/community_extensions/extensions/httpd_log.html) | [duckdb-httpd-log](https://github.com/saygox/duckdb-httpd-log) | 🟢 Ongoing | 4 days ago (2026-01-12 06:14:58 UTC) | 0 | C++ | duckdb extension |
-| 21 | [ion](https://duckdb.org/community_extensions/extensions/ion.html) | [duckdb-ion](https://github.com/kestra-io/duckdb-ion) | 🟢 Ongoing | 4 days ago (2026-01-12 18:20:02 UTC) | 0 | C++ | AWS Ion extension for DuckDB |
-| 22 | [observefs](https://duckdb.org/community_extensions/extensions/observefs.html) | [duckdb-filesystem-observability](https://github.com/dentiny/duckdb-filesystem-observability) | 🟢 Ongoing | 4 days ago (2026-01-12 11:21:05 UTC) | 9 | C++ | Provides observability for duckdb filesystem. |
-| 23 | [web_search](https://duckdb.org/community_extensions/extensions/web_search.html) | [duckdb-web-search](https://github.com/midwork-finds-jobs/duckdb-web-search) | 🟢 Ongoing | 4 days ago (2026-01-12 06:46:15 UTC) | 0 | C++ | Web/HTTP functionality extension by midwork-finds-jobs |
-| 24 | [bigquery](https://duckdb.org/community_extensions/extensions/bigquery.html) | [duckdb-bigquery](https://github.com/hafenkran/duckdb-bigquery) | 🟢 Ongoing | 5 days ago (2026-01-11 18:36:32 UTC) | 149 | C++ | Integrates DuckDB with Google BigQuery, allowing direct querying and manageme... |
-| 25 | [duck_block_utils](https://duckdb.org/community_extensions/extensions/duck_block_utils.html) | [duckdb_duck_block_utils](https://github.com/teaguesterling/duckdb_duck_block_utils) | 🟢 Ongoing | 5 days ago (2026-01-11 19:30:48 UTC) | 0 | C++ | A collection of utility functions to work with doc block-style structures and... |
-| 26 | [duck_tails](https://duckdb.org/community_extensions/extensions/duck_tails.html) | [duck_tails](https://github.com/teaguesterling/duck_tails) | 🟢 Ongoing | 5 days ago (2026-01-11 19:27:46 UTC) | 11 | C++ | A DuckDB extension for exploring and reading git history. |
-| 27 | [func_apply](https://duckdb.org/community_extensions/extensions/func_apply.html) | [duckdb_func_apply](https://github.com/teaguesterling/duckdb_func_apply) | 🟢 Ongoing | 5 days ago (2026-01-11 19:20:07 UTC) | 3 | C++ | An exension to allow dynamic function application |
+| 20 | [ion](https://duckdb.org/community_extensions/extensions/ion.html) | [duckdb-ion](https://github.com/kestra-io/duckdb-ion) | 🟢 Ongoing | 4 days ago (2026-01-12 18:20:02 UTC) | 0 | C++ | AWS Ion extension for DuckDB |
+| 21 | [observefs](https://duckdb.org/community_extensions/extensions/observefs.html) | [duckdb-filesystem-observability](https://github.com/dentiny/duckdb-filesystem-observability) | 🟢 Ongoing | 4 days ago (2026-01-12 11:21:05 UTC) | 9 | C++ | Provides observability for duckdb filesystem. |
+| 22 | [web_search](https://duckdb.org/community_extensions/extensions/web_search.html) | [duckdb-web-search](https://github.com/midwork-finds-jobs/duckdb-web-search) | 🟢 Ongoing | 4 days ago (2026-01-12 06:46:15 UTC) | 0 | C++ | Web/HTTP functionality extension by midwork-finds-jobs |
+| 23 | [bigquery](https://duckdb.org/community_extensions/extensions/bigquery.html) | [duckdb-bigquery](https://github.com/hafenkran/duckdb-bigquery) | 🟢 Ongoing | 5 days ago (2026-01-11 18:36:32 UTC) | 149 | C++ | Integrates DuckDB with Google BigQuery, allowing direct querying and manageme... |
+| 24 | [duck_block_utils](https://duckdb.org/community_extensions/extensions/duck_block_utils.html) | [duckdb_duck_block_utils](https://github.com/teaguesterling/duckdb_duck_block_utils) | 🟢 Ongoing | 5 days ago (2026-01-11 19:30:48 UTC) | 0 | C++ | A collection of utility functions to work with doc block-style structures and... |
+| 25 | [duck_tails](https://duckdb.org/community_extensions/extensions/duck_tails.html) | [duck_tails](https://github.com/teaguesterling/duck_tails) | 🟢 Ongoing | 5 days ago (2026-01-11 19:27:46 UTC) | 11 | C++ | A DuckDB extension for exploring and reading git history. |
+| 26 | [func_apply](https://duckdb.org/community_extensions/extensions/func_apply.html) | [duckdb_func_apply](https://github.com/teaguesterling/duckdb_func_apply) | 🟢 Ongoing | 5 days ago (2026-01-11 19:20:07 UTC) | 3 | C++ | An exension to allow dynamic function application |
+| 27 | [httpd_log](https://duckdb.org/community_extensions/extensions/httpd_log.html) | [duckdb-httpd-log](https://github.com/saygox/duckdb-httpd-log) | 🟢 Ongoing | 5 days ago (2026-01-12 06:14:58 UTC) | 0 | C++ | duckdb extension |
 | 28 | [sitting_duck](https://duckdb.org/community_extensions/extensions/sitting_duck.html) | [sitting_duck](https://github.com/teaguesterling/sitting_duck) | 🟢 Ongoing | 5 days ago (2026-01-11 19:26:45 UTC) | 6 | C | DuckDB extension: sitting_duck by teaguesterling |
 | 29 | [urlpattern](https://duckdb.org/community_extensions/extensions/urlpattern.html) | [duckdb_urlpattern](https://github.com/teaguesterling/duckdb_urlpattern) | 🟢 Ongoing | 5 days ago (2026-01-11 21:26:52 UTC) | 1 | C++ | An implementation of URLPattern for DuckDB |
 | 30 | [yaml](https://duckdb.org/community_extensions/extensions/yaml.html) | [duckdb_yaml](https://github.com/teaguesterling/duckdb_yaml) | 🟢 Ongoing | 5 days ago (2026-01-11 19:39:03 UTC) | 10 | C++ |  A DuckDB to read and work with YAML files in a similar way to JSON files (al... |
@@ -292,7 +292,6 @@ Third-party extensions maintained by the community
 | 26 | [ulid](https://duckdb.org/community_extensions/extensions/ulid.html) | [duckdb_ulid](https://github.com/Maxxen/duckdb_ulid) | ❓ Unknown | over a year ago (2024-07-09 09:35:50 UTC) | 24 | C++ | DuckDB extension: ulid by Maxxen |
 
 </details>
----
 ## All Community Extensions
 
 **Total:** 150 extensions
@@ -365,7 +364,7 @@ Third-party extensions maintained by the community
 | 61 | [html_readability](https://duckdb.org/community_extensions/extensions/html_readability.html) | [duckdb-html-readability](https://github.com/midwork-finds-jobs/duckdb-html-readability) | 🟢 Ongoing | today (2026-01-16 04:48:03 UTC) | 0 | Rust | DuckDB extension to parse html to readable text |
 | 62 | [http_client](https://duckdb.org/community_extensions/extensions/http_client.html) | [httpclient](https://github.com/Query-farm/httpclient) | 🟢 Ongoing | 43 days ago (2025-12-04 16:10:02 UTC) | 77 | C++ | DuckDB HTTP GET/POST Client in a Community Extension |
 | 63 | [http_request](https://duckdb.org/community_extensions/extensions/http_request.html) | [duckdb_http_request](https://github.com/midwork-finds-jobs/duckdb_http_request) | 🟢 Ongoing | 2 days ago (2026-01-15 05:09:39 UTC) | 0 | C++ | Uses the native duckdb httputil to make extra requests in SELECT |
-| 64 | [httpd_log](https://duckdb.org/community_extensions/extensions/httpd_log.html) | [duckdb-httpd-log](https://github.com/saygox/duckdb-httpd-log) | 🟢 Ongoing | 4 days ago (2026-01-12 06:14:58 UTC) | 0 | C++ | duckdb extension |
+| 64 | [httpd_log](https://duckdb.org/community_extensions/extensions/httpd_log.html) | [duckdb-httpd-log](https://github.com/saygox/duckdb-httpd-log) | 🟢 Ongoing | 5 days ago (2026-01-12 06:14:58 UTC) | 0 | C++ | duckdb extension |
 | 65 | [httpserver](https://duckdb.org/community_extensions/extensions/httpserver.html) | [httpserver](https://github.com/Query-farm/httpserver) | 🟢 Ongoing | 43 days ago (2025-12-04 18:26:31 UTC) | 263 | C++ | DuckDB HTTP API Server and Query Interface in a  Community Extension |
 | 66 | [infera](https://duckdb.org/community_extensions/extensions/infera.html) | [infera](https://github.com/CogitatorTech/infera) | 🟢 Ongoing | 36 days ago (2025-12-11 07:11:16 UTC) | 119 | Rust | A DuckDB extension for in-database inference |
 | 67 | [inflector](https://duckdb.org/community_extensions/extensions/inflector.html) | [inflector](https://github.com/Query-farm/inflector) | 🟢 Ongoing | 37 days ago (2025-12-10 16:06:48 UTC) | 5 | C++ | Powerful string case transformation and inflection capabilities directly to y... |
@@ -454,10 +453,6 @@ Third-party extensions maintained by the community
 | 150 | [zipfs](https://duckdb.org/community_extensions/extensions/zipfs.html) | [duckdb-zipfs](https://github.com/isaacbrodsky/duckdb-zipfs) | 🟢 Ongoing | 18 days ago (2025-12-29 18:19:46 UTC) | 53 | C++ | DuckDB extension to read files within zip archives. |
 
 </details>
-
----
----
-
 ## Appendix: DuckDB Release Information
 
 ### Current Release Context
@@ -511,9 +506,9 @@ See full table in the repository: [Historical Pre‑1.0 Releases](https://github
 - **🛠️ Development Roadmap**: [duckdb.org/roadmap.html](https://duckdb.org/roadmap.html)
 
 <p class="fine-print">Data sourced from the official <a href="https://duckdb.org/data/duckdb-releases.csv">DuckDB releases CSV</a>. For the most current information, see the <a href="https://duckdb.org/release_calendar.html">release calendar</a>.</p>
----
-
 ## Data quality and limitations
+
+📖 **[Full documentation](https://github.com/duckdb/duckdb/blob/main/docs/DATA_QUALITY_LIMITATIONS.md)**
 
 Short version:
 - Sources: DuckDB docs (core), community-extensions registry, GitHub API (repo metadata), DuckDB releases CSV + release calendar.
@@ -535,7 +530,5 @@ Report issues or fixes:
 - Missing/broken link? Confirm if closed source or moved.
 - Missing extension? Add/update in the community-extensions registry.
 - Anything else: open an issue here → https://github.com/duckdb/duckdb/issues
-
----
 
 <p class="fine-print">Last updated: 2026-01-17</p>
