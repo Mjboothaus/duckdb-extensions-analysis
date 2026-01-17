@@ -39,6 +39,16 @@ jobs:
           echo "Virtual environment info:"
           uv pip list | head -10
       
+      - name: Restore analysis cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .cache
+            data/extensions.duckdb
+          key: analysis-cache-${{ runner.os }}-v1-${{ hashFiles('conf/**/*.toml', 'templates/**/*.j2', 'src/**/*.py') }}
+          restore-keys: |
+            analysis-cache-${{ runner.os }}-v1-
+      
       - name: Generate extensions report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
