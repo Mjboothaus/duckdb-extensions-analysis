@@ -155,6 +155,30 @@ class ExtensionMetadata:
         templates = self.metadata.get("community_extensions", {}).get("templates", {})
         return templates.get(extension_name)
     
+    def get_corrected_repo_name(self, extension_name: str, repo_name: str) -> str:
+        """Get corrected repository name if it's truncated/misspelled in upstream.
+        
+        Args:
+            extension_name: Name of the extension
+            repo_name: Repository name from metadata (might be truncated)
+        
+        Returns:
+            Corrected repository name if known, otherwise original repo_name
+        """
+        corrections = self.metadata.get("community_extensions", {}).get("repo_name_corrections", {})
+        
+        if extension_name in corrections:
+            correction_info = corrections[extension_name]
+            incorrect = correction_info.get("incorrect", "")
+            correct = correction_info.get("correct", "")
+            
+            # Check if the repo_name matches the known incorrect pattern
+            if repo_name == incorrect or repo_name.lower() == incorrect.lower():
+                logger.info(f"Correcting truncated repo name for {extension_name}: {repo_name} → {correct}")
+                return correct
+        
+        return repo_name
+    
     def reload_metadata(self) -> None:
         """Reload metadata from file."""
         self.metadata = self._load_metadata()

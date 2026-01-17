@@ -391,6 +391,12 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
 
                 if metadata and "repo" in metadata and "github" in metadata["repo"]:
                     repo = metadata["repo"]["github"]
+                    
+                    # Apply repository name corrections for truncated upstream names
+                    from .extension_metadata import ExtensionMetadata
+                    metadata_helper = ExtensionMetadata(self.config.config_dir)
+                    repo = metadata_helper.get_corrected_repo_name(ext, repo)
+                    
                     repo_info = await self.get_repository_info(client, repo)
                     if repo_info:
                         ext_info["repo_info"] = repo_info
