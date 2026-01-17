@@ -127,11 +127,20 @@ $(document).ready(function() {
             // Interactive extension tables: full functionality
             let columnDefs = [{ "orderable": true, "targets": "_all" }];
             
-            // Add special sorting for Status column if present
-            if (numCols >= 4) {
+            // Add custom sorting for extension tables
+            // Determine column indices dynamically
+            const headers = $table.find('thead tr:first th').map(function() {
+                return $(this).text().trim();
+            }).get();
+            
+            const statusIdx = headers.indexOf('Status');
+            const starsIdx = headers.indexOf('Stars');
+            const activityIdx = headers.indexOf('Last Activity');
+            
+            // Status column: Sort by icon type
+            if (statusIdx >= 0) {
                 columnDefs.push({
-                    // Status column is typically at index 3
-                    "targets": [3],
+                    "targets": [statusIdx],
                     "type": "string",
                     "render": function(data, type, row) {
                         if (type === 'sort' || type === 'type') {
@@ -148,10 +157,79 @@ $(document).ready(function() {
                 });
             }
             
+            // Stars column: Extract numeric value from text
+            if (starsIdx >= 0) {
+                columnDefs.push({
+                    "targets": [starsIdx],
+                    "type": "num",
+                    "render": function(data, type, row) {
+                        if (type === 'sort' || type === 'type') {
+                            if (data && typeof data === 'string') {
+                                // Handle "N/A" cases
+                                if (data.includes('N/A') || data.includes('NOT FOUND')) {
+                                    return -1; // Sort N/A to bottom
+                                }
+                                // Extract first number from string
+                                const match = data.match(/\d+/);
+                                return match ? parseInt(match[0]) : -1;
+                            }
+                            return data || -1;
+                        }
+                        return data;
+                    }
+                });
+            }
+            
+            // Last Activity column: Parse relative and absolute dates
+            if (activityIdx >= 0) {
+                columnDefs.push({
+                    "targets": [activityIdx],
+                    "type": "num",
+                    "render": function(data, type, row) {
+                        if (type === 'sort' || type === 'type') {
+                            if (data && typeof data === 'string') {
+                                const now = Date.now();
+                                const dayMs = 24 * 60 * 60 * 1000;
+                                
+                                // Handle "today"
+                                if (data.toLowerCase().includes('today')) {
+                                    return now;
+                                }
+                                
+                                // Handle "X days ago"
+                                const daysMatch = data.match(/(\d+)\s+days?\s+ago/);
+                                if (daysMatch) {
+                                    return now - (parseInt(daysMatch[1]) * dayMs);
+                                }
+                                
+                                // Handle absolute dates (YYYY-MM-DD HH:MM:SS UTC)
+                                const dateMatch = data.match(/(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})/);
+                                if (dateMatch) {
+                                    try {
+                                        return new Date(dateMatch[1] + ' UTC').getTime();
+                                    } catch (e) {
+                                        return 0;
+                                    }
+                                }
+                                
+                                // Fallback
+                                return 0;
+                            }
+                            return 0;
+                        }
+                        return data;
+                    }
+                });
+            }
+            
+            // Set default sort order: by Extension name (column 1) ascending
+            const extensionIdx = headers.indexOf('Extension');
+            const defaultOrder = extensionIdx >= 0 ? [[extensionIdx, 'asc']] : [];
+            
             $table.DataTable({
                 "pageLength": 25,
                 "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-                "order": [],
+                "order": defaultOrder,
                 "columnDefs": columnDefs,
                 "responsive": true,
                 "dom": '<"top"lf>rt<"bottom"ip><"clear">'
