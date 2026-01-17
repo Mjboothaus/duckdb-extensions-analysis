@@ -284,6 +284,7 @@ class TemplateEngine:
                 'version': duckdb_info.get('version'),
                 'release_date': duckdb_info.get('release_date')
             },
+            'duckdb_releases': self._get_duckdb_releases(),
             'tool': {
                 'version': self.config.version,
                 'cache_hours': getattr(self.config, 'default_cache_hours', 24),
@@ -325,6 +326,19 @@ class TemplateEngine:
             if isinstance(last_push_days, (int, float)) and last_push_days <= days_threshold:
                 count += 1
         return count
+    
+    def _get_duckdb_releases(self) -> List[Dict[str, Any]]:
+        """Get DuckDB releases data for template rendering."""
+        try:
+            from .analyzers.release_manager import DuckDBReleaseManager
+            
+            release_manager = DuckDBReleaseManager(self.config)
+            releases = release_manager.get_releases_for_report()
+            
+            return releases
+        except Exception as e:
+            logger.warning(f"Failed to fetch DuckDB releases: {e}")
+            return []
     
     def render_report(self, template_name: str, analysis_result: Dict[str, Any]) -> str:
         """

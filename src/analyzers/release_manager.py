@@ -53,7 +53,9 @@ class DuckDBReleaseManager:
     """Manages DuckDB release information from official CSV source."""
     
     RELEASES_CSV_URL = "https://duckdb.org/data/duckdb-releases.csv"
+    RELEASE_CALENDAR_URL = "https://duckdb.org/release_calendar"
     CACHE_KEY = "duckdb_releases_csv"
+    CACHE_KEY_UPCOMING = "duckdb_releases_upcoming"
     CACHE_DURATION_HOURS = 24
     
     def __init__(self, config, cache_hours: int = 24):
@@ -93,9 +95,10 @@ class DuckDBReleaseManager:
         # Fetch from URL
         logger.info(f"Fetching DuckDB releases from {self.RELEASES_CSV_URL}")
         try:
+            timeout = getattr(self.config, 'timeout_seconds', 10)
             response = httpx.get(
                 self.RELEASES_CSV_URL,
-                timeout=self.config.http_timeout,
+                timeout=timeout,
                 follow_redirects=True
             )
             response.raise_for_status()
@@ -156,13 +159,103 @@ class DuckDBReleaseManager:
         logger.info(f"Parsed {len(releases)} releases from CSV")
         return releases
     
+    def _fetch_upcoming_releases(self) -> List[DuckDBRelease]:
+        """Fetch upcoming releases from the release calendar page."""
+        # Check cache first
+        cached_data = self.cache.get(self.CACHE_KEY_UPCOMING)
+        if cached_data:
+            cached_time, upcoming_releases = cached_data
+            age_hours = (datetime.now() - cached_time).total_seconds() / 3600
+            if age_hours < self.cache_hours:
+                logger.debug(f"Using cached upcoming releases (age: {age_hours:.1f}h)")
+                return upcoming_releases
+        
+        # Fetch from release calendar page
+        logger.info("Fetching upcoming releases from release calendar")
+        upcoming_releases = []
+        
+        try:
+            import re
+            timeout = getattr(self.config, 'timeout_seconds', 10)
+            response = httpx.get(
+                self.RELEASE_CALENDAR_URL,
+                timeout=timeout,
+                follow_redirects=True
+            )
+            response.raise_for_status()
+            
+            # Parse upcoming releases table from HTML
+            # Looking for: <td style="text-align: left">2026-01-26</td>
+            #              <td style="text-align: right">1.4.4</td>
+            html_content = response.text
+            
+            # Match date and version patterns with styled table cells
+            pattern = r'<td[^>]*>(\d{4}-\d{2}-\d{2})</td>\s*<td[^>]*>(\d+\.\d+\.\d+)</td>'
+            matches = re.findall(pattern, html_content)
+            
+            logger.debug(f"Found {len(matches)} potential upcoming release matches")
+            
+            for date_str, version_str in matches:
+                try:
+                    release_date = self._parse_date(date_str)
+                    if release_date and release_date > date.today():
+                        # Determine if LTS (even minor versions starting from 1.4)
+                        version_parts = version_str.split('.')
+                        is_lts = False
+                        if len(version_parts) >= 2:
+                            major, minor = int(version_parts[0]), int(version_parts[1])
+                            if major >= 1 and minor >= 4:
+                                is_lts = minor % 2 == 0  # Even minor versions are LTS
+                        
+                        upcoming_release = DuckDBRelease(
+                            version=version_str,
+                            release_date=release_date,
+                            lts=is_lts,
+                            codename=None  # Upcoming releases don't have codenames yet
+                        )
+                        upcoming_releases.append(upcoming_release)
+                        logger.info(f"Found upcoming release: {version_str} on {date_str}")
+                except Exception as e:
+                    logger.warning(f"Failed to parse upcoming release {version_str}: {e}")
+                    continue
+            
+            # Cache the results
+            self.cache.set(self.CACHE_KEY_UPCOMING, (datetime.now(), upcoming_releases))
+            logger.info(f"Found {len(upcoming_releases)} upcoming releases")
+            
+        except Exception as e:
+            logger.warning(f"Failed to fetch upcoming releases: {e}")
+            # Return stale cache if available
+            if cached_data:
+                logger.warning("Using stale cached upcoming releases")
+                return cached_data[1]
+        
+        return upcoming_releases
+    
     def load_releases(self) -> List[DuckDBRelease]:
-        """Load all DuckDB releases from CSV."""
+        """Load all DuckDB releases from CSV and merge with upcoming releases."""
         if self._releases is not None:
             return self._releases
         
+        # Load from CSV
         csv_content = self._fetch_releases_csv()
-        self._releases = self._parse_releases_csv(csv_content)
+        csv_releases = self._parse_releases_csv(csv_content)
+        
+        # Fetch upcoming releases
+        upcoming_releases = self._fetch_upcoming_releases()
+        
+        # Merge, avoiding duplicates
+        existing_versions = {r.version.lstrip('v') for r in csv_releases}
+        new_upcoming = [r for r in upcoming_releases 
+                       if r.version.lstrip('v') not in existing_versions]
+        
+        # Combine and sort
+        all_releases = csv_releases + new_upcoming
+        all_releases.sort(key=lambda r: r.release_date, reverse=True)
+        
+        logger.info(f"Total releases: {len(all_releases)} (CSV: {len(csv_releases)}, Upcoming: {len(new_upcoming)})")
+        
+        self._releases = all_releases
         return self._releases
     
     def get_all_releases(self) -> List[DuckDBRelease]:
