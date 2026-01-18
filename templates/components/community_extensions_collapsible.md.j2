@@ -17,13 +17,13 @@ Third-party extensions maintained by the community
 |---|-----------|------------|--------|----------|---------------|-------|----------|-------------|
 {% for ext in community_extensions | sort(attribute='name') -%}
 {% if ext.last_activity < 8 -%}
-{% set activity_badge = '🔥 Very Active' -%}
+{% set activity_badge = '1 - 🔥 Very Active' -%}
 {% elif ext.last_activity < 31 -%}
-{% set activity_badge = '✅ Active' -%}
+{% set activity_badge = '2 - ✅ Active' -%}
 {% elif ext.last_activity < 91 -%}
-{% set activity_badge = '🟡 Stable' -%}
+{% set activity_badge = '3 - 🟡 Stable' -%}
 {% else -%}
-{% set activity_badge = '🟠 Stale' -%}
+{% set activity_badge = '4 - 🟠 Stale' -%}
 {% endif -%}
 | {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ activity_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
 {% endfor %}
