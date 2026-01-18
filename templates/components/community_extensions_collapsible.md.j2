@@ -10,62 +10,22 @@ Third-party extensions maintained by the community
 
 **Total:** {{ community_extensions|length }} extensions | 🔥 Very Active (≤7d): {{ very_active|length }} | ✅ Active (≤30d): {{ active|length }} | 🟡 Stable (≤90d): {{ stable|length }} | 🟠 Stale (>90d): {{ stale|length }}
 
----
-
-### 🔥 Very Active (≤ 7 days)
-
 <details open markdown="1">
-<summary>{{ very_active|length }} extensions with recent activity</summary>
+<summary>Click to expand/collapse community extensions table</summary>
 
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|
-{% for ext in very_active | sort(attribute='last_activity') -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
-{% endfor %}
-
-</details>
-
----
-
-### ✅ Active (≤ 30 days)
-
-<details markdown="1">
-<summary>{{ active|length }} extensions with regular activity</summary>
-
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|
-{% for ext in active | sort(attribute='last_activity') -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
-{% endfor %}
-
-</details>
-
----
-
-### 🟡 Stable (≤ 90 days)
-
-<details markdown="1">
-<summary>{{ stable|length }} extensions with moderate activity</summary>
-
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|
-{% for ext in stable | sort(attribute='last_activity') -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
-{% endfor %}
-
-</details>
-
----
-
-### 🟠 Stale (> 90 days)
-
-<details markdown="1">
-<summary>{{ stale|length }} extensions with infrequent updates</summary>
-
-| # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
-|---|-----------|------------|--------|---------------|-------|----------|-------------|
-{% for ext in stale | sort(attribute='last_activity') -%}
-| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+| # | Extension | Repository | Status | Activity | Last Activity | Stars | Language | Description |
+|---|-----------|------------|--------|----------|---------------|-------|----------|-------------|
+{% for ext in community_extensions | sort(attribute='last_activity') -%}
+{% if ext.last_activity < 8 -%}
+{% set activity_badge = '🔥 Very Active' -%}
+{% elif ext.last_activity < 31 -%}
+{% set activity_badge = '✅ Active' -%}
+{% elif ext.last_activity < 91 -%}
+{% set activity_badge = '🟡 Stable' -%}
+{% else -%}
+{% set activity_badge = '🟠 Stale' -%}
+{% endif -%}
+| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ activity_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
 {% endfor %}
 
 </details>

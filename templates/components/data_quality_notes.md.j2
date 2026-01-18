@@ -2,25 +2,28 @@
 
 📖 **[Full documentation]({{ metadata.links.github_repo }}/blob/main/docs/DATA_QUALITY_LIMITATIONS.md)**
 
-Short version:
+**Short version:**
+
 - Sources: DuckDB docs (core), community-extensions registry, GitHub API (repo metadata), DuckDB releases CSV + release calendar.
 - This report reflects what those sources provide. Where data is missing or closed, we show that clearly.
 
-Known issues (what "NOT FOUND" etc. usually means):
+**Known issues (what "NOT FOUND" etc. usually means):**
+
 - Closed source: Some extensions (e.g. MotherDuck, Vortex) have no public repo.
 - Moved/renamed: Upstream URLs changed after registration.
 - Private: Repositories are not public yet.
 - Metadata errors: Incorrect URLs in upstream data.
 
-Other caveats:
+**Other caveats:**
+
 - Truncated names: A few registry entries truncate repo names (e.g. query-farm/airpor). We correct known cases; some may remain until fixed upstream.
 - Activity signal: "Last Activity" = last git push; stable projects may be quiet but healthy.
 - Stars: Popularity signal, not usage or quality.
 - Install check: Verifies INSTALL succeeds; does not exercise functionality.
 
-Report issues or fixes:
-- Missing/broken link? Confirm if closed source or moved.
-- Missing extension? Add/update in the community-extensions registry.
-- Anything else: open an issue here → {{ metadata.links.github_repo }}/issues
+**Report issues:**
+
+- Report issues to [this analysis tool repo]({{ metadata.links.github_repo }}/issues) or directly to the specific extension's repository.
+- Reporting issues here helps improve the analysis tool for everyone!
 
 <p class="fine-print">Last updated: {{ timestamp | strftime('%Y-%m-%d') }}</p>
