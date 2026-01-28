@@ -1,4 +1,78 @@
-# DuckDB Extensions Analysis - Beta Release Notes v0.1.0
+# DuckDB Extensions Analysis - Release Notes
+
+## v0.2.0 - January 2026 Update
+
+*Released: January 28, 2026*
+
+### ✨ New Features
+
+**🔢 GitHub Tags API Integration**
+- Added GitHub Tags API as release source to catch newly released DuckDB versions immediately
+- Fixes delay in detecting releases not yet in official CSV (e.g., v1.4.4)
+- Priority: CSV (full metadata) → GitHub Tags (gap filling) → Release calendar (upcoming)
+
+**📊 Consolidated Community Extensions Table**
+- Replaced multiple activity-based tables with single sortable table
+- Added Activity column with visual indicators (🔥 Very Active, ✅ Active, 🟡 Stable, 🟠 Stale)
+- Numeric prefixes (1-4) for proper sorting by activity level
+- Initial alphabetical sort for logical row numbering
+
+**🌐 Interactive DataTables**
+- Sortable, searchable, paginated tables in web interface
+- Default 20 entries per page (10/20/50/100/All options)
+- Smart column sorting for Status, Stars, Activity, and dates
+- Responsive design for mobile and tablet
+
+**📈 Analytics Integration**
+- Added Umami Cloud for privacy-focused web analytics
+- Cookieless tracking, GDPR/CCPA compliant
+- Tracks page views, referrers, devices without personal data
+
+**🔍 SEO & Discoverability**
+- Added comprehensive keywords and topics to reports and README
+- Improved search engine visibility for extension ecosystem queries
+
+### 🐛 Fixes
+
+**🔗 Repository Links**
+- Fixed incorrect GitHub repo links (was pointing to duckdb/duckdb, now correct repo)
+- Absolute URLs for documentation files (DATA_QUALITY_LIMITATIONS.md, HISTORICAL_PRE_1_0_RELEASES.md)
+
+**📝 Report Formatting**
+- Fixed bullet point formatting in data quality section
+- Removed extra `---` separators for cleaner layout
+- Improved markdown rendering consistency
+
+**💾 Caching Improvements**
+- Enabled GitHub Actions caching for `.cache` and DuckDB database
+- Reduced workflow runtime by persisting analysis artifacts
+- Cache restoration on subsequent runs for faster analysis
+
+### 📚 Documentation
+
+- Created `docs/DATA_QUALITY_LIMITATIONS.md` - comprehensive data quality notes
+- Created `ANALYTICS.md` - analytics implementation documentation  
+- Updated blog posts with current ecosystem statistics (177 extensions, growth from 107)
+- Clarified trend tracking plans and historical data availability
+- Simplified issue reporting instructions
+
+### 📊 Ecosystem Growth
+
+- **177 total extensions** (from 107 in Sept 2025)
+- **27 core extensions** (from 24)
+- **150 community extensions** (from 83)
+- Nearly doubled in 4 months!
+
+### 🛠️ Technical Improvements
+
+- Optimised table rendering and column definitions
+- Enhanced GitHub API error handling and rate limiting
+- Improved release detection reliability
+- Better handling of closed-source extensions (motherduck, vortex)
+
+---
+
+## v0.1.0 - Beta Release
 
 *Released: September 2025*
 
