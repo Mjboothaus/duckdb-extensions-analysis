@@ -171,6 +171,7 @@ reports/report_*.xlsx
 
 # Data directory (DuckDB databases)
 data/
+!data/extensions.duckdb
 
 # Log files directory
 logs/

@@ -60,6 +60,24 @@ jobs:
           
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
+
+      - name: Save analysis to DuckDB database
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🗄️  Saving latest analysis into DuckDB database..."
+          uv run scripts/cli.py database save
+          echo "✅ Database saved"
+          if [ -f data/extensions.duckdb ]; then
+            echo "Database size:"
+            du -h data/extensions.duckdb || true
+            # Warn if DB grows beyond a reasonable threshold.
+            size_bytes=$(wc -c < data/extensions.duckdb)
+            threshold_bytes=$((100 * 1024 * 1024))
+            if [ "$size_bytes" -gt "$threshold_bytes" ]; then
+              echo "⚠️  WARNING: data/extensions.duckdb is larger than 100MB ($(du -h data/extensions.duckdb | cut -f1)). Consider pruning history or changing persistence strategy."
+            fi
+          fi
       
       - name: Update README with latest status
         run: ./scripts/update_readme.sh
@@ -74,17 +92,21 @@ jobs:
           # Rebase local changes on top of remote to avoid non-fast-forward errors
           git pull --rebase origin main || true
           
-          # Add all report files and README
+          # Add report files, README, and database (commit only if changed)
+          # Note: data/ is gitignored in the repo, so force-add the DB file.
           git add reports/ README.md
+          git add -f data/extensions.duckdb
           
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
+            db_size=$(du -h data/extensions.duckdb 2>/dev/null | cut -f1)
             git commit -m "📊 Daily extensions analysis: $(date -I)
             
             - Updated extension analysis for $(date -u '+%Y-%m-%d')
             - Generated markdown, CSV, and Excel reports
+            - Saved DuckDB database snapshot (${db_size:-unknown})
             - Includes GitHub issues analysis for extension health monitoring"
             # Try normal push first, then fallback with --force-with-lease if needed
             git push || git push --force-with-lease

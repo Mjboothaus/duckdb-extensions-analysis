@@ -154,6 +154,87 @@ cache-cleanup-stashes:
         echo "Only $total_stashes stashes found, no cleanup needed"
     fi
 
+# === DISCOVERY (UNOFFICIAL / LONG-TAIL EXTENSIONS) ===
+
+# High-precision GitHub discovery (topic + high-signal code queries)
+# Provide a date tag (e.g. 2026-03-01) to keep outputs reproducible.
+discover-precision date:
+    uv run python scripts/discover_additional_extensions.py --mode precision --max-pages 10 --per-page 100 --early-stop 5000 --sleep 1.0 --output data/discovery/discovered_repos_precision_{{date}}.json --enrich-missing --enrich-limit 200 --cache --cache-ttl-seconds 604800
+
+# Broader GitHub discovery (noisier, higher recall)
+discover-broad date:
+    uv run python scripts/discover_additional_extensions.py --mode broad --max-pages 10 --per-page 100 --early-stop 5000 --sleep 1.0 --output data/discovery/discovered_repos_broad_{{date}}.json --enrich-missing --enrich-limit 200 --cache --cache-ttl-seconds 604800
+
+# Deduplicate and subtract already-known core/community repos
+# Input should be a JSON produced by discover-* recipes.
+discover-analyse input output_prefix:
+    uv run python scripts/analyse_discovered_extensions.py {{input}} --output-json data/discovery/{{output_prefix}}.json --output-csv data/discovery/{{output_prefix}}.csv --exclude-owner duckdb --exclude-owner DuckDB
+
+# Validate candidates (git tree scan + nested CMake scan + README signals + release asset scan)
+# Input should typically be the JSON output from discover-analyse.
+discover-validate input output:
+    uv run python scripts/validate_extension_candidates.py {{input}} --max 400 --duckdb-smoke-max 0 --tree-cmake-max 3 --release-scan --release-max 10 --no-release-download --timeout-seconds 60 --checkpoint-every 10 --output {{output}}
+
+# Promote validated candidates into a shortlist using initial criteria
+discover-promote input output_prefix:
+    uv run python scripts/promote_extension_candidates.py {{input}} --min-score 15 --output-json data/discovery/{{output_prefix}}.json --output-csv data/discovery/{{output_prefix}}.csv
+
+# Load validated/promoted outputs into DuckDB so they can be queried via views
+discover-load-db validated_json promoted_json notes="":
+    uv run python scripts/load_discovery_into_db.py --validated-json {{validated_json}} --promoted-json {{promoted_json}} --notes "{{notes}}"
+
+# Render promoted shortlist as an aligned terminal table
+discover-render promoted_csv:
+    uv run python scripts/render_promoted_candidates_table.py {{promoted_csv}}
+
+# End-to-end workflows (discover → analyse → validate → promote)
+# Note: these write deterministic filenames under data/discovery/
+discover-workflow-precision date:
+    just discover-precision {{date}}
+    just discover-analyse data/discovery/discovered_repos_precision_{{date}}.json novel_extension_candidates_precision_{{date}}
+    just discover-validate data/discovery/novel_extension_candidates_precision_{{date}}.json data/discovery/validated_extension_candidates_precision_{{date}}.json
+    just discover-promote data/discovery/validated_extension_candidates_precision_{{date}}.json promoted_candidates_precision_{{date}}
+
+# Same as above, but also loads into DuckDB
+discover-workflow-precision-db date notes="":
+    just discover-workflow-precision {{date}}
+    just discover-load-db data/discovery/validated_extension_candidates_precision_{{date}}.json data/discovery/promoted_candidates_precision_{{date}}.json "{{notes}}"
+
+# Broad workflow (noisier)
+discover-workflow-broad date:
+    just discover-broad {{date}}
+    just discover-analyse data/discovery/discovered_repos_broad_{{date}}.json novel_extension_candidates_broad_{{date}}
+    just discover-validate data/discovery/novel_extension_candidates_broad_{{date}}.json data/discovery/validated_extension_candidates_broad_{{date}}.json
+    just discover-promote data/discovery/validated_extension_candidates_broad_{{date}}.json promoted_candidates_broad_{{date}}
+
+# Same as above, but also loads into DuckDB
+discover-workflow-broad-db date notes="":
+    just discover-workflow-broad {{date}}
+    just discover-load-db data/discovery/validated_extension_candidates_broad_{{date}}.json data/discovery/promoted_candidates_broad_{{date}}.json "{{notes}}"
+
+# Labelling helpers (stores labels in DuckDB)
+label-export-recent out="data/discovery/labels_to_fill_recent.csv":
+    uv run python scripts/label_extension_candidates.py export --source recent_extension_discovery_validated --unlabeled-only --out {{out}}
+
+# Speed-first exports/loops
+label-export-assets out="data/discovery/labels_to_fill_assets.csv":
+    uv run python scripts/label_extension_candidates.py export --source recent_extension_discovery_validated --unlabeled-only --has-release-assets --out {{out}}
+
+label-loop-assets limit="50":
+    uv run python scripts/label_extension_candidates.py loop --source recent_extension_discovery_validated --has-release-assets --limit {{limit}}
+
+label-export-promoted out="data/discovery/labels_to_fill_promoted.csv":
+    uv run python scripts/label_extension_candidates.py export --source recent_extension_discovery_validated --unlabeled-only --only-promoted --out {{out}}
+
+label-loop-promoted limit="50":
+    uv run python scripts/label_extension_candidates.py loop --source recent_extension_discovery_validated --only-promoted --limit {{limit}}
+
+label-loop-recent limit="50":
+    uv run python scripts/label_extension_candidates.py loop --source recent_extension_discovery_validated --limit {{limit}}
+
+label-import path:
+    uv run python scripts/label_extension_candidates.py import {{path}}
+
 # === UTILITIES ===
 
 # Validate release history table against GitHub releases
