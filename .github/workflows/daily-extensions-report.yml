@@ -3,7 +3,14 @@ name: Daily DuckDB Extensions Report
 on:
   schedule:
     - cron: '0 6 * * *'  # Daily at 6 AM UTC
-  workflow_dispatch:      # Allow manual triggering
+    - cron: '0 7 * * 1'  # Weekly (Mon) at 7 AM UTC - with issues analysis
+  workflow_dispatch:
+    inputs:
+      with_issues:
+        description: "Include GitHub issues analysis (slower)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -54,10 +61,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🚀 Starting DuckDB extensions analysis..."
+
+          # Daily runs should be fast by default.
+          # - Weekly scheduled run enables issues (see cron above).
+          # - Manual runs can opt in via workflow_dispatch input.
+          WITH_ISSUES_FLAG=""
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 7 * * 1" ]; then
+            echo "🗓️ Weekly scheduled run: including GitHub issues analysis"
+            WITH_ISSUES_FLAG="--with-issues"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.with_issues }}" = "true" ]; then
+            echo "🔎 Manual run: including GitHub issues analysis (with_issues=true)"
+            WITH_ISSUES_FLAG="--with-issues"
+          else
+            echo "⚡ Skipping GitHub issues analysis"
+          fi
+
           uv run scripts/cli.py report generate \
             --format markdown --format csv --format excel \
-            --with-issues
-          
+            ${WITH_ISSUES_FLAG}
+
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
 
