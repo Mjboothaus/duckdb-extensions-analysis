@@ -74,8 +74,8 @@ class TemplateEngine:
         """Format datetime using strftime."""
         if isinstance(date, str):
             try:
-                date = datetime.fromisoformat(date.replace('Z', '+00:00'))
-            except:
+                date = datetime.fromisoformat(date.replace("Z", "+00:00"))
+            except ValueError:
                 return str(date)
         
         if not isinstance(date, datetime):
@@ -260,6 +260,7 @@ class TemplateEngine:
         # Extract basic data
         core_extensions = analysis_result.get('core_extensions', [])
         community_extensions = analysis_result.get('community_extensions', [])
+        third_party_extensions = analysis_result.get('third_party_extensions', [])
         duckdb_info = analysis_result.get('duckdb_version_info', {})
         
         # Calculate statistics
@@ -292,6 +293,7 @@ class TemplateEngine:
             },
             'core_extensions': self._prepare_extensions_data(core_extensions),
             'community_extensions': self._prepare_extensions_data(community_extensions),
+            'third_party_extensions': self._prepare_extensions_data(third_party_extensions),
             'duckdb': {
                 'version': duckdb_info.get('version'),
                 'release_date': duckdb_info.get('release_date')

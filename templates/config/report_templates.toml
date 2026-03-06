@@ -37,6 +37,16 @@
     "methodology"
   ]
 
+  [reports.third_party_verified]
+  name = "Verified Third-party DuckDB Extensions"
+  description = "Labelled, verified third-party DuckDB extensions discovered outside the official registries"
+  template = "reports/third_party_verified.md.j2"
+  components = [
+    "header",
+    "third_party_extensions_table",
+    "methodology"
+  ]
+
 [components]
   # Reusable template components
   
@@ -55,6 +65,10 @@
   [components.community_extensions_table]
   template = "components/community_extensions_table.md.j2"
   description = "Table of community extensions with metadata"
+
+  [components.third_party_extensions_table]
+  template = "components/third_party_extensions_collapsible.md.j2"
+  description = "Table of verified third-party extensions with metadata"
 
 
   [components.duckdb_release_info]

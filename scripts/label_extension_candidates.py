@@ -1,7 +1,6 @@
 import argparse
 import csv
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 import duckdb
@@ -29,6 +28,12 @@ class LabelRow:
 
 
 def ensure_schema(con: duckdb.DuckDBPyConnection) -> None:
+    """Ensure label schema exists.
+
+    This helper is used by both interactive labelling and report rendering.
+    It must tolerate databases that do not have the discovery tables/views yet.
+    """
+
     con.execute(
         """
         CREATE TABLE IF NOT EXISTS extension_discovery_labels (
@@ -39,19 +44,37 @@ def ensure_schema(con: duckdb.DuckDBPyConnection) -> None:
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
-
-        CREATE OR REPLACE VIEW latest_extension_discovery_labeled AS
-        SELECT
-            v.*, 
-            l.is_extension,
-            l.distribution,
-            l.notes AS label_notes,
-            l.updated_at AS label_updated_at
-        FROM latest_extension_discovery_validated v
-        LEFT JOIN extension_discovery_labels l
-            ON v.repo = l.repo;
         """
     )
+
+    # Optional convenience view (only if the validated view exists).
+    try:
+        exists = con.execute(
+            """
+            SELECT 1
+            FROM information_schema.tables
+            WHERE table_name = 'latest_extension_discovery_validated'
+            LIMIT 1
+            """
+        ).fetchone()
+    except Exception:
+        exists = None
+
+    if exists:
+        con.execute(
+            """
+            CREATE OR REPLACE VIEW latest_extension_discovery_labeled AS
+            SELECT
+                v.*, 
+                l.is_extension,
+                l.distribution,
+                l.notes AS label_notes,
+                l.updated_at AS label_updated_at
+            FROM latest_extension_discovery_validated v
+            LEFT JOIN extension_discovery_labels l
+                ON v.repo = l.repo;
+            """
+        )
 
 
 def upsert_label(con: duckdb.DuckDBPyConnection, row: LabelRow) -> None:

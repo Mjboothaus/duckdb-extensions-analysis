@@ -1,0 +1,21 @@
+# {{ report.name }}
+
+🦆 **Verified third-party DuckDB extensions (manually labelled)**
+
+{% if metadata.show_timestamps %}
+**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}  
+**Analysis Tool:** {{ tool.version }}{% if metadata.version_link %} ([Source Code]({{ metadata.version_link }})){% endif %}
+{% endif %}
+
+[Jump to Extensions](#verified-third-party-extensions)
+---
+
+{% include 'components/third_party_report_header.md.j2' %}
+
+{% include 'components/third_party_extensions_collapsible.md.j2' %}
+
+{% include 'components/third_party_discovery_appendix.md.j2' %}
+
+{% if metadata.include_methodology %}
+{% include 'components/methodology_section.md.j2' %}
+{% endif %}

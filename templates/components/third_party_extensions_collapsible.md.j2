@@ -1,0 +1,31 @@
+---
+## Verified third-party extensions
+
+Manually labelled DuckDB extensions discovered outside the official registries.
+
+{% set very_active = third_party_extensions | selectattr('last_activity', 'lt', 8) | list %}
+{% set active = third_party_extensions | selectattr('last_activity', 'ge', 8) | selectattr('last_activity', 'lt', 31) | list %}
+{% set stable = third_party_extensions | selectattr('last_activity', 'ge', 31) | selectattr('last_activity', 'lt', 91) | list %}
+{% set stale = third_party_extensions | selectattr('last_activity', 'ge', 91) | list %}
+
+**Total:** {{ third_party_extensions|length }} extensions | 🔥 Very Active (≤7d): {{ very_active|length }} | ✅ Active (≤30d): {{ active|length }} | 🟡 Stable (≤90d): {{ stable|length }} | 🟠 Stale (>90d): {{ stale|length }}
+
+<details open markdown="1">
+<summary>Click to expand/collapse verified third-party extensions table</summary>
+
+|| # | Extension | Repository | Status | Activity | Last Activity | Stars | Language | Description |
+||---|-----------|------------|--------|----------|---------------|-------|----------|-------------|
+{% for ext in third_party_extensions | sort(attribute='name') -%}
+{% if ext.last_activity < 8 -%}
+{% set activity_badge = '1 - 🔥 Very Active' -%}
+{% elif ext.last_activity < 31 -%}
+{% set activity_badge = '2 - ✅ Active' -%}
+{% elif ext.last_activity < 91 -%}
+{% set activity_badge = '3 - 🟡 Stable' -%}
+{% else -%}
+{% set activity_badge = '4 - 🟠 Stale' -%}
+{% endif -%}
+|| {{ loop.index }} | {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.status | status_badge }} | {{ activity_badge }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} | {{ ext.stars | number_format }} | {{ ext.language }} | {{ ext.description | truncate(80) }} |
+{% endfor %}
+
+</details>
