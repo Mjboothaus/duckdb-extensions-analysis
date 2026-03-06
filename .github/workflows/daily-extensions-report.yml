@@ -83,6 +83,16 @@ jobs:
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
 
+      - name: Generate verified third-party report (unlinked)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🧪 Generating verified third-party extensions report (unlinked sub-page)..."
+          uv run python scripts/render_verified_third_party_report.py \
+            --source recent \
+            --out reports/third_party_extensions_verified.md
+          echo "✅ Third-party report generated: reports/third_party_extensions_verified.md"
+
       - name: Save analysis to DuckDB database
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -116,7 +126,9 @@ jobs:
           
           # Add report files, README, and database (commit only if changed)
           # Note: data/ is gitignored in the repo, so force-add the DB file.
-          git add reports/ README.md
+          git add -- reports/ README.md
+          # Include the third-party report markdown (unlinked on the site, but still part of artefacts)
+          git add -- reports/third_party_extensions_verified.md
           git add -f data/extensions.duckdb
           
           # Check if there are changes to commit
@@ -153,14 +165,22 @@ jobs:
           # Install markdown converter
           pip install markdown
           
-          # Generate HTML using external script
+          # Generate HTML for main report
           python scripts/build_report_site.py
+
+          # Generate HTML for the verified third-party report as an unlinked sub-page
+          # Note: this is intentionally not linked from the main page.
+          python scripts/build_report_site.py \
+            --input reports/third_party_extensions_verified.md \
+            --out-dir _site/third-party \
+            --out-file index.html
           
           # Copy CSV and Excel files for download
           cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
           
           # Also copy the original markdown for direct access
           cp reports/latest.md _site/report.md
+          cp reports/third_party_extensions_verified.md _site/third-party/report.md 2>/dev/null || true
           
           echo "✅ Pages site prepared with proper HTML rendering"
       
