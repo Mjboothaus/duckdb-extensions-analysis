@@ -6,12 +6,12 @@ Handles generation of reports in multiple formats (Markdown, CSV, Excel).
 
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
+from typing import Dict, Optional
 
 import pandas as pd
 from loguru import logger
 
-from .base import BaseReportGenerator, AnalysisResult, ExtensionInfo
+from .base import BaseReportGenerator, AnalysisResult
 from .extension_metadata import ExtensionMetadata
 from ..templates import TemplateEngine
 
@@ -71,7 +71,6 @@ class ReportGenerator(BaseReportGenerator):
             from bs4 import BeautifulSoup
             import diskcache as dc
             from datetime import timedelta
-            import hashlib
             
             # Set up caching
             cache = dc.Cache(str(self.config.cache_dir))
@@ -424,9 +423,9 @@ class ReportGenerator(BaseReportGenerator):
         report.extend([
             "\n### Community Extensions Summary",
             f"- **Total Extensions**: {total}",
-            f"- **Active Extensions**: {active} ({active / total * 100:.1f}%)" if total > 0 else f"- **Active Extensions**: 0 (0%)",
-            f"- **Archived Extensions**: {archived} ({archived / total * 100:.1f}%)" if total > 0 else f"- **Archived Extensions**: 0 (0%)",
-            f"- **Extensions with Issues**: {issues} ({issues / total * 100:.1f}%)" if total > 0 else f"- **Extensions with Issues**: 0 (0%)",
+            f"- **Active Extensions**: {active} ({active / total * 100:.1f}%)" if total > 0 else "- **Active Extensions**: 0 (0%)",
+            f"- **Archived Extensions**: {archived} ({archived / total * 100:.1f}%)" if total > 0 else "- **Archived Extensions**: 0 (0%)",
+            f"- **Extensions with Issues**: {issues} ({issues / total * 100:.1f}%)" if total > 0 else "- **Extensions with Issues**: 0 (0%)",
             "",
         ])
         
@@ -698,7 +697,7 @@ class ReportGenerator(BaseReportGenerator):
         except Exception as e:
             logger.error(f"Error generating template-based report: {e}")
             logger.info("Falling back to legacy report generation")
-            return self.generate_markdown(analysis_result)
+            return await self.generate_markdown(analysis_result)
     
     def _parse_status(self, raw_status: str) -> str:
         """Parse status from raw format to standardized format."""

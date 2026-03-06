@@ -6,12 +6,12 @@ Handles database schema creation and data persistence for analysis results.
 
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Dict
+from typing import Optional, Dict
 
 import duckdb
 from loguru import logger
 
-from .base import BaseDatabaseManager, AnalysisResult, ExtensionInfo
+from .base import BaseDatabaseManager, AnalysisResult
 
 
 class DatabaseManager(BaseDatabaseManager):
@@ -410,7 +410,7 @@ class DatabaseManager(BaseDatabaseManager):
                 logger.warning(f"Failed to save GitHub issue {issue.issue_number}: {e}")
                 continue
         
-        logger.info(f"Successfully saved GitHub issues to database")
+        logger.info("Successfully saved GitHub issues to database")
     
     async def _save_installation_results(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
         """Save installation test results to database."""
@@ -418,13 +418,8 @@ class DatabaseManager(BaseDatabaseManager):
         
         install_sql = self._load_sql("insert_installation_test.sql")
         
-        # Determine extension types for classification
-        core_extension_names = {ext.name for ext in analysis_result.core_extensions}
-        
         for result in analysis_result.installation_results:
             try:
-                ext_type = 'core' if result.extension_name in core_extension_names else 'community'
-                
                 # Determine error type based on error message and test environment
                 error_type = None
                 if result.test_environment == 'special_case':
@@ -467,7 +462,7 @@ class DatabaseManager(BaseDatabaseManager):
                 logger.warning(f"Failed to save installation test result for {result.extension_name}: {e}")
                 continue
         
-        logger.info(f"Successfully saved installation test results to database")
+        logger.info("Successfully saved installation test results to database")
     
     async def _save_trend_data(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
         """Calculate and save trend data for extensions."""
@@ -501,7 +496,7 @@ class DatabaseManager(BaseDatabaseManager):
                         commit_date = self._parse_date_string(last_commit)
                         if commit_date:
                             days_since_update = (analysis_result.analysis_timestamp - commit_date).days
-                    except:
+                    except Exception:
                         pass
             
             is_active = days_since_update is not None and days_since_update <= 30
@@ -529,9 +524,11 @@ class DatabaseManager(BaseDatabaseManager):
             is_archived = False
             
             # Check if archived from metadata
+            repo_info: dict = {}
             if ext.metadata and isinstance(ext.metadata, dict):
-                repo_info = ext.metadata.get('repo_info', {})
-                is_archived = repo_info.get('archived', False)
+                # repo_info can legitimately be None if an upstream fetch failed.
+                repo_info = ext.metadata.get('repo_info') or {}
+                is_archived = bool(repo_info.get('archived', False))
             
             conn.execute(
                 metrics_sql,
@@ -540,7 +537,7 @@ class DatabaseManager(BaseDatabaseManager):
                     'community',
                     analysis_date,
                     ext.stars,
-                    ext.metadata.get('repo_info', {}).get('forks') if ext.metadata else None,
+                    repo_info.get('forks') if repo_info else None,
                     days_since_update,
                     ext.metadata.get('status', '❓ Unknown') if ext.metadata else '❓ Unknown',
                     is_active,
@@ -611,16 +608,18 @@ class DatabaseManager(BaseDatabaseManager):
         # Sum stars and forks for community extensions
         total_stars = sum(ext.stars for ext in analysis_result.community_extensions if ext.stars)
         total_forks = sum(
-            ext.metadata.get('repo_info', {}).get('forks', 0) 
-            for ext in analysis_result.community_extensions 
+            (ext.metadata.get('repo_info') or {}).get('forks', 0)
+            for ext in analysis_result.community_extensions
             if ext.metadata and isinstance(ext.metadata, dict)
         )
         
         # Count archived
         archived_count = sum(
-            1 for ext in analysis_result.community_extensions
-            if ext.metadata and isinstance(ext.metadata, dict) and 
-            ext.metadata.get('repo_info', {}).get('archived', False)
+            1
+            for ext in analysis_result.community_extensions
+            if ext.metadata
+            and isinstance(ext.metadata, dict)
+            and (ext.metadata.get('repo_info') or {}).get('archived', False)
         )
         
         # Insert summary
