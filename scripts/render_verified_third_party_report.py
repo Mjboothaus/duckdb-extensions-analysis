@@ -90,7 +90,12 @@ def _get_candidate_repos(
     source: str,
     known_repos: set[str],
 ) -> list[dict[str, str]]:
-    """Return candidate repos (labelled yes) not already tracked as core/community."""
+    """Return candidate repos (labelled yes) not already tracked as core/community.
+
+    Preferred data source is the discovery views (validated candidates + labels), but if
+    discovery data is not available we fall back to the labels table alone. This keeps
+    the verified report usable in CI, where you may only want to commit labels.
+    """
 
     if source == "latest":
         validated_view = "latest_extension_discovery_validated"
@@ -110,9 +115,30 @@ def _get_candidate_repos(
             validated_view = fallback_view
         else:
             logger.warning(
-                f"Missing relation '{validated_view}'. No discovery data available; third-party report will be empty."
+                f"Missing relation '{validated_view}'. Falling back to labels-only mode."
             )
-            return []
+            rows = con.execute(
+                """
+                SELECT repo, distribution, notes
+                FROM extension_discovery_labels
+                WHERE is_extension = 'yes'
+                ORDER BY updated_at DESC
+                """
+            ).fetchall()
+
+            results: list[dict[str, str]] = []
+            for repo, distribution, notes in rows:
+                if repo in known_repos:
+                    continue
+                results.append(
+                    {
+                        "repo": repo,
+                        "repo_url": f"https://github.com/{repo}",
+                        "distribution": distribution or "unknown",
+                        "notes": (notes or "").strip(),
+                    }
+                )
+            return results
 
     rows = con.execute(
         f"""

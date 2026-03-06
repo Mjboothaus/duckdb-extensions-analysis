@@ -235,6 +235,11 @@ label-loop-recent limit="50":
 label-import path:
     uv run python scripts/label_extension_candidates.py import {{path}}
 
+# Export *all* labels to a committed CSV suitable for CI import.
+# Tip: keep this file committed so GitHub Actions can build the verified third-party report.
+label-export-committed out="labels/third_party_extension_labels.csv":
+    uv run python scripts/label_extension_candidates.py export --source extension_discovery_validated_with_run --out {{out}}
+
 # === UTILITIES ===
 
 # Validate release history table against GitHub releases

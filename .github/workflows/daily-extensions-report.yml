@@ -83,6 +83,17 @@ jobs:
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
 
+      - name: Import third-party labels (if present)
+        run: |
+          # Labels are committed as a CSV so CI can produce the same verified report.
+          # This is intentionally a no-op if the file is not present.
+          if [ -f labels/third_party_extension_labels.csv ]; then
+            echo "🏷️  Importing third-party labels from labels/third_party_extension_labels.csv"
+            uv run python scripts/label_extension_candidates.py import labels/third_party_extension_labels.csv
+          else
+            echo "🏷️  No labels/third_party_extension_labels.csv found; skipping label import"
+          fi
+
       - name: Generate verified third-party report (unlinked)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
