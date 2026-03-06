@@ -672,7 +672,8 @@ class ReportGenerator(BaseReportGenerator):
             
             # Convert community extensions
             for ext in analysis_result.community_extensions:
-                repo_info = ext.metadata.get('repo_info', {}) if ext.metadata else {}
+                # repo_info can be None if the repository fetch failed upstream.
+                repo_info = (ext.metadata.get('repo_info') or {}) if ext.metadata else {}
                 
                 community_ext = {
                     'name': ext.name,
