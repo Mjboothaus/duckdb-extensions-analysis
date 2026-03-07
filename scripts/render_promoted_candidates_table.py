@@ -59,6 +59,7 @@ def main() -> int:
         "days_ago",
         "score",
         "stars",
+        "is_template_clone",
         "release_asset_count",
         "reason",
     ]

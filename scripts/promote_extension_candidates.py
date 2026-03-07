@@ -27,6 +27,7 @@ def write_csv(path: Path, rows: list[dict]) -> None:
         "release_asset_count",
         "release_asset_name",
         "release_load_ok",
+        "is_template_clone",
         "topic_duckdb_extension",
         "tree_has_extension_config_cmake",
         "tree_cmake_mentions_duckdb_extension",
@@ -113,6 +114,8 @@ def main() -> int:
             reason_bits.append("topic:duckdb-extension")
         if readme_duckdb:
             reason_bits.append("readme:duckdb")
+        if sig.get("is_template_clone"):
+            reason_bits.append("hint:template_clone")
         if (r.get("release_asset_count") or 0) > 0:
             reason_bits.append(f"releases:{r.get('release_asset_count')}")
         if r.get("release_load_ok"):
@@ -127,6 +130,7 @@ def main() -> int:
                 "release_asset_count": r.get("release_asset_count") or 0,
                 "release_asset_name": r.get("release_asset_name"),
                 "release_load_ok": bool(r.get("release_load_ok")),
+                "is_template_clone": bool(sig.get("is_template_clone")),
                 "topic_duckdb_extension": topic_duckdb_extension,
                 "tree_has_extension_config_cmake": tree_extcfg,
                 "tree_cmake_mentions_duckdb_extension": tree_cmake,

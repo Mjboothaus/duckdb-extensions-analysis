@@ -383,7 +383,44 @@ def readme_signals(text: str) -> dict[str, bool]:
         "readme_mentions_load_command": "load " in t,
         "readme_mentions_from_syntax": " from " in t and "install" in t,
         "readme_mentions_custom_repo": "custom_extension_repository" in t,
+        # Template/noise hints.
+        "readme_mentions_template": "template" in t,
+        "readme_mentions_extension_template": "extension template" in t,
     }
+
+
+def is_likely_template_clone(*, repo: str, topics: list[str], signals: dict[str, bool], paths: list[str]) -> bool:
+    """Heuristic to flag likely template/scaffold repos.
+
+    This is intentionally conservative: it only *flags* candidates to reduce reviewer time.
+    We do not exclude automatically (promotion/labelling can decide what to do).
+    """
+
+    repo_l = repo.lower()
+    topics_l = [t.lower() for t in topics if isinstance(t, str)]
+    paths_l = [p.lower() for p in paths if isinstance(p, str)]
+
+    name_hint = any(k in repo_l for k in ["template", "scaffold", "example"]) and "duckdb" in repo_l
+    topic_hint = any(t in {"template", "duckdb-template", "duckdb-extension-template"} for t in topics_l)
+
+    readme_hint = bool(
+        signals.get("readme_mentions_template")
+        and signals.get("readme_mentions_duckdb")
+        and (signals.get("readme_mentions_extension_template") or "duckdb" in repo_l)
+    )
+
+    path_hint = any(
+        k in p
+        for p in paths_l
+        for k in [
+            "extension-template",
+            "extension_template",
+            "duckdb-extension-template",
+            "duckdb_extension_template",
+        ]
+    )
+
+    return bool(name_hint or topic_hint or readme_hint or path_hint)
 
 
 @dataclass
@@ -800,6 +837,14 @@ def main() -> int:
                 p = e.get("path") if isinstance(e, dict) else None
                 if isinstance(p, str):
                     paths.append(p)
+
+        # Flag likely template clones (noise reduction hint).
+        signals["is_template_clone"] = is_likely_template_clone(
+            repo=repo,
+            topics=topics,
+            signals=signals,
+            paths=paths,
+        )
 
         def _has_suffix(suffix: str) -> bool:
             return any(p.endswith(suffix) for p in paths)
