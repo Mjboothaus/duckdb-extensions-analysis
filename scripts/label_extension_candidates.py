@@ -19,6 +19,23 @@ VALID_DISTRIBUTIONS = {
 }
 
 
+def _relation_exists(con: duckdb.DuckDBPyConnection, name: str) -> bool:
+    try:
+        row = con.execute(
+            """
+            SELECT 1
+            FROM information_schema.tables
+            WHERE table_schema = 'main'
+              AND table_name = ?
+            LIMIT 1
+            """,
+            [name],
+        ).fetchone()
+        return row is not None
+    except Exception:
+        return False
+
+
 @dataclass
 class LabelRow:
     repo: str
@@ -119,6 +136,48 @@ def export_csv(
     if source_view not in allowed_views:
         raise ValueError(f"Invalid source view: {source_view}")
 
+    # Graceful fallback if the requested view doesn't exist in this DB snapshot.
+    if not _relation_exists(con, source_view):
+        fallback_order = [
+            "recent_extension_discovery_validated",
+            "latest_extension_discovery_validated",
+            "extension_discovery_validated_with_run",
+            "extension_discovery_validated",
+        ]
+        for fb in fallback_order:
+            if _relation_exists(con, fb):
+                print(f"⚠️  Missing view '{source_view}'. Falling back to '{fb}'.")
+                source_view = fb
+                break
+        else:
+            print(
+                f"❌ Missing discovery relation '{source_view}'.\n"
+                "Load discovery data into DuckDB first, e.g.:\n"
+                "  just discover-load-db <validated.json> <promoted.json>\n"
+                "Then retry the label loop."
+            )
+            return
+
+    promoted_view = "recent_extension_discovery_promoted"
+    if only_promoted and not _relation_exists(con, promoted_view):
+        promoted_fallbacks = [
+            "recent_extension_discovery_promoted",
+            "latest_extension_discovery_promoted",
+            "extension_discovery_promoted_with_run",
+            "extension_discovery_promoted",
+        ]
+        for fb in promoted_fallbacks:
+            if _relation_exists(con, fb):
+                print(f"⚠️  Missing view '{promoted_view}'. Falling back to '{fb}'.")
+                promoted_view = fb
+                break
+        else:
+            print(
+                "⚠️  only-promoted requested but no promoted discovery relation exists; disabling only-promoted."
+            )
+            only_promoted = False
+            promoted_view = "extension_discovery_promoted"  # unused when only_promoted=False
+
     where_bits: list[str] = []
     if unlabeled_only:
         where_bits.append("l.repo IS NULL")
@@ -159,7 +218,7 @@ def export_csv(
         ) v
         LEFT JOIN extension_discovery_labels l
             ON v.repo = l.repo
-        LEFT JOIN recent_extension_discovery_promoted p
+        LEFT JOIN {promoted_view} p
             ON v.repo = p.repo
         {where}
         ORDER BY v.score DESC, v.stars DESC;
@@ -326,6 +385,48 @@ def interactive_label(
     if source_view not in allowed_views:
         raise ValueError(f"Invalid source view: {source_view}")
 
+    # Graceful fallback if the requested view doesn't exist in this DB snapshot.
+    if not _relation_exists(con, source_view):
+        fallback_order = [
+            "recent_extension_discovery_validated",
+            "latest_extension_discovery_validated",
+            "extension_discovery_validated_with_run",
+            "extension_discovery_validated",
+        ]
+        for fb in fallback_order:
+            if _relation_exists(con, fb):
+                print(f"⚠️  Missing view '{source_view}'. Falling back to '{fb}'.")
+                source_view = fb
+                break
+        else:
+            print(
+                f"❌ Missing discovery relation '{source_view}'.\n"
+                "Load discovery data into DuckDB first, e.g.:\n"
+                "  just discover-load-db <validated.json> <promoted.json>\n"
+                "Then retry the label loop."
+            )
+            return
+
+    promoted_view = "recent_extension_discovery_promoted"
+    if only_promoted:
+        if not _relation_exists(con, promoted_view):
+            promoted_fallbacks = [
+                "recent_extension_discovery_promoted",
+                "latest_extension_discovery_promoted",
+                "extension_discovery_promoted_with_run",
+                "extension_discovery_promoted",
+            ]
+            for fb in promoted_fallbacks:
+                if _relation_exists(con, fb):
+                    print(f"⚠️  Missing view '{promoted_view}'. Falling back to '{fb}'.")
+                    promoted_view = fb
+                    break
+            else:
+                print(
+                    "⚠️  only-promoted requested but no promoted discovery relation exists; disabling only-promoted."
+                )
+                only_promoted = False
+
     where_bits: list[str] = []
     params: list = []
 
@@ -365,7 +466,7 @@ def interactive_label(
         ) v
         LEFT JOIN extension_discovery_labels l
             ON v.repo = l.repo
-        LEFT JOIN recent_extension_discovery_promoted p
+        LEFT JOIN {promoted_view} p
             ON v.repo = p.repo
         {where}
         ORDER BY v.score DESC, v.stars DESC
