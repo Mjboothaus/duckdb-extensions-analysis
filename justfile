@@ -243,6 +243,9 @@ label-loop-recent limit="50":
 label-import path:
     uv run python scripts/label_extension_candidates.py import {{path}}
 
+label-stats:
+    uv run python scripts/label_extension_candidates.py stats --only-promoted
+
 # Export *all* labels to a committed CSV suitable for CI import.
 # Tip: keep this file committed so GitHub Actions can build the verified third-party report.
 label-export-committed out="labels/third_party_extension_labels.csv":
@@ -264,6 +267,9 @@ thirdparty-label-loop-promoted limit="50" db="data/third_party_extensions.duckdb
 
 thirdparty-label-export-committed out="labels/third_party_extension_labels.csv" db="data/third_party_extensions.duckdb":
     uv run python scripts/label_extension_candidates.py --db {{db}} export --source extension_discovery_validated_with_run --out {{out}}
+
+thirdparty-label-stats db="data/third_party_extensions.duckdb":
+    uv run python scripts/label_extension_candidates.py --db {{db}} stats --source extension_discovery_validated_with_run --only-promoted
 
 thirdparty-report-verified source="recent" out="reports/third_party_extensions_verified.md" db="data/third_party_extensions.duckdb":
     uv run python scripts/render_verified_third_party_report.py --db {{db}} --source {{source}} --out {{out}}

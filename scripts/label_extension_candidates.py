@@ -603,6 +603,77 @@ def interactive_label(
             break
 
 
+def print_label_stats(
+    con: duckdb.DuckDBPyConnection,
+    *,
+    source_view: str | None,
+    only_promoted: bool,
+) -> None:
+    total_labels = con.execute("select count(*) from extension_discovery_labels").fetchone()[0]
+    by_label = con.execute(
+        "select is_extension, count(*) from extension_discovery_labels group by 1 order by 1"
+    ).fetchall()
+
+    template_clones = con.execute(
+        """
+        select count(*)
+        from extension_discovery_labels
+        where is_extension = 'no'
+          and lower(coalesce(notes, '')) like '%template clone%'
+        """
+    ).fetchone()[0]
+
+    print("Labelling stats")
+    print(f"- labels: {int(total_labels)}")
+    if by_label:
+        for k, n in by_label:
+            print(f"  - {k}: {int(n)}")
+    print(f"- template clones (no): {int(template_clones)}")
+
+    if source_view is None:
+        return
+
+    if not _relation_exists(con, source_view):
+        print(f"- coverage: source view '{source_view}' not available")
+        return
+
+    # Total candidates in source.
+    total_candidates = con.execute(
+        f"select count(*) from (select distinct repo from {source_view})"
+    ).fetchone()[0]
+
+    labelled_in_source = con.execute(
+        f"""
+        select count(*)
+        from (select distinct repo from {source_view}) v
+        join extension_discovery_labels l on v.repo = l.repo
+        """
+    ).fetchone()[0]
+
+    if only_promoted:
+        promoted_view = "recent_extension_discovery_promoted"
+        if not _relation_exists(con, promoted_view):
+            promoted_view = "extension_discovery_promoted"
+
+        if _relation_exists(con, promoted_view):
+            total_promoted = con.execute(
+                f"select count(*) from (select distinct repo from {promoted_view})"
+            ).fetchone()[0]
+            labelled_promoted = con.execute(
+                f"""
+                select count(*)
+                from (select distinct repo from {promoted_view}) p
+                join extension_discovery_labels l on p.repo = l.repo
+                """
+            ).fetchone()[0]
+            print(f"- promoted candidates: {int(total_promoted)}")
+            print(f"- promoted labelled: {int(labelled_promoted)}")
+
+    pct = (100.0 * labelled_in_source / total_candidates) if total_candidates else 0.0
+    print(f"- candidates in {source_view}: {int(total_candidates)}")
+    print(f"- labelled in {source_view}: {int(labelled_in_source)} ({pct:.1f}%)")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Label extension candidates (yes/no/unsure) and optionally distribution type"
@@ -651,6 +722,24 @@ def main() -> int:
 
     p_import = sub.add_parser("import", help="Import labels from a CSV")
     p_import.add_argument("path")
+
+    p_stats = sub.add_parser("stats", help="Show labelling coverage and progress")
+    p_stats.add_argument(
+        "--source",
+        choices=[
+            "latest_extension_discovery_validated",
+            "recent_extension_discovery_validated",
+            "extension_discovery_validated_with_run",
+        ],
+        default="recent_extension_discovery_validated",
+        help="Which discovery dataset to use for coverage metrics",
+    )
+    p_stats.add_argument(
+        "--only-promoted",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Also compute coverage for promoted candidates (if promoted view exists)",
+    )
 
     p_loop = sub.add_parser("loop", help="Interactive labelling loop")
     p_loop.add_argument("--limit", type=int, default=50)
@@ -717,6 +806,14 @@ def main() -> int:
             only_new_or_changed=bool(args.only_new_or_changed),
         )
         print(f"Wrote: {args.out}")
+        return 0
+
+    if args.cmd == "stats":
+        print_label_stats(
+            con,
+            source_view=str(args.source) if args.source else None,
+            only_promoted=bool(args.only_promoted),
+        )
         return 0
 
     if args.cmd == "import":
