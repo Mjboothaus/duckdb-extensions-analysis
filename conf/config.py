@@ -16,25 +16,25 @@ from dotenv import load_dotenv
 
 class Config:
     """Configuration class that loads settings from TOML files."""
-    
+
     def __init__(self):
         self.project_root = Path(__file__).parent.parent
         self.config_dir = self.project_root / "conf"
-        
+
         # Load environment variables from .env file
         dotenv_path = self.project_root / ".env"
         if dotenv_path.exists():
             load_dotenv(dotenv_path)
-        
+
         # Load project metadata from pyproject.toml
         pyproject_path = self.project_root / "pyproject.toml"
         pyproject_data = toml.load(pyproject_path)
         self.project = pyproject_data["project"]
-        
+
         # Load application configuration from config.toml
         config_path = self.config_dir / "config.toml"
         self.config_data = toml.load(config_path)
-        
+
         # Set up derived properties
         self._setup_paths()
         self._setup_headers()
@@ -54,10 +54,10 @@ class Config:
     def _setup_headers(self):
         """Set up HTTP headers with GitHub token from multiple sources."""
         self.headers = {"Accept": self.config_data["github"]["accept_header"]}
-        
+
         # Try to get GitHub token from multiple sources
         github_token = self._get_github_token()
-        
+
         if github_token:
             self.headers["Authorization"] = f"token {github_token}"
             self.has_github_token = True
@@ -82,22 +82,23 @@ class Config:
         # 1. Environment variable (from .env or system)
         if token := os.getenv("GITHUB_TOKEN"):
             return token
-        
+
         # 2. Try gh CLI if available
         try:
             result = subprocess.run(
-                ["gh", "auth", "token"],
-                capture_output=True,
-                text=True,
-                timeout=5
+                ["gh", "auth", "token"], capture_output=True, text=True, timeout=5
             )
             if result.returncode == 0:
                 return result.stdout.strip()
-        except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+        except (
+            subprocess.TimeoutExpired,
+            FileNotFoundError,
+            subprocess.SubprocessError,
+        ):
             pass
-        
+
         return None
-    
+
     def _get_git_info(self) -> tuple[str, str]:
         """Get git version and short hash."""
         try:
@@ -107,26 +108,33 @@ class Config:
                 capture_output=True,
                 text=True,
                 timeout=5,
-                cwd=self.project_root
+                cwd=self.project_root,
             )
             git_hash = result.stdout.strip() if result.returncode == 0 else "unknown"
-            
+
             # Create version with git hash
             base_version = self.project["version"]
             full_version = f"{base_version}+{git_hash}"
-            
+
             return base_version, full_version
-            
-        except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
+
+        except (
+            subprocess.TimeoutExpired,
+            FileNotFoundError,
+            subprocess.SubprocessError,
+        ):
             base_version = self.project["version"]
             return base_version, f"{base_version}+unknown"
-    
+
     def get_github_token_info(self) -> tuple[bool, str]:
         """Get GitHub token information for logging."""
         if self.has_github_token:
             return True, "Using GitHub authentication token (from .env or gh CLI)"
         else:
-            return False, "No GitHub token found. Consider running 'just setup-token' or setting GITHUB_TOKEN environment variable for higher rate limits."
+            return (
+                False,
+                "No GitHub token found. Consider running 'just setup-token' or setting GITHUB_TOKEN environment variable for higher rate limits.",
+            )
 
     def load_sql(self, filename: str) -> str:
         """Load SQL from a file in the sql directory."""
@@ -140,7 +148,7 @@ class Config:
     def version(self) -> str:
         """Get base version from pyproject.toml."""
         return self.project["version"]
-    
+
     @property
     def version_full(self) -> str:
         """Get full version with git hash."""
@@ -171,7 +179,6 @@ class Config:
     def core_extensions_url(self) -> str:
         return self.config_data["analysis"]["core_extensions_url"]
 
-
     @property
     def popular_extensions(self) -> List[str]:
         return self.config_data["analysis"]["popular_extensions"]
@@ -195,15 +202,15 @@ class Config:
     @property
     def max_retries(self) -> int:
         return self.config_data["http"]["max_retries"]
-    
+
     @property
     def enable_issues_analysis(self) -> bool:
         return self.config_data["analysis"].get("enable_issues_analysis", True)
-    
+
     @enable_issues_analysis.setter
     def enable_issues_analysis(self, value: bool):
         self.config_data["analysis"]["enable_issues_analysis"] = value
-    
+
     @property
     def issues_analysis_days_back(self) -> int:
         return self.config_data["analysis"].get("issues_analysis_days_back", 90)

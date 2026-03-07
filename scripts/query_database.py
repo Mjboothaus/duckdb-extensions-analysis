@@ -21,13 +21,13 @@ def load_sql_query(query_name: str, **params) -> str:
     query_file = SQL_QUERIES_DIR / f"{query_name}.sql"
     if not query_file.exists():
         raise FileNotFoundError(f"SQL query file not found: {query_file}")
-    
+
     query = query_file.read_text()
-    
+
     # Substitute parameters
     for key, value in params.items():
         query = query.replace(f"{{{key}}}", str(value))
-    
+
     return query
 
 
@@ -40,7 +40,9 @@ def get_ecosystem_growth_trends(db_path: str = "data/extensions.duckdb") -> list
     return result
 
 
-def get_recent_extensions(db_path: str = "data/extensions.duckdb", days: int = 30) -> list:
+def get_recent_extensions(
+    db_path: str = "data/extensions.duckdb", days: int = 30
+) -> list:
     """Get extensions first seen in the last N days."""
     conn = duckdb.connect(db_path)
     query = load_sql_query("recent_extensions", days=days)
@@ -49,7 +51,9 @@ def get_recent_extensions(db_path: str = "data/extensions.duckdb", days: int = 3
     return result
 
 
-def get_trending_extensions(db_path: str = "data/extensions.duckdb", limit: int = 10) -> list:
+def get_trending_extensions(
+    db_path: str = "data/extensions.duckdb", limit: int = 10
+) -> list:
     """Get extensions with highest star growth in recent period."""
     conn = duckdb.connect(db_path)
     query = load_sql_query("trending_extensions", limit=limit)
@@ -64,39 +68,43 @@ def get_extension_trend_summary(db_path: str = "data/extensions.duckdb") -> dict
     query = load_sql_query("latest_trend_summary")
     result = conn.execute(query).fetchall()
     conn.close()
-    
+
     if not result:
         return {}
-    
+
     latest = result[0]
     previous = result[1] if len(result) > 1 else None
-    
+
     summary = {
-        'date': latest[0],
-        'total_extensions': latest[1],
-        'core_count': latest[2],
-        'community_count': latest[3],
-        'active_30d': latest[4],
-        'active_7d': latest[5],
-        'new_extensions': latest[6] or [],
-        'removed_extensions': latest[7] or [],
-        'avg_days_since_update': latest[8],
-        'total_stars': latest[9],
-        'total_forks': latest[10],
-        'archived_count': latest[11],
+        "date": latest[0],
+        "total_extensions": latest[1],
+        "core_count": latest[2],
+        "community_count": latest[3],
+        "active_30d": latest[4],
+        "active_7d": latest[5],
+        "new_extensions": latest[6] or [],
+        "removed_extensions": latest[7] or [],
+        "avg_days_since_update": latest[8],
+        "total_stars": latest[9],
+        "total_forks": latest[10],
+        "archived_count": latest[11],
     }
-    
+
     # Calculate deltas if we have previous data
     if previous:
-        summary['total_delta'] = latest[1] - previous[1]
-        summary['community_delta'] = latest[3] - previous[3]
-        summary['active_30d_delta'] = latest[4] - previous[4]
-        summary['stars_delta'] = latest[9] - previous[9] if latest[9] and previous[9] else None
-    
+        summary["total_delta"] = latest[1] - previous[1]
+        summary["community_delta"] = latest[3] - previous[3]
+        summary["active_30d_delta"] = latest[4] - previous[4]
+        summary["stars_delta"] = (
+            latest[9] - previous[9] if latest[9] and previous[9] else None
+        )
+
     return summary
 
 
-def get_extension_star_history(extension_name: str, db_path: str = "data/extensions.duckdb") -> list:
+def get_extension_star_history(
+    extension_name: str, db_path: str = "data/extensions.duckdb"
+) -> list:
     """Get star growth history for a specific extension."""
     conn = duckdb.connect(db_path)
     query = load_sql_query("extension_star_history", extension_name=extension_name)
@@ -105,7 +113,9 @@ def get_extension_star_history(extension_name: str, db_path: str = "data/extensi
     return result
 
 
-def get_activity_changes(db_path: str = "data/extensions.duckdb", days: int = 7) -> list:
+def get_activity_changes(
+    db_path: str = "data/extensions.duckdb", days: int = 7
+) -> list:
     """Get extensions that changed activity status recently."""
     conn = duckdb.connect(db_path)
     query = load_sql_query("activity_changes", days=days)
@@ -114,7 +124,9 @@ def get_activity_changes(db_path: str = "data/extensions.duckdb", days: int = 7)
     return result
 
 
-def get_top_extensions_by_stars(db_path: str = "data/extensions.duckdb", limit: int = 20) -> list:
+def get_top_extensions_by_stars(
+    db_path: str = "data/extensions.duckdb", limit: int = 20
+) -> list:
     """Get top community extensions by stars."""
     conn = duckdb.connect(db_path)
     query = load_sql_query("top_extensions_by_stars", limit=limit)
@@ -247,18 +259,36 @@ def query_database(db_path: str = "data/extensions.duckdb"):
     try:
         trends = get_ecosystem_growth_trends(db_path)
         if trends:
-            print(f"{'Date':<12} {'Total':<7} {'Delta':<7} {'Active 30d':<12} {'Avg Days':<10}")
+            print(
+                f"{'Date':<12} {'Total':<7} {'Delta':<7} {'Active 30d':<12} {'Avg Days':<10}"
+            )
             print("-" * 50)
             for row in trends[:5]:  # Show last 5 analysis runs
                 date = row[0]
                 total = row[1]
-                delta = f"+{row[2]}" if row[2] and row[2] > 0 else str(row[2]) if row[2] else "-"
+                delta = (
+                    f"+{row[2]}"
+                    if row[2] and row[2] > 0
+                    else str(row[2])
+                    if row[2]
+                    else "-"
+                )
                 active = row[5]
-                active_delta = f"(+{row[6]})" if row[6] and row[6] > 0 else f"({row[6]})" if row[6] else ""
+                active_delta = (
+                    f"(+{row[6]})"
+                    if row[6] and row[6] > 0
+                    else f"({row[6]})"
+                    if row[6]
+                    else ""
+                )
                 avg_days = f"{row[8]:.1f}" if row[8] else "N/A"
-                print(f"{date} {total:<7} {delta:<7} {active:<4} {active_delta:<7} {avg_days}")
+                print(
+                    f"{date} {total:<7} {delta:<7} {active:<4} {active_delta:<7} {avg_days}"
+                )
         else:
-            print("No trend data available yet. Run analysis multiple times to build history.")
+            print(
+                "No trend data available yet. Run analysis multiple times to build history."
+            )
     except Exception as e:
         print(f"⚠️  Trend data not available: {e}")
 
@@ -303,21 +333,27 @@ def query_database(db_path: str = "data/extensions.duckdb"):
         if summary:
             print(f"Date: {summary['date']}")
             print(f"Total Extensions: {summary['total_extensions']}")
-            if 'total_delta' in summary:
-                delta = summary['total_delta']
-                print(f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis")
+            if "total_delta" in summary:
+                delta = summary["total_delta"]
+                print(
+                    f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis"
+                )
             print(f"\nCommunity Extensions: {summary['community_count']}")
-            if 'community_delta' in summary:
-                delta = summary['community_delta']
-                print(f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis")
+            if "community_delta" in summary:
+                delta = summary["community_delta"]
+                print(
+                    f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis"
+                )
             print(f"\nActive (30d): {summary['active_30d']}")
-            if 'active_30d_delta' in summary:
-                delta = summary['active_30d_delta']
-                print(f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis")
-            
-            if summary['new_extensions']:
+            if "active_30d_delta" in summary:
+                delta = summary["active_30d_delta"]
+                print(
+                    f"  Change: {'+' if delta > 0 else ''}{delta} from previous analysis"
+                )
+
+            if summary["new_extensions"]:
                 print(f"\n🆕 New Extensions: {', '.join(summary['new_extensions'])}")
-            if summary['removed_extensions']:
+            if summary["removed_extensions"]:
                 print(f"\n🗑️  Removed: {', '.join(summary['removed_extensions'])}")
         else:
             print("No trend summary available yet.")

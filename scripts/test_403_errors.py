@@ -18,28 +18,24 @@ async def test_repos():
     config = Config()
     print(f"Token found: {config.has_github_token}")
     print()
-    
+
     client_api = GitHubAPIClient(config, cache_hours=0)
-    
+
     # Test repos that have been giving 403s
-    test_repos = [
-        "query-farm/a5",
-        "duckdb/duckdb", 
-        "duckdb/community-extensions"
-    ]
-    
+    test_repos = ["query-farm/a5", "duckdb/duckdb", "duckdb/community-extensions"]
+
     async with httpx.AsyncClient() as client:
         for repo in test_repos:
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"Testing: {repo}")
-            print('='*60)
-            
+            print("=" * 60)
+
             result = await client_api.get_repository_info(client, repo)
-            
+
             if result:
                 print(f"✓ Success: Got {result.get('full_name', 'data')}")
             else:
-                print(f"✗ Failed: No data returned")
+                print("✗ Failed: No data returned")
 
 
 if __name__ == "__main__":

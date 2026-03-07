@@ -96,9 +96,13 @@ def ensure_schema(con: duckdb.DuckDBPyConnection) -> None:
 
 def upsert_label(con: duckdb.DuckDBPyConnection, row: LabelRow) -> None:
     if row.is_extension not in VALID_LABELS:
-        raise ValueError(f"Invalid is_extension={row.is_extension} (expected one of {sorted(VALID_LABELS)})")
+        raise ValueError(
+            f"Invalid is_extension={row.is_extension} (expected one of {sorted(VALID_LABELS)})"
+        )
     if row.distribution not in VALID_DISTRIBUTIONS:
-        raise ValueError(f"Invalid distribution={row.distribution} (expected one of {sorted(VALID_DISTRIBUTIONS)})")
+        raise ValueError(
+            f"Invalid distribution={row.distribution} (expected one of {sorted(VALID_DISTRIBUTIONS)})"
+        )
 
     # DuckDB's CURRENT_TIMESTAMP keyword can behave unexpectedly in some contexts.
     # Rely on defaults for created_at/updated_at on insert, and use now() on update.
@@ -181,7 +185,9 @@ def export_csv(
                 "⚠️  only-promoted requested but no promoted discovery relation exists; disabling only-promoted."
             )
             only_promoted = False
-            promoted_view = "extension_discovery_promoted"  # unused when only_promoted=False
+            promoted_view = (
+                "extension_discovery_promoted"  # unused when only_promoted=False
+            )
 
     # If using incremental mode, we need run timestamps.
     if only_new_or_changed and source_view != "extension_discovery_validated_with_run":
@@ -530,9 +536,16 @@ def interactive_label(
 
     total = len(rows)
 
-    for idx, (repo, score, stars, pushed, asset_count, asset_name, existing_label, existing_dist) in enumerate(
-        rows, start=1
-    ):
+    for idx, (
+        repo,
+        score,
+        stars,
+        pushed,
+        asset_count,
+        asset_name,
+        existing_label,
+        existing_dist,
+    ) in enumerate(rows, start=1):
         url = f"https://github.com/{repo}"
         print("\n---")
         print(f"Progress: {idx}/{total}")
@@ -551,7 +564,11 @@ def interactive_label(
 
         while True:
             try:
-                raw = input("Label [y/n/u] [distribution] (or skip/quit): ").strip().lower()
+                raw = (
+                    input("Label [y/n/u] [distribution] (or skip/quit): ")
+                    .strip()
+                    .lower()
+                )
             except KeyboardInterrupt:
                 print("\nInterrupted. Exiting labelling loop without error.")
                 return
@@ -571,7 +588,11 @@ def interactive_label(
                 notes = "template clone"
             # Convenience: allow entering a distribution directly, interpreted as "yes <distribution>".
             # Example: "community" => yes community
-            elif parts and parts[0] in VALID_DISTRIBUTIONS and parts[0] not in {"unknown"}:
+            elif (
+                parts
+                and parts[0] in VALID_DISTRIBUTIONS
+                and parts[0] not in {"unknown"}
+            ):
                 label = "yes"
                 dist = parts[0]
                 notes = input("Notes (optional): ").strip()
@@ -596,7 +617,10 @@ def interactive_label(
                 if label != "no":
                     notes = input("Notes (optional): ").strip()
 
-            upsert_label(con, LabelRow(repo=repo, is_extension=label, distribution=dist, notes=notes))
+            upsert_label(
+                con,
+                LabelRow(repo=repo, is_extension=label, distribution=dist, notes=notes),
+            )
 
             if autosave_csv is not None:
                 export_labels_only_csv(con, autosave_csv)
@@ -611,7 +635,9 @@ def print_label_stats(
     source_view: str | None,
     only_promoted: bool,
 ) -> None:
-    total_labels = con.execute("select count(*) from extension_discovery_labels").fetchone()[0]
+    total_labels = con.execute(
+        "select count(*) from extension_discovery_labels"
+    ).fetchone()[0]
     by_label = con.execute(
         "select is_extension, count(*) from extension_discovery_labels group by 1 order by 1"
     ).fetchall()

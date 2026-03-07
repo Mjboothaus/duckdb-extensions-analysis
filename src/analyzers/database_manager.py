@@ -16,32 +16,32 @@ from .base import BaseDatabaseManager, AnalysisResult
 
 class DatabaseManager(BaseDatabaseManager):
     """Manager for DuckDB database operations."""
-    
+
     def __init__(self, config):
         super().__init__(config)
         self.database_path = config.database_path
         self.sql_dir = Path(config.project_root) / "sql"
         self._sql_cache: Dict[str, str] = {}
-    
+
     def _load_sql(self, filename: str) -> str:
         """Load SQL query from file, with caching."""
         if filename in self._sql_cache:
             return self._sql_cache[filename]
-        
+
         sql_file = self.sql_dir / filename
         if not sql_file.exists():
             raise FileNotFoundError(f"SQL file not found: {sql_file}")
-        
-        with open(sql_file, 'r', encoding='utf-8') as f:
+
+        with open(sql_file, "r", encoding="utf-8") as f:
             sql = f.read().strip()
-        
+
         self._sql_cache[filename] = sql
         return sql
-    
+
     def create_schema(self) -> None:
         """Create the database schema for storing extension data with proper historical tracking."""
         self.config.ensure_directories()
-        
+
         conn = duckdb.connect(str(self.database_path))
         try:
             logger.info("Creating database schema with historical tracking")
@@ -49,7 +49,7 @@ class DatabaseManager(BaseDatabaseManager):
             # Execute schema creation SQL files in order
             schema_files = [
                 "01_sequences.sql",
-                "02_core_extensions_history.sql", 
+                "02_core_extensions_history.sql",
                 "03_community_extensions_history.sql",
                 "04_views.sql",
                 "05_duckdb_releases.sql",
@@ -64,9 +64,9 @@ class DatabaseManager(BaseDatabaseManager):
                 "14_extension_trends_summary.sql",
                 "15_extension_metrics_daily.sql",
                 "16_trends_views.sql",
-                "17_duckdb_releases_enhancement.sql"
+                "17_duckdb_releases_enhancement.sql",
             ]
-            
+
             for sql_file in schema_files:
                 try:
                     sql = self._load_sql(sql_file)
@@ -79,10 +79,10 @@ class DatabaseManager(BaseDatabaseManager):
                     raise
 
             logger.info("Database schema created successfully with historical tracking")
-        
+
         finally:
             conn.close()
-    
+
     def _parse_date_string(self, date_str: Optional[str]) -> Optional[datetime]:
         """Parse ISO date string to datetime object."""
         if not date_str:
@@ -91,27 +91,30 @@ class DatabaseManager(BaseDatabaseManager):
             return datetime.fromisoformat(date_str.rstrip("Z"))
         except (ValueError, TypeError):
             return None
-    
+
     async def save_analysis(self, analysis_result: AnalysisResult) -> None:
         """Save analysis results to DuckDB database."""
         logger.info(f"Saving analysis results to database: {self.database_path}")
 
         # Ensure schema exists
         self.create_schema()
-        
+
         conn = duckdb.connect(str(self.database_path))
         try:
             # Insert/update DuckDB release info
             if analysis_result.duckdb_version and analysis_result.duckdb_release_date:
-                days_since_release = (analysis_result.analysis_timestamp.replace(tzinfo=None) - analysis_result.duckdb_release_date.replace(tzinfo=None)).days
+                days_since_release = (
+                    analysis_result.analysis_timestamp.replace(tzinfo=None)
+                    - analysis_result.duckdb_release_date.replace(tzinfo=None)
+                ).days
                 sql = self._load_sql("insert_duckdb_release.sql")
                 conn.execute(
                     sql,
                     [
-                        analysis_result.duckdb_version, 
-                        analysis_result.duckdb_release_date, 
-                        days_since_release, 
-                        analysis_result.analysis_timestamp
+                        analysis_result.duckdb_version,
+                        analysis_result.duckdb_release_date,
+                        days_since_release,
+                        analysis_result.analysis_timestamp,
                     ],
                 )
 
@@ -132,21 +135,27 @@ class DatabaseManager(BaseDatabaseManager):
 
             # Insert core extensions (into history table for proper versioning)
             await self._save_core_extensions(conn, analysis_result)
-            
+
             # Insert community extensions
             await self._save_community_extensions(conn, analysis_result)
-            
+
             # Insert extension availability history
             await self._save_extension_availability(conn, analysis_result)
-            
+
             # Insert GitHub issues if available
-            if hasattr(analysis_result, 'github_issues') and analysis_result.github_issues:
+            if (
+                hasattr(analysis_result, "github_issues")
+                and analysis_result.github_issues
+            ):
                 await self._save_github_issues(conn, analysis_result)
-            
+
             # Insert installation test results if available
-            if hasattr(analysis_result, 'installation_results') and analysis_result.installation_results:
+            if (
+                hasattr(analysis_result, "installation_results")
+                and analysis_result.installation_results
+            ):
                 await self._save_installation_results(conn, analysis_result)
-            
+
             # Calculate and save trend data
             await self._save_trend_data(conn, analysis_result)
 
@@ -156,47 +165,59 @@ class DatabaseManager(BaseDatabaseManager):
 
         finally:
             conn.close()
-    
-    async def _save_core_extensions(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_core_extensions(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Save core extensions to database."""
         import json
-        
+
         for ext in analysis_result.core_extensions:
             last_commit_date = None
             last_commit_sha = None
             last_commit_message = None
-            
+
             # Extract GitHub info from metadata if available
             if ext.metadata and isinstance(ext.metadata, dict):
-                last_commit_date = self._parse_date_string(ext.metadata.get("last_commit_date"))
+                last_commit_date = self._parse_date_string(
+                    ext.metadata.get("last_commit_date")
+                )
                 last_commit_sha = ext.metadata.get("last_commit_sha")
                 last_commit_message = ext.metadata.get("last_commit_message")
-            
+
             # Prepare platform availability data
             platform_availability_json = None
             earliest_availability_date = None
             available_platforms = []
-            
+
             if ext.platform_availability:
                 # Convert datetime objects to ISO strings for JSON serialization
                 serializable_platform_data = {}
                 for platform, info in ext.platform_availability.items():
                     serializable_info = dict(info)
-                    if 'date' in serializable_info and isinstance(serializable_info['date'], datetime):
-                        serializable_info['date'] = serializable_info['date'].isoformat()
+                    if "date" in serializable_info and isinstance(
+                        serializable_info["date"], datetime
+                    ):
+                        serializable_info["date"] = serializable_info[
+                            "date"
+                        ].isoformat()
                     serializable_platform_data[platform] = serializable_info
-                
+
                 platform_availability_json = json.dumps(serializable_platform_data)
                 available_dates = []
-                
+
                 for platform, info in ext.platform_availability.items():
-                    if info.get('available'):
+                    if info.get("available"):
                         available_platforms.append(platform)
-                        if info.get('date'):
-                            date_obj = info['date'] if isinstance(info['date'], datetime) else self._parse_date_string(info['date'])
+                        if info.get("date"):
+                            date_obj = (
+                                info["date"]
+                                if isinstance(info["date"], datetime)
+                                else self._parse_date_string(info["date"])
+                            )
                             if date_obj:
                                 available_dates.append(date_obj)
-                
+
                 if available_dates:
                     earliest_availability_date = min(available_dates)
 
@@ -219,21 +240,29 @@ class DatabaseManager(BaseDatabaseManager):
                     analysis_result.analysis_timestamp,
                 ],
             )
-    
-    async def _save_community_extensions(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_community_extensions(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Save community extensions to database."""
         for ext in analysis_result.community_extensions:
-            if ext.metadata and ext.metadata.get("status") != "❌ Error" and ext.metadata.get("repo_info"):
+            if (
+                ext.metadata
+                and ext.metadata.get("status") != "❌ Error"
+                and ext.metadata.get("repo_info")
+            ):
                 # Extension with valid repository info
                 repo_info = ext.metadata["repo_info"]
-                
+
                 last_push_date = self._parse_date_string(ext.last_push)
                 created_at = self._parse_date_string(repo_info.get("created_at"))
                 updated_at = self._parse_date_string(repo_info.get("updated_at"))
 
                 # Extract URLs from links
                 github_url = ext.links.get("github") if ext.links else None
-                community_repo_url = ext.links.get("community_repo") if ext.links else None
+                community_repo_url = (
+                    ext.links.get("community_repo") if ext.links else None
+                )
                 install_url = ext.links.get("install") if ext.links else None
 
                 sql = self._load_sql("insert_community_extension_full.sql")
@@ -266,11 +295,19 @@ class DatabaseManager(BaseDatabaseManager):
                 )
             else:
                 # Extension with errors or no repository info
-                community_repo_url = ext.links.get("community_repo") if ext.links else None
+                community_repo_url = (
+                    ext.links.get("community_repo") if ext.links else None
+                )
                 install_url = ext.links.get("install") if ext.links else None
-                
-                error_msg = ext.metadata.get("error") if ext.metadata else "Failed to fetch info"
-                status = "❌ No Repo" if error_msg == "No repository found" else "❌ Error"
+
+                error_msg = (
+                    ext.metadata.get("error")
+                    if ext.metadata
+                    else "Failed to fetch info"
+                )
+                status = (
+                    "❌ No Repo" if error_msg == "No repository found" else "❌ Error"
+                )
 
                 sql = self._load_sql("insert_community_extension_error.sql")
                 conn.execute(
@@ -288,83 +325,100 @@ class DatabaseManager(BaseDatabaseManager):
                         analysis_result.analysis_timestamp,
                     ],
                 )
-    
-    async def _save_extension_availability(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_extension_availability(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Save extension platform availability data to database."""
         availability_sql = self._load_sql("insert_extension_availability.sql")
-        
+
         # Calculate days since release for this analysis
         days_since_release = None
         if analysis_result.duckdb_release_date:
-            days_since_release = (analysis_result.analysis_timestamp.replace(tzinfo=None) - analysis_result.duckdb_release_date.replace(tzinfo=None)).days
-        
+            days_since_release = (
+                analysis_result.analysis_timestamp.replace(tzinfo=None)
+                - analysis_result.duckdb_release_date.replace(tzinfo=None)
+            ).days
+
         # Save core extension availability data
         for ext in analysis_result.core_extensions:
             if ext.platform_availability:
                 for platform, availability_info in ext.platform_availability.items():
                     # Determine availability date (when first became available)
                     availability_date = None
-                    if availability_info.get('available') and availability_info.get('date'):
-                        if isinstance(availability_info['date'], str):
-                            availability_date = self._parse_date_string(availability_info['date'])
+                    if availability_info.get("available") and availability_info.get(
+                        "date"
+                    ):
+                        if isinstance(availability_info["date"], str):
+                            availability_date = self._parse_date_string(
+                                availability_info["date"]
+                            )
                         else:
-                            availability_date = availability_info['date']
-                    
+                            availability_date = availability_info["date"]
+
                     conn.execute(
                         availability_sql,
                         [
                             ext.name,
-                            'core',
+                            "core",
                             platform,
                             analysis_result.duckdb_version,
-                            availability_info.get('available', False),
+                            availability_info.get("available", False),
                             availability_date,
                             analysis_result.analysis_timestamp,
-                            availability_info.get('http_status'),
-                            availability_info.get('file_size'),
-                            availability_info.get('error'),
+                            availability_info.get("http_status"),
+                            availability_info.get("file_size"),
+                            availability_info.get("error"),
                             days_since_release,
-                        ]
+                        ],
                     )
-        
+
         # Save community extension availability data (if they have platform info)
         for ext in analysis_result.community_extensions:
             if ext.platform_availability:
                 for platform, availability_info in ext.platform_availability.items():
                     availability_date = None
-                    if availability_info.get('available') and availability_info.get('date'):
-                        if isinstance(availability_info['date'], str):
-                            availability_date = self._parse_date_string(availability_info['date'])
+                    if availability_info.get("available") and availability_info.get(
+                        "date"
+                    ):
+                        if isinstance(availability_info["date"], str):
+                            availability_date = self._parse_date_string(
+                                availability_info["date"]
+                            )
                         else:
-                            availability_date = availability_info['date']
-                    
+                            availability_date = availability_info["date"]
+
                     conn.execute(
                         availability_sql,
                         [
                             ext.name,
-                            'community',
+                            "community",
                             platform,
                             analysis_result.duckdb_version,
-                            availability_info.get('available', False),
+                            availability_info.get("available", False),
                             availability_date,
                             analysis_result.analysis_timestamp,
-                            availability_info.get('http_status'),
-                            availability_info.get('file_size'),
-                            availability_info.get('error'),
+                            availability_info.get("http_status"),
+                            availability_info.get("file_size"),
+                            availability_info.get("error"),
                             days_since_release,
-                        ]
+                        ],
                     )
-    
-    async def _save_github_issues(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_github_issues(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Save GitHub issues data to database."""
-        logger.info(f"Saving {len(analysis_result.github_issues)} GitHub issues to database")
-        
+        logger.info(
+            f"Saving {len(analysis_result.github_issues)} GitHub issues to database"
+        )
+
         issues_sql = self._load_sql("insert_github_issue.sql")
         mapping_sql = self._load_sql("insert_extension_issue_mapping.sql")
-        
+
         # Determine extension types for mapping
         core_extension_names = {ext.name for ext in analysis_result.core_extensions}
-        
+
         for issue in analysis_result.github_issues:
             try:
                 # Insert the issue
@@ -385,16 +439,18 @@ class DatabaseManager(BaseDatabaseManager):
                         issue.severity,
                         issue.html_url,
                         analysis_result.analysis_timestamp,
-                    ]
+                    ],
                 )
-                
+
                 # Insert extension-issue mappings
                 for ext_name in issue.extension_names:
-                    ext_type = 'core' if ext_name in core_extension_names else 'community'
-                    
+                    ext_type = (
+                        "core" if ext_name in core_extension_names else "community"
+                    )
+
                     # Calculate relevance score based on how specifically the extension is mentioned
                     relevance_score = 1.0  # Default high relevance for named extensions
-                    
+
                     conn.execute(
                         mapping_sql,
                         [
@@ -403,46 +459,54 @@ class DatabaseManager(BaseDatabaseManager):
                             issue.issue_number,
                             relevance_score,
                             analysis_result.analysis_timestamp,
-                        ]
+                        ],
                     )
-                
+
             except Exception as e:
                 logger.warning(f"Failed to save GitHub issue {issue.issue_number}: {e}")
                 continue
-        
+
         logger.info("Successfully saved GitHub issues to database")
-    
-    async def _save_installation_results(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_installation_results(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Save installation test results to database."""
-        logger.info(f"Saving {len(analysis_result.installation_results)} installation test results to database")
-        
+        logger.info(
+            f"Saving {len(analysis_result.installation_results)} installation test results to database"
+        )
+
         install_sql = self._load_sql("insert_installation_test.sql")
-        
+
         for result in analysis_result.installation_results:
             try:
                 # Determine error type based on error message and test environment
                 error_type = None
-                if result.test_environment == 'special_case':
-                    error_type = 'special_case'
+                if result.test_environment == "special_case":
+                    error_type = "special_case"
                 elif result.error_message:
                     error_msg_lower = result.error_message.lower()
-                    if 'statically linked' in error_msg_lower or 'built into' in error_msg_lower:
-                        error_type = 'special_case'
-                    elif 'timeout' in error_msg_lower:
-                        error_type = 'timeout'
-                    elif 'http' in error_msg_lower or 'network' in error_msg_lower:
-                        error_type = 'download'
-                    elif 'load' in error_msg_lower:
-                        error_type = 'load'
-                    elif 'environment' in error_msg_lower:
-                        error_type = 'environment'
+                    if (
+                        "statically linked" in error_msg_lower
+                        or "built into" in error_msg_lower
+                    ):
+                        error_type = "special_case"
+                    elif "timeout" in error_msg_lower:
+                        error_type = "timeout"
+                    elif "http" in error_msg_lower or "network" in error_msg_lower:
+                        error_type = "download"
+                    elif "load" in error_msg_lower:
+                        error_type = "load"
+                    elif "environment" in error_msg_lower:
+                        error_type = "environment"
                     else:
-                        error_type = 'install'
-                
+                        error_type = "install"
+
                 # Get platform from installation tester
                 from .installation_tester import InstallationTester
+
                 platform = InstallationTester()._get_current_platform()
-                
+
                 conn.execute(
                     install_sql,
                     [
@@ -455,101 +519,120 @@ class DatabaseManager(BaseDatabaseManager):
                         error_type,
                         analysis_result.duckdb_version,
                         analysis_result.analysis_timestamp,
-                    ]
+                    ],
                 )
-                
+
             except Exception as e:
-                logger.warning(f"Failed to save installation test result for {result.extension_name}: {e}")
+                logger.warning(
+                    f"Failed to save installation test result for {result.extension_name}: {e}"
+                )
                 continue
-        
+
         logger.info("Successfully saved installation test results to database")
-    
-    async def _save_trend_data(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult) -> None:
+
+    async def _save_trend_data(
+        self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult
+    ) -> None:
         """Calculate and save trend data for extensions."""
         logger.info("Calculating and saving trend data")
-        
+
         analysis_date = analysis_result.analysis_timestamp.date()
-        
+
         # Save daily metrics for each extension
         await self._save_extension_metrics_daily(conn, analysis_result, analysis_date)
-        
+
         # Calculate and save summary trends
         await self._save_trends_summary(conn, analysis_result, analysis_date)
-        
+
         logger.info("Successfully saved trend data")
-    
-    async def _save_extension_metrics_daily(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult, analysis_date) -> None:
+
+    async def _save_extension_metrics_daily(
+        self,
+        conn: duckdb.DuckDBPyConnection,
+        analysis_result: AnalysisResult,
+        analysis_date,
+    ) -> None:
         """Save daily metrics for each extension."""
         metrics_sql = self._load_sql("insert_extension_metrics_daily.sql")
-        
+
         # Save core extensions metrics
         for ext in analysis_result.core_extensions:
             # Core extensions don't have individual stars (part of main repo)
             days_since_update = None
-            if hasattr(ext, 'days_ago'):
+            if hasattr(ext, "days_ago"):
                 days_since_update = ext.days_ago
-            elif hasattr(ext, 'metadata') and ext.metadata:
+            elif hasattr(ext, "metadata") and ext.metadata:
                 # Try to calculate from last_commit_date
-                last_commit = ext.metadata.get('last_commit_date')
+                last_commit = ext.metadata.get("last_commit_date")
                 if last_commit:
                     try:
                         commit_date = self._parse_date_string(last_commit)
                         if commit_date:
-                            days_since_update = (analysis_result.analysis_timestamp - commit_date).days
+                            days_since_update = (
+                                analysis_result.analysis_timestamp - commit_date
+                            ).days
                     except Exception:
                         pass
-            
+
             is_active = days_since_update is not None and days_since_update <= 30
-            
+
             conn.execute(
                 metrics_sql,
                 [
                     ext.name,
-                    'core',
+                    "core",
                     analysis_date,
                     None,  # stars (core don't have individual stars)
                     None,  # forks
                     days_since_update,
-                    ext.stage or 'Stable',
+                    ext.stage or "Stable",
                     is_active,
                     False,  # is_archived
-                    ext.repository
-                ]
+                    ext.repository,
+                ],
             )
-        
+
         # Save community extensions metrics
         for ext in analysis_result.community_extensions:
-            days_since_update = ext.days_ago if hasattr(ext, 'days_ago') else None
+            days_since_update = ext.days_ago if hasattr(ext, "days_ago") else None
             is_active = days_since_update is not None and days_since_update <= 30
             is_archived = False
-            
+
             # Check if archived from metadata
             repo_info: dict = {}
             if ext.metadata and isinstance(ext.metadata, dict):
                 # repo_info can legitimately be None if an upstream fetch failed.
-                repo_info = ext.metadata.get('repo_info') or {}
-                is_archived = bool(repo_info.get('archived', False))
-            
+                repo_info = ext.metadata.get("repo_info") or {}
+                is_archived = bool(repo_info.get("archived", False))
+
             conn.execute(
                 metrics_sql,
                 [
                     ext.name,
-                    'community',
+                    "community",
                     analysis_date,
                     ext.stars,
-                    repo_info.get('forks') if repo_info else None,
+                    repo_info.get("forks") if repo_info else None,
                     days_since_update,
-                    ext.metadata.get('status', '❓ Unknown') if ext.metadata else '❓ Unknown',
+                    ext.metadata.get("status", "❓ Unknown")
+                    if ext.metadata
+                    else "❓ Unknown",
                     is_active,
                     is_archived,
-                    ext.repository
-                ]
+                    ext.repository,
+                ],
             )
-    
-    async def _save_trends_summary(self, conn: duckdb.DuckDBPyConnection, analysis_result: AnalysisResult, analysis_date) -> None:
+
+    async def _save_trends_summary(
+        self,
+        conn: duckdb.DuckDBPyConnection,
+        analysis_result: AnalysisResult,
+        analysis_date,
+    ) -> None:
         """Calculate and save aggregate trend summary."""
         # Get previous analysis for comparison
-        previous_data = conn.execute("""
+        previous_data = conn.execute(
+            """
             SELECT 
                 total_extensions,
                 core_count,
@@ -560,12 +643,15 @@ class DatabaseManager(BaseDatabaseManager):
             WHERE analysis_date < ?
             ORDER BY analysis_date DESC
             LIMIT 1
-        """, [analysis_date]).fetchone()
-        
+        """,
+            [analysis_date],
+        ).fetchone()
+
         # Get list of extensions from previous analysis
         previous_extensions = set()
         if previous_data:
-            prev_core = conn.execute("""
+            prev_core = conn.execute(
+                """
                 SELECT DISTINCT extension_name 
                 FROM extension_metrics_daily
                 WHERE analysis_date < ? AND extension_type = 'core'
@@ -573,9 +659,12 @@ class DatabaseManager(BaseDatabaseManager):
                 LIMIT (SELECT COUNT(DISTINCT extension_name) FROM extension_metrics_daily 
                        WHERE extension_type = 'core' AND analysis_date = 
                        (SELECT MAX(analysis_date) FROM extension_metrics_daily WHERE analysis_date < ?))
-            """, [analysis_date, analysis_date]).fetchall()
-            
-            prev_community = conn.execute("""
+            """,
+                [analysis_date, analysis_date],
+            ).fetchall()
+
+            prev_community = conn.execute(
+                """
                 SELECT DISTINCT extension_name
                 FROM extension_metrics_daily  
                 WHERE analysis_date < ? AND extension_type = 'community'
@@ -583,52 +672,77 @@ class DatabaseManager(BaseDatabaseManager):
                 LIMIT (SELECT COUNT(DISTINCT extension_name) FROM extension_metrics_daily
                        WHERE extension_type = 'community' AND analysis_date =
                        (SELECT MAX(analysis_date) FROM extension_metrics_daily WHERE analysis_date < ?))
-            """, [analysis_date, analysis_date]).fetchall()
-            
+            """,
+                [analysis_date, analysis_date],
+            ).fetchall()
+
             previous_extensions = {row[0] for row in prev_core + prev_community}
-        
+
         # Current extensions
-        current_extensions = {ext.name for ext in analysis_result.core_extensions + analysis_result.community_extensions}
-        
+        current_extensions = {
+            ext.name
+            for ext in analysis_result.core_extensions
+            + analysis_result.community_extensions
+        }
+
         # Calculate new and removed extensions
         new_extensions = list(current_extensions - previous_extensions)
         removed_extensions = list(previous_extensions - current_extensions)
-        
+
         # Count active extensions
-        active_30d = sum(1 for ext in analysis_result.core_extensions + analysis_result.community_extensions 
-                        if hasattr(ext, 'days_ago') and ext.days_ago is not None and ext.days_ago <= 30)
-        active_7d = sum(1 for ext in analysis_result.core_extensions + analysis_result.community_extensions
-                       if hasattr(ext, 'days_ago') and ext.days_ago is not None and ext.days_ago <= 7)
-        
+        active_30d = sum(
+            1
+            for ext in analysis_result.core_extensions
+            + analysis_result.community_extensions
+            if hasattr(ext, "days_ago")
+            and ext.days_ago is not None
+            and ext.days_ago <= 30
+        )
+        active_7d = sum(
+            1
+            for ext in analysis_result.core_extensions
+            + analysis_result.community_extensions
+            if hasattr(ext, "days_ago")
+            and ext.days_ago is not None
+            and ext.days_ago <= 7
+        )
+
         # Calculate average days since update
-        days_list = [ext.days_ago for ext in analysis_result.core_extensions + analysis_result.community_extensions
-                    if hasattr(ext, 'days_ago') and ext.days_ago is not None]
+        days_list = [
+            ext.days_ago
+            for ext in analysis_result.core_extensions
+            + analysis_result.community_extensions
+            if hasattr(ext, "days_ago") and ext.days_ago is not None
+        ]
         avg_days = sum(days_list) / len(days_list) if days_list else None
-        
+
         # Sum stars and forks for community extensions
-        total_stars = sum(ext.stars for ext in analysis_result.community_extensions if ext.stars)
+        total_stars = sum(
+            ext.stars for ext in analysis_result.community_extensions if ext.stars
+        )
         total_forks = sum(
-            (ext.metadata.get('repo_info') or {}).get('forks', 0)
+            (ext.metadata.get("repo_info") or {}).get("forks", 0)
             for ext in analysis_result.community_extensions
             if ext.metadata and isinstance(ext.metadata, dict)
         )
-        
+
         # Count archived
         archived_count = sum(
             1
             for ext in analysis_result.community_extensions
             if ext.metadata
             and isinstance(ext.metadata, dict)
-            and (ext.metadata.get('repo_info') or {}).get('archived', False)
+            and (ext.metadata.get("repo_info") or {}).get("archived", False)
         )
-        
+
         # Insert summary
         summary_sql = self._load_sql("insert_trends_summary.sql")
         conn.execute(
             summary_sql,
             [
                 analysis_date,
-                len(analysis_result.core_extensions) + len(analysis_result.community_extensions),
+                len(analysis_result.core_extensions)
+                + len(analysis_result.community_extensions),
                 len(analysis_result.core_extensions),
                 len(analysis_result.community_extensions),
                 active_30d,
@@ -638,6 +752,6 @@ class DatabaseManager(BaseDatabaseManager):
                 avg_days,
                 total_stars,
                 total_forks,
-                archived_count
-            ]
+                archived_count,
+            ],
         )

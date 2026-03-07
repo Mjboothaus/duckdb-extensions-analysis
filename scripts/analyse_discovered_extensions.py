@@ -73,14 +73,18 @@ def load_known_repos_from_db(db_path: Path) -> KnownRepos:
     # Community
     for col in ["repository", "github_url", "community_repo_url"]:
         try:
-            rows = con.execute(f"select {col} from community_extensions where {col} is not null").fetchall()
+            rows = con.execute(
+                f"select {col} from community_extensions where {col} is not null"
+            ).fetchall()
             add_many([r[0] for r in rows])
         except Exception:
             pass
 
     # Core
     try:
-        rows = con.execute("select repository from core_extensions where repository is not null").fetchall()
+        rows = con.execute(
+            "select repository from core_extensions where repository is not null"
+        ).fetchall()
         add_many([r[0] for r in rows])
     except Exception:
         pass
@@ -108,7 +112,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Analyse discovered GitHub repos vs known DuckDB extension repos and output novel candidates"
     )
-    parser.add_argument("input", help="JSON produced by scripts/discover_additional_extensions.py")
+    parser.add_argument(
+        "input", help="JSON produced by scripts/discover_additional_extensions.py"
+    )
     parser.add_argument(
         "--db",
         default="data/extensions.duckdb",
@@ -164,7 +170,9 @@ def main() -> int:
 
         # Keep the best row if we see duplicates.
         existing = unique_by_repo.get(repo)
-        if existing is None or stars > (existing.get("stars") if isinstance(existing.get("stars"), int) else 0):
+        if existing is None or stars > (
+            existing.get("stars") if isinstance(existing.get("stars"), int) else 0
+        ):
             unique_by_repo[repo] = {
                 "repo": repo,
                 "url": r.get("url") or "",

@@ -33,7 +33,7 @@ result = conn.execute("""
 first_date, latest_date, snapshots = result
 days_tracked = (latest_date - first_date).days if latest_date and first_date else 0
 
-print(f"\n📅 TRACKING PERIOD")
+print("\n📅 TRACKING PERIOD")
 print(f"   First recorded: {first_date}")
 print(f"   Latest: {latest_date}")
 print(f"   Days tracked: {days_tracked}")
@@ -65,26 +65,43 @@ result = conn.execute("""
 """).fetchone()
 
 if result:
-    first_date, first_total, first_core, first_comm, first_active, latest_date, latest_total, latest_core, latest_comm, latest_active = result
-    
+    (
+        first_date,
+        first_total,
+        first_core,
+        first_comm,
+        first_active,
+        latest_date,
+        latest_total,
+        latest_core,
+        latest_comm,
+        latest_active,
+    ) = result
+
     print(f"\n📊 ECOSYSTEM GROWTH ({first_date} to {latest_date})")
-    print(f"   Total extensions:")
-    print(f"      Started with: {first_total} ({first_core} core + {first_comm} community)")
-    print(f"      Current: {latest_total} ({latest_core} core + {latest_comm} community)")
-    print(f"      Growth: +{latest_total - first_total} ({(latest_total - first_total) / first_total * 100:.1f}%)")
-    
-    print(f"\n   Community extensions:")
+    print("   Total extensions:")
+    print(
+        f"      Started with: {first_total} ({first_core} core + {first_comm} community)"
+    )
+    print(
+        f"      Current: {latest_total} ({latest_core} core + {latest_comm} community)"
+    )
+    print(
+        f"      Growth: +{latest_total - first_total} ({(latest_total - first_total) / first_total * 100:.1f}%)"
+    )
+
+    print("\n   Community extensions:")
     print(f"      Started with: {first_comm}")
     print(f"      Current: {latest_comm}")
     print(f"      Growth: +{latest_comm - first_comm}")
-    
-    print(f"\n   Active extensions (≤30d):")
+
+    print("\n   Active extensions (≤30d):")
     print(f"      Started with: {first_active}")
     print(f"      Current: {latest_active}")
     print(f"      Activity rate: {latest_active / latest_total * 100:.1f}%")
 
 # Top extensions by stars
-print(f"\n⭐ TOP 10 EXTENSIONS BY STARS")
+print("\n⭐ TOP 10 EXTENSIONS BY STARS")
 result = conn.execute("""
     SELECT 
         emd.extension_name,
@@ -103,16 +120,16 @@ result = conn.execute("""
 for i, (name, stars, active, repo, days) in enumerate(result, 1):
     status = "active" if active else f"{days}d ago"
     # Build proper GitHub URL
-    if repo and repo.startswith('http'):
+    if repo and repo.startswith("http"):
         repo_link = repo
-    elif repo and '/' in repo:
+    elif repo and "/" in repo:
         repo_link = f"https://github.com/{repo}"
     else:
         repo_link = f"https://github.com/duckdb/{name}"
     print(f"   {i:2}. [{name}]({repo_link}) - {stars:,} stars ({status})")
 
 # Recently added - use trend summary which has historical data
-print(f"\n🆕 EXTENSIONS ADDED OVER TIME")
+print("\n🆕 EXTENSIONS ADDED OVER TIME")
 result = conn.execute("""
     SELECT 
         analysis_date,
@@ -126,19 +143,21 @@ result = conn.execute("""
 """).fetchall()
 
 if result:
-    print(f"   Recent additions (last 10 snapshots with new extensions):")
+    print("   Recent additions (last 10 snapshots with new extensions):")
     for date, new_exts, total in result:
         count = len(new_exts) if new_exts else 0
         if count > 0:
             if count <= 5:
                 print(f"   {date}: +{count} ({', '.join(new_exts)}) - total: {total}")
             else:
-                print(f"   {date}: +{count} ({', '.join(new_exts[:3])}...) - total: {total}")
+                print(
+                    f"   {date}: +{count} ({', '.join(new_exts[:3])}...) - total: {total}"
+                )
 else:
-    print(f"   No new extension data available")
+    print("   No new extension data available")
 
 # Most active
-print(f"\n⚡ MOST ACTIVE (Updated in last 7 days)")
+print("\n⚡ MOST ACTIVE (Updated in last 7 days)")
 result = conn.execute("""
     WITH latest_date AS (
         SELECT MAX(analysis_date) as max_date
@@ -161,9 +180,9 @@ if result:
     print(f"   {len(result)} extensions updated in last 7 days:")
     for name, days, stars, repo in result:
         # Build proper GitHub URL
-        if repo and repo.startswith('http'):
+        if repo and repo.startswith("http"):
             repo_link = repo
-        elif repo and '/' in repo:
+        elif repo and "/" in repo:
             repo_link = f"https://github.com/{repo}"
         else:
             repo_link = f"https://github.com/duckdb/{name}"
@@ -172,7 +191,7 @@ if result:
         print(f"   - [{name}]({repo_link}) - {days_str} ({stars_str})")
 
 # Language breakdown
-print(f"\n🔧 LANGUAGE BREAKDOWN (Community)")
+print("\n🔧 LANGUAGE BREAKDOWN (Community)")
 result = conn.execute("""
     WITH latest_metrics AS (
         SELECT DISTINCT ON (extension_name) 

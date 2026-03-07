@@ -14,8 +14,12 @@ def parse_dt(s: str | None) -> datetime | None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Render promoted candidates CSV as a readable table")
-    parser.add_argument("input", help="CSV file produced by scripts/promote_extension_candidates.py")
+    parser = argparse.ArgumentParser(
+        description="Render promoted candidates CSV as a readable table"
+    )
+    parser.add_argument(
+        "input", help="CSV file produced by scripts/promote_extension_candidates.py"
+    )
     parser.add_argument(
         "--as-of",
         default=None,
@@ -47,7 +51,11 @@ def main() -> int:
     def key(r: dict):
         score = int(r.get("score") or 0)
         stars = int(r.get("stars") or 0)
-        days = int(r.get("days_ago") or 10**9) if str(r.get("days_ago") or "").isdigit() else 10**9
+        days = (
+            int(r.get("days_ago") or 10**9)
+            if str(r.get("days_ago") or "").isdigit()
+            else 10**9
+        )
         return (score, -days, stars)
 
     rows.sort(key=key, reverse=True)

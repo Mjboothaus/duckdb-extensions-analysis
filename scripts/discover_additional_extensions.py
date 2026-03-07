@@ -332,16 +332,19 @@ def enrich_repos_in_place(
     enriched = 0
     start_ts = time.time()
 
-    print(f"Enrichment: {total} repos to enrich (limit={limit}, cache={cache is not None})")
+    print(
+        f"Enrichment: {total} repos to enrich (limit={limit}, cache={cache is not None})"
+    )
 
     for idx, (full_name, repo) in enumerate(needs_enrichment, start=1):
-
         if verbose or idx == 1 or idx % 25 == 0:
             elapsed = time.time() - start_ts
             rate = (idx / elapsed) if elapsed > 0 else 0.0
             eta = ((total - idx) / rate) if rate > 0 else None
             eta_str = f"~{int(eta)}s" if eta is not None else "?"
-            print(f"  Enriching {idx}/{total}: {full_name} (elapsed {elapsed:.1f}s, eta {eta_str})")
+            print(
+                f"  Enriching {idx}/{total}: {full_name} (elapsed {elapsed:.1f}s, eta {eta_str})"
+            )
 
         try:
             details = get_repo_details(
@@ -391,7 +394,9 @@ def dedupe_repos_by_full_name(
     return out
 
 
-def print_repo_table(repos: list[dict], title: str, *, max_rows: int | None = None) -> None:
+def print_repo_table(
+    repos: list[dict], title: str, *, max_rows: int | None = None
+) -> None:
     if not repos:
         print(f"\n{title}: nothing found")
         return
@@ -423,7 +428,9 @@ def to_output_rows(repos: list[dict]) -> list[dict]:
             {
                 "repo": r.get("full_name") or "",
                 "url": r.get("html_url") or "",
-                "stars": r.get("stargazers_count") if isinstance(r.get("stargazers_count"), int) else 0,
+                "stars": r.get("stargazers_count")
+                if isinstance(r.get("stargazers_count"), int)
+                else 0,
                 "lang": r.get("language"),
                 "pushed": r.get("pushed_at"),
                 "desc": r.get("description") or "",
@@ -433,13 +440,36 @@ def to_output_rows(repos: list[dict]) -> list[dict]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Discover additional DuckDB extension repositories via GitHub search")
-    parser.add_argument("--test", action="store_true", default=DEFAULT_TEST_MODE, help="Use conservative limits for smoke testing")
-    parser.add_argument("--early-stop", type=int, default=None, help="Stop after this many unique repos are found (across all searches)")
-    parser.add_argument("--max-pages", type=int, default=None, help="Max pages to fetch per search")
-    parser.add_argument("--per-page", type=int, default=None, help="Results per page (max 100)")
-    parser.add_argument("--sleep", type=float, default=DEFAULT_SLEEP_SECONDS, help="Delay between API calls")
-    parser.add_argument("--output", default=DEFAULT_OUTPUT_PATH, help="Path to write JSON output")
+    parser = argparse.ArgumentParser(
+        description="Discover additional DuckDB extension repositories via GitHub search"
+    )
+    parser.add_argument(
+        "--test",
+        action="store_true",
+        default=DEFAULT_TEST_MODE,
+        help="Use conservative limits for smoke testing",
+    )
+    parser.add_argument(
+        "--early-stop",
+        type=int,
+        default=None,
+        help="Stop after this many unique repos are found (across all searches)",
+    )
+    parser.add_argument(
+        "--max-pages", type=int, default=None, help="Max pages to fetch per search"
+    )
+    parser.add_argument(
+        "--per-page", type=int, default=None, help="Results per page (max 100)"
+    )
+    parser.add_argument(
+        "--sleep",
+        type=float,
+        default=DEFAULT_SLEEP_SECONDS,
+        help="Delay between API calls",
+    )
+    parser.add_argument(
+        "--output", default=DEFAULT_OUTPUT_PATH, help="Path to write JSON output"
+    )
     parser.add_argument(
         "--mode",
         choices=["precision", "broad"],
@@ -492,10 +522,14 @@ def main() -> int:
 
     is_test = bool(args.test)
     per_page = args.per_page or (DEFAULT_PER_PAGE_TEST if is_test else DEFAULT_PER_PAGE)
-    max_pages = args.max_pages or (DEFAULT_MAX_PAGES_TEST if is_test else DEFAULT_MAX_PAGES)
+    max_pages = args.max_pages or (
+        DEFAULT_MAX_PAGES_TEST if is_test else DEFAULT_MAX_PAGES
+    )
     early_stop = args.early_stop
     if early_stop is None:
-        early_stop = DEFAULT_EARLY_STOP_COUNT_TEST if is_test else DEFAULT_EARLY_STOP_COUNT
+        early_stop = (
+            DEFAULT_EARLY_STOP_COUNT_TEST if is_test else DEFAULT_EARLY_STOP_COUNT
+        )
 
     token = get_github_token()
     headers = build_headers(token)
@@ -535,7 +569,9 @@ def main() -> int:
         cache=cache,
         timeout_seconds=args.timeout_seconds,
     )
-    topic_repos = dedupe_repos_by_full_name(topic_items, seen_full_names=seen_full_names, early_stop_count=early_stop)
+    topic_repos = dedupe_repos_by_full_name(
+        topic_items, seen_full_names=seen_full_names, early_stop_count=early_stop
+    )
     _add_repos(topic_repos)
 
     if len(seen_full_names) < early_stop:
@@ -544,7 +580,7 @@ def main() -> int:
         if args.mode == "precision":
             # Higher-signal queries: fewer results, better precision.
             code_queries = [
-                'filename:extension_config.cmake',
+                "filename:extension_config.cmake",
                 '"build_duckdb_extension" filename:CMakeLists.txt',
                 '"duckdb_extension_init" filename:CMakeLists.txt',
                 '"duckdb_loadable_extension" filename:CMakeLists.txt',
@@ -598,7 +634,9 @@ def main() -> int:
     found_repos = list(repos_by_full_name.values())
 
     # Final filter
-    found_repos = [r for r in found_repos if r.get("full_name") != "duckdb/community-extensions"]
+    found_repos = [
+        r for r in found_repos if r.get("full_name") != "duckdb/community-extensions"
+    ]
 
     print_repo_table(found_repos, "DuckDB extension candidates")
 
@@ -607,7 +645,9 @@ def main() -> int:
 
     print(f"\nSaved to {args.output}")
     if is_test:
-        print("Tip: re-run without --test (or set higher --max-pages/--early-stop) to discover more.")
+        print(
+            "Tip: re-run without --test (or set higher --max-pages/--early-stop) to discover more."
+        )
 
     return 0
 

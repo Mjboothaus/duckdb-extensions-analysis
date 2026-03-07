@@ -9,9 +9,13 @@ Features intelligent caching to speed up subsequent runs.
 import argparse
 import asyncio
 import sys
+from datetime import datetime
 from pathlib import Path
 
 from loguru import logger
+
+from conf.config import Config
+from src.analyzers import AnalysisOrchestrator
 
 # Configure logger - both stdout and file
 logger.remove()
@@ -20,8 +24,11 @@ logger.add(
 )
 
 # Add file logging for persistent capture of analysis metrics
-from datetime import datetime
-log_file = Path(__file__).parent.parent / "logs" / f"analysis_{datetime.now().strftime('%Y%m%d')}.log"
+log_file = (
+    Path(__file__).parent.parent
+    / "logs"
+    / f"analysis_{datetime.now().strftime('%Y%m%d')}.log"
+)
 log_file.parent.mkdir(exist_ok=True)
 logger.add(
     str(log_file),
@@ -29,13 +36,8 @@ logger.add(
     level="INFO",
     rotation="10 MB",
     retention="30 days",
-    compression="gz"
+    compression="gz",
 )
-
-# Import configuration and analyzers (add parent directory to path)
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from conf.config import Config
-from src.analyzers import AnalysisOrchestrator
 
 # Initialize configuration
 config = Config()
@@ -66,47 +68,41 @@ Examples:
     analyze_extensions_new.py --no-cache         # Bypass cache for this run
         """,
     )
-    
+
     parser.add_argument(
         "mode",
         choices=["community", "core", "full", "report", "database"],
         help="Analysis mode to run",
     )
-    
+
     parser.add_argument(
-        "--clear-cache", 
-        action="store_true", 
-        help="Clear cache before running analysis"
+        "--clear-cache", action="store_true", help="Clear cache before running analysis"
     )
-    
+
     parser.add_argument(
-        "--no-cache", 
-        action="store_true", 
-        help="Bypass cache for this run (fetch fresh data)"
+        "--no-cache",
+        action="store_true",
+        help="Bypass cache for this run (fetch fresh data)",
     )
-    
+
     parser.add_argument(
-        "--csv", 
-        action="store_true", 
-        help="Generate CSV output (only for report mode)"
+        "--csv", action="store_true", help="Generate CSV output (only for report mode)"
     )
-    
+
     parser.add_argument(
-        "--excel", 
-        action="store_true", 
-        help="Generate Excel output (only for report mode)"
+        "--excel",
+        action="store_true",
+        help="Generate Excel output (only for report mode)",
     )
-    
+
     parser.add_argument(
-        "--cache-info", 
-        action="store_true", 
-        help="Show cache statistics"
+        "--cache-info", action="store_true", help="Show cache statistics"
     )
-    
+
     parser.add_argument(
-        "--no-issues", 
-        action="store_true", 
-        help="Skip GitHub issues analysis (avoids rate limits)"
+        "--no-issues",
+        action="store_true",
+        help="Skip GitHub issues analysis (avoids rate limits)",
     )
 
     args = parser.parse_args()
@@ -115,6 +111,7 @@ Examples:
     if args.clear_cache:
         logger.info("Clearing cache...")
         import diskcache as dc
+
         cache = dc.Cache(str(config.cache_dir))
         cache.clear()
         logger.info("Cache cleared")
@@ -127,6 +124,7 @@ Examples:
     # Show cache info if requested
     if args.cache_info:
         import diskcache as dc
+
         cache = dc.Cache(str(config.cache_dir))
         logger.info(f"Cache directory: {config.cache_dir}")
         logger.info(f"Cache size: {len(cache)} items")
@@ -137,7 +135,7 @@ Examples:
     if args.no_issues:
         logger.info("Skipping GitHub issues analysis (--no-issues flag)")
         config.enable_issues_analysis = False
-    
+
     # Initialize the orchestrator
     orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours)
 
@@ -145,13 +143,13 @@ Examples:
         if args.mode in ["community", "core", "full"]:
             # Run analysis
             analysis_result = await orchestrator.run_analysis_mode(args.mode)
-            
+
             # Save to database automatically for all analysis modes
             await orchestrator.save_to_database(analysis_result)
             logger.info(f"Analysis saved to database: {config.database_path}")
-            
+
             orchestrator.print_analysis_summary(analysis_result)
-            
+
         elif args.mode == "report":
             # Determine report formats
             formats = ["markdown"]  # Default
@@ -159,16 +157,16 @@ Examples:
                 formats.append("csv")
             if args.excel:
                 formats.append("excel")
-            
+
             # Generate reports
             report_files = await orchestrator.run_report_generation(formats)
-            
+
             for format_type, filepath in report_files.items():
                 logger.info(f"{format_type.capitalize()} report saved: {filepath}")
-            
+
             if not args.csv and not args.excel:
                 logger.info("Latest report updated: reports/latest.md")
-            
+
         elif args.mode == "database":
             # Save to database
             await orchestrator.run_database_save()

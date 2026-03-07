@@ -114,7 +114,9 @@ def insert_run(con: duckdb.DuckDBPyConnection, notes: str | None) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Load extension discovery outputs into DuckDB")
+    parser = argparse.ArgumentParser(
+        description="Load extension discovery outputs into DuckDB"
+    )
     parser.add_argument(
         "--db",
         default="data/extensions.duckdb",

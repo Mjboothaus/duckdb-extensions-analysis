@@ -48,10 +48,19 @@ def write_csv(path: Path, rows: list[dict]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Promote validated extension candidates using initial criteria")
-    parser.add_argument("input", help="Validated JSON output from scripts/validate_extension_candidates.py")
-    parser.add_argument("--output-json", default="data/discovery/promoted_candidates.json")
-    parser.add_argument("--output-csv", default="data/discovery/promoted_candidates.csv")
+    parser = argparse.ArgumentParser(
+        description="Promote validated extension candidates using initial criteria"
+    )
+    parser.add_argument(
+        "input",
+        help="Validated JSON output from scripts/validate_extension_candidates.py",
+    )
+    parser.add_argument(
+        "--output-json", default="data/discovery/promoted_candidates.json"
+    )
+    parser.add_argument(
+        "--output-csv", default="data/discovery/promoted_candidates.csv"
+    )
 
     # Initial promotion criteria knobs
     parser.add_argument("--min-score", type=int, default=15)
@@ -79,8 +88,14 @@ def main() -> int:
         if not isinstance(repo, str) or not repo:
             continue
 
-        input_repo = r.get("input_repo") if isinstance(r.get("input_repo"), str) else repo
-        canonical_repo = r.get("canonical_repo") if isinstance(r.get("canonical_repo"), str) else repo
+        input_repo = (
+            r.get("input_repo") if isinstance(r.get("input_repo"), str) else repo
+        )
+        canonical_repo = (
+            r.get("canonical_repo")
+            if isinstance(r.get("canonical_repo"), str)
+            else repo
+        )
 
         if r.get("error"):
             continue
@@ -143,8 +158,12 @@ def main() -> int:
                 "tree_cmake_mentions_duckdb_extension": tree_cmake,
                 "readme_mentions_duckdb": bool(sig.get("readme_mentions_duckdb")),
                 "readme_mentions_extension": bool(sig.get("readme_mentions_extension")),
-                "readme_mentions_install_command": bool(sig.get("readme_mentions_install_command")),
-                "readme_mentions_duckdb_extension_file": bool(sig.get("readme_mentions_duckdb_extension_file")),
+                "readme_mentions_install_command": bool(
+                    sig.get("readme_mentions_install_command")
+                ),
+                "readme_mentions_duckdb_extension_file": bool(
+                    sig.get("readme_mentions_duckdb_extension_file")
+                ),
                 "reason": "; ".join(reason_bits),
             }
         )

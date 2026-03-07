@@ -45,7 +45,9 @@ def get_github_token() -> str:
         text=True,
     )
     if result.returncode != 0:
-        raise RuntimeError("Unable to obtain GitHub token. Set GITHUB_TOKEN or run `gh auth login`.")
+        raise RuntimeError(
+            "Unable to obtain GitHub token. Set GITHUB_TOKEN or run `gh auth login`."
+        )
 
     token = result.stdout.strip()
     if not token:
@@ -146,7 +148,10 @@ def request_json(
 
         try:
             resp = requests.get(url, headers=headers, timeout=timeout_seconds)
-        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+        except (
+            requests.exceptions.Timeout,
+            requests.exceptions.ConnectionError,
+        ) as exc:
             sleep_for = 1.0 * (2 ** (attempt - 1))
             if verbose:
                 print(f"    WARN: request error ({exc}); retrying in {sleep_for:.1f}s")
@@ -279,7 +284,9 @@ def try_get_contents(
 ) -> dict | None:
     url = contents_api(owner_repo, path)
     try:
-        resp = request_json(url, headers, cache=cache, timeout_seconds=timeout_seconds, verbose=verbose)
+        resp = request_json(
+            url, headers, cache=cache, timeout_seconds=timeout_seconds, verbose=verbose
+        )
         return resp.json()
     except RuntimeError as exc:
         # Missing file comes back as 404, but our request_json will raise for non-retryable.
@@ -307,7 +314,9 @@ def get_repo_tree_recursive(
     # Fast path: many GitHub APIs accept a branch name here.
     try:
         url = git_tree_api(owner_repo, default_branch)
-        return request_json(url, headers, cache=cache, timeout_seconds=timeout_seconds, verbose=verbose).json()
+        return request_json(
+            url, headers, cache=cache, timeout_seconds=timeout_seconds, verbose=verbose
+        ).json()
     except Exception:
         pass
 
@@ -331,7 +340,7 @@ def get_repo_tree_recursive(
             timeout_seconds=timeout_seconds,
             verbose=verbose,
         ).json()
-        tree_sha = ((commit.get("tree") or {}).get("sha"))
+        tree_sha = (commit.get("tree") or {}).get("sha")
         if not isinstance(tree_sha, str) or not tree_sha:
             return None
 
@@ -408,7 +417,9 @@ def readme_signals(text: str) -> dict[str, bool]:
     }
 
 
-def is_likely_template_clone(*, repo: str, topics: list[str], signals: dict[str, bool], paths: list[str]) -> bool:
+def is_likely_template_clone(
+    *, repo: str, topics: list[str], signals: dict[str, bool], paths: list[str]
+) -> bool:
     """Heuristic to flag likely template/scaffold repos.
 
     This is intentionally conservative: it only *flags* candidates to reduce reviewer time.
@@ -419,8 +430,14 @@ def is_likely_template_clone(*, repo: str, topics: list[str], signals: dict[str,
     topics_l = [t.lower() for t in topics if isinstance(t, str)]
     paths_l = [p.lower() for p in paths if isinstance(p, str)]
 
-    name_hint = any(k in repo_l for k in ["template", "scaffold", "example"]) and "duckdb" in repo_l
-    topic_hint = any(t in {"template", "duckdb-template", "duckdb-extension-template"} for t in topics_l)
+    name_hint = (
+        any(k in repo_l for k in ["template", "scaffold", "example"])
+        and "duckdb" in repo_l
+    )
+    topic_hint = any(
+        t in {"template", "duckdb-template", "duckdb-extension-template"}
+        for t in topics_l
+    )
 
     readme_hint = bool(
         signals.get("readme_mentions_template")
@@ -475,9 +492,17 @@ def compute_score_with_breakdown(
     add("topic:duckdb", 1, enabled=("duckdb" in topics))
 
     # Root-path signals
-    add("root:extension_config.cmake", 6, enabled=bool(signals.get("has_extension_config_cmake")))
+    add(
+        "root:extension_config.cmake",
+        6,
+        enabled=bool(signals.get("has_extension_config_cmake")),
+    )
     add("root:extension_dir", 2, enabled=bool(signals.get("has_extension_dir")))
-    add("root:.duckdb_extension", 6, enabled=bool(signals.get("has_dot_duckdb_extension")))
+    add(
+        "root:.duckdb_extension",
+        6,
+        enabled=bool(signals.get("has_dot_duckdb_extension")),
+    )
     add(
         "root:CMakeLists mentions extension",
         3,
@@ -515,7 +540,11 @@ def compute_score_with_breakdown(
     # README signals (lighter weight; helps ranking rather than strict validation)
     add("readme:duckdb", 1, enabled=bool(signals.get("readme_mentions_duckdb")))
     add("readme:extension", 1, enabled=bool(signals.get("readme_mentions_extension")))
-    add("readme:install command", 1, enabled=bool(signals.get("readme_mentions_install_command")))
+    add(
+        "readme:install command",
+        1,
+        enabled=bool(signals.get("readme_mentions_install_command")),
+    )
     add(
         "readme:.duckdb_extension",
         1,
@@ -559,7 +588,9 @@ def find_release_extension_assets(releases: list[dict]) -> list[dict]:
             if not isinstance(name, str):
                 continue
             lower = name.lower()
-            if lower.endswith(".duckdb_extension") or lower.endswith(".duckdb_extension.gz"):
+            if lower.endswith(".duckdb_extension") or lower.endswith(
+                ".duckdb_extension.gz"
+            ):
                 assets.append(a)
     return assets
 
@@ -653,7 +684,9 @@ def main() -> int:
     )
 
     parser.add_argument("--cache-dir", default=DEFAULT_CACHE_DIR)
-    parser.add_argument("--cache-ttl-seconds", type=int, default=DEFAULT_CACHE_TTL_SECONDS)
+    parser.add_argument(
+        "--cache-ttl-seconds", type=int, default=DEFAULT_CACHE_TTL_SECONDS
+    )
     parser.add_argument("--timeout-seconds", type=int, default=DEFAULT_TIMEOUT_SECONDS)
     parser.add_argument(
         "--tree-cmake-max",
@@ -736,7 +769,9 @@ def main() -> int:
             existing = json.loads(output_path.read_text())
             if isinstance(existing, list):
                 out = [x for x in existing if isinstance(x, dict)]
-                already_done = {x.get("repo") for x in out if isinstance(x.get("repo"), str)}
+                already_done = {
+                    x.get("repo") for x in out if isinstance(x.get("repo"), str)
+                }
                 already_done.discard("")
                 print(f"Resuming: loaded {len(out)} existing rows from {args.output}")
         except Exception:
@@ -825,7 +860,9 @@ def main() -> int:
         topics = [t.lower() for t in topics if isinstance(t, str)]
 
         signals: dict[str, bool] = {
-            "is_fork": bool(isinstance(repo_details, dict) and repo_details.get("fork") is True),
+            "is_fork": bool(
+                isinstance(repo_details, dict) and repo_details.get("fork") is True
+            ),
         }
 
         # README keyword signals (fast-ish, cached)
@@ -888,10 +925,12 @@ def main() -> int:
             timeout_seconds=args.timeout_seconds,
             verbose=args.verbose,
         )
-        cmake_text = decode_content(cmake_json) if isinstance(cmake_json, dict) else None
-        signals["cmake_mentions_duckdb_extension"] = (
-            (cmake_text is not None) and looks_like_duckdb_extension_cmake(cmake_text)
+        cmake_text = (
+            decode_content(cmake_json) if isinstance(cmake_json, dict) else None
         )
+        signals["cmake_mentions_duckdb_extension"] = (
+            cmake_text is not None
+        ) and looks_like_duckdb_extension_cmake(cmake_text)
 
         # Git tree scan (better recall): find artefacts anywhere in the repo.
         default_branch = repo_details.get("default_branch")
@@ -925,7 +964,9 @@ def main() -> int:
         def _has_suffix(suffix: str) -> bool:
             return any(p.endswith(suffix) for p in paths)
 
-        signals["tree_has_extension_config_cmake"] = _has_suffix("extension_config.cmake")
+        signals["tree_has_extension_config_cmake"] = _has_suffix(
+            "extension_config.cmake"
+        )
         signals["tree_has_dot_duckdb_extension"] = _has_suffix(".duckdb_extension")
         signals["tree_has_cmakelists"] = _has_suffix("CMakeLists.txt")
 
@@ -1026,10 +1067,12 @@ def main() -> int:
         if args.duckdb_smoke_test and smoke_tested < args.duckdb_smoke_max:
             smoke_tested += 1
             candidates = guess_extension_names_from_repo(repo)
-            install_ok, load_ok, install_name, install_error = duckdb_install_load_smoke_test(
-                con,
-                candidates=candidates,
-                verbose=args.verbose,
+            install_ok, load_ok, install_name, install_error = (
+                duckdb_install_load_smoke_test(
+                    con,
+                    candidates=candidates,
+                    verbose=args.verbose,
+                )
             )
 
         # Optional: scan releases for binary assets and optionally attempt LOAD from file.
@@ -1063,11 +1106,19 @@ def main() -> int:
 
             if release_assets:
                 # Pick the smallest asset to avoid huge downloads by default.
-                release_assets.sort(key=lambda a: a.get("size") if isinstance(a.get("size"), int) else 10**18)
+                release_assets.sort(
+                    key=lambda a: a.get("size")
+                    if isinstance(a.get("size"), int)
+                    else 10**18
+                )
                 chosen = release_assets[0]
-                release_asset_name = chosen.get("name") if isinstance(chosen.get("name"), str) else None
+                release_asset_name = (
+                    chosen.get("name") if isinstance(chosen.get("name"), str) else None
+                )
                 release_asset_url = (
-                    chosen.get("browser_download_url") if isinstance(chosen.get("browser_download_url"), str) else None
+                    chosen.get("browser_download_url")
+                    if isinstance(chosen.get("browser_download_url"), str)
+                    else None
                 )
 
                 if args.release_download and release_asset_url and release_asset_name:
@@ -1128,7 +1179,9 @@ def main() -> int:
     ok = sum(1 for r in out if r.get("duckdb_install_ok") and r.get("duckdb_load_ok"))
     print("Validation summary")
     print(f"- validated: {len(out)}")
-    print(f"- duckdb smoke tested: {min(len(out), args.duckdb_smoke_max) if args.duckdb_smoke_test else 0}")
+    print(
+        f"- duckdb smoke tested: {min(len(out), args.duckdb_smoke_max) if args.duckdb_smoke_test else 0}"
+    )
     print(f"- duckdb install+load ok: {ok}")
     print(f"- wrote: {args.output}")
 

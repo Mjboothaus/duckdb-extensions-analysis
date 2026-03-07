@@ -249,7 +249,9 @@ async def _build_third_party_extensions(
                     "docs_url": cand["repo_url"],
                     "status": _status_from_repo_info(repo_info),
                     "last_push_days": last_push_days,
-                    "last_push": pushed_at.isoformat().replace("+00:00", "Z") if pushed_at else None,
+                    "last_push": pushed_at.isoformat().replace("+00:00", "Z")
+                    if pushed_at
+                    else None,
                     "stars": repo_info.get("stargazers_count") or 0,
                     "language": repo_info.get("language") or "N/A",
                     "description": (
@@ -264,7 +266,10 @@ async def _build_third_party_extensions(
 
     # Most-recent activity first.
     extensions.sort(
-        key=lambda e: (e.get("last_push_days") is None, e.get("last_push_days") or 10**9)
+        key=lambda e: (
+            e.get("last_push_days") is None,
+            e.get("last_push_days") or 10**9,
+        )
     )
     return extensions
 
