@@ -38,7 +38,7 @@ This analysis is based on the following authoritative sources:
 | **Total Extensions** | 222 | → No change |
 | **Core Extensions** | 27 | → Stable |
 | **Community Extensions** | 195 | → No change |
-| **Recently Active** (≤ 30 days) | 131 (59.0%) | -9 🔽 |
+| **Recently Active** (≤ 30 days) | 131 (59.0%) | -3 🔽 |
 | **Very Active** (≤ 7 days) | 38 (17.1%) | — |
 
 *Changes since previous analysis*
@@ -166,7 +166,7 @@ Third-party extensions maintained by the community
 | 62 | [faiss](https://duckdb.org/community_extensions/extensions/faiss.html) | [duckdb-faiss-ext](https://github.com/duckdb-faiss-ext/duckdb-faiss-ext) | 🟢 Ongoing | 3 - 🟡 Stable | 87 days ago (2025-12-09 01:30:08 UTC) | 30 | Go | DuckDB wrapper for FAISS - Experimental |
 | 63 | [fakeit](https://duckdb.org/community_extensions/extensions/fakeit.html) | [duckdb-fakeit](https://github.com/tobilg/duckdb-fakeit) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-01-27 11:41:16 UTC) | 10 | Rust | DuckDB extension: fakeit by tobilg |
 | 64 | [file_dialog](https://duckdb.org/community_extensions/extensions/file_dialog.html) | [duckdb-ext-file-dialog](https://github.com/yutannihilation/duckdb-ext-file-dialog) | 🟢 Ongoing | 3 - 🟡 Stable | 36 days ago (2026-01-29 11:36:23 UTC) | 15 | Rust | A DuckDB extension to choose file interactively using native file open dialogs |
-| 65 | [finetype](https://duckdb.org/community_extensions/extensions/finetype.html) | [duckdb-finetype](https://github.com/noon-org/duckdb-finetype) | 🟢 Ongoing | 2 - ✅ Active | 16 days ago (2026-02-18 00:46:29 UTC) | 0 | Rust | DuckDB extension for semantic type classification powered by FineType |
+| 65 | [finetype](https://duckdb.org/community_extensions/extensions/finetype.html) | [duckdb-finetype](https://github.com/noon-org/duckdb-finetype) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-02-18 00:46:29 UTC) | 0 | Rust | DuckDB extension for semantic type classification powered by FineType |
 | 66 | [fire_duck_ext](https://duckdb.org/community_extensions/extensions/fire_duck_ext.html) | [fire_duck_ext](https://github.com/BorisBesky/fire_duck_ext) | 🟢 Ongoing | 2 - ✅ Active | 25 days ago (2026-02-09 07:17:21 UTC) | 2 | C++ | duckdb extension for firestore |
 | 67 | [fit](https://duckdb.org/community_extensions/extensions/fit.html) | [duckdb-fit-extension](https://github.com/antoriche/duckdb-fit-extension) | ❓ Unknown | 3 - 🟡 Stable | 81 days ago (2025-12-15 19:16:40 UTC) | 1 | C++ | DuckDB extension: fit by antoriche |
 | 68 | [fivetran](https://duckdb.org/community_extensions/extensions/fivetran.html) | [fivetran](https://github.com/lnkuiper/fivetran) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-01-27 11:13:43 UTC) | 0 | C++ | DuckDB extension: fivetran by lnkuiper |
@@ -284,7 +284,7 @@ Third-party extensions maintained by the community
 | 180 | [tributary](https://duckdb.org/community_extensions/extensions/tributary.html) | [tributary](https://github.com/Query-farm/tributary) | 🟢 Ongoing | 2 - ✅ Active | 16 days ago (2026-02-18 23:03:31 UTC) | 53 | C++ | A DuckDB Extension for Kafka |
 | 181 | [tsid](https://duckdb.org/community_extensions/extensions/tsid.html) | [tsid](https://github.com/Query-farm/tsid) | 🟢 Ongoing | 2 - ✅ Active | 16 days ago (2026-02-18 19:49:55 UTC) | 6 | C++ | TSID Extension for DuckDB  |
 | 182 | [ulid](https://duckdb.org/community_extensions/extensions/ulid.html) | [duckdb_ulid](https://github.com/Maxxen/duckdb_ulid) | ❓ Unknown | 4 - 🟠 Stale | over a year ago (2024-07-09 09:35:50 UTC) | 25 | C++ | DuckDB extension: ulid by Maxxen |
-| 183 | [urlpattern](https://duckdb.org/community_extensions/extensions/urlpattern.html) | [duckdb_urlpattern](https://github.com/teaguesterling/duckdb_urlpattern) | 🟢 Ongoing | 2 - ✅ Active | 10 days ago (2026-02-24 00:52:19 UTC) | 2 | C++ | An implementation of URLPattern for DuckDB |
+| 183 | [urlpattern](https://duckdb.org/community_extensions/extensions/urlpattern.html) | [duckdb_urlpattern](https://github.com/teaguesterling/duckdb_urlpattern) | 🟢 Ongoing | 2 - ✅ Active | 11 days ago (2026-02-24 00:52:19 UTC) | 2 | C++ | An implementation of URLPattern for DuckDB |
 | 184 | [valhalla_routing](https://duckdb.org/community_extensions/extensions/valhalla_routing.html) | [duckdb-valhalla-routing](https://github.com/midwork-finds-jobs/duckdb-valhalla-routing) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-02-17 11:36:12 UTC) | 3 | Makefile | WIP: Attempt to package valhalla routing engine to duckdb |
 | 185 | [warc](https://duckdb.org/community_extensions/extensions/warc.html) | [duckdb_warc](https://github.com/midwork-finds-jobs/duckdb_warc) | ❓ Unknown | 2 - ✅ Active | 29 days ago (2026-02-05 15:33:27 UTC) | 3 | Rust | DuckDB extension for parsing WARC files |
 | 186 | [web_archive](https://duckdb.org/community_extensions/extensions/web_archive.html) | [duckdb-web-archive](https://github.com/midwork-finds-jobs/duckdb-web-archive) | 🟢 Ongoing | 3 - 🟡 Stable | 31 days ago (2026-02-03 08:28:03 UTC) | 16 | C++ | DuckDB extension to fetch pages from Wayback Machine & Common Crawl |
