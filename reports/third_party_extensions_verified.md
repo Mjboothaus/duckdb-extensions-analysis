@@ -1,16 +1,16 @@
-# Verified Third-party DuckDB Extensions
+# Third-party DuckDB Extensions
 
-🦆 **Verified third-party DuckDB extensions (manually labelled)**
+🦆 **Third-party DuckDB extensions (manually labelled)**
 
 
-[Jump to Extensions](#verified-third-party-extensions)
+[Jump to Extensions](#third-party-extensions)
 ---
 
 This report provides a verified view of DuckDB extensions discovered outside the official core/community registries.
 
 Back to the main extensions report: [DuckDB Extensions Analysis](https://mjboothaus.github.io/duckdb-extensions-analysis/) ([Markdown](https://github.com/Mjboothaus/duckdb-extensions-analysis/blob/main/reports/latest.md)).
 
-*Note:* Third-party labelling is an ongoing work in progress, so this verified list is partial.
+*Note:* Third-party labelling is an ongoing work in progress, so this list is partial and may contain errors. Please do your own due diligence.
 
 ## Data Sources
 This analysis is based on:
@@ -28,7 +28,7 @@ For a detailed description of how candidates are discovered, validated, promoted
 
 ---
 ---
-## Verified third-party extensions
+## Third-party extensions
 
 Manually labelled DuckDB extensions discovered outside the official registries.
 
@@ -67,9 +67,9 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 || 25 | [PDXearch](https://github.com/Noorts/PDXearch) | [PDXearch](https://github.com/Noorts/PDXearch) | 🟢 Ongoing | 2 - ✅ Active | 10 days ago (2026-02-24 16:07:08 UTC) | 5 | C++ | A state-of-the-art IVF index for lightweight but fast (filtered) vector simil... |
 || 26 | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-07 01:00:31 UTC) | 1,442 | C | pg_lake: Postgres with Iceberg and data lake access |
 || 27 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | 157 days ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
-|| 28 | [quackeccak](https://github.com/PJBala/quackeccak) | [quackeccak](https://github.com/PJBala/quackeccak) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-07 06:55:05 UTC) | 0 | C++ | 🦆 Enhance Ethereum computations in SQL with this DuckDB extension for Keccak-... |
+|| 28 | [quackeccak](https://github.com/PJBala/quackeccak) | [quackeccak](https://github.com/PJBala/quackeccak) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-07 02:11:30 UTC) | 0 | C++ | 🦆 Enhance Ethereum computations in SQL with this DuckDB extension for Keccak-... |
 || 29 | [REMOP](https://github.com/MSRG/REMOP) | [REMOP](https://github.com/MSRG/REMOP) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-06 19:41:50 UTC) | 0 | C++ | REMOP: REmote-Memory-aware OPerator Optimization |
-|| 30 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-07 06:44:07 UTC) | 886 | C++ | No description available |
+|| 30 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-07 03:47:14 UTC) | 886 | C++ | No description available |
 || 31 | [spy](https://github.com/hugolatendresse/rpt-plus-plus) | [rpt-plus-plus](https://github.com/hugolatendresse/rpt-plus-plus) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-06 20:06:42 UTC) | 0 | C++ | Robust predicate transfer with cache-aware hash tables. |
 || 32 | [wz-extension](https://github.com/Arengard/wz-extension) | [wz-extension](https://github.com/Arengard/wz-extension) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-03-05 22:19:31 UTC) | 1 | C++ | No description available |
 

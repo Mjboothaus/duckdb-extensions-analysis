@@ -38,8 +38,8 @@
   ]
 
   [reports.third_party_verified]
-  name = "Verified Third-party DuckDB Extensions"
-  description = "Labelled, verified third-party DuckDB extensions discovered outside the official registries"
+  name = "Third-party DuckDB Extensions"
+  description = "Labelled third-party DuckDB extensions discovered outside the official registries"
   template = "reports/third_party_verified.md.j2"
   components = [
     "header",
