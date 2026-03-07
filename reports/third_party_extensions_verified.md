@@ -28,7 +28,7 @@ For a detailed description of how candidates are discovered, validated, promoted
 Manually labelled DuckDB extensions discovered outside the official registries.
 
 
-**Total:** 6 extensions | 🔥 Very Active (≤7d): 1 | ✅ Active (≤30d): 2 | 🟡 Stable (≤90d): 2 | 🟠 Stale (>90d): 1
+**Total:** 9 extensions | 🔥 Very Active (≤7d): 1 | ✅ Active (≤30d): 3 | 🟡 Stable (≤90d): 3 | 🟠 Stale (>90d): 2
 
 <details open markdown="1">
 <summary>Click to expand/collapse verified third-party extensions table</summary>
@@ -37,10 +37,13 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 ||---|-----------|------------|--------|----------|---------------|-------|----------|-------------|
 || 1 | [duck_rdf](https://github.com/nonodename/read_rdf) | [read_rdf](https://github.com/nonodename/read_rdf) | 🟢 Ongoing | 1 - 🔥 Very Active | 2 days ago (2026-03-04 23:27:05 UTC) | 14 | C++ | RDF file extension for DuckDB. Reads and writes supported |
 || 2 | [duckdb-extension-fluss-lake](https://github.com/luoyuxia/duckdb-extension-fluss-lake) | [duckdb-extension-fluss-lake](https://github.com/luoyuxia/duckdb-extension-fluss-lake) | 🟢 Ongoing | 3 - 🟡 Stable | 48 days ago (2026-01-17 11:04:21 UTC) | 5 | Rust | DuckDB extension to union read Fluss & DataLake |
-|| 3 | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-01-27 07:04:19 UTC) | 22 | C++ | This is a prototype of a geospatial extension for DuckDB that adds support fo... |
-|| 4 | [erpl](https://github.com/DataZooDE/erpl) | [erpl](https://github.com/DataZooDE/erpl) | 🟢 Ongoing | 2 - ✅ Active | 23 days ago (2026-02-11 15:43:56 UTC) | 52 | C++ | ERPL is a DuckDB extension to integrate Enterprise Data in your Data Science... |
-|| 5 | [navision_gdpdu](https://github.com/Arengard/navision_gdpdu) | [navision_gdpdu](https://github.com/Arengard/navision_gdpdu) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-02-17 18:04:32 UTC) | 1 | C++ | No description available |
-|| 6 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | 157 days ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
+|| 3 | [duckdb-extension-paimon](https://github.com/luoyuxia/duckdb-extension-paimon) | [duckdb-extension-paimon](https://github.com/luoyuxia/duckdb-extension-paimon) | 🟢 Ongoing | 3 - 🟡 Stable | 55 days ago (2026-01-10 03:22:42 UTC) | 4 | CMake | DuckDB extension for Paimon |
+|| 4 | [duckdb-extension-xxhash](https://github.com/ajzo90/duckdb-extension-xxhash) | [duckdb-extension-xxhash](https://github.com/ajzo90/duckdb-extension-xxhash) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2024-09-18 07:13:44 UTC) | 4 | Shell | DuckDB Extension for xxhash functions |
+|| 5 | [duckdb-raquet](https://github.com/jatorre/duckdb-raquet) | [duckdb-raquet](https://github.com/jatorre/duckdb-raquet) | 🟢 Ongoing | 2 - ✅ Active | 28 days ago (2026-02-06 09:32:01 UTC) | 3 | C++ | DuckDB extension for reading Raquet format (raster data in Parquet with QUADB... |
+|| 6 | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-01-27 07:04:19 UTC) | 22 | C++ | This is a prototype of a geospatial extension for DuckDB that adds support fo... |
+|| 7 | [erpl](https://github.com/DataZooDE/erpl) | [erpl](https://github.com/DataZooDE/erpl) | 🟢 Ongoing | 2 - ✅ Active | 23 days ago (2026-02-11 15:43:56 UTC) | 52 | C++ | ERPL is a DuckDB extension to integrate Enterprise Data in your Data Science... |
+|| 8 | [navision_gdpdu](https://github.com/Arengard/navision_gdpdu) | [navision_gdpdu](https://github.com/Arengard/navision_gdpdu) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-02-17 18:04:32 UTC) | 1 | C++ | No description available |
+|| 9 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | 157 days ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
 
 </details>
 ---
