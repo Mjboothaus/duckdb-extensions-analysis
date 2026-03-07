@@ -213,10 +213,71 @@ def import_csv(con: duckdb.DuckDBPyConnection, path: Path) -> tuple[int, int]:
             if distribution not in VALID_DISTRIBUTIONS:
                 raise ValueError(f"Row {repo}: invalid distribution={distribution}")
 
-            upsert_label(con, LabelRow(repo=repo, is_extension=is_extension, distribution=distribution, notes=notes))
+            upsert_label(
+                con,
+                LabelRow(
+                    repo=repo,
+                    is_extension=is_extension,
+                    distribution=distribution,
+                    notes=notes,
+                ),
+            )
             updated += 1
 
     return updated, skipped
+
+
+def export_labels_only_csv(con: duckdb.DuckDBPyConnection, path: Path) -> None:
+    """Export the labels table alone.
+
+    This is used as a low-friction way to persist interactive labelling progress.
+    The output schema matches the discovery export schema (extra columns blank), so it
+    can be imported by the existing CSV importer.
+    """
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    rows = con.execute(
+        """
+        SELECT repo, is_extension, distribution, COALESCE(notes, '') AS notes
+        FROM extension_discovery_labels
+        ORDER BY updated_at DESC
+        """
+    ).fetchall()
+
+    fieldnames = [
+        "repo",
+        "repo_url",
+        "score",
+        "stars",
+        "pushed",
+        "release_asset_count",
+        "release_asset_name",
+        "release_asset_url",
+        "is_extension",
+        "distribution",
+        "notes",
+    ]
+
+    with path.open("w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w.writeheader()
+        for repo, is_extension, distribution, notes in rows:
+            w.writerow(
+                {
+                    "repo": repo,
+                    "repo_url": f"https://github.com/{repo}",
+                    "score": "",
+                    "stars": "",
+                    "pushed": "",
+                    "release_asset_count": "",
+                    "release_asset_name": "",
+                    "release_asset_url": "",
+                    "is_extension": is_extension,
+                    "distribution": distribution,
+                    "notes": notes,
+                }
+            )
 
 
 def interactive_label(
@@ -228,6 +289,7 @@ def interactive_label(
     min_score: int | None,
     has_release_assets: bool,
     only_promoted: bool,
+    autosave_csv: Path | None,
 ) -> None:
     # Preload known core/community repo identifiers for fast display during the loop.
     known_core = {
@@ -316,10 +378,17 @@ def interactive_label(
     print("- enter: y/n/u (yes/no/unsure)")
     print("- optionally: y releases  (distribution)")
     print("- commands: skip, quit")
+    if autosave_csv is not None:
+        print(f"- autosave: {autosave_csv}")
 
-    for (repo, score, stars, pushed, asset_count, asset_name, existing_label, existing_dist) in rows:
+    total = len(rows)
+
+    for idx, (repo, score, stars, pushed, asset_count, asset_name, existing_label, existing_dist) in enumerate(
+        rows, start=1
+    ):
         url = f"https://github.com/{repo}"
         print("\n---")
+        print(f"Progress: {idx}/{total}")
         print(f"Repo:  {repo}")
         print(f"URL:   {url}")
         print(f"Score: {score}   Stars: {stars}   Pushed: {pushed}")
@@ -334,7 +403,12 @@ def interactive_label(
             print(f"Current label: {existing_label} (distribution={existing_dist})")
 
         while True:
-            raw = input("Label [y/n/u] [distribution] (or skip/quit): ").strip().lower()
+            try:
+                raw = input("Label [y/n/u] [distribution] (or skip/quit): ").strip().lower()
+            except KeyboardInterrupt:
+                print("\nInterrupted. Exiting labelling loop without error.")
+                return
+
             if raw in {"quit", "q", "exit"}:
                 return
             if raw in {"skip", "s", ""}:
@@ -365,6 +439,10 @@ def interactive_label(
                 notes = input("Notes (optional): ").strip()
 
             upsert_label(con, LabelRow(repo=repo, is_extension=label, distribution=dist, notes=notes))
+
+            if autosave_csv is not None:
+                export_labels_only_csv(con, autosave_csv)
+
             print("Saved.")
             break
 
@@ -414,6 +492,16 @@ def main() -> int:
 
     p_loop = sub.add_parser("loop", help="Interactive labelling loop")
     p_loop.add_argument("--limit", type=int, default=50)
+    p_loop.add_argument(
+        "--autosave-csv",
+        default="labels/third_party_extension_labels.csv",
+        help="Write a labels-only CSV after each saved label (prevents losing work)",
+    )
+    p_loop.add_argument(
+        "--no-autosave-csv",
+        action="store_true",
+        help="Disable labels-only CSV autosave",
+    )
     p_loop.add_argument(
         "--source",
         choices=[
@@ -468,6 +556,10 @@ def main() -> int:
         return 0
 
     if args.cmd == "loop":
+        autosave_csv = None
+        if not bool(args.no_autosave_csv):
+            autosave_csv = Path(str(args.autosave_csv))
+
         interactive_label(
             con,
             limit=int(args.limit),
@@ -476,6 +568,7 @@ def main() -> int:
             min_score=args.min_score,
             has_release_assets=bool(args.has_release_assets),
             only_promoted=bool(args.only_promoted),
+            autosave_csv=autosave_csv,
         )
         return 0
 

@@ -78,6 +78,27 @@ def ensure_schema(con: duckdb.DuckDBPyConnection) -> None:
         SELECT p.*
         FROM extension_discovery_promoted p
         JOIN latest_extension_discovery_run r ON p.run_id = r.id;
+
+        -- Convenience views for tooling that expects a "recent" dataset.
+        -- For now, treat "recent" as "latest" (latest discovery run).
+        CREATE OR REPLACE VIEW recent_extension_discovery_validated AS
+        SELECT *
+        FROM latest_extension_discovery_validated;
+
+        CREATE OR REPLACE VIEW recent_extension_discovery_promoted AS
+        SELECT *
+        FROM latest_extension_discovery_promoted;
+
+        -- Views that include run metadata for cross-run analysis.
+        CREATE OR REPLACE VIEW extension_discovery_validated_with_run AS
+        SELECT v.*, r.run_timestamp
+        FROM extension_discovery_validated v
+        JOIN extension_discovery_runs r ON v.run_id = r.id;
+
+        CREATE OR REPLACE VIEW extension_discovery_promoted_with_run AS
+        SELECT p.*, r.run_timestamp
+        FROM extension_discovery_promoted p
+        JOIN extension_discovery_runs r ON p.run_id = r.id;
         """
     )
 
