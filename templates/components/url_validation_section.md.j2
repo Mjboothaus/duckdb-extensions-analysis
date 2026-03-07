@@ -23,6 +23,7 @@ This section shows the results of validating URLs associated with extensions, in
 {% for url_key, result in url_validation.items() %}
 {% if result.status in ['BROKEN', 'LIKELY_WRONG'] %}
 **{{ url_key }}**
+
 - Status: {% if result.status == 'BROKEN' %}❌ Broken{% else %}⚠️ Likely Wrong{% endif %}
 - URL: `{{ result.url }}`
 {% if result.status_code %}- HTTP Status: {{ result.status_code }}{% endif %}
@@ -38,6 +39,7 @@ This section shows the results of validating URLs associated with extensions, in
 
 {% for url_key, result in url_validation.items() %}
 **{{ url_key }}**
+
 - URL: `{{ result.url }}`
 - Status: {% if result.status == 'OK' %}✅ OK{% elif result.status == 'LIKELY_WRONG' %}⚠️ Likely Wrong{% else %}❌ Broken{% endif %}
 {% if result.status_code %}- HTTP Status: {{ result.status_code }}{% endif %}

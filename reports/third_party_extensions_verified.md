@@ -18,7 +18,7 @@ This analysis is based on:
 ## Contribute corrections
 If you spot an error or want to suggest an addition/amendment, please email: [duckdb@databooth.com.au](mailto:duckdb@databooth.com.au).
 
-To contribute via pull request, see `docs/THIRD_PARTY_EXTENSIONS_SUBMISSIONS.md`.
+To contribute via pull request, see [THIRD_PARTY_EXTENSIONS_SUBMISSIONS.md](https://github.com/Mjboothaus/duckdb-extensions-analysis/blob/main/docs/THIRD_PARTY_EXTENSIONS_SUBMISSIONS.md).
 
 For a detailed description of how candidates are discovered, validated, promoted, ranked, and selected for labelling, see the appendix: [Discovery and verification methodology](#appendix-discovery-and-verification-methodology).
 
@@ -80,6 +80,7 @@ This reduces noise and focuses the workflow on genuinely novel candidates.
 
 ### 3) Validate
 Candidates are validated with lightweight checks intended to be fast and resilient:
+
 - repository reachability
 - basic project structure indicators (extension-like repository layout)
 - evidence signals (e.g. release assets, build artefacts, references to DuckDB extension APIs)
@@ -93,6 +94,7 @@ Promotion is designed to be conservative: it aims to reduce false positives and 
 
 ### 5) Manual labelling
 Finally, candidates are manually labelled (e.g. `is_extension=yes/no/unsure`), and optionally annotated with:
+
 - distribution method (if known), and
 - free-form notes.
 
@@ -100,6 +102,7 @@ Only repositories labelled `is_extension=yes` are included in the verified third
 
 ### Risk notes and guardrails (reducing false positives)
 Discovery is intentionally conservative. The following patterns frequently produce false positives and should be treated with care:
+
 - **Template clones / scaffolds**: repositories generated from an extension template but never completed. These are typically labelled `no` with a note like `template clone`.
 - **Forks and mirrors**: prefer to label the canonical upstream repository rather than each fork.
 - **Coursework / experiments / benchmarks**: projects that mention DuckDB or include a submodule, but do not ship an extension.
