@@ -378,6 +378,7 @@ def interactive_label(
     print("- enter: y/n/u (yes/no/unsure)")
     print("- optionally: y releases  (distribution)")
     print("- commands: skip, quit")
+    print("- shortcuts: t (template clone => no + note 'template clone')")
     if autosave_csv is not None:
         print(f"- autosave: {autosave_csv}")
 
@@ -416,27 +417,38 @@ def interactive_label(
 
             parts = raw.split()
 
+            # Convenience shortcut: template clones.
+            # Entering 't'/'template' labels the repo as a non-extension with a standard note.
+            if parts and parts[0] in {"t", "template"}:
+                label = "no"
+                dist = "unknown"
+                notes = "template clone"
             # Convenience: allow entering a distribution directly, interpreted as "yes <distribution>".
             # Example: "community" => yes community
-            if parts and parts[0] in VALID_DISTRIBUTIONS and parts[0] not in {"unknown"}:
+            elif parts and parts[0] in VALID_DISTRIBUTIONS and parts[0] not in {"unknown"}:
                 label = "yes"
                 dist = parts[0]
+                notes = input("Notes (optional): ").strip()
             else:
                 short = parts[0] if parts else ""
                 label = {"y": "yes", "n": "no", "u": "unsure"}.get(short)
                 if label is None:
-                    print("Invalid label. Use y/n/u, or a distribution like 'community', or skip/quit.")
+                    print(
+                        "Invalid label. Use y/n/u, 't' for template clone, or a distribution like 'community', or skip/quit."
+                    )
                     continue
 
                 dist = parts[1] if len(parts) > 1 else "unknown"
 
-            if dist not in VALID_DISTRIBUTIONS:
-                print(f"Invalid distribution. Choose from: {', '.join(sorted(VALID_DISTRIBUTIONS))}")
-                continue
+                if dist not in VALID_DISTRIBUTIONS:
+                    print(
+                        f"Invalid distribution. Choose from: {', '.join(sorted(VALID_DISTRIBUTIONS))}"
+                    )
+                    continue
 
-            notes = ""
-            if label != "no":
-                notes = input("Notes (optional): ").strip()
+                notes = ""
+                if label != "no":
+                    notes = input("Notes (optional): ").strip()
 
             upsert_label(con, LabelRow(repo=repo, is_extension=label, distribution=dist, notes=notes))
 
