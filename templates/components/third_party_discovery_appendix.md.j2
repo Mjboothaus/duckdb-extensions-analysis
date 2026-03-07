@@ -33,3 +33,13 @@ Finally, candidates are manually labelled (e.g. `is_extension=yes/no/unsure`), a
 - free-form notes.
 
 Only repositories labelled `is_extension=yes` are included in the verified third-party report.
+
+### Risk notes and guardrails (reducing false positives)
+Discovery is intentionally conservative. The following patterns frequently produce false positives and should be treated with care:
+- **Template clones / scaffolds**: repositories generated from an extension template but never completed. These are typically labelled `no` with a note like `template clone`.
+- **Forks and mirrors**: prefer to label the canonical upstream repository rather than each fork.
+- **Coursework / experiments / benchmarks**: projects that mention DuckDB or include a submodule, but do not ship an extension.
+- **Wrapper repos**: language bindings or tooling that are not DuckDB extensions themselves.
+- **“DuckDB” in name only**: repositories whose names include DuckDB but contain unrelated work.
+
+Where possible, the pipeline flags likely template clones and canonicalises forks to upstream repositories, but manual review remains the source of truth.
