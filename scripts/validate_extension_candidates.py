@@ -371,6 +371,25 @@ def looks_like_duckdb_extension_cmake(text: str) -> bool:
     return any(n in t for n in needles)
 
 
+def source_entrypoint_signals(text: str) -> dict[str, bool]:
+    """Signals from scanning repository source files.
+
+    This is a lightweight heuristic intended to improve validation precision.
+    """
+
+    t = text.lower()
+    needles = [
+        "duckdb_extension_init",
+        "duckdb_init",
+        "duckdb_loadable_extension",
+        "build_duckdb_extension",
+    ]
+    return {
+        "source_mentions_duckdb_extension_api": any(n in t for n in needles),
+        "source_mentions_duckdb": "duckdb" in t,
+    }
+
+
 def readme_signals(text: str) -> dict[str, bool]:
     t = text.lower()
     return {
@@ -438,45 +457,72 @@ class ValidationRow:
     install_error: str | None
 
 
-def compute_score(topics: list[str], signals: dict[str, bool]) -> int:
+def compute_score_with_breakdown(
+    topics: list[str],
+    signals: dict[str, bool],
+) -> tuple[int, dict[str, int]]:
     score = 0
+    breakdown: dict[str, int] = {}
 
-    if "duckdb-extension" in topics:
-        score += 4
-    if "duckdb" in topics:
-        score += 1
+    def add(key: str, points: int, *, enabled: bool) -> None:
+        nonlocal score
+        if not enabled:
+            return
+        score += points
+        breakdown[key] = breakdown.get(key, 0) + points
+
+    add("topic:duckdb-extension", 4, enabled=("duckdb-extension" in topics))
+    add("topic:duckdb", 1, enabled=("duckdb" in topics))
 
     # Root-path signals
-    if signals.get("has_extension_config_cmake"):
-        score += 6
-    if signals.get("has_extension_dir"):
-        score += 2
-    if signals.get("has_dot_duckdb_extension"):
-        score += 6
-    if signals.get("cmake_mentions_duckdb_extension"):
-        score += 3
+    add("root:extension_config.cmake", 6, enabled=bool(signals.get("has_extension_config_cmake")))
+    add("root:extension_dir", 2, enabled=bool(signals.get("has_extension_dir")))
+    add("root:.duckdb_extension", 6, enabled=bool(signals.get("has_dot_duckdb_extension")))
+    add(
+        "root:CMakeLists mentions extension",
+        3,
+        enabled=bool(signals.get("cmake_mentions_duckdb_extension")),
+    )
 
     # Tree-scan signals (help find files nested in subdirs)
-    if signals.get("tree_has_extension_config_cmake") and not signals.get("has_extension_config_cmake"):
-        score += 5
-    if signals.get("tree_has_dot_duckdb_extension") and not signals.get("has_dot_duckdb_extension"):
-        score += 5
+    add(
+        "tree:extension_config.cmake",
+        5,
+        enabled=bool(signals.get("tree_has_extension_config_cmake"))
+        and not bool(signals.get("has_extension_config_cmake")),
+    )
+    add(
+        "tree:.duckdb_extension",
+        5,
+        enabled=bool(signals.get("tree_has_dot_duckdb_extension"))
+        and not bool(signals.get("has_dot_duckdb_extension")),
+    )
 
     # Strong positive: nested CMakeLists appears to contain DuckDB extension markers.
-    if signals.get("tree_cmake_mentions_duckdb_extension"):
-        score += 3
+    add(
+        "tree:CMakeLists mentions extension",
+        3,
+        enabled=bool(signals.get("tree_cmake_mentions_duckdb_extension")),
+    )
+
+    # Source scanning signals
+    add(
+        "tree:source mentions extension API",
+        4,
+        enabled=bool(signals.get("tree_source_mentions_duckdb_extension_api")),
+    )
 
     # README signals (lighter weight; helps ranking rather than strict validation)
-    if signals.get("readme_mentions_duckdb"):
-        score += 1
-    if signals.get("readme_mentions_extension"):
-        score += 1
-    if signals.get("readme_mentions_install_command"):
-        score += 1
-    if signals.get("readme_mentions_duckdb_extension_file"):
-        score += 1
+    add("readme:duckdb", 1, enabled=bool(signals.get("readme_mentions_duckdb")))
+    add("readme:extension", 1, enabled=bool(signals.get("readme_mentions_extension")))
+    add("readme:install command", 1, enabled=bool(signals.get("readme_mentions_install_command")))
+    add(
+        "readme:.duckdb_extension",
+        1,
+        enabled=bool(signals.get("readme_mentions_duckdb_extension_file")),
+    )
 
-    return score
+    return score, breakdown
 
 
 def duckdb_install_load_smoke_test(
@@ -917,7 +963,59 @@ def main() -> int:
 
         signals["tree_cmake_mentions_duckdb_extension"] = tree_cmake_mentions
 
-        score = compute_score(topics, signals)
+        # Fetch & scan a few likely source files for extension entrypoint markers.
+        source_paths = [
+            p
+            for p in paths
+            if p.lower().endswith(
+                (
+                    ".c",
+                    ".cc",
+                    ".cpp",
+                    ".cxx",
+                    ".h",
+                    ".hpp",
+                    ".rs",
+                    ".go",
+                    ".py",
+                )
+            )
+        ]
+
+        def _source_rank(p: str) -> tuple[int, int, str]:
+            lower = p.lower()
+            preference = 3
+            if any(k in lower for k in ["extension", "duckdb", "ext/"]):
+                preference = 0
+            elif lower.startswith("src/"):
+                preference = 1
+            depth = p.count("/")
+            return (preference, depth, p)
+
+        source_paths.sort(key=_source_rank)
+        source_paths = source_paths[:5]
+
+        tree_source_mentions = False
+        for sp in source_paths:
+            contents = try_get_contents(
+                repo,
+                sp,
+                headers,
+                cache=cache,
+                timeout_seconds=args.timeout_seconds,
+                verbose=args.verbose,
+            )
+            text = decode_content(contents) if isinstance(contents, dict) else None
+            if not text:
+                continue
+            sigs = source_entrypoint_signals(text)
+            if sigs.get("source_mentions_duckdb_extension_api"):
+                tree_source_mentions = True
+                break
+
+        signals["tree_source_mentions_duckdb_extension_api"] = tree_source_mentions
+
+        score, score_breakdown = compute_score_with_breakdown(topics, signals)
 
         # Optional DuckDB smoke test (INSTALL/LOAD)
         install_ok = False
@@ -1000,6 +1098,7 @@ def main() -> int:
                 "topics": topics,
                 "signals": signals,
                 "score": score,
+                "score_breakdown": score_breakdown,
                 "duckdb_install_name": install_name,
                 "duckdb_install_ok": install_ok,
                 "duckdb_load_ok": load_ok,
