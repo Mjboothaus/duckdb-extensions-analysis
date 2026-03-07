@@ -157,6 +157,8 @@ def export_csv(
                 f"❌ Missing discovery relation '{source_view}'.\n"
                 "Load discovery data into DuckDB first, e.g.:\n"
                 "  just discover-load-db <validated.json> <promoted.json>\n"
+                "If you're using the separate third-party labelling DB, use:\n"
+                "  just thirdparty-load-db <validated.json> <promoted.json>\n"
                 "Then retry the label loop."
             )
             return

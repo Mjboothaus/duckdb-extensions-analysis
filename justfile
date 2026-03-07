@@ -265,6 +265,9 @@ thirdparty-load-db validated_json promoted_json notes="" db="data/third_party_ex
 thirdparty-label-loop-promoted limit="50" db="data/third_party_extensions.duckdb":
     uv run python scripts/label_extension_candidates.py --db {{db}} loop --source recent_extension_discovery_validated --only-promoted --limit {{limit}}
 
+thirdparty-label-loop-promoted-incremental limit="50" db="data/third_party_extensions.duckdb":
+    uv run python scripts/label_extension_candidates.py --db {{db}} loop --source extension_discovery_validated_with_run --only-promoted --only-new-or-changed --limit {{limit}}
+
 thirdparty-label-export-committed out="labels/third_party_extension_labels.csv" db="data/third_party_extensions.duckdb":
     uv run python scripts/label_extension_candidates.py --db {{db}} export --source extension_discovery_validated_with_run --out {{out}}
 
