@@ -21,6 +21,8 @@ def write_csv(path: Path, rows: list[dict]) -> None:
 
     fieldnames = [
         "repo",
+        "input_repo",
+        "canonical_repo",
         "score",
         "stars",
         "pushed",
@@ -77,6 +79,9 @@ def main() -> int:
         if not isinstance(repo, str) or not repo:
             continue
 
+        input_repo = r.get("input_repo") if isinstance(r.get("input_repo"), str) else repo
+        canonical_repo = r.get("canonical_repo") if isinstance(r.get("canonical_repo"), str) else repo
+
         if r.get("error"):
             continue
 
@@ -124,6 +129,8 @@ def main() -> int:
         promoted.append(
             {
                 "repo": repo,
+                "input_repo": input_repo,
+                "canonical_repo": canonical_repo,
                 "score": score,
                 "stars": r.get("stars") if isinstance(r.get("stars"), int) else 0,
                 "pushed": r.get("pushed"),

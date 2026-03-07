@@ -703,20 +703,20 @@ def main() -> int:
         if validated >= args.max:
             break
 
-        repo = normalise_repo(r.get("repo"))
-        if not repo:
+        input_repo = normalise_repo(r.get("repo"))
+        if not input_repo:
             continue
 
-        if repo in already_done:
+        if input_repo in already_done:
             continue
 
         validated += 1
         if args.verbose or validated == 1 or validated % 25 == 0:
-            print(f"Validating {validated}/{args.max}: {repo}")
+            print(f"Validating {validated}/{args.max}: {input_repo}")
 
         try:
             repo_details = request_json(
-                repo_api(repo),
+                repo_api(input_repo),
                 headers,
                 cache=cache,
                 timeout_seconds=args.timeout_seconds,
@@ -726,7 +726,9 @@ def main() -> int:
             # Repo missing / renamed / access denied. Record and continue.
             out.append(
                 {
-                    "repo": repo,
+                    "repo": input_repo,
+                    "input_repo": input_repo,
+                    "canonical_repo": input_repo,
                     "error": str(exc),
                     "score": 0,
                     "stars": 0,
@@ -747,10 +749,38 @@ def main() -> int:
             )
             continue
 
+        canonical_repo = input_repo
+        if isinstance(repo_details, dict) and repo_details.get("fork") is True:
+            source = repo_details.get("source") or repo_details.get("parent") or {}
+            full_name = source.get("full_name") if isinstance(source, dict) else None
+            if isinstance(full_name, str) and full_name:
+                canonical_repo = normalise_repo(full_name) or canonical_repo
+
+        # If this is a fork and we have a canonical upstream, re-fetch details for the canonical repo.
+        # This avoids duplicate review/label effort.
+        if canonical_repo != input_repo:
+            if canonical_repo in already_done:
+                continue
+            try:
+                repo_details = request_json(
+                    repo_api(canonical_repo),
+                    headers,
+                    cache=cache,
+                    timeout_seconds=args.timeout_seconds,
+                    verbose=args.verbose,
+                ).json()
+            except Exception:
+                # Keep fork details if canonical fetch fails.
+                pass
+
+        repo = canonical_repo
+
         topics = repo_details.get("topics") or []
         topics = [t.lower() for t in topics if isinstance(t, str)]
 
-        signals: dict[str, bool] = {}
+        signals: dict[str, bool] = {
+            "is_fork": bool(isinstance(repo_details, dict) and repo_details.get("fork") is True),
+        }
 
         # README keyword signals (fast-ish, cached)
         try:
@@ -962,6 +992,8 @@ def main() -> int:
         out.append(
             {
                 "repo": repo,
+                "input_repo": input_repo,
+                "canonical_repo": repo,
                 "stars": int(repo_details.get("stargazers_count") or 0),
                 "pushed": repo_details.get("pushed_at"),
                 "archived": repo_details.get("archived"),
