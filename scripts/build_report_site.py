@@ -61,10 +61,31 @@ def _extract_report_timestamp(md_content: str, *, git_path: Path) -> str:
     return report_timestamp
 
 
+def _nav_links_for_md(md_content: str) -> str:
+    """Return the header nav links HTML snippet based on the report content."""
+
+    # Detect third-party report by its stable section heading.
+    if "## Verified third-party extensions" in md_content:
+        return (
+            '<a href="#verified-third-party-extensions">Jump to Extensions</a>'
+            ' | <a href="#appendix-discovery-and-verification-methodology">Methodology</a>'
+            ' | <a href="https://mjboothaus.github.io/duckdb-extensions-analysis/">Main report</a>'
+        )
+
+    return (
+        '<a href="#summary">Jump to Summary</a>'
+        ' | <a href="#core-extensions">Core Extensions</a>'
+        ' | <a href="#community-extensions">Community Extensions</a>'
+        ' | <a href="https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/">Verified third-party extensions</a>'
+    )
+
+
 def build_site(*, input_md: Path, out_dir: Path, out_file: str) -> None:
     md_content = input_md.read_text(encoding="utf-8")
 
     report_timestamp = _extract_report_timestamp(md_content, git_path=input_md)
+
+    nav_links = _nav_links_for_md(md_content)
 
     # Convert Markdown to HTML with proper handling of HTML blocks.
     # The 'md_in_html' extension enables Markdown parsing inside <details> and other HTML tags.
@@ -86,6 +107,7 @@ def build_site(*, input_md: Path, out_dir: Path, out_file: str) -> None:
     full_html = html_template.replace("{{STYLES}}", css_content)
     full_html = full_html.replace("{{CONTENT}}", html_content)
     full_html = full_html.replace("{{REPORT_TIMESTAMP}}", report_timestamp)
+    full_html = full_html.replace("{{NAV_LINKS}}", nav_links)
     full_html = full_html.replace("{{JAVASCRIPT}}", js_content)
 
     out_dir.mkdir(parents=True, exist_ok=True)
