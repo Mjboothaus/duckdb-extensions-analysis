@@ -126,6 +126,7 @@ def export_csv(
     min_score: int | None,
     has_release_assets: bool,
     only_promoted: bool,
+    only_new_or_changed: bool,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -180,9 +181,24 @@ def export_csv(
             only_promoted = False
             promoted_view = "extension_discovery_promoted"  # unused when only_promoted=False
 
+    # If using incremental mode, we need run timestamps.
+    if only_new_or_changed and source_view != "extension_discovery_validated_with_run":
+        if _relation_exists(con, "extension_discovery_validated_with_run"):
+            print(
+                f"⚠️  only-new-or-changed requires run metadata; using extension_discovery_validated_with_run instead of {source_view}."
+            )
+            source_view = "extension_discovery_validated_with_run"
+        else:
+            print(
+                "⚠️  only-new-or-changed requested but extension_discovery_validated_with_run is not available; disabling incremental filter."
+            )
+            only_new_or_changed = False
+
     where_bits: list[str] = []
     if unlabeled_only:
         where_bits.append("l.repo IS NULL")
+    if only_new_or_changed:
+        where_bits.append("l.repo IS NULL OR v.run_timestamp > l.updated_at")
     if min_score is not None:
         where_bits.append("v.score >= ?")
     if has_release_assets:
@@ -350,6 +366,7 @@ def interactive_label(
     min_score: int | None,
     has_release_assets: bool,
     only_promoted: bool,
+    only_new_or_changed: bool,
     autosave_csv: Path | None,
 ) -> None:
     # Preload known core/community repo identifiers for fast display during the loop.
@@ -438,11 +455,26 @@ def interactive_label(
                 )
                 only_promoted = False
 
+    # If using incremental mode, we need run timestamps.
+    if only_new_or_changed and source_view != "extension_discovery_validated_with_run":
+        if _relation_exists(con, "extension_discovery_validated_with_run"):
+            print(
+                f"⚠️  only-new-or-changed requires run metadata; using extension_discovery_validated_with_run instead of {source_view}."
+            )
+            source_view = "extension_discovery_validated_with_run"
+        else:
+            print(
+                "⚠️  only-new-or-changed requested but extension_discovery_validated_with_run is not available; disabling incremental filter."
+            )
+            only_new_or_changed = False
+
     where_bits: list[str] = []
     params: list = []
 
     if not include_already_labelled:
         where_bits.append("l.repo IS NULL")
+    if only_new_or_changed:
+        where_bits.append("l.repo IS NULL OR v.run_timestamp > l.updated_at")
     if min_score is not None:
         where_bits.append("v.score >= ?")
         params.append(int(min_score))
@@ -610,6 +642,12 @@ def main() -> int:
         default=False,
         help="Only include repos that appear in recent_extension_discovery_promoted",
     )
+    p_export.add_argument(
+        "--only-new-or-changed",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Only include repos that are new since last label, or whose discovery run is newer than the last label update",
+    )
 
     p_import = sub.add_parser("import", help="Import labels from a CSV")
     p_import.add_argument("path")
@@ -655,6 +693,12 @@ def main() -> int:
         default=False,
         help="Only include repos that appear in recent_extension_discovery_promoted",
     )
+    p_loop.add_argument(
+        "--only-new-or-changed",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Only include repos that are new since last label, or whose discovery run is newer than the last label update",
+    )
 
     args = parser.parse_args()
 
@@ -670,6 +714,7 @@ def main() -> int:
             min_score=args.min_score,
             has_release_assets=bool(args.has_release_assets),
             only_promoted=bool(args.only_promoted),
+            only_new_or_changed=bool(args.only_new_or_changed),
         )
         print(f"Wrote: {args.out}")
         return 0
@@ -692,6 +737,7 @@ def main() -> int:
             min_score=args.min_score,
             has_release_assets=bool(args.has_release_assets),
             only_promoted=bool(args.only_promoted),
+            only_new_or_changed=bool(args.only_new_or_changed),
             autosave_csv=autosave_csv,
         )
         return 0

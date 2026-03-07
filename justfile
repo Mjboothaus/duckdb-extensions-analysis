@@ -226,8 +226,16 @@ label-loop-assets limit="50":
 label-export-promoted out="data/discovery/labels_to_fill_promoted.csv":
     uv run python scripts/label_extension_candidates.py export --source recent_extension_discovery_validated --unlabeled-only --only-promoted --out {{out}}
 
+# Incremental triage: only candidates that are new since your last label, or whose
+# discovery run timestamp is newer than the last label update.
+label-export-promoted-incremental out="data/discovery/labels_to_fill_promoted_incremental.csv":
+    uv run python scripts/label_extension_candidates.py export --source extension_discovery_validated_with_run --only-promoted --only-new-or-changed --out {{out}}
+
 label-loop-promoted limit="50":
     uv run python scripts/label_extension_candidates.py loop --source recent_extension_discovery_validated --only-promoted --limit {{limit}}
+
+label-loop-promoted-incremental limit="50":
+    uv run python scripts/label_extension_candidates.py loop --source extension_discovery_validated_with_run --only-promoted --only-new-or-changed --limit {{limit}}
 
 label-loop-recent limit="50":
     uv run python scripts/label_extension_candidates.py loop --source recent_extension_discovery_validated --limit {{limit}}
