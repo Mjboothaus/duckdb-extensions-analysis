@@ -100,16 +100,18 @@ def upsert_label(con: duckdb.DuckDBPyConnection, row: LabelRow) -> None:
     if row.distribution not in VALID_DISTRIBUTIONS:
         raise ValueError(f"Invalid distribution={row.distribution} (expected one of {sorted(VALID_DISTRIBUTIONS)})")
 
+    # DuckDB's CURRENT_TIMESTAMP keyword can behave unexpectedly in some contexts.
+    # Rely on defaults for created_at/updated_at on insert, and use now() on update.
     con.execute(
         """
-        INSERT INTO extension_discovery_labels (repo, is_extension, distribution, notes, created_at, updated_at)
-        VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO extension_discovery_labels (repo, is_extension, distribution, notes)
+        VALUES (?, ?, ?, ?)
         ON CONFLICT(repo)
         DO UPDATE SET
             is_extension = excluded.is_extension,
             distribution = excluded.distribution,
             notes = excluded.notes,
-            updated_at = CURRENT_TIMESTAMP;
+            updated_at = now();
         """,
         [row.repo, row.is_extension, row.distribution, row.notes],
     )
@@ -351,32 +353,41 @@ def interactive_label(
     autosave_csv: Path | None,
 ) -> None:
     # Preload known core/community repo identifiers for fast display during the loop.
-    known_core = {
-        r[0]
-        for r in con.execute(
-            "select distinct repository from core_extensions where repository is not null"
-        ).fetchall()
-        if isinstance(r[0], str)
-    }
-    known_community = {
-        r[0]
-        for r in con.execute(
-            "select distinct repository from community_extensions where repository is not null"
-        ).fetchall()
-        if isinstance(r[0], str)
-    }
-    # Normalise community GitHub URLs too.
-    for (u,) in con.execute(
-        "select distinct github_url from community_extensions where github_url is not null"
-    ).fetchall():
-        if not isinstance(u, str):
-            continue
-        if "github.com/" not in u:
-            continue
-        tail = u.split("github.com/", 1)[1]
-        parts = tail.split("/")
-        if len(parts) >= 2:
-            known_community.add(f"{parts[0]}/{parts[1]}")
+    # In a discovery-only DB (e.g. third-party labelling DB), these tables won't exist.
+    try:
+        known_core = {
+            r[0]
+            for r in con.execute(
+                "select distinct repository from core_extensions where repository is not null"
+            ).fetchall()
+            if isinstance(r[0], str)
+        }
+    except Exception:
+        known_core = set()
+
+    try:
+        known_community = {
+            r[0]
+            for r in con.execute(
+                "select distinct repository from community_extensions where repository is not null"
+            ).fetchall()
+            if isinstance(r[0], str)
+        }
+
+        # Normalise community GitHub URLs too.
+        for (u,) in con.execute(
+            "select distinct github_url from community_extensions where github_url is not null"
+        ).fetchall():
+            if not isinstance(u, str):
+                continue
+            if "github.com/" not in u:
+                continue
+            tail = u.split("github.com/", 1)[1]
+            parts = tail.split("/")
+            if len(parts) >= 2:
+                known_community.add(f"{parts[0]}/{parts[1]}")
+    except Exception:
+        known_community = set()
     allowed_views = {
         "latest_extension_discovery_validated",
         "recent_extension_discovery_validated",
