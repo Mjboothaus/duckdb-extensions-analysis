@@ -4,11 +4,11 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 ## Latest Analysis
 
-**Last Updated:** 2026-03-08 08:44:23 UTC
+**Last Updated:** 2026-03-09 06:41:26 UTC
 
 [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
 [![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-223-blue)](./reports/latest.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-03-08%2008:44:23%20UTC-lightgrey)](./reports/latest.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-03-09%2006:41:26%20UTC-lightgrey)](./reports/latest.md)
 
 ### Quick Summary
 
@@ -21,8 +21,8 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 | **Total Extensions** | 223 | → No change |
 | **Core Extensions** | 27 | → Stable |
 | **Community Extensions** | 196 | → No change |
-| **Recently Active** (≤ 30 days) | 132 (59.2%) | -4 🔽 |
-| **Very Active** (≤ 7 days) | 41 (18.4%) | — |
+| **Recently Active** (≤ 30 days) | 126 (56.5%) | -4 🔽 |
+| **Very Active** (≤ 7 days) | 40 (17.9%) | — |
 
 *Changes since previous analysis*
 
