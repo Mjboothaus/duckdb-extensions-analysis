@@ -279,6 +279,13 @@ thirdparty-report-verified source="recent" out="reports/third_party_extensions_v
 
 # === UTILITIES ===
 
+# Open the live GitHub Pages reports in your default browser (cross-platform).
+view-live:
+    uv run python -c "import webbrowser; webbrowser.open('https://mjboothaus.github.io/duckdb-extensions-analysis/')"
+
+view-live-thirdparty:
+    uv run python -c "import webbrowser; webbrowser.open('https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/')"
+
 # Validate release history table against GitHub releases
 validate-releases:
     uv run scripts/validate_release_history.py

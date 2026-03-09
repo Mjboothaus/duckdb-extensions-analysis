@@ -46,8 +46,9 @@ retry_max_wait_seconds = 10
 
 [fallback]
 # Used if GitHub API fails to get latest DuckDB release
-duckdb_version = "v1.4.1"
-duckdb_release_date = "2025-10-07"
+# Keep this reasonably current so reports still advertise the latest version during transient API failures.
+duckdb_version = "v1.5.0"
+duckdb_release_date = "2026-03-09"
 
 [logging]
 level = "INFO"

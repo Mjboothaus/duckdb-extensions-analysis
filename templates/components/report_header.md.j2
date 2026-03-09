@@ -1,3 +1,7 @@
+{% if duckdb.version %}
+**Running on DuckDB:** {{ duckdb.version }}{% if duckdb.release_date %} ({{ duckdb.release_date | strftime('%Y-%m-%d') }}){% endif %}
+{% endif %}
+
 This report provides a comprehensive analysis of DuckDB extensions, including both core extensions (built into DuckDB) and community-contributed extensions.
 
 For third-party extensions discovered outside the official registries, see: [Third-party extensions](https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/).

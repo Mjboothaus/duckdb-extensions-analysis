@@ -53,10 +53,10 @@ class DuckDBReleaseManager:
 
     RELEASES_CSV_URL = "https://duckdb.org/data/duckdb-releases.csv"
     RELEASE_CALENDAR_URL = "https://duckdb.org/release_calendar"
-    GITHUB_TAGS_API_URL = "https://api.github.com/repos/duckdb/duckdb/tags"
+    GITHUB_RELEASES_API_URL = "https://api.github.com/repos/duckdb/duckdb/releases"
     CACHE_KEY = "duckdb_releases_csv"
     CACHE_KEY_UPCOMING = "duckdb_releases_upcoming"
-    CACHE_KEY_GITHUB_TAGS = "duckdb_github_tags"
+    CACHE_KEY_GITHUB_RELEASES = "duckdb_github_releases"
     CACHE_DURATION_HOURS = 24
 
     def __init__(self, config, cache_hours: int = 24):
@@ -242,24 +242,23 @@ class DuckDBReleaseManager:
 
         return upcoming_releases
 
-    def _fetch_github_tags(self) -> List[DuckDBRelease]:
-        """Fetch recent releases from GitHub Tags API to catch newly released versions."""
+    def _fetch_github_releases(self) -> List[DuckDBRelease]:
+        """Fetch recent releases from GitHub Releases API to catch newly released versions."""
         # Check cache first
-        cached_data = self.cache.get(self.CACHE_KEY_GITHUB_TAGS)
+        cached_data = self.cache.get(self.CACHE_KEY_GITHUB_RELEASES)
         if cached_data:
             cached_time, github_releases = cached_data
             age_hours = (datetime.now() - cached_time).total_seconds() / 3600
             if age_hours < self.cache_hours:
-                logger.debug(f"Using cached GitHub tags (age: {age_hours:.1f}h)")
+                logger.debug(f"Using cached GitHub releases (age: {age_hours:.1f}h)")
                 return github_releases
 
-        # Fetch from GitHub API
-        logger.info("Fetching recent releases from GitHub Tags API")
-        github_releases = []
+        logger.info("Fetching recent releases from GitHub Releases API")
+        github_releases: List[DuckDBRelease] = []
 
         try:
             timeout = getattr(self.config, "timeout_seconds", 10)
-            headers = {}
+            headers: Dict[str, str] = {}
 
             # Add GitHub token if available for higher rate limits
             import os
@@ -269,90 +268,62 @@ class DuckDBReleaseManager:
                 headers["Authorization"] = f"token {github_token}"
 
             response = httpx.get(
-                self.GITHUB_TAGS_API_URL,
+                self.GITHUB_RELEASES_API_URL,
                 timeout=timeout,
                 headers=headers,
                 follow_redirects=True,
+                params={"per_page": 20},
             )
             response.raise_for_status()
 
-            tags_data = response.json()
-            logger.debug(f"Found {len(tags_data)} tags from GitHub API")
+            releases_data = response.json()
+            if not isinstance(releases_data, list):
+                return []
 
-            # Parse recent version tags (v1.x.x format)
-            import re
+            for release in releases_data:
+                # Ignore drafts and pre-releases for date purposes.
+                if release.get("draft") or release.get("prerelease"):
+                    continue
 
-            version_pattern = re.compile(r"^v?(\d+\.\d+\.\d+)$")
+                tag_name = (release.get("tag_name") or "").strip()
+                published_at = (release.get("published_at") or "").strip()
+                if not tag_name or not published_at:
+                    continue
 
-            for tag in tags_data[:20]:  # Check last 20 tags for recent releases
-                tag_name = tag.get("name", "")
-                match = version_pattern.match(tag_name)
+                version_str = tag_name.lstrip("v")
+                release_date = datetime.fromisoformat(
+                    published_at.replace("Z", "+00:00")
+                ).date()
 
-                if match:
-                    version_str = match.group(1)
+                # Determine if LTS (even minor versions starting from 1.4)
+                version_parts = version_str.split(".")
+                is_lts = False
+                if len(version_parts) >= 2:
+                    major, minor = int(version_parts[0]), int(version_parts[1])
+                    if major >= 1 and minor >= 4:
+                        is_lts = minor % 2 == 0
 
-                    # Fetch commit details to get date
-                    try:
-                        commit_sha = tag.get("commit", {}).get("sha")
-                        if commit_sha:
-                            commit_url = f"https://api.github.com/repos/duckdb/duckdb/commits/{commit_sha}"
-                            commit_response = httpx.get(
-                                commit_url, timeout=timeout, headers=headers
-                            )
-                            commit_response.raise_for_status()
-                            commit_data = commit_response.json()
-
-                            # Get commit date
-                            date_str = (
-                                commit_data.get("commit", {})
-                                .get("committer", {})
-                                .get("date", "")
-                            )
-                            if date_str:
-                                # Parse ISO 8601 date
-                                commit_date = datetime.fromisoformat(
-                                    date_str.replace("Z", "+00:00")
-                                ).date()
-
-                                # Determine if LTS (even minor versions starting from 1.4)
-                                version_parts = version_str.split(".")
-                                is_lts = False
-                                if len(version_parts) >= 2:
-                                    major, minor = (
-                                        int(version_parts[0]),
-                                        int(version_parts[1]),
-                                    )
-                                    if major >= 1 and minor >= 4:
-                                        is_lts = minor % 2 == 0
-
-                                github_release = DuckDBRelease(
-                                    version=version_str,
-                                    release_date=commit_date,
-                                    lts=is_lts,
-                                    codename=None,
-                                )
-                                github_releases.append(github_release)
-                                logger.info(
-                                    f"Found GitHub release: {version_str} ({commit_date})"
-                                )
-
-                    except Exception as e:
-                        logger.debug(
-                            f"Failed to get commit details for {tag_name}: {e}"
-                        )
-                        continue
+                github_release = DuckDBRelease(
+                    version=version_str,
+                    release_date=release_date,
+                    lts=is_lts,
+                    codename=None,
+                )
+                github_releases.append(github_release)
 
             # Cache the results
             self.cache.set(
-                self.CACHE_KEY_GITHUB_TAGS, (datetime.now(), github_releases)
+                self.CACHE_KEY_GITHUB_RELEASES, (datetime.now(), github_releases)
             )
-            logger.info(f"Found {len(github_releases)} releases from GitHub tags")
+            logger.info(
+                f"Found {len(github_releases)} releases from GitHub releases endpoint"
+            )
 
         except Exception as e:
-            logger.warning(f"Failed to fetch GitHub tags: {e}")
+            logger.warning(f"Failed to fetch GitHub releases: {e}")
             # Return stale cache if available
             if cached_data:
-                logger.warning("Using stale cached GitHub tags")
+                logger.warning("Using stale cached GitHub releases")
                 return cached_data[1]
 
         return github_releases
@@ -366,8 +337,8 @@ class DuckDBReleaseManager:
         csv_content = self._fetch_releases_csv()
         csv_releases = self._parse_releases_csv(csv_content)
 
-        # Fetch GitHub tags (for recently released versions not yet in CSV)
-        github_releases = self._fetch_github_tags()
+        # Fetch GitHub releases (for recently released versions not yet in CSV)
+        github_releases = self._fetch_github_releases()
 
         # Fetch upcoming releases from calendar
         upcoming_releases = self._fetch_upcoming_releases()

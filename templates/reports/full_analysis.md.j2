@@ -3,7 +3,7 @@
 🦆 **Automated monitoring and analysis of DuckDB's extension ecosystem**
 
 {% if metadata.show_timestamps %}
-**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}{% if duckdb.version %} | **DuckDB Version:** {{ duckdb.version }} ({{ duckdb.release_date | strftime('%Y-%m-%d') }}){% endif %}  
+**Report Generated:** {{ timestamp | strftime('%Y-%m-%d %H:%M:%S UTC') }}{% if duckdb.version %} | **Running on DuckDB:** {{ duckdb.version }} ({{ duckdb.release_date | strftime('%Y-%m-%d') }}){% endif %}  
 **Analysis Tool:** {{ tool.version }}{% if metadata.version_link %} ([Source Code]({{ metadata.version_link }})){% endif %}
 {% endif %}
 
