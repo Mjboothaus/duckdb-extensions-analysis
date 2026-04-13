@@ -80,8 +80,8 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 || 38 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | 194 days ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
 || 39 | [quackeccak](https://github.com/PJBala/quackeccak) | [quackeccak](https://github.com/PJBala/quackeccak) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-04-13 06:10:22 UTC) | 0 | C++ | 🦆 Enhance Ethereum computations in SQL with this DuckDB extension for Keccak-... |
 || 40 | [REMOP](https://github.com/MSRG/REMOP) | [REMOP](https://github.com/MSRG/REMOP) | 🟢 Ongoing | 3 - 🟡 Stable | 37 days ago (2026-03-06 19:41:50 UTC) | 0 | C++ | REMOP: REmote-Memory-aware OPerator Optimization |
-|| 41 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | 2 days ago (2026-04-10 22:51:28 UTC) | 917 | C++ | No description available |
-|| 42 | [sirius](https://github.com/ddiwu/sirius) | [sirius](https://github.com/ddiwu/sirius) | 🟢 Ongoing | 2 - ✅ Active | 27 days ago (2026-03-16 18:01:57 UTC) | 0 | N/A | No description available |
+|| 41 | [sirius](https://github.com/ddiwu/sirius) | [sirius](https://github.com/ddiwu/sirius) | 🟢 Ongoing | 2 - ✅ Active | 27 days ago (2026-03-16 18:01:57 UTC) | 0 | N/A | No description available |
+|| 42 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-04-13 07:31:07 UTC) | 917 | C++ | No description available |
 || 43 | [spy](https://github.com/hugolatendresse/rpt-plus-plus) | [rpt-plus-plus](https://github.com/hugolatendresse/rpt-plus-plus) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-04-12 19:18:45 UTC) | 0 | C++ | Robust predicate transfer with cache-aware hash tables. |
 || 44 | [VCrypt](https://github.com/ccfelius/VCrypt) | [VCrypt](https://github.com/ccfelius/VCrypt) | 🟢 Ongoing | 4 - 🟠 Stale | 358 days ago (2025-04-19 13:06:24 UTC) | 4 | C++ | Experimental? |
 
