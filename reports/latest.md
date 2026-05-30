@@ -38,7 +38,7 @@ This analysis is based on the following authoritative sources:
 ---
 ## Summary
 
-### 📊 Current Status
+### 📊 Quick Stats (with trends)
 
 | **Metric** | **Count** |
 |------------|-----------|
@@ -48,7 +48,6 @@ This analysis is based on the following authoritative sources:
 | **Recently Active** (≤ 30 days) | 101 (41.1%) |
 | **Very Active** (≤ 7 days) | 52 (21.1%) |
 
-*Historical trend tracking is planned for future releases to show extension ecosystem growth over time*
 
 
 ---
