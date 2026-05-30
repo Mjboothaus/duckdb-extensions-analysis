@@ -1,23 +1,23 @@
 # DuckDB Extensions Analysis - GitHub Pages URL
 
-## Live Report URL
+## Live report URL
 
-🦆 **[DuckDB Extensions Analysis Report](https://mjboothaus.github.io/duckdb-extensions-analysis/)**
+🦆 **Main report (Core & Community):** https://mjboothaus.github.io/duckdb-extensions-analysis/
 
-### Additional Links
+🦆 **Third-party extensions (work in progress):** https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/
+
+### Additional links
 
 - **Repository**: https://github.com/Mjboothaus/duckdb-extensions-analysis
 - **GitHub Actions**: https://github.com/Mjboothaus/duckdb-extensions-analysis/actions
 - **Latest Workflow Run**: https://github.com/Mjboothaus/duckdb-extensions-analysis/actions/workflows/update-reports.yml
 
-### Report Features
+### Report features
 
-- 📊 Real-time DuckDB v1.4.1 extension analysis
-- 🔍 Core extensions (24) and community extensions (88+)
-- 📈 Interactive tables with sorting and filtering
+- 📊 Daily DuckDB extension analysis (the report header shows the current DuckDB version)
+- 🔍 Core + community extension tracking
 - 🔗 URL validation and broken link detection
-- 📱 Mobile-responsive design
-- 🕒 Live local time display
+- 📱 Mobile-responsive HTML output
 
 ### Last Updated
 
