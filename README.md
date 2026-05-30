@@ -1,6 +1,12 @@
 # DuckDB Extensions Analysis
-
 Automated monitoring of DuckDB's extension ecosystem, tracking core and community extensions with daily reports.
+
+## Live reports
+- Main report (Core & Community): https://mjboothaus.github.io/duckdb-extensions-analysis/
+- Third-party extensions (work in progress): https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/
+
+## What’s new
+Monthly roundup of notable ecosystem changes: [WHATS_NEW.md](./WHATS_NEW.md)
 
 ## Latest Analysis
 
