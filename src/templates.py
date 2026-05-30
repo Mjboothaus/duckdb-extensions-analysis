@@ -323,6 +323,9 @@ class TemplateEngine:
         # Extract trend data if available
         trend_data = analysis_result.get("trend_data", None)
 
+        # Extract compatibility testing results if available
+        compatibility_testing = analysis_result.get("compatibility_testing", None)
+
         # Prepare template data structure
         template_data = {
             "report": {
@@ -338,6 +341,7 @@ class TemplateEngine:
             "tables": self.table_config.get("tables", {}),
             "url_validation": url_validation_results,
             "trend_data": trend_data,
+            "compatibility_testing": compatibility_testing,
             "stats": {
                 "core_count": len(core_extensions),
                 "community_count": len(community_extensions),

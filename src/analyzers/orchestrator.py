@@ -24,11 +24,28 @@ class AnalysisOrchestrator:
     """Main orchestrator that coordinates all analysis modules."""
 
     def __init__(
-        self, config, cache_hours: int = 1, enable_compatibility_testing: bool = False
+        self,
+        config,
+        cache_hours: int = 1,
+        enable_compatibility_testing: bool = False,
+        *,
+        compatibility_min_duckdb_version: str = "1.3.0",
+        compatibility_max_runtime_seconds: int = 900,
+        compatibility_max_extensions: int = 25,
+        compatibility_per_test_timeout_seconds: int = 120,
+        compatibility_duckdb_versions: Optional[List[str]] = None,
     ):
         self.config = config
         self.cache_hours = cache_hours
         self.enable_compatibility_testing = enable_compatibility_testing
+
+        self.compatibility_min_duckdb_version = compatibility_min_duckdb_version
+        self.compatibility_max_runtime_seconds = compatibility_max_runtime_seconds
+        self.compatibility_max_extensions = compatibility_max_extensions
+        self.compatibility_per_test_timeout_seconds = (
+            compatibility_per_test_timeout_seconds
+        )
+        self.compatibility_duckdb_versions = compatibility_duckdb_versions
 
         # Initialize all modules
         self.github_client = GitHubAPIClient(config, cache_hours)
@@ -213,9 +230,20 @@ class AnalysisOrchestrator:
                     "Skipping GitHub issues analysis (disabled in configuration)"
                 )
 
-            # Run installation tests for a subset of extensions (prioritize core for database mode)
+            # Run compatibility testing (optional, time-bounded)
+            compatibility_testing = None
+            if self.enable_compatibility_testing:
+                compatibility_testing = await self.run_version_compatibility_tests(
+                    core_extensions=core_extensions,
+                    community_extensions=community_extensions,
+                    max_runtime_seconds=self.compatibility_max_runtime_seconds,
+                    min_duckdb_version=self.compatibility_min_duckdb_version,
+                    max_extensions=self.compatibility_max_extensions,
+                    per_test_timeout_seconds=self.compatibility_per_test_timeout_seconds,
+                    duckdb_versions=self.compatibility_duckdb_versions,
+                )
+
             # Installation testing is disabled by default for faster report generation
-            # installation_results = await self.run_installation_tests(core_extensions, community_extensions)
             installation_results = []
 
             # Validate URLs in all extensions
@@ -234,6 +262,7 @@ class AnalysisOrchestrator:
             analysis_result.github_issues = github_issues
             analysis_result.installation_results = installation_results
             analysis_result.url_validation_results = url_validation_results
+            analysis_result.compatibility_testing = compatibility_testing
 
             # Log comprehensive analysis summary for persistent tracking
             logger.info(
@@ -241,6 +270,122 @@ class AnalysisOrchestrator:
             )
 
             return analysis_result
+
+    async def run_version_compatibility_tests(
+        self,
+        core_extensions: List[ExtensionInfo],
+        community_extensions: List[ExtensionInfo],
+        max_runtime_seconds: int,
+        min_duckdb_version: str,
+        max_extensions: int,
+        *,
+        per_test_timeout_seconds: int = 120,
+        duckdb_versions: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """Run best-effort compatibility tests across multiple DuckDB versions."""
+        from time import monotonic
+
+        from .release_manager import DuckDBReleaseManager
+        from .installation_tester import InstallationTester
+
+        release_manager = DuckDBReleaseManager(
+            self.config, cache_hours=self.cache_hours
+        )
+        if duckdb_versions:
+            versions_to_test = list(duckdb_versions)
+        else:
+            releases = release_manager.get_latest_patch_releases_by_minor(
+                min_version=min_duckdb_version
+            )
+            versions_to_test = [r.version for r in releases]
+
+        tester = InstallationTester()
+
+        # Keep scope small for on-demand runs.
+        extension_names: List[str] = []
+        extension_names.extend([e.name for e in core_extensions])
+        extension_names.extend([e.name for e in community_extensions[:max_extensions]])
+
+        results = []
+        start = monotonic()
+
+        attempted_pairs = 0
+        completed_pairs = 0
+        skipped_pairs_time_limit = 0
+        timed_out_tests = 0
+
+        for duckdb_version in versions_to_test:
+            for ext_name in extension_names:
+                if monotonic() - start > max_runtime_seconds:
+                    remaining = len(extension_names) - (
+                        attempted_pairs % len(extension_names)
+                    )
+                    skipped_pairs_time_limit += max(remaining, 0)
+                    break
+
+                attempted_pairs += 1
+
+                test_start = monotonic()
+                batch_results = await tester.test_extensions_batch(
+                    [ext_name],
+                    duckdb_pypi_version=duckdb_version,
+                    timeout_seconds=per_test_timeout_seconds,
+                )
+                test_duration_seconds = monotonic() - test_start
+
+                if batch_results:
+                    r = batch_results[0]
+                    # Attach the tested version explicitly (even if the underlying package
+                    # reports something unexpected).
+                    r.duckdb_version_used = duckdb_version
+
+                    # Best-effort detection of timeouts.
+                    if r.error_message and "timed out" in r.error_message.lower():
+                        timed_out_tests += 1
+
+                    # Preserve duration on the rendered payload (even if the underlying
+                    # test reported 0.0 due to timeout/early exit).
+                    r.total_time = max(r.total_time or 0.0, test_duration_seconds)
+                    results.append(r)
+                    completed_pairs += 1
+
+            if monotonic() - start > max_runtime_seconds:
+                break
+
+        runtime_seconds = int(monotonic() - start)
+
+        compatible = sum(1 for r in results if r.success)
+        failed = sum(1 for r in results if not r.success)
+
+        # Flatten to a JSON/template-friendly structure
+        rendered_results = [
+            {
+                "extension_name": r.extension_name,
+                "duckdb_version": r.duckdb_version_used,
+                "success": r.success,
+                "error_message": r.error_message,
+                "total_time_seconds": r.total_time,
+            }
+            for r in results
+        ]
+
+        return {
+            "versions_tested": versions_to_test,
+            "extensions_attempted_count": len(extension_names),
+            "attempted_pairs_count": attempted_pairs,
+            "completed_pairs_count": completed_pairs,
+            "results_count": len(results),
+            "max_runtime_seconds": max_runtime_seconds,
+            "per_test_timeout_seconds": per_test_timeout_seconds,
+            "runtime_seconds": runtime_seconds,
+            "summary": {
+                "compatible": compatible,
+                "failed": failed,
+                "timed_out_tests": timed_out_tests,
+                "skipped_pairs_time_limit": skipped_pairs_time_limit,
+            },
+            "results": rendered_results,
+        }
 
     async def validate_extension_urls(
         self, extensions: List[ExtensionInfo]

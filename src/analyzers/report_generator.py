@@ -814,6 +814,11 @@ class ReportGenerator(BaseReportGenerator):
                 }
                 analysis_data["community_extensions"].append(community_ext)
 
+            # Compatibility testing results (optional)
+            analysis_data["compatibility_testing"] = getattr(
+                analysis_result, "compatibility_testing", None
+            )
+
             # Generate report using template engine
             rendered_report = self.template_engine.render_report(
                 template_name, analysis_data

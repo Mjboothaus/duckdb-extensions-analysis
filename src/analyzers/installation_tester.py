@@ -225,7 +225,11 @@ if __name__ == "__main__":
         return None
 
     async def test_extensions_batch(
-        self, extension_names: List[str]
+        self,
+        extension_names: List[str],
+        duckdb_pypi_version: str = "",
+        *,
+        timeout_seconds: int = 120,
     ) -> List[InstallationTestResult]:
         """
         Test installation of multiple extensions using uv-managed environments.
@@ -248,7 +252,11 @@ if __name__ == "__main__":
                 continue
 
             try:
-                result = await self._test_single_extension_with_uv(extension_name)
+                result = await self._test_single_extension_with_uv(
+                    extension_name,
+                    duckdb_pypi_version=duckdb_pypi_version,
+                    timeout_seconds=timeout_seconds,
+                )
                 results.append(result)
 
                 # Brief pause between tests
@@ -276,7 +284,11 @@ if __name__ == "__main__":
         return results
 
     async def _test_single_extension_with_uv(
-        self, extension_name: str
+        self,
+        extension_name: str,
+        duckdb_pypi_version: str = "",
+        *,
+        timeout_seconds: int = 120,
     ) -> InstallationTestResult:
         """Test a single extension using uv-managed environment."""
 
@@ -285,10 +297,15 @@ if __name__ == "__main__":
             temp_path = Path(temp_dir)
 
             # Create pyproject.toml for uv
-            pyproject_content = """[project]
+            duckdb_dep = (
+                f"duckdb=={duckdb_pypi_version}"
+                if duckdb_pypi_version
+                else "duckdb>=1.0.0"
+            )
+            pyproject_content = f"""[project]
 name = "duckdb-extension-test"
 version = "0.1.0"
-dependencies = ["duckdb>=1.0.0"]
+dependencies = ["{duckdb_dep}"]
 
 [build-system]
 requires = ["setuptools"]
@@ -326,7 +343,7 @@ build-backend = "setuptools.build_meta"
 
                 try:
                     stdout, stderr = await asyncio.wait_for(
-                        process.communicate(), timeout=120
+                        process.communicate(), timeout=timeout_seconds
                     )
 
                     if process.returncode == 0:
@@ -385,7 +402,7 @@ build-backend = "setuptools.build_meta"
                         load_time=None,
                         functional_test_time=None,
                         total_time=0.0,
-                        error_message="Test timed out after 120 seconds",
+                        error_message=f"Test timed out after {timeout_seconds} seconds",
                         python_version="unknown",
                         duckdb_version_used="unknown",
                         test_environment="uv",

@@ -60,31 +60,16 @@ class CommunityExtensionAnalyzer(BaseAnalyzer):
             github_api_client=github_client,  # Pass rate-limited API client
         )
 
-        # Initialize installation tester for version compatibility testing (if enabled)
+        # Optional installation tester for the legacy (v1.3/v1.4) compatibility codepath
+        # in this analyser (separate from the orchestrator-wide multi-version matrix).
         self.installation_tester = (
             InstallationTester() if enable_compatibility_testing else None
         )
 
-        # Cache for official extensions list and version compatibility
+        # Caches for official extensions list and compatibility helpers.
         self._official_extensions_cache = None
         self._version_compatibility_cache = {}
         self._duckdb_versions_cache = None
-
-        # Initialize installation tester for v1.4.0 and v1.3.2 compatibility testing
-        self.installation_tester = InstallationTester()
-
-        # Cache for official extensions list and version compatibility
-        self._official_extensions_cache = None
-        self._version_compatibility_cache = {}
-
-        # DuckDB versions to test against
-        self.test_versions = ["1.4.0", "1.3.2"]
-
-        # Initialize installation tester for compatibility testing
-        self.installation_tester = InstallationTester()
-
-        # Cache for official extensions list
-        self._official_extensions_cache = None
 
     async def get_community_extensions_list(
         self, client: httpx.AsyncClient
