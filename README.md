@@ -1,20 +1,14 @@
 # DuckDB Extensions Analysis
+
 Automated monitoring of DuckDB's extension ecosystem, tracking core and community extensions with daily reports.
-
-## Live reports
-- Main report (Core & Community): https://mjboothaus.github.io/duckdb-extensions-analysis/
-- Third-party extensions (work in progress): https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/
-
-## What’s new
-Monthly roundup of notable ecosystem changes: [WHATS_NEW.md](./WHATS_NEW.md)
 
 ## Latest Analysis
 
-**Last Updated:** 2026-05-30 07:25:12 UTC
+**Last Updated:** 2026-05-30 12:35:03 UTC
 
 [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
-[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-246-blue)](./reports/latest.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-05-30%2007:25:12%20UTC-lightgrey)](./reports/latest.md)
+[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-271-blue)](./reports/latest.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-05-30%2012:35:03%20UTC-lightgrey)](./reports/latest.md)
 
 ### Quick Summary
 
@@ -24,11 +18,11 @@ Monthly roundup of notable ecosystem changes: [WHATS_NEW.md](./WHATS_NEW.md)
 
 | **Metric** | **Current** | **Change** |
 |------------|-------------|------------|
-| **Total Extensions** | 246 | +2 🔼 |
-| **Core Extensions** | 0 | Changed |
+| **Total Extensions** | 271 | +2 🔼 |
+| **Core Extensions** | 25 | Changed |
 | **Community Extensions** | 246 | +1 🔼 |
-| **Recently Active** (≤ 30 days) | 103 (41.9%) | -5 🔽 |
-| **Very Active** (≤ 7 days) | 56 (22.8%) | — |
+| **Recently Active** (≤ 30 days) | 103 (38.0%) | -5 🔽 |
+| **Very Active** (≤ 7 days) | 53 (19.6%) | — |
 
 *Changes since previous analysis*
 
