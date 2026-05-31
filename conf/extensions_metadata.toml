@@ -25,6 +25,9 @@ encodings = { repository = "duckdb/duckdb-encodings", description = "Character e
 excel = { repository = "duckdb/duckdb-excel", description = "Excel file format support" }
 fts = { repository = "duckdb/duckdb-fts", description = "Full-text search functionality" }
 httpfs = { repository = "duckdb/duckdb-httpfs", description = "HTTP/S3 filesystem support" }
+lance = { repository = "lance-format/lance-duckdb", description = "Lance file format support" }
+odbc = { repository = "duckdb/odbc-scanner", description = "ODBC connectivity (odbc_scanner)" }
+quack = { repository = "duckdb/duckdb-quack", description = "Quack remote protocol" }
 iceberg = { repository = "duckdb/duckdb-iceberg", description = "Apache Iceberg format support" }
 inet = { repository = "duckdb/duckdb-inet", description = "Internet address data types" }
 mysql = { repository = "duckdb/duckdb-mysql", description = "MySQL database connectivity" }
@@ -57,13 +60,14 @@ vortex = { description = "Apache Vortex columnar format support", note = "Closed
 
 # Special URL patterns for core extensions documentation
 [core_extensions.special_urls]
-json = "https://duckdb.org/docs/stable/data/json/overview.html"
-parquet = "https://duckdb.org/docs/stable/data/parquet/overview.html"
+json = "https://duckdb.org/docs/current/data/json/overview"
+parquet = "https://duckdb.org/docs/current/data/parquet/overview"
+fts = "https://duckdb.org/docs/current/core_extensions/full_text_search"
 
 # URL patterns for different extension documentation structures
 [url_patterns]
-standard = "https://duckdb.org/docs/stable/core_extensions/{name}.html"
-overview_pattern = "https://duckdb.org/docs/stable/core_extensions/{name}/overview.html"
+standard = "https://duckdb.org/docs/current/core_extensions/{name}"
+overview_pattern = "https://duckdb.org/docs/current/core_extensions/{name}/overview"
 
 # Extensions that use the overview pattern
 overview_extensions = ["httpfs", "iceberg", "spatial"]

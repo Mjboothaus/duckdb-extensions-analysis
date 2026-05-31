@@ -43,7 +43,7 @@ jobs:
           echo "Virtual environment info:"
           uv pip list | head -10
       - name: Restore analysis cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .cache
@@ -115,7 +115,8 @@ jobs:
       - name: Update README with latest status
         run: ./scripts/update_readme.sh
       - name: Upload analysis artefacts
-        uses: actions/upload-artifact@v4
+        if: ${{ !env.ACT }}
+        uses: actions/upload-artifact@v6
         with:
           name: daily-report-artefacts
           if-no-files-found: error
@@ -136,7 +137,7 @@ jobs:
           fetch-depth: 0
           ref: main
       - name: Download analysis artefacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: daily-report-artefacts
           path: artefacts
@@ -180,7 +181,7 @@ jobs:
           ref: main
       
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
       
       - name: Create Pages site
         run: |
@@ -207,9 +208,9 @@ jobs:
           echo "✅ Pages site prepared with proper HTML rendering"
       
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: '_site'
       
       - name: Deploy to Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

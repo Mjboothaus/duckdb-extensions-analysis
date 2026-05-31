@@ -43,15 +43,15 @@ class ReportGenerator(BaseReportGenerator):
         Discover URLs to the documentation for core extensions from DuckDB website.
 
         This function relies on several DuckDB documentation sources to find URLs:
-        1. Primary source: Core extensions overview page at /docs/stable/core_extensions/overview.html
-        2. Secondary source: Main extensions overview at /docs/stable/extensions/overview.html
+        1. Primary source: Core extensions overview page at /docs/current/core_extensions/overview
+        2. Secondary source: Main extensions overview at /docs/current/extensions/overview
         3. Special cases: Some extensions like 'json' and 'parquet' have documentation under
-           /docs/stable/data/ rather than /core_extensions/
+           /docs/current/data/ rather than /core_extensions/
 
         The function handles several URL patterns and exceptions:
-        - Standard pattern: /docs/stable/core_extensions/extension_name.html
-        - Overview pattern: /docs/stable/core_extensions/extension_name/overview.html
-        - Data section pattern: /docs/stable/data/extension_name/overview.html
+        - Standard pattern: /docs/current/core_extensions/extension_name
+        - Overview pattern: /docs/current/core_extensions/extension_name/overview
+        - Data section pattern: /docs/current/data/extension_name/overview
 
         Note that DuckDB's documentation structure has inconsistencies in URL patterns
         and location of extension documentation, which requires special handling.
@@ -74,7 +74,9 @@ class ReportGenerator(BaseReportGenerator):
 
             # Set up caching
             cache = dc.Cache(str(self.config.cache_dir))
-            cache_key = "core_extension_urls"
+            # Cache key is versioned so that DuckDB docs URL structure changes
+            # invalidate older cached results.
+            cache_key = "core_extension_urls_v2"
 
             # Check cache first (cache for 24 hours)
             cached_data = cache.get(cache_key)
@@ -86,9 +88,7 @@ class ReportGenerator(BaseReportGenerator):
                     return urls
 
             # Fetch the core extensions overview page
-            overview_url = (
-                "https://duckdb.org/docs/stable/core_extensions/overview.html"
-            )
+            overview_url = "https://duckdb.org/docs/current/core_extensions/overview"
             response = requests.get(overview_url, timeout=10)
             response.raise_for_status()
 
@@ -106,25 +106,24 @@ class ReportGenerator(BaseReportGenerator):
                         if link:
                             href = link["href"]
                             extension_name = link.get_text(strip=True).lower()
-                            if href.startswith("/docs/stable/core_extensions/"):
+                            if href.startswith("/docs/current/core_extensions/"):
                                 full_url = f"https://duckdb.org{href}"
                                 extension_urls[extension_name] = full_url
                             elif href.startswith(
-                                "https://duckdb.org/docs/stable/core_extensions/"
+                                "https://duckdb.org/docs/current/core_extensions/"
                             ):
                                 extension_urls[extension_name] = href
 
             # Pattern 2: Look for any links to core_extensions in the page
             for link in soup.find_all("a", href=True):
                 href = link["href"]
-                if "/docs/stable/core_extensions/" in href and href.endswith(".html"):
+                if "/docs/current/core_extensions/" in href:
                     # Extract extension name from URL
-                    if href.endswith("/overview.html"):
-                        # Handle httpfs/overview.html -> httpfs
-                        extension_name = href.split("/")[-2]
+                    if href.rstrip("/").endswith("/overview"):
+                        # Handle httpfs/overview -> httpfs
+                        extension_name = href.rstrip("/").split("/")[-2]
                     else:
-                        # Handle standard extension.html -> extension
-                        extension_name = href.split("/")[-1].replace(".html", "")
+                        extension_name = href.rstrip("/").split("/")[-1]
 
                     if extension_name not in ["overview", "index"]:
                         if href.startswith("/"):
@@ -135,25 +134,19 @@ class ReportGenerator(BaseReportGenerator):
 
             # Also check the main extensions page for additional links
             try:
-                main_extensions_url = (
-                    "https://duckdb.org/docs/stable/extensions/overview.html"
-                )
+                main_extensions_url = "https://duckdb.org/docs/current/extensions/overview"
                 response2 = requests.get(main_extensions_url, timeout=10)
                 response2.raise_for_status()
                 soup2 = BeautifulSoup(response2.text, "html.parser")
 
                 for link in soup2.find_all("a", href=True):
                     href = link["href"]
-                    if "/docs/stable/core_extensions/" in href and href.endswith(
-                        ".html"
-                    ):
+                    if "/docs/current/core_extensions/" in href:
                         # Extract extension name from URL
-                        if href.endswith("/overview.html"):
-                            # Handle httpfs/overview.html -> httpfs
-                            extension_name = href.split("/")[-2]
+                        if href.rstrip("/").endswith("/overview"):
+                            extension_name = href.rstrip("/").split("/")[-2]
                         else:
-                            # Handle standard extension.html -> extension
-                            extension_name = href.split("/")[-1].replace(".html", "")
+                            extension_name = href.rstrip("/").split("/")[-1]
 
                         if extension_name not in ["overview", "index"]:
                             if href.startswith("/"):

@@ -82,6 +82,23 @@ The workflow uses:
 - **README Badges**: Quick status indicators
 - **Commit History**: See automated commits
 
+### Local workflow runs (act)
+You can run the analysis job locally using [`act`](https://nektosact.com/). This is useful for debugging report generation without waiting for CI.
+
+```bash
+rm -rf /tmp/act-artifacts && mkdir -p /tmp/act-artifacts
+
+act -W .github/workflows/daily-extensions-report.yml \
+  -j analyse-and-render \
+  --container-architecture linux/amd64 \
+  -s GITHUB_TOKEN="$(gh auth token)" \
+  --artifact-server-path /tmp/act-artifacts
+```
+
+Notes:
+- When running under `act`, the workflow skips uploading GitHub artefacts (since `act` does not provide a GitHub artefacts backend by default).
+- Reports are still generated locally (e.g. `reports/latest.md`, CSV/XLSX outputs, and `data/extensions.duckdb`).
+
 ### Troubleshooting
 - View workflow logs in Actions tab
 - Check for rate limiting messages
