@@ -321,6 +321,47 @@ def analyze_all(cache_hours, with_issues, with_compatibility_testing):
     help="Enable GitHub issues analysis (slower, may hit rate limits)",
 )
 @click.option(
+    "--with-compatibility-testing",
+    is_flag=True,
+    help="Enable best-effort extension compatibility testing across multiple DuckDB versions (slower)",
+)
+@click.option(
+    "--compat-min-version",
+    type=str,
+    default="1.3.0",
+    show_default=True,
+    help="Minimum DuckDB version to include when selecting latest patch per minor (only used with --with-compatibility-testing)",
+)
+@click.option(
+    "--compat-max-runtime-seconds",
+    type=int,
+    default=900,
+    show_default=True,
+    help="Maximum wall-clock runtime for compatibility testing (only used with --with-compatibility-testing)",
+)
+@click.option(
+    "--compat-max-extensions",
+    type=int,
+    default=25,
+    show_default=True,
+    help="Maximum number of community extensions to include in compatibility testing (only used with --with-compatibility-testing)",
+)
+@click.option(
+    "--compat-per-test-timeout-seconds",
+    type=int,
+    default=120,
+    show_default=True,
+    help="Timeout for an individual extension install/load test (only used with --with-compatibility-testing)",
+)
+@click.option(
+    "--compat-duckdb-version",
+    "compat_duckdb_versions",
+    multiple=True,
+    type=str,
+    default=None,
+    help="Explicit DuckDB version(s) to test (repeatable). If provided, overrides latest-patch-per-minor selection.",
+)
+@click.option(
     "--cache-hours",
     type=int,
     default=None,
@@ -332,7 +373,18 @@ def analyze_all(cache_hours, with_issues, with_compatibility_testing):
     default=None,
     help="Generate report as of this date (YYYY-MM-DD format, e.g., 2024-09-16 for DuckDB v1.4.0 release)",
 )
-def report_generate(formats, with_issues, cache_hours, as_of_date):
+def report_generate(
+    formats,
+    with_issues,
+    with_compatibility_testing,
+    compat_min_version,
+    compat_max_runtime_seconds,
+    compat_max_extensions,
+    compat_per_test_timeout_seconds,
+    compat_duckdb_versions,
+    cache_hours,
+    as_of_date,
+):
     """Generate analysis report in specified format(s)."""
     if with_issues:
         config.enable_issues_analysis = True
@@ -341,7 +393,21 @@ def report_generate(formats, with_issues, cache_hours, as_of_date):
         config.enable_issues_analysis = False
         logger.info("Skipping GitHub issues analysis (default behavior)")
 
-    asyncio.run(_run_report_generation(list(formats), cache_hours, as_of_date))
+    asyncio.run(
+        _run_report_generation(
+            list(formats),
+            cache_hours,
+            as_of_date,
+            with_compatibility_testing,
+            compat_min_version=compat_min_version,
+            compat_max_runtime_seconds=compat_max_runtime_seconds,
+            compat_max_extensions=compat_max_extensions,
+            compat_per_test_timeout_seconds=compat_per_test_timeout_seconds,
+            compat_duckdb_versions=list(compat_duckdb_versions)
+            if compat_duckdb_versions
+            else None,
+        )
+    )
 
 
 # Database commands
@@ -371,7 +437,11 @@ def quick_report(formats):
     """Quick report generation (same as default behavior now)."""
     config.enable_issues_analysis = False
     logger.info("Quick mode: Using default fast behavior (no GitHub issues)")
-    asyncio.run(_run_report_generation(list(formats), cache_hours=1))
+    asyncio.run(
+        _run_report_generation(
+            list(formats), cache_hours=1, with_compatibility_testing=False
+        )
+    )
 
 
 # Hidden implementation functions
@@ -406,7 +476,16 @@ async def _run_analysis(
 
 
 async def _run_report_generation(
-    formats: List[str], cache_hours: Optional[int], as_of_date: Optional[str] = None
+    formats: List[str],
+    cache_hours: Optional[int],
+    as_of_date: Optional[str] = None,
+    with_compatibility_testing: bool = False,
+    *,
+    compat_min_version: str = "1.3.0",
+    compat_max_runtime_seconds: int = 900,
+    compat_max_extensions: int = 25,
+    compat_per_test_timeout_seconds: int = 120,
+    compat_duckdb_versions: Optional[List[str]] = None,
 ):
     """Generate reports in specified formats."""
     cache_hours = cache_hours if cache_hours is not None else config.default_cache_hours
@@ -417,7 +496,16 @@ async def _run_report_generation(
     if as_of_date:
         logger.info(f"Generating historical report as of date: {as_of_date}")
 
-    orchestrator = AnalysisOrchestrator(config, cache_hours=cache_hours)
+    orchestrator = AnalysisOrchestrator(
+        config,
+        cache_hours=cache_hours,
+        enable_compatibility_testing=with_compatibility_testing,
+        compatibility_min_duckdb_version=compat_min_version,
+        compatibility_max_runtime_seconds=compat_max_runtime_seconds,
+        compatibility_max_extensions=compat_max_extensions,
+        compatibility_per_test_timeout_seconds=compat_per_test_timeout_seconds,
+        compatibility_duckdb_versions=compat_duckdb_versions,
+    )
 
     try:
         report_files = await orchestrator.run_report_generation(formats, as_of_date)

@@ -162,7 +162,7 @@ class TestExtensionTesting:
         )
 
         # Mock the single extension testing method
-        async def mock_test_single(ext_name):
+        async def mock_test_single(ext_name, **_kwargs):
             if ext_name == 'json':
                 return mock_result_json
             elif ext_name == 'parquet':

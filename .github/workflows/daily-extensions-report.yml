@@ -18,21 +18,18 @@ permissions:
   id-token: write
 
 jobs:
-  analyze-extensions:
+  analyse-and-render:
     runs-on: ubuntu-latest
     timeout-minutes: 25  # Prevent workflows from hanging
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          fetch-depth: 0  # Ensure full history for rebase
-      
+          fetch-depth: 0
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
-      
       - name: Setup Python and dependencies
         run: |
           echo "🐍 Setting up Python environment with caching..."
@@ -45,9 +42,8 @@ jobs:
           echo "✅ Dependencies installed successfully"
           echo "Virtual environment info:"
           uv pip list | head -10
-      
       - name: Restore analysis cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .cache
@@ -55,7 +51,6 @@ jobs:
           key: analysis-cache-${{ runner.os }}-v1-${{ hashFiles('conf/**/*.toml', 'templates/**/*.j2', 'src/**/*.py') }}
           restore-keys: |
             analysis-cache-${{ runner.os }}-v1-
-      
       - name: Generate extensions report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -82,7 +77,6 @@ jobs:
 
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
-
       - name: Import third-party labels (if present)
         run: |
           # Labels are committed as a CSV so CI can produce the same verified report.
@@ -93,7 +87,6 @@ jobs:
           else
             echo "🏷️  No labels/third_party_extension_labels.csv found; skipping label import"
           fi
-
       - name: Generate verified third-party report (unlinked)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -103,7 +96,6 @@ jobs:
             --source recent \
             --out reports/third_party_extensions_verified.md
           echo "✅ Third-party report generated: reports/third_party_extensions_verified.md"
-
       - name: Save analysis to DuckDB database
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,62 +106,82 @@ jobs:
           if [ -f data/extensions.duckdb ]; then
             echo "Database size:"
             du -h data/extensions.duckdb || true
-            # Warn if DB grows beyond a reasonable threshold.
             size_bytes=$(wc -c < data/extensions.duckdb)
             threshold_bytes=$((100 * 1024 * 1024))
             if [ "$size_bytes" -gt "$threshold_bytes" ]; then
               echo "⚠️  WARNING: data/extensions.duckdb is larger than 100MB ($(du -h data/extensions.duckdb | cut -f1)). Consider pruning history or changing persistence strategy."
             fi
           fi
-      
       - name: Update README with latest status
         run: ./scripts/update_readme.sh
-      
+      - name: Upload analysis artefacts
+        if: ${{ !env.ACT }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: daily-report-artefacts
+          if-no-files-found: error
+          retention-days: 7
+          path: |
+            reports/
+            README.md
+            data/extensions.duckdb
+
+  publish:
+    needs: analyse-and-render
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: Download analysis artefacts
+        uses: actions/download-artifact@v7
+        with:
+          name: daily-report-artefacts
+          path: artefacts
+      - name: Copy artefacts into workspace
+        run: |
+          rsync -a artefacts/reports/ reports/
+          cp artefacts/README.md README.md
+          mkdir -p data
+          cp artefacts/data/extensions.duckdb data/extensions.duckdb
       - name: Commit and push reports
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action Bot"
-          
-          # Ensure we are up-to-date with remote before committing
+
           git fetch origin main
-          # Rebase local changes on top of remote to avoid non-fast-forward errors
           git pull --rebase origin main || true
-          
-          # Add report files, README, and database (commit only if changed)
-          # Note: data/ is gitignored in the repo, so force-add the DB file.
+
           git add -- reports/ README.md
-          # Include the third-party report markdown (unlinked on the site, but still part of artefacts)
-          git add -- reports/third_party_extensions_verified.md
           git add -f data/extensions.duckdb
-          
-          # Check if there are changes to commit
+
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
             db_size=$(du -h data/extensions.duckdb 2>/dev/null | cut -f1)
             git commit -m "📊 Daily extensions analysis: $(date -I)
-            
+
             - Updated extension analysis for $(date -u '+%Y-%m-%d')
             - Generated markdown, CSV, and Excel reports
-            - Saved DuckDB database snapshot (${db_size:-unknown})
-            - Includes GitHub issues analysis for extension health monitoring"
-            # Try normal push first, then fallback with --force-with-lease if needed
+            - Saved DuckDB database snapshot (${db_size:-unknown})"
             git push || git push --force-with-lease
           fi
 
   deploy-to-pages:
-    needs: analyze-extensions
+    needs: publish
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: main  # Ensure we get the updated reports
+          ref: main
       
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
       
       - name: Create Pages site
         run: |
@@ -196,9 +208,9 @@ jobs:
           echo "✅ Pages site prepared with proper HTML rendering"
       
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: '_site'
       
       - name: Deploy to Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

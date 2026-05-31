@@ -104,10 +104,31 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
         soup = BeautifulSoup(html, "html.parser")
 
         # Parse the table for extensions and stages
-        table = soup.find("table")
+        # DuckDB docs structure changes over time; prefer a table whose header
+        # looks like the "Extension / Stage" table.
+        table = None
+        for candidate in soup.find_all("table"):
+            header_cells = candidate.find_all("th")
+            header_text = " ".join(
+                cell.get_text(strip=True).lower() for cell in header_cells
+            )
+            if "extension" in header_text and "stage" in header_text:
+                table = candidate
+                break
+
+        if table is None:
+            table = soup.find("table")
+
         if not table:
-            logger.warning("Could not find core extensions table")
-            return []
+            logger.warning(
+                "Could not find core extensions table; falling back to curated metadata list"
+            )
+            fallback_extensions = sorted(self.metadata.get_all_core_extensions())
+            extensions = [
+                {"name": name, "stage": "Unknown"} for name in fallback_extensions
+            ]
+            self.core_extensions = extensions
+            return extensions
 
         rows = table.find_all("tr")[1:]  # Skip header
         extensions = []
@@ -117,6 +138,17 @@ class CoreExtensionAnalyzer(BaseAnalyzer):
                 name = cols[0].get_text(strip=True)
                 stage = cols[1].get_text(strip=True)
                 extensions.append({"name": name, "stage": stage})
+
+        if not extensions:
+            # If the docs layout changed (or the page was blocked/empty), fall back to
+            # the curated metadata list so reports remain useful.
+            fallback_extensions = sorted(self.metadata.get_all_core_extensions())
+            extensions = [
+                {"name": name, "stage": "Unknown"} for name in fallback_extensions
+            ]
+            logger.warning(
+                "Core extensions table parse returned 0 entries; falling back to curated metadata list"
+            )
 
         self.core_extensions = extensions
         logger.info(

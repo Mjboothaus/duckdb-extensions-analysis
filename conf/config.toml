@@ -25,7 +25,7 @@ default_hours = 12
 web_content_hours = 24
 
 [analysis]
-core_extensions_url = "https://duckdb.org/docs/stable/core_extensions/overview.html"
+core_extensions_url = "https://duckdb.org/docs/current/core_extensions/overview"
 
 # GitHub issues analysis settings
 enable_issues_analysis = false  # Set to true to enable GitHub issues analysis (may hit rate limits)

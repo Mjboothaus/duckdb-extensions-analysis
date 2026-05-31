@@ -7,11 +7,13 @@
 **Analysis Tool:** {{ tool.version }}{% if metadata.version_link %} ([Source Code]({{ metadata.version_link }})){% endif %}
 {% endif %}
 
-[Jump to Summary](#summary) | [Core Extensions](#core-extensions) | [Community Extensions](#community-extensions)
+[Executive summary](#executive-summary) | [Jump to Summary](#summary) | [Core Extensions](#core-extensions) | [Community Extensions](#community-extensions)
 
 ---
 
 {% include 'components/report_header.md.j2' %}
+
+{% include 'components/executive_summary.md.j2' %}
 
 {% include 'components/summary_enhanced.md.j2' %}
 
@@ -20,6 +22,8 @@
 {% include 'components/community_extensions_collapsible.md.j2' %}
 
 {% include 'components/duckdb_release_info.md.j2' %}
+
+{% include 'components/compatibility_testing.md.j2' %}
 
 {% include 'components/data_quality_notes.md.j2' %}
 

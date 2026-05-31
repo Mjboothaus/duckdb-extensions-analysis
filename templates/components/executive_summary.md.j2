@@ -1,0 +1,38 @@
+## Executive summary
+
+{% set community_total = community_extensions | length %}
+{% set community_archived = community_extensions | selectattr('status', 'equalto', 'archived') | list %}
+{% set community_unknown = community_extensions | selectattr('status', 'equalto', 'unknown') | list %}
+{% set top_starred = community_extensions | sort(attribute='stars', reverse=true) | list %}
+{% set most_recent = community_extensions | sort(attribute='last_activity') | list %}
+
+### At a glance
+- **{{ stats.total_count }}** total extensions tracked (**{{ stats.core_count }}** core, **{{ stats.community_count }}** community)
+- **{{ stats.very_active_count }} / {{ stats.total_count }}** extensions updated in the last 7 days
+- **{{ stats.recently_active_count }} / {{ stats.total_count }}** extensions updated in the last 30 days
+- **{{ community_archived | length }}** community repositories are archived
+- **{{ community_unknown | length }}** community extensions have unknown/repo issues (missing or inaccessible repositories)
+
+### Highlights
+#### Most active (last 7 days)
+| Extension | Repository | Last activity |
+|---|---|---|
+{% for ext in most_recent if ext.last_activity < 8 %}
+{% if loop.index0 < 5 %}
+| {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.last_activity | datetime_with_relative(ext.last_push) }} |
+{% endif %}
+{% endfor %}
+
+#### Most starred (community)
+| Extension | Repository | Stars |
+|---|---|---:|
+{% for ext in top_starred[:5] %}
+| {{ ext.name | extension_link(ext.docs_url, url_validation, ext.name, ext.repository) }} | {{ ext.repository | github_link(url_validation, ext.name) }} | {{ ext.stars | number_format }} |
+{% endfor %}
+
+### How to read the report
+- **Status** is a repository signal (ongoing / archived / unknown).
+- **Activity** is based on the last git push; quiet projects can still be healthy.
+- Use the tables below to drill into **Core Extensions** and **Community Extensions**.
+
+---

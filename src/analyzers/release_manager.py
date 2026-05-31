@@ -423,6 +423,28 @@ class DuckDBReleaseManager:
         past_releases = self.get_past_releases()
         return [r for r in past_releases if r.is_active]
 
+    def get_latest_patch_releases_by_minor(
+        self, min_version: str = "1.3.0"
+    ) -> List[DuckDBRelease]:
+        """Return the latest patch release for each minor version >= min_version."""
+        min_tuple = tuple(int(p) for p in min_version.split(".")[:3])
+
+        latest_by_minor: Dict[tuple[int, int], DuckDBRelease] = {}
+        for rel in self.get_past_releases():
+            vt = rel.version_tuple
+            if len(vt) < 3:
+                continue
+            if vt < min_tuple:
+                continue
+
+            key = (vt[0], vt[1])
+            current = latest_by_minor.get(key)
+            if current is None or vt > current.version_tuple:
+                latest_by_minor[key] = rel
+
+        # Sort by version ascending (1.3.x, 1.4.x, 1.5.x, ...)
+        return sorted(latest_by_minor.values(), key=lambda r: r.version_tuple)
+
     def get_releases_for_report(self) -> List[Dict]:
         """Get release data formatted for report generation."""
         all_releases = self.load_releases()
