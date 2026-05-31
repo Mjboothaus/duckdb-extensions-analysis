@@ -10,11 +10,11 @@ Monthly roundup of notable ecosystem changes: [WHATS_NEW.md](./WHATS_NEW.md)
 
 ## Latest Analysis
 
-**Last Updated:** 2026-03-09 13:19:47 UTC
+**Last Updated:** 2026-05-31 07:42:02 UTC
 
 [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
-[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-223-blue)](./reports/latest.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-03-09%2013:19:47%20UTC-lightgrey)](./reports/latest.md)
+[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-246-blue)](./reports/latest.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-05-31%2007:42:02%20UTC-lightgrey)](./reports/latest.md)
 
 ### Quick Summary
 
@@ -24,11 +24,11 @@ Monthly roundup of notable ecosystem changes: [WHATS_NEW.md](./WHATS_NEW.md)
 
 | **Metric** | **Current** | **Change** |
 |------------|-------------|------------|
-| **Total Extensions** | 223 | → No change |
-| **Core Extensions** | 27 | → Stable |
-| **Community Extensions** | 196 | → No change |
-| **Recently Active** (≤ 30 days) | 125 (56.1%) | -4 🔽 |
-| **Very Active** (≤ 7 days) | 38 (17.0%) | — |
+| **Total Extensions** | 246 | +2 🔼 |
+| **Core Extensions** | 0 | Changed |
+| **Community Extensions** | 246 | +1 🔼 |
+| **Recently Active** (≤ 30 days) | 104 (42.3%) | -5 🔽 |
+| **Very Active** (≤ 7 days) | 55 (22.4%) | — |
 
 *Changes since previous analysis*
 
