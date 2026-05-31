@@ -22,8 +22,8 @@ For a lightweight monthly roundup of notable ecosystem changes, see: [What’s n
 
 ### At a glance
 - **275** total extensions tracked (**29** core, **246** community)
-- **53 / 275** extensions updated in the last 7 days
-- **102 / 275** extensions updated in the last 30 days
+- **55 / 275** extensions updated in the last 7 days
+- **104 / 275** extensions updated in the last 30 days
 - **1** community repositories are archived
 - **64** community extensions have unknown/repo issues (missing or inaccessible repositories)
 
@@ -33,9 +33,9 @@ For a lightweight monthly roundup of notable ecosystem changes, see: [What’s n
 |---|---|---|
 | [airport](https://duckdb.org/community_extensions/extensions/airport.html) | [airport](https://github.com/Query-farm/airport) | today (2026-05-30 13:33:18 UTC) |
 | [bigquery](https://duckdb.org/community_extensions/extensions/bigquery.html) | [duckdb-bigquery](https://github.com/hafenkran/duckdb-bigquery) | today (2026-05-30 12:25:49 UTC) |
-| [duckhts](https://duckdb.org/community_extensions/extensions/duckhts.html) | [duckhts](https://github.com/RGenomicsETL/duckhts) | today (2026-05-30 13:23:15 UTC) |
-| [markdown](https://duckdb.org/community_extensions/extensions/markdown.html) | [duckdb_markdown](https://github.com/teaguesterling/duckdb_markdown) | today (2026-05-30 18:46:25 UTC) |
-| [otlp](https://duckdb.org/community_extensions/extensions/otlp.html) | [duckdb-otlp](https://github.com/smithclay/duckdb-otlp) | today (2026-05-30 19:34:20 UTC) |
+| [brew](https://duckdb.org/community_extensions/extensions/brew.html) | [duckdb-brew](https://github.com/adriens/duckdb-brew) | today (2026-05-31 08:18:52 UTC) |
+| [duckhts](https://duckdb.org/community_extensions/extensions/duckhts.html) | [duckhts](https://github.com/RGenomicsETL/duckhts) | today (2026-05-31 02:28:42 UTC) |
+| [func_apply](https://duckdb.org/community_extensions/extensions/func_apply.html) | [duckdb_func_apply](https://github.com/teaguesterling/duckdb_func_apply) | today (2026-05-30 23:19:09 UTC) |
 
 #### Most starred (community)
 | Extension | Repository | Stars |
@@ -54,17 +54,29 @@ For a lightweight monthly roundup of notable ecosystem changes, see: [What’s n
 ---
 ## Summary
 
-### 📊 Current Status
+### 📊 Quick Stats (with trends)
 
-| **Metric** | **Count** |
-|------------|-----------|
-| **Core Extensions** | 29 |
-| **Community Extensions** | 246 |
-| **Total Extensions** | 275 |
-| **Recently Active** (≤ 30 days) | 102 (37.1%) |
-| **Very Active** (≤ 7 days) | 53 (19.3%) |
+| **Metric** | **Current** | **Change** |
+|------------|-------------|------------|
+| **Total Extensions** | 275 | +22 🔼 |
+| **Core Extensions** | 29 | Changed |
+| **Community Extensions** | 246 | +50 🔼 |
+| **Recently Active** (≤ 30 days) | 104 (37.8%) | -21 🔽 |
+| **Very Active** (≤ 7 days) | 55 (20.0%) | — |
 
-*Historical trend tracking is planned for future releases to show extension ecosystem growth over time*
+*Changes since previous analysis*
+
+
+### 🆕 Recent Additions
+
+ducksmiles, zeek, lastra, http_stats, holtfs, paimon, duckdb_zarr, waddle, us_address_standardizer, raster *and 44 more*
+
+
+
+### 🗑️ Removed
+
+mysql, spatial, encodings, icu, aws, httpfs, vortex, motherduck, lance, vss, fts, azure, sqlite, iceberg, inet, encoding, parquet, postgres, ducklake, ui, tpcds, quack, json, unity_catalog, autocomplete, jemalloc, latency_injection, avro, excel, delta, tpch
+
 
 
 ---
@@ -79,35 +91,35 @@ Core extensions maintained by the DuckDB team and distributed via the official e
 
 | # | Extension | Repository | Status | Last Activity | Stars | Language | Description |
 |---|-----------|------------|--------|---------------|-------|----------|-------------|
-| 1 | [autocomplete](https://duckdb.org/docs/current/core_extensions/autocomplete) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/autocomplete) | 🟢 Ongoing | 17 days ago (2026-05-13 07:11:40 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: autocomplete |
+| 1 | [autocomplete](https://duckdb.org/docs/current/core_extensions/autocomplete) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/autocomplete) | 🟢 Ongoing | 18 days ago (2026-05-13 07:11:40 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: autocomplete |
 | 2 | [avro](https://duckdb.org/docs/current/core_extensions/avro) | [duckdb-avro](https://github.com/duckdb/duckdb-avro) | 🟢 Ongoing | 9 days ago (2026-05-21 10:59:02 UTC) | 36 | C++ | Apache Avro format support |
 | 3 | [aws](https://duckdb.org/docs/current/core_extensions/aws) | [duckdb-aws](https://github.com/duckdb/duckdb-aws) | 🟢 Ongoing | 3 days ago (2026-05-27 08:55:11 UTC) | 64 | C++ | AWS S3 integration |
-| 4 | [azure](https://duckdb.org/docs/current/core_extensions/azure) | [duckdb-azure](https://github.com/duckdb/duckdb-azure) | 🟢 Ongoing | 29 days ago (2026-05-01 07:37:45 UTC) | 76 | C++ | Azure extension for DuckDB |
+| 4 | [azure](https://duckdb.org/docs/current/core_extensions/azure) | [duckdb-azure](https://github.com/duckdb/duckdb-azure) | 🟢 Ongoing | 30 days ago (2026-05-01 07:37:45 UTC) | 76 | C++ | Azure extension for DuckDB |
 | 5 | [delta](https://duckdb.org/docs/current/core_extensions/delta) | [duckdb-delta](https://github.com/duckdb/duckdb-delta) | 🟢 Ongoing | 10 days ago (2026-05-20 15:43:17 UTC) | 226 | C++ | DuckDB extension for Delta Lake |
 | 6 | [ducklake](https://duckdb.org/docs/current/core_extensions/ducklake) | [duckdb/ducklake](https://github.com/duckdb/ducklake) | 🟢 Ongoing | 10 days ago | N/A (part of core DuckDB repo) | C++ | Delta Lake support via DuckLake (different from delta extension) |
 | 7 | [encodings](https://duckdb.org/docs/current/core_extensions/encodings) | [duckdb-encodings](https://github.com/duckdb/duckdb-encodings) | 🟢 Ongoing | 103 days ago (2026-02-16 11:43:18 UTC) | 15 | C++ | Character encoding support |
 | 8 | [excel](https://duckdb.org/docs/current/core_extensions/excel) | [duckdb-excel](https://github.com/duckdb/duckdb-excel) | 🟢 Ongoing | 2 days ago (2026-05-28 14:57:36 UTC) | 54 | C++ | Excel extension for DuckDB |
 | 9 | [fts](https://duckdb.org/docs/current/core_extensions/full_text_search) | [duckdb-fts](https://github.com/duckdb/duckdb-fts) | 🟢 Ongoing | 11 days ago (2026-05-19 14:25:32 UTC) | 36 | C++ | Full-text search functionality |
 | 10 | [httpfs](https://duckdb.org/docs/current/core_extensions/httpfs/overview) | [duckdb-httpfs](https://github.com/duckdb/duckdb-httpfs) | 🟢 Ongoing | 8 days ago (2026-05-22 14:10:44 UTC) | 54 | C++ | HTTP/S3 filesystem support |
-| 11 | [iceberg](https://duckdb.org/docs/current/core_extensions/iceberg/overview) | [duckdb-iceberg](https://github.com/duckdb/duckdb-iceberg) | 🟢 Ongoing | today (2026-05-29 13:25:02 UTC) | 404 | C++ | Apache Iceberg format support |
+| 11 | [iceberg](https://duckdb.org/docs/current/core_extensions/iceberg/overview) | [duckdb-iceberg](https://github.com/duckdb/duckdb-iceberg) | 🟢 Ongoing | today (2026-05-30 21:01:31 UTC) | 404 | C++ | Apache Iceberg format support |
 | 12 | [icu](https://duckdb.org/docs/current/core_extensions/icu) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/icu) | 🟢 Ongoing | 12 days ago (2026-05-18 19:15:38 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: icu |
-| 13 | [inet](https://duckdb.org/docs/current/core_extensions/inet) | [duckdb-inet](https://github.com/duckdb/duckdb-inet) | 🟢 Ongoing | 190 days ago (2025-11-20 22:54:12 UTC) | 14 | C++ | Internet address data types |
+| 13 | [inet](https://duckdb.org/docs/current/core_extensions/inet) | [duckdb-inet](https://github.com/duckdb/duckdb-inet) | 🟢 Ongoing | 191 days ago (2025-11-20 22:54:12 UTC) | 14 | C++ | Internet address data types |
 | 14 | [json](https://duckdb.org/docs/current/data/json/overview) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/json) | 🟢 Ongoing | 2 days ago (2026-05-28 09:55:03 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: json |
 | 15 | [lance](https://duckdb.org/docs/current/core_extensions/lance) | [lance-duckdb](https://github.com/lance-format/lance-duckdb) | 🟢 Ongoing | 8 days ago (2026-05-22 18:33:15 UTC) | 110 | C++ | The lance extensions for DuckDB enable reading and writing of lance tables. |
 | 16 | [motherduck](https://duckdb.org/docs/current/core_extensions/motherduck.html) | [duckdb/duckdb](https://github.com/duckdb/duckdb) *(Third Party - Closed source - maintained by MotherDuck Inc.)* | 🟢 Ongoing | 10 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: motherduck |
 | 17 | [mysql](https://duckdb.org/docs/current/core_extensions/mysql) | [duckdb-mysql](https://github.com/duckdb/duckdb-mysql) | 🟢 Ongoing | 2 days ago (2026-05-28 21:08:21 UTC) | 96 | C++ | MySQL database connectivity |
 | 18 | [odbc](https://duckdb.org/docs/current/core_extensions/odbc/overview) | [odbc-scanner](https://github.com/duckdb/odbc-scanner) | 🟢 Ongoing | today (2026-05-30 11:58:55 UTC) | 38 | C++ | DuckDB ODBC extension |
-| 19 | [parquet](https://duckdb.org/docs/current/data/parquet/overview) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/parquet) | 🟢 Ongoing | 3 days ago (2026-05-27 07:48:18 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: parquet |
+| 19 | [parquet](https://duckdb.org/docs/current/data/parquet/overview) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/parquet) | 🟢 Ongoing | 4 days ago (2026-05-27 07:48:18 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: parquet |
 | 20 | [postgres](https://duckdb.org/docs/current/core_extensions/postgres/overview) | [duckdb-postgres](https://github.com/duckdb/duckdb-postgres) | 🟢 Ongoing | 4 days ago (2026-05-26 16:58:42 UTC) | 355 | C++ | PostgreSQL database connectivity |
-| 21 | [quack](https://duckdb.org/docs/current/core_extensions/quack) | [duckdb-quack](https://github.com/duckdb/duckdb-quack) | 🟢 Ongoing | today (2026-05-29 06:40:18 UTC) | 93 | C++ | Quack remote protocol |
+| 21 | [quack](https://duckdb.org/docs/current/core_extensions/quack) | [duckdb-quack](https://github.com/duckdb/duckdb-quack) | 🟢 Ongoing | 2 days ago (2026-05-29 06:40:18 UTC) | 94 | C++ | Quack remote protocol |
 | 22 | [spatial](https://duckdb.org/docs/current/core_extensions/spatial/overview) | [duckdb-spatial](https://github.com/duckdb/duckdb-spatial) | 🟢 Ongoing | 18 days ago (2026-05-12 17:37:14 UTC) | 681 | C++ | Geospatial data types and functions |
 | 23 | [sqlite](https://duckdb.org/docs/current/core_extensions/sqlite) | [duckdb-sqlite](https://github.com/duckdb/duckdb-sqlite) | 🟢 Ongoing | 2 days ago (2026-05-28 21:00:20 UTC) | 276 | C++ | DuckDB extension to read and write to SQLite databases |
-| 24 | [tpcds](https://duckdb.org/docs/current/core_extensions/tpcds) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/tpcds) | 🟢 Ongoing | 32 days ago (2026-04-28 06:25:21 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: tpcds |
+| 24 | [tpcds](https://duckdb.org/docs/current/core_extensions/tpcds) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/tpcds) | 🟢 Ongoing | 33 days ago (2026-04-28 06:25:21 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: tpcds |
 | 25 | [tpch](https://duckdb.org/docs/current/core_extensions/tpch) | [duckdb/duckdb](https://github.com/duckdb/duckdb/tree/main/extension/tpch) | 🟢 Ongoing | 11 days ago (2026-05-19 10:41:37 UTC) | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: tpch |
-| 26 | [ui](https://duckdb.org/docs/current/core_extensions/ui) | [duckdb-ui](https://github.com/duckdb/duckdb-ui) | 🟢 Ongoing | 9 days ago (2026-05-20 21:38:17 UTC) | 448 | C++ | Browser-based user interface for DuckDB |
+| 26 | [ui](https://duckdb.org/docs/current/core_extensions/ui) | [duckdb-ui](https://github.com/duckdb/duckdb-ui) | 🟢 Ongoing | 10 days ago (2026-05-20 21:38:17 UTC) | 448 | C++ | Browser-based user interface for DuckDB |
 | 27 | [unity_catalog](https://duckdb.org/docs/current/core_extensions/unity_catalog) | [unity_catalog](https://github.com/duckdb/unity_catalog) | 🟢 Ongoing | 23 days ago (2026-05-07 12:01:13 UTC) | 102 | C++ | Proof-of-concept extension combining the delta extension with Unity Catalog |
 | 28 | [vortex](https://duckdb.org/docs/current/core_extensions/vortex) | [duckdb/duckdb](https://github.com/duckdb/duckdb) *(Third Party - Closed source - third-party extension)* | 🟢 Ongoing | 10 days ago | N/A (part of core DuckDB repo) | C++ | Core DuckDB extension: vortex |
-| 29 | [vss](https://duckdb.org/docs/current/core_extensions/vss) | [duckdb-vss](https://github.com/duckdb/duckdb-vss) | 🟢 Ongoing | 2 days ago (2026-05-27 23:27:27 UTC) | 256 | C++ | Vector similarity search |
+| 29 | [vss](https://duckdb.org/docs/current/core_extensions/vss) | [duckdb-vss](https://github.com/duckdb/duckdb-vss) | 🟢 Ongoing | 3 days ago (2026-05-27 23:27:27 UTC) | 258 | C++ | Vector similarity search |
 
 </details>
 
@@ -118,7 +130,7 @@ Core extensions maintained by the DuckDB team and distributed via the official e
 Third-party extensions maintained by the community
 
 
-**Total:** 246 extensions | 🔥 Very Active (≤7d): 54 | ✅ Active (≤30d): 49 | 🟡 Stable (≤90d): 90 | 🟠 Stale (>90d): 53
+**Total:** 246 extensions | 🔥 Very Active (≤7d): 56 | ✅ Active (≤30d): 49 | 🟡 Stable (≤90d): 89 | 🟠 Stale (>90d): 52
 
 <details open markdown="1">
 <summary>Click to expand/collapse community extensions table</summary>
@@ -128,13 +140,13 @@ Third-party extensions maintained by the community
 | 1 | [a5](https://duckdb.org/community_extensions/extensions/a5.html) | [a5](https://github.com/Query-farm/a5) | 🟢 Ongoing | 3 - 🟡 Stable | 62 days ago (2026-03-29 21:04:28 UTC) | 12 | C++ | A5 Geospatial Extension for DuckDB |
 | 2 | [acp](https://duckdb.org/community_extensions/extensions/acp.html) | [duckdb-acp](https://github.com/sidequery/duckdb-acp) | 🟡 Archived | 4 - 🟠 Stale | 171 days ago (2025-12-11 03:36:46 UTC) | 58 | Rust | Use Claude Code & other AI agents from inside DuckDB via extension |
 | 3 | [adbc_scanner](https://duckdb.org/community_extensions/extensions/adbc_scanner.html) | [adbc_scanner](https://github.com/Query-farm/adbc_scanner) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-04-22 14:37:02 UTC) | 15 | C++ | A DuckDB ADBC Scanner Extension - adds support for using ADBC drivers with Du... |
-| 4 | [agent_data](https://duckdb.org/community_extensions/extensions/agent_data.html) | [agent_data_duckdb](https://github.com/axsaucedo/agent_data_duckdb) | 🟢 Ongoing | 1 - 🔥 Very Active | 5 days ago (2026-05-25 09:54:48 UTC) | 16 | Rust | DuckDB extension: agent_data by axsaucedo |
+| 4 | [agent_data](https://duckdb.org/community_extensions/extensions/agent_data.html) | [agent_data_duckdb](https://github.com/axsaucedo/agent_data_duckdb) | 🟢 Ongoing | 1 - 🔥 Very Active | 5 days ago (2026-05-25 09:54:48 UTC) | 17 | Rust | DuckDB extension: agent_data by axsaucedo |
 | 5 | [airport](https://duckdb.org/community_extensions/extensions/airport.html) | [airport](https://github.com/Query-farm/airport) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 13:33:18 UTC) | 338 | C++ | The Airport extension for DuckDB, enables the use of Arrow Flight with DuckDB |
 | 6 | [aixchess](https://duckdb.org/community_extensions/extensions/aixchess.html) | [aix](https://github.com/thomas-daniels/aix) | 🟢 Ongoing | 3 - 🟡 Stable | 62 days ago (2026-03-29 12:16:27 UTC) | 25 | Rust | Aix: Efficiently storing and querying chess game collections |
-| 7 | [altertable](https://github.com/altertable-ai/duckdb-altertable) | [duckdb-altertable](https://github.com/altertable-ai/duckdb-altertable) | ❓ Unknown | 2 - ✅ Active | 8 days ago (2026-05-22 07:05:10 UTC) | 0 | C++ | Query Altertable's lakehouse directly from your local DuckDB |
-| 8 | [anndata](https://duckdb.org/community_extensions/extensions/anndata.html) | [anndata-duckdb-extension](https://github.com/honicky/anndata-duckdb-extension) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-05-13 07:13:44 UTC) | 8 | C++ | Attach and AnnData file in duckdb and query it with SQL.  Perform SQL over gr... |
+| 7 | [altertable](https://github.com/altertable-ai/duckdb-altertable) | [duckdb-altertable](https://github.com/altertable-ai/duckdb-altertable) | ❓ Unknown | 2 - ✅ Active | 9 days ago (2026-05-22 07:05:10 UTC) | 0 | C++ | Query Altertable's lakehouse directly from your local DuckDB |
+| 8 | [anndata](https://duckdb.org/community_extensions/extensions/anndata.html) | [anndata-duckdb-extension](https://github.com/honicky/anndata-duckdb-extension) | 🟢 Ongoing | 2 - ✅ Active | 18 days ago (2026-05-13 07:13:44 UTC) | 8 | C++ | Attach and AnnData file in duckdb and query it with SQL.  Perform SQL over gr... |
 | 9 | [anofox_forecast](https://duckdb.org/community_extensions/extensions/anofox_forecast.html) | [anofox-forecast](https://github.com/DataZooDE/anofox-forecast) | 🟢 Ongoing | 2 - ✅ Active | 8 days ago (2026-05-22 13:30:21 UTC) | 34 | C++ | Statistical timeseries forecasting in DuckDB |
-| 10 | [anofox_statistics](https://duckdb.org/community_extensions/extensions/anofox_statistics.html) | [anofox-statistics](https://github.com/DataZooDE/anofox-statistics) | ❓ Unknown | 2 - ✅ Active | 9 days ago (2026-05-21 06:55:41 UTC) | 8 | Rust | A DuckDB extension for statistical regression analysis, providing OLS, Ridge,... |
+| 10 | [anofox_statistics](https://duckdb.org/community_extensions/extensions/anofox_statistics.html) | [anofox-statistics](https://github.com/DataZooDE/anofox-statistics) | ❓ Unknown | 2 - ✅ Active | 10 days ago (2026-05-21 06:55:41 UTC) | 8 | Rust | A DuckDB extension for statistical regression analysis, providing OLS, Ridge,... |
 | 11 | [anofox_tabular](https://duckdb.org/community_extensions/extensions/anofox_tabular.html) | [anofox-tabular](https://github.com/DataZooDE/anofox-tabular) | ❓ Unknown | 2 - ✅ Active | 10 days ago (2026-05-21 03:18:56 UTC) | 14 | C++ | A duckdb extension which combines data quality and data preparation tools for... |
 | 12 | [arrow](https://duckdb.org/community_extensions/extensions/arrow.html) | [duckdb-extension-alias](https://github.com/duckdb/duckdb-extension-alias) | ❓ Unknown | 4 - 🟠 Stale | 236 days ago (2025-10-06 09:07:38 UTC) | 4 | C | DuckDB extension: arrow |
 | 13 | [astro](https://duckdb.org/community_extensions/extensions/astro.html) | [astro-duck](https://github.com/synapticore-io/astro-duck) | 🟢 Ongoing | 2 - ✅ Active | 11 days ago (2026-05-19 12:22:23 UTC) | 1 | C++ | 60+ astronomical SQL functions for DuckDB: coordinate transforms, CCM89 dust... |
@@ -143,9 +155,9 @@ Third-party extensions maintained by the community
 | 16 | [bitfilters](https://duckdb.org/community_extensions/extensions/bitfilters.html) | [bitfilters](https://github.com/Query-farm/bitfilters) | 🟢 Ongoing | 3 - 🟡 Stable | 33 days ago (2026-04-27 17:21:05 UTC) | 7 | C++ | A high-performance DuckDB extension providing probabilistic data structures f... |
 | 17 | [blockduck](https://duckdb.org/community_extensions/extensions/blockduck.html) | [BlockDuck](https://github.com/luohaha/BlockDuck) | 🟢 Ongoing | 4 - 🟠 Stale | 234 days ago (2025-10-08 16:19:04 UTC) | 10 | C++ | Live SQL Queries on Blockchain |
 | 18 | [boilstream](https://duckdb.org/community_extensions/extensions/boilstream.html) | [boilstream-extension](https://github.com/dforsber/boilstream-extension) | 🟢 Ongoing | 1 - 🔥 Very Active | 7 days ago (2026-05-23 14:44:51 UTC) | 10 | C++ | Secure Remote Secrets Storage for DuckDB |
-| 19 | [brew](https://duckdb.org/community_extensions/extensions/brew.html) | [duckdb-brew](https://github.com/adriens/duckdb-brew) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-29 20:52:29 UTC) | 1 | C++ | duckdb extension to report installed brew packages/casks/formulas with SQL |
+| 19 | [brew](https://duckdb.org/community_extensions/extensions/brew.html) | [duckdb-brew](https://github.com/adriens/duckdb-brew) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-31 08:18:52 UTC) | 1 | C++ | duckdb extension to report installed brew packages/casks/formulas with SQL |
 | 20 | [bvh2sql](https://duckdb.org/community_extensions/extensions/bvh2sql.html) | [bvh2sql](https://github.com/nkwork9999/bvh2sql) | 🟢 Ongoing | 4 - 🟠 Stale | 209 days ago (2025-11-02 18:17:05 UTC) | 0 | Makefile | SQL-related extension by nkwork9999 |
-| 21 | [cache_httpfs](https://duckdb.org/community_extensions/extensions/cache_httpfs.html) | [duck-read-cache-fs](https://github.com/dentiny/duck-read-cache-fs) | 🟢 Ongoing | 1 - 🔥 Very Active | 2 days ago (2026-05-28 07:14:06 UTC) | 140 | C++ | This repository is made as read-only filesystem for remote access. |
+| 21 | [cache_httpfs](https://duckdb.org/community_extensions/extensions/cache_httpfs.html) | [duck-read-cache-fs](https://github.com/dentiny/duck-read-cache-fs) | 🟢 Ongoing | 1 - 🔥 Very Active | 3 days ago (2026-05-28 07:14:06 UTC) | 140 | C++ | This repository is made as read-only filesystem for remote access. |
 | 22 | [cache_prewarm](https://duckdb.org/community_extensions/extensions/cache_prewarm.html) | [duckdb-cache-prewarm](https://github.com/dentiny/duckdb-cache-prewarm) | 🟢 Ongoing | 1 - 🔥 Very Active | 5 days ago (2026-05-25 09:13:59 UTC) | 8 | C++ | DuckDB extension: cache_prewarm by dentiny |
 | 23 | [capi_quack](https://duckdb.org/community_extensions/extensions/capi_quack.html) | [extension-template-c](https://github.com/duckdb/extension-template-c) | ❓ Unknown | 3 - 🟡 Stable | 65 days ago (2026-03-26 12:21:42 UTC) | 29 | C | (Experimental) C/C++ template for DuckDB extensions based on the C API |
 | 24 | [cassandra](https://duckdb.org/community_extensions/extensions/cassandra.html) | [duckdb-cassandra](https://github.com/dioptre/duckdb-cassandra) | ❓ Unknown | 4 - 🟠 Stale | 222 days ago (2025-10-20 19:15:10 UTC) | 2 | C++ | DuckDB Connector for Cassandra |
@@ -157,18 +169,18 @@ Third-party extensions maintained by the community
 | 30 | [cityjson](https://duckdb.org/community_extensions/extensions/cityjson.html) | [duckdb-cityjson](https://github.com/cityjson/duckdb-cityjson) | ❓ Unknown | 2 - ✅ Active | 29 days ago (2026-05-01 11:22:55 UTC) | 9 | C++ | Data format handling extension by cityjson |
 | 31 | [clamp](https://duckdb.org/community_extensions/extensions/clamp.html) | [duckdb_clamp](https://github.com/oglego/duckdb_clamp) | 🟢 Ongoing | 3 - 🟡 Stable | 35 days ago (2026-04-26 01:35:35 UTC) | 2 | C++ | The Clamp extension introduces range-clamping scalar functions to DuckDB. Ini... |
 | 32 | [cloudfront](https://duckdb.org/community_extensions/extensions/cloudfront.html) | [duckdb-cloudfront](https://github.com/midwork-finds-jobs/duckdb-cloudfront) | 🟢 Ongoing | 4 - 🟠 Stale | 114 days ago (2026-02-05 15:32:51 UTC) | 1 | C++ | DuckDB module which provides custom authentication methods on top of httpfs m... |
-| 33 | [cozip](https://duckdb.org/community_extensions/extensions/cozip.html) | [cozip_reader](https://github.com/asterisk-labs/cozip_reader) | 🟢 Ongoing | 2 - ✅ Active | 16 days ago (2026-05-15 05:12:11 UTC) | 4 | C++ | Read Cloud-Optimized ZIP files |
+| 33 | [cozip](https://duckdb.org/community_extensions/extensions/cozip.html) | [cozip_reader](https://github.com/asterisk-labs/cozip_reader) | 🟢 Ongoing | 2 - ✅ Active | 16 days ago (2026-05-15 05:12:11 UTC) | 5 | C++ | Read Cloud-Optimized ZIP files |
 | 34 | [crawler](https://duckdb.org/community_extensions/extensions/crawler.html) | [duckdb-crawler](https://github.com/midwork-finds-jobs/duckdb-crawler) | 🟢 Ongoing | 3 - 🟡 Stable | 58 days ago (2026-04-03 04:32:07 UTC) | 11 | C++ | DuckDB extension: crawler by midwork-finds-jobs |
 | 35 | [cronjob](https://duckdb.org/community_extensions/extensions/cronjob.html) | [cronjob](https://github.com/Query-farm/cronjob) | 🟢 Ongoing | 3 - 🟡 Stable | 62 days ago (2026-03-29 21:04:33 UTC) | 49 | C++ | DuckDB CronJob Extension |
 | 36 | [crypto](https://duckdb.org/community_extensions/extensions/crypto.html) | [crypto](https://github.com/Query-farm/crypto) | 🟢 Ongoing | 3 - 🟡 Stable | 38 days ago (2026-04-22 13:25:10 UTC) | 28 | C++ | DuckDB Extension for cryptographic hash functions and HMAC |
 | 37 | [curl_httpfs](https://duckdb.org/community_extensions/extensions/curl_httpfs.html) | [duckdb-curl-filesystem](https://github.com/dentiny/duckdb-curl-filesystem) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 10:09:45 UTC) | 8 | C++ | Filesystem built upon libcurl. |
 | 38 | [cwiqduck](https://duckdb.org/community_extensions/extensions/cwiqduck.html) | [cwiqduck](https://github.com/cwiq-os/cwiqduck) | 🟢 Ongoing | 4 - 🟠 Stale | 173 days ago (2025-12-09 02:09:40 UTC) | 3 | C++ | DuckDB extensions for CWIQ |
-| 39 | [dash](https://duckdb.org/community_extensions/extensions/dash.html) | [dash](https://github.com/gropaul/dash) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 20:40:00 UTC) | 62 | C++ | Local GUI and Data Canvas as a DuckDB extension |
+| 39 | [dash](https://duckdb.org/community_extensions/extensions/dash.html) | [dash](https://github.com/gropaul/dash) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 20:40:00 UTC) | 63 | C++ | Local GUI and Data Canvas as a DuckDB extension |
 | 40 | [datasketches](https://duckdb.org/community_extensions/extensions/datasketches.html) | [datasketches](https://github.com/Query-farm/datasketches) | 🟢 Ongoing | 3 - 🟡 Stable | 33 days ago (2026-04-27 17:17:18 UTC) | 46 | C++ | Integrates DuckDB with the high-performance Apache DataSketches library. This... |
 | 41 | [dazzleduck](https://duckdb.org/community_extensions/extensions/dazzleduck.html) | [dazzleduck-sql-duckdb](https://github.com/dazzleduck-web/dazzleduck-sql-duckdb) | ❓ Unknown | 3 - 🟡 Stable | 79 days ago (2026-03-12 22:24:42 UTC) | 1 | C++ | DuckDB extension: dazzleduck by dazzleduck-web |
 | 42 | [decimal_arithmetic](https://duckdb.org/community_extensions/extensions/decimal_arithmetic.html) | [duckdb-decimal-arithmetic](https://github.com/duckdb/duckdb-decimal-arithmetic) | 🟢 Ongoing | 3 - 🟡 Stable | 45 days ago (2026-04-15 14:14:23 UTC) | 2 | C++ | DuckDB extension: decimal_arithmetic |
 | 43 | [delta_classic](https://duckdb.org/community_extensions/extensions/delta_classic.html) | [delta_classic](https://github.com/djouallah/delta_classic) | 🟢 Ongoing | 3 - 🟡 Stable | 79 days ago (2026-03-13 00:57:38 UTC) | 5 | C++ | DuckDB extension to attach a directory of Delta tables as a database |
-| 44 | [delta_export](https://duckdb.org/community_extensions/extensions/delta_export.html) | [delta_export](https://github.com/djouallah/delta_export) | 🟢 Ongoing | 3 - 🟡 Stable | 78 days ago (2026-03-13 07:02:40 UTC) | 6 | C++ | DuckDB extension to export Delta Lake metadata from DuckLake |
+| 44 | [delta_export](https://duckdb.org/community_extensions/extensions/delta_export.html) | [delta_export](https://github.com/djouallah/delta_export) | 🟢 Ongoing | 3 - 🟡 Stable | 79 days ago (2026-03-13 07:02:40 UTC) | 7 | C++ | DuckDB extension to export Delta Lake metadata from DuckLake |
 | 45 | [dicom](https://github.com/nmontesg/duck-dicom) | [duck-dicom](https://github.com/nmontesg/duck-dicom) | ❓ Unknown | 2 - ✅ Active | 16 days ago (2026-05-14 11:56:42 UTC) | 0 | C++ | A DuckDB extension to import medical imaging data |
 | 46 | [dns](https://duckdb.org/community_extensions/extensions/dns.html) | [duckdb-dns](https://github.com/tobilg/duckdb-dns) | 🟢 Ongoing | 3 - 🟡 Stable | 37 days ago (2026-04-23 16:42:42 UTC) | 16 | Rust | DNS (Reverse) Lookup Extension for DuckDB |
 | 47 | [dplyr](https://duckdb.org/community_extensions/extensions/dplyr.html) | [libdplyr](https://github.com/mrchypark/libdplyr) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-05-14 03:14:54 UTC) | 14 | Rust | DuckDB extension: dplyr by mrchypark |
@@ -190,7 +202,7 @@ Third-party extensions maintained by the community
 | 63 | [duckgl](https://duckdb.org/community_extensions/extensions/duckgl.html) | [duckgl](https://github.com/nkwork9999/duckgl) | 🟢 Ongoing | 3 - 🟡 Stable | 87 days ago (2026-03-04 16:41:20 UTC) | 6 | C++ | DuckDB extension: duckgl by nkwork9999 |
 | 64 | [duckherder](https://duckdb.org/community_extensions/extensions/duckherder.html) | [duckdb-distributed-execution](https://github.com/dentiny/duckdb-distributed-execution) | ❓ Unknown | 3 - 🟡 Stable | 81 days ago (2026-03-10 09:36:00 UTC) | 59 | C++ | Distributed execution for duckdb queries. |
 | 65 | [duckhog](https://duckdb.org/community_extensions/extensions/duckhog.html) | [duckhog](https://github.com/PostHog/duckhog) | 🟢 Ongoing | 1 - 🔥 Very Active | 4 days ago (2026-05-26 17:05:33 UTC) | 7 | C++ | duckdb extension to connect to posthog managed data warehouse  |
-| 66 | [duckhts](https://duckdb.org/community_extensions/extensions/duckhts.html) | [duckhts](https://github.com/RGenomicsETL/duckhts) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 13:23:15 UTC) | 13 | C | 'htslib' based 'Duckdb' Extenstion for High Throughput Sequencing File Formats |
+| 66 | [duckhts](https://duckdb.org/community_extensions/extensions/duckhts.html) | [duckhts](https://github.com/RGenomicsETL/duckhts) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-31 02:28:42 UTC) | 13 | C | 'htslib' based 'Duckdb' Extenstion for High Throughput Sequencing File Formats |
 | 67 | [ducklake_cdc](https://duckdb.org/community_extensions/extensions/ducklake_cdc.html) | [ducklake-cdc-extension](https://github.com/ekkuleivonen/ducklake-cdc-extension) | 🟢 Ongoing | 2 - ✅ Active | 24 days ago (2026-05-06 19:37:35 UTC) | 12 | C++ | The missing operational layer for DuckLake’s change feed. |
 | 68 | [ducknng](https://github.com/sounkou-bioinfo/ducknng) | [ducknng](https://github.com/sounkou-bioinfo/ducknng) | ❓ Unknown | 2 - ✅ Active | 13 days ago (2026-05-17 20:54:34 UTC) | 2 | C | ducknng: a 'DuckDB' Binding To The 'NNG' Scalability Protocols Library And an... |
 | 69 | [duckorch](https://duckdb.org/community_extensions/extensions/duckorch.html) | [duck-orch](https://github.com/nkwork9999/duck-orch) | 🟢 Ongoing | 2 - ✅ Active | 13 days ago (2026-05-17 17:44:53 UTC) | 2 | Rust | DuckDB extension: duckorch by nkwork9999 |
@@ -211,14 +223,14 @@ Third-party extensions maintained by the community
 | 84 | [finetype](https://duckdb.org/community_extensions/extensions/finetype.html) | [duckdb-finetype](https://github.com/meridian-online/duckdb-finetype) | ❓ Unknown | 3 - 🟡 Stable | 74 days ago (2026-03-17 22:10:13 UTC) | 1 | Rust | DuckDB extension for semantic type classification powered by FineType |
 | 85 | [fire_duck_ext](https://duckdb.org/community_extensions/extensions/fire_duck_ext.html) | [fire_duck_ext](https://github.com/BorisBesky/fire_duck_ext) | 🟢 Ongoing | 3 - 🟡 Stable | 35 days ago (2026-04-25 17:50:34 UTC) | 3 | C++ | duckdb extension for firestore |
 | 86 | [fit](https://duckdb.org/community_extensions/extensions/fit.html) | [duckdb-fit-extension](https://github.com/antoriche/duckdb-fit-extension) | ❓ Unknown | 4 - 🟠 Stale | 166 days ago (2025-12-15 19:16:40 UTC) | 1 | C++ | DuckDB extension: fit by antoriche |
-| 87 | [fivetran](https://duckdb.org/community_extensions/extensions/fivetran.html) | [duckdb_sparse_variant](https://github.com/fivetran/duckdb_sparse_variant) | 🟢 Ongoing | 2 - ✅ Active | 11 days ago (2026-05-19 07:42:06 UTC) | 0 | C++ | A DuckDB extension providing sparse VARIANT encoding for STRUCTs and an optim... |
+| 87 | [fivetran](https://duckdb.org/community_extensions/extensions/fivetran.html) | [duckdb_sparse_variant](https://github.com/fivetran/duckdb_sparse_variant) | 🟢 Ongoing | 2 - ✅ Active | 12 days ago (2026-05-19 07:42:06 UTC) | 0 | C++ | A DuckDB extension providing sparse VARIANT encoding for STRUCTs and an optim... |
 | 88 | [flock](https://duckdb.org/community_extensions/extensions/flock.html) | [flock](https://github.com/dais-polymtl/flock) | 🟢 Ongoing | 3 - 🟡 Stable | 50 days ago (2026-04-10 16:03:31 UTC) | 340 | C++ | Beyond Quacking: Deep Integration of Language Models and RAG into DuckDB (VLD... |
 | 89 | [fsquery](https://duckdb.org/community_extensions/extensions/fsquery.html) | [fsquery](https://github.com/halgari/fsquery) | 🟢 Ongoing | 3 - 🟡 Stable | 75 days ago (2026-03-16 16:09:24 UTC) | 1 | C++ | An extension that allows DuckDB to enumerate and stat files on the disk |
-| 90 | [func_apply](https://duckdb.org/community_extensions/extensions/func_apply.html) | [duckdb_func_apply](https://github.com/teaguesterling/duckdb_func_apply) | 🟢 Ongoing | 4 - 🟠 Stale | 96 days ago (2026-02-23 23:42:41 UTC) | 3 | C++ | An exension to allow dynamic function application |
+| 90 | [func_apply](https://duckdb.org/community_extensions/extensions/func_apply.html) | [duckdb_func_apply](https://github.com/teaguesterling/duckdb_func_apply) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 23:19:09 UTC) | 3 | C++ | An exension to allow dynamic function application |
 | 91 | [fuzzycomplete](https://duckdb.org/community_extensions/extensions/fuzzycomplete.html) | [fuzzycomplete](https://github.com/Query-farm/fuzzycomplete) | 🟢 Ongoing | 3 - 🟡 Stable | 62 days ago (2026-03-29 21:04:37 UTC) | 27 | C++ | DuckDB Extension for fuzzy string matching based autocompletion |
 | 92 | [gaggle](https://duckdb.org/community_extensions/extensions/gaggle.html) | [gaggle](https://github.com/CogitatorTech/gaggle) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 17:09:37 UTC) | 16 | Rust | A DuckDB extension for working with Kaggle datasets |
 | 93 | [gcs](https://duckdb.org/community_extensions/extensions/gcs.html) | [duckdb-gcs](https://github.com/northpolesec/duckdb-gcs) | 🟢 Ongoing | 2 - ✅ Active | 9 days ago (2026-05-21 11:15:37 UTC) | 22 | C++ | A GCS-native extension for DuckDB |
-| 94 | [gdx](https://duckdb.org/community_extensions/extensions/gdx.html) | [duckdb-gdx](https://github.com/chrispahm/duckdb-gdx) | 🟢 Ongoing | 2 - ✅ Active | 8 days ago (2026-05-22 08:05:29 UTC) | 1 | C++ | DuckDB extension: gdx by chrispahm |
+| 94 | [gdx](https://duckdb.org/community_extensions/extensions/gdx.html) | [duckdb-gdx](https://github.com/chrispahm/duckdb-gdx) | 🟢 Ongoing | 2 - ✅ Active | 9 days ago (2026-05-22 08:05:29 UTC) | 1 | C++ | DuckDB extension: gdx by chrispahm |
 | 95 | [geography](https://duckdb.org/community_extensions/extensions/geography.html) | [duckdb-geography](https://github.com/paleolimbot/duckdb-geography) | ❓ Unknown | 3 - 🟡 Stable | 79 days ago (2026-03-12 16:05:00 UTC) | 44 | C++ | Geospatial data extension by paleolimbot |
 | 96 | [geosilo](https://duckdb.org/community_extensions/extensions/geosilo.html) | [geosilo](https://github.com/Query-farm/geosilo) | 🟢 Ongoing | 3 - 🟡 Stable | 33 days ago (2026-04-27 16:21:07 UTC) | 24 | C++ | DuckDB extension for compact geometry encoding using delta-encoded coordinate... |
 | 97 | [geotiff](https://duckdb.org/community_extensions/extensions/geotiff.html) | [duckdb-geotiff](https://github.com/babaknaimi/duckdb-geotiff) | ❓ Unknown | 4 - 🟠 Stale | 284 days ago (2025-08-20 05:12:15 UTC) | 2 | C++ | Duckdb extension to read GeoTiffs directly with duckdb database |
@@ -227,14 +239,14 @@ Third-party extensions maintained by the community
 | 100 | [gsheets](https://duckdb.org/community_extensions/extensions/gsheets.html) | [duckdb_gsheets](https://github.com/evidence-dev/duckdb_gsheets) | 🟢 Ongoing | 4 - 🟠 Stale | 99 days ago (2026-02-21 04:11:04 UTC) | 344 | C++ | DuckDB extension to read and write Google Sheets using SQL |
 | 101 | [h3](https://duckdb.org/community_extensions/extensions/h3.html) | [h3-duckdb](https://github.com/isaacbrodsky/h3-duckdb) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 15:42:28 UTC) | 248 | C++ | Bindings for H3 to DuckDB |
 | 102 | [h5db](https://duckdb.org/community_extensions/extensions/h5db.html) | [h5db](https://github.com/jokasimr/h5db) | 🟢 Ongoing | 1 - 🔥 Very Active | 3 days ago (2026-05-27 14:56:28 UTC) | 1 | C++ | Duckdb extension for reading HDF5 files. |
-| 103 | [harbor](https://github.com/shreeve/duckdb-harbor) | [duckdb-harbor](https://github.com/shreeve/duckdb-harbor) | ❓ Unknown | 2 - ✅ Active | 8 days ago (2026-05-22 08:03:40 UTC) | 0 | C++ | Harbor turns one DuckDB process into a small, embeddable database harbor: nat... |
+| 103 | [harbor](https://github.com/shreeve/duckdb-harbor) | [duckdb-harbor](https://github.com/shreeve/duckdb-harbor) | ❓ Unknown | 2 - ✅ Active | 9 days ago (2026-05-22 08:03:40 UTC) | 0 | C++ | Harbor turns one DuckDB process into a small, embeddable database harbor: nat... |
 | 104 | [hashfuncs](https://duckdb.org/community_extensions/extensions/hashfuncs.html) | [hashfuncs](https://github.com/Query-farm/hashfuncs) | 🟢 Ongoing | 3 - 🟡 Stable | 62 days ago (2026-03-29 21:04:38 UTC) | 12 | C++ | A DuckDB extension that supplies non-cryptographic hash functions. |
 | 105 | [hdf5](https://duckdb.org/community_extensions/extensions/hdf5.html) | [duckdb-hdf5](https://github.com/Berrysoft/duckdb-hdf5) | ❓ Unknown | 3 - 🟡 Stable | 38 days ago (2026-04-23 01:30:36 UTC) | 12 | Rust | HDF5 plugin for duckdb |
 | 106 | [hedged_request_fs](https://duckdb.org/community_extensions/extensions/hedged_request_fs.html) | [duckdb-hedged-request](https://github.com/dentiny/duckdb-hedged-request) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 09:35:49 UTC) | 1 | C++ | DuckDB extension: hedged_request_fs by dentiny |
 | 107 | [highs](https://duckdb.org/community_extensions/extensions/highs.html) | [HiGHS-duckdb](https://github.com/fhk/HiGHS-duckdb) | ❓ Unknown | 4 - 🟠 Stale | 95 days ago (2026-02-25 02:07:48 UTC) | 1 | C++ | Run the solver in the database! |
 | 108 | [hive_metastore](https://duckdb.org/community_extensions/extensions/hive_metastore.html) | [duckdb-hive-metastore](https://github.com/ilum-cloud/duckdb-hive-metastore) | 🟢 Ongoing | 2 - ✅ Active | 8 days ago (2026-05-22 17:49:59 UTC) | 3 | C++ | DuckDB extension allowing to connect to Apache Hive Metastore and query the d... |
-| 109 | [hnsw_acorn](https://duckdb.org/community_extensions/extensions/hnsw_acorn.html) | [duckdb-hnsw-acorn](https://github.com/cigrainger/duckdb-hnsw-acorn) | 🟢 Ongoing | 3 - 🟡 Stable | 63 days ago (2026-03-28 07:49:47 UTC) | 62 | C++ | ACORN-1 pre-filtered HNSW search for DuckDB |
-| 110 | [holtfs](https://github.com/feichai0017/duckdb-holtfs) | [duckdb-holtfs](https://github.com/feichai0017/duckdb-holtfs) | ❓ Unknown | 1 - 🔥 Very Active | 3 days ago (2026-05-27 06:55:19 UTC) | 0 | C++ | DuckDB extension for planning scans through Holt-backed metadata indexes |
+| 109 | [hnsw_acorn](https://duckdb.org/community_extensions/extensions/hnsw_acorn.html) | [duckdb-hnsw-acorn](https://github.com/cigrainger/duckdb-hnsw-acorn) | 🟢 Ongoing | 3 - 🟡 Stable | 64 days ago (2026-03-28 07:49:47 UTC) | 62 | C++ | ACORN-1 pre-filtered HNSW search for DuckDB |
+| 110 | [holtfs](https://github.com/feichai0017/duckdb-holtfs) | [duckdb-holtfs](https://github.com/feichai0017/duckdb-holtfs) | ❓ Unknown | 1 - 🔥 Very Active | 4 days ago (2026-05-27 06:55:19 UTC) | 0 | C++ | DuckDB extension for planning scans through Holt-backed metadata indexes |
 | 111 | [hostfs](https://duckdb.org/community_extensions/extensions/hostfs.html) | [hostFS](https://github.com/gropaul/hostFS) | ❓ Unknown | 4 - 🟠 Stale | 241 days ago (2025-10-01 21:02:13 UTC) | 31 | C++ | DuckDB extension: hostfs by gropaul |
 | 112 | [html_query](https://duckdb.org/community_extensions/extensions/html_query.html) | [duckdb_html_query](https://github.com/midwork-finds-jobs/duckdb_html_query) | ❓ Unknown | 4 - 🟠 Stale | 114 days ago (2026-02-05 15:33:13 UTC) | 2 | Rust | Filter HTML inside duckdb |
 | 113 | [html_readability](https://duckdb.org/community_extensions/extensions/html_readability.html) | [duckdb-html-readability](https://github.com/midwork-finds-jobs/duckdb-html-readability) | ❓ Unknown | 4 - 🟠 Stale | 114 days ago (2026-02-05 15:33:16 UTC) | 0 | Rust | DuckDB extension to parse html to readable text |
@@ -243,7 +255,7 @@ Third-party extensions maintained by the community
 | 116 | [http_stats](https://duckdb.org/community_extensions/extensions/http_stats.html) | [duckdb-http-stats](https://github.com/tlinhart/duckdb-http-stats) | 🟢 Ongoing | 3 - 🟡 Stable | 64 days ago (2026-03-27 13:58:03 UTC) | 1 | C++ | Better HTTP statistics for DuckDB |
 | 117 | [httpd_log](https://duckdb.org/community_extensions/extensions/httpd_log.html) | [duckdb-httpd-log](https://github.com/saygox/duckdb-httpd-log) | ❓ Unknown | 4 - 🟠 Stale | 139 days ago (2026-01-12 06:14:58 UTC) | 0 | C++ | duckdb extension |
 | 118 | [httpfs_timeout_retry](https://duckdb.org/community_extensions/extensions/httpfs_timeout_retry.html) | [duckdb-httpfs-timeout-retry](https://github.com/dentiny/duckdb-httpfs-timeout-retry) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 10:38:20 UTC) | 0 | C++ | Web/HTTP functionality extension by dentiny |
-| 119 | [httpserver](https://duckdb.org/community_extensions/extensions/httpserver.html) | [httpserver](https://github.com/Query-farm/httpserver) | ❓ Unknown | 3 - 🟡 Stable | 47 days ago (2026-04-13 23:57:25 UTC) | 278 | C++ | DuckDB HTTP API Server and Query Interface in a  Community Extension |
+| 119 | [httpserver](https://duckdb.org/community_extensions/extensions/httpserver.html) | [httpserver](https://github.com/Query-farm/httpserver) | ❓ Unknown | 3 - 🟡 Stable | 47 days ago (2026-04-13 23:57:25 UTC) | 279 | C++ | DuckDB HTTP API Server and Query Interface in a  Community Extension |
 | 120 | [infera](https://duckdb.org/community_extensions/extensions/infera.html) | [infera](https://github.com/CogitatorTech/infera) | 🟢 Ongoing | 1 - 🔥 Very Active | 6 days ago (2026-05-24 17:20:54 UTC) | 132 | Rust | A DuckDB extension for in-database inference |
 | 121 | [inflector](https://duckdb.org/community_extensions/extensions/inflector.html) | [inflector](https://github.com/Query-farm/inflector) | 🟢 Ongoing | 2 - ✅ Active | 9 days ago (2026-05-21 12:33:21 UTC) | 8 | C++ | Powerful string case transformation and inflection capabilities directly to y... |
 | 122 | [ion](https://duckdb.org/community_extensions/extensions/ion.html) | [duckdb-ion](https://github.com/kestra-io/duckdb-ion) | 🟢 Ongoing | 3 - 🟡 Stable | 81 days ago (2026-03-10 15:49:39 UTC) | 4 | C++ | AWS Ion extension for DuckDB |
@@ -268,7 +280,7 @@ Third-party extensions maintained by the community
 | 141 | [mlpack](https://duckdb.org/community_extensions/extensions/mlpack.html) | [duckdb-mlpack](https://github.com/eddelbuettel/duckdb-mlpack) | 🟢 Ongoing | 4 - 🟠 Stale | 123 days ago (2026-01-27 14:18:00 UTC) | 18 | C++ | Bringing mlpack to duckdb |
 | 142 | [monetary](https://duckdb.org/community_extensions/extensions/monetary.html) | [monetary](https://github.com/fyffee/monetary) | ❓ Unknown | 4 - 🟠 Stale | 121 days ago (2026-01-29 11:29:01 UTC) | 0 | C++ | DuckDB extension: monetary by fyffee |
 | 143 | [mongo](https://duckdb.org/community_extensions/extensions/mongo.html) | [duckdb-mongo](https://github.com/stephaniewang526/duckdb-mongo) | 🟢 Ongoing | 1 - 🔥 Very Active | 3 days ago (2026-05-27 20:45:34 UTC) | 52 | C++ | Integrates DuckDB with MongoDB, enabling direct SQL queries over MongoDB coll... |
-| 144 | [mooncake](https://duckdb.org/community_extensions/extensions/mooncake.html) | [duckdb_mooncake](https://github.com/Mooncake-Labs/duckdb_mooncake) | ❓ Unknown | 4 - 🟠 Stale | 216 days ago (2025-10-26 07:13:05 UTC) | 10 | C++ | Read Iceberg tables written by moonlink in real time |
+| 144 | [mooncake](https://duckdb.org/community_extensions/extensions/mooncake.html) | [duckdb_mooncake](https://github.com/Mooncake-Labs/duckdb_mooncake) | ❓ Unknown | 4 - 🟠 Stale | 217 days ago (2025-10-26 07:13:05 UTC) | 10 | C++ | Read Iceberg tables written by moonlink in real time |
 | 145 | [mpduck](https://duckdb.org/community_extensions/extensions/mpduck.html) | [mpduck](https://github.com/MatthewMooreZA/mpduck) | 🟢 Ongoing | 3 - 🟡 Stable | 47 days ago (2026-04-13 17:59:29 UTC) | 1 | C++ | DuckDB extension to read and write Prophet model point files. |
 | 146 | [msolap](https://duckdb.org/community_extensions/extensions/msolap.html) | [duckdb-msolap-extension](https://github.com/Hugoberry/duckdb-msolap-extension) | ❓ Unknown | 4 - 🟠 Stale | 248 days ago (2025-09-24 16:33:46 UTC) | 14 | C++ | DuckDB extension: msolap by Hugoberry |
 | 147 | [mssql](https://duckdb.org/community_extensions/extensions/mssql.html) | [mssql-extension](https://github.com/hugr-lab/mssql-extension) | 🟢 Ongoing | 1 - 🔥 Very Active | 2 days ago (2026-05-28 22:30:48 UTC) | 109 | C++ | DuckDB extension for Microsoft SQL Server (TDS + TLS), with catalog integrati... |
@@ -284,12 +296,12 @@ Third-party extensions maintained by the community
 | 157 | [onelake](https://duckdb.org/community_extensions/extensions/onelake.html) | [duckdb_onelake](https://github.com/datumnova/duckdb_onelake) | ❓ Unknown | 4 - 🟠 Stale | 180 days ago (2025-12-01 10:28:22 UTC) | 19 | C++ | DuckDB extension: onelake by datumnova |
 | 158 | [open_prompt](https://duckdb.org/community_extensions/extensions/open_prompt.html) | [openprompt](https://github.com/Query-farm/openprompt) | 🟢 Ongoing | 3 - 🟡 Stable | 67 days ago (2026-03-24 20:13:01 UTC) | 59 | C++ | DuckDB Community Extension to prompt LLMs from SQL |
 | 159 | [osmium](https://duckdb.org/community_extensions/extensions/osmium.html) | [duckdb-osmium](https://github.com/jake-low/duckdb-osmium) | 🟢 Ongoing | 2 - ✅ Active | 29 days ago (2026-05-01 21:24:55 UTC) | 17 | C++ | DuckDB extension for reading OpenStreetMap PBF files using libosmium |
-| 160 | [otlp](https://duckdb.org/community_extensions/extensions/otlp.html) | [duckdb-otlp](https://github.com/smithclay/duckdb-otlp) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 19:34:20 UTC) | 52 | C++ | query OpenTelemetry metrics, logs, and traces (OTLP) in duckdb |
+| 160 | [otlp](https://duckdb.org/community_extensions/extensions/otlp.html) | [duckdb-otlp](https://github.com/smithclay/duckdb-otlp) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-31 00:15:57 UTC) | 52 | C++ | stream, store and query OpenTelemetry metrics, logs, and traces (OTLP) in duckdb |
 | 161 | [overture](https://duckdb.org/community_extensions/extensions/overture.html) | [duckdb-overture](https://github.com/cubilica/duckdb-overture) | 🟢 Ongoing | 3 - 🟡 Stable | 46 days ago (2026-04-14 16:46:56 UTC) | 4 | C++ | DuckDB extension: overture by cubilica |
 | 162 | [pac](https://duckdb.org/community_extensions/extensions/pac.html) | [privacy](https://github.com/cwida/privacy) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-29 13:52:18 UTC) | 17 | C++ | Automatic query privatization in DuckDB |
 | 163 | [paimon](https://duckdb.org/community_extensions/extensions/paimon.html) | [duckdb-paimon](https://github.com/polardb/duckdb-paimon) | 🟢 Ongoing | 1 - 🔥 Very Active | 5 days ago (2026-05-25 10:02:28 UTC) | 31 | C++ | DuckDB extension for accessing Apache Paimon. 🦆 |
 | 164 | [parser_tools](https://duckdb.org/community_extensions/extensions/parser_tools.html) | [duckdb_extension_parser_tools](https://github.com/hotdata-dev/duckdb_extension_parser_tools) | 🟢 Ongoing | 4 - 🟠 Stale | 120 days ago (2026-01-30 16:44:26 UTC) | 25 | C++ | Parse sql - with sql! |
-| 165 | [pbi_scanner](https://duckdb.org/community_extensions/extensions/pbi_scanner.html) | [pbi_scanner](https://github.com/crazy-treyn/pbi_scanner) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 19:27:42 UTC) | 15 | C++ | DuckDB extension that enables querying Power BI Semantic Models with DAX. |
+| 165 | [pbi_scanner](https://duckdb.org/community_extensions/extensions/pbi_scanner.html) | [pbi_scanner](https://github.com/crazy-treyn/pbi_scanner) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-31 01:45:47 UTC) | 15 | C++ | DuckDB extension that enables querying Power BI Semantic Models with DAX. |
 | 166 | [pbix](https://duckdb.org/community_extensions/extensions/pbix.html) | [duckdb-pbix-extension](https://github.com/Hugoberry/duckdb-pbix-extension) | 🟢 Ongoing | 4 - 🟠 Stale | 218 days ago (2025-10-24 13:47:34 UTC) | 37 | C++ | Duckdb extension for parsing the metadata and contents of the embedded data m... |
 | 167 | [pcap_reader](https://duckdb.org/community_extensions/extensions/pcap_reader.html) | [pcap](https://github.com/Query-farm/pcap) | ❓ Unknown | 2 - ✅ Active | 12 days ago (2026-05-18 22:26:34 UTC) | 13 | Rust | DuckDB PCAP Reader Extension made in Rust |
 | 168 | [pdal](https://duckdb.org/community_extensions/extensions/pdal.html) | [duckdb-pdal](https://github.com/ahuarte47/duckdb-pdal) | 🟢 Ongoing | 2 - ✅ Active | 10 days ago (2026-05-20 17:17:09 UTC) | 26 | C++ | DuckDB extension for manipulating point cloud data using SQL |
@@ -325,7 +337,7 @@ Third-party extensions maintained by the community
 | 198 | [rusty_quack](https://duckdb.org/community_extensions/extensions/rusty_quack.html) | [extension-template-rs](https://github.com/duckdb/extension-template-rs) | ❓ Unknown | 3 - 🟡 Stable | 46 days ago (2026-04-14 09:37:53 UTC) | 107 | Rust | (Experimental) Template for Rust-based DuckDB extensions |
 | 199 | [rusty_sheet](https://duckdb.org/community_extensions/extensions/rusty_sheet.html) | [rusty-sheet](https://github.com/redraiment/rusty-sheet) | 🟢 Ongoing | 4 - 🟠 Stale | 107 days ago (2026-02-13 02:27:56 UTC) | 72 | Rust | An Excel/WPS/OpenDocument Spreadsheets file reader for DuckDB |
 | 200 | [sazgar](https://duckdb.org/community_extensions/extensions/sazgar.html) | [Sazgar](https://github.com/Angelerator/Sazgar) | ❓ Unknown | 2 - ✅ Active | 9 days ago (2026-05-22 04:56:10 UTC) | 13 | HTML | DuckDB extension for system monitoring & intelligent SQL routing. 25+ functio... |
-| 201 | [scalarfs](https://github.com/teaguesterling/duckdb_scalarfs) | [duckdb_scalarfs](https://github.com/teaguesterling/duckdb_scalarfs) | 🟢 Ongoing | 3 - 🟡 Stable | 49 days ago (2026-04-11 16:49:55 UTC) | 8 | C++ | A collection of simple virtual filesystems for treating scalar values as files. |
+| 201 | [scalarfs](https://duckdb.org/community_extensions/extensions/scalarfs.html) | [duckdb_scalarfs](https://github.com/teaguesterling/duckdb_scalarfs) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 23:22:40 UTC) | 8 | C++ | A collection of simple virtual filesystems for treating scalar values as files. |
 | 202 | [scrooge](https://duckdb.org/community_extensions/extensions/scrooge.html) | [Scrooge-McDuck](https://github.com/pdet/Scrooge-McDuck) | 🟢 Ongoing | 2 - ✅ Active | 26 days ago (2026-05-04 14:27:57 UTC) | 162 | C++ | DuckDB extension: scrooge by pdet |
 | 203 | [se3](https://duckdb.org/community_extensions/extensions/se3.html) | [se3](https://github.com/jokasimr/se3) | 🟢 Ongoing | 3 - 🟡 Stable | 83 days ago (2026-03-08 13:32:27 UTC) | 0 | C++ | Duckdb extension for efficient rotation / translation operations on points in... |
 | 204 | [semantic_views](https://duckdb.org/community_extensions/extensions/semantic_views.html) | [duckdb-semantic-views](https://github.com/anentropic/duckdb-semantic-views) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-05-30 11:20:36 UTC) | 6 | Rust | Semantic Views for DuckDB. |
