@@ -11,6 +11,11 @@ on:
         required: false
         type: boolean
         default: false
+      with_compatibility:
+        description: "Include DuckDB version compatibility testing (can be slow)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -71,9 +76,18 @@ jobs:
             echo "⚡ Skipping GitHub issues analysis"
           fi
 
+          WITH_COMPATIBILITY_FLAG=""
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.with_compatibility }}" = "true" ]; then
+            echo "🧪 Manual run: enabling compatibility testing (with_compatibility=true)"
+            WITH_COMPATIBILITY_FLAG="--with-compatibility-testing"
+          else
+            echo "⚡ Skipping compatibility testing"
+          fi
+
           uv run scripts/cli.py report generate \
             --format markdown --format csv --format excel \
-            ${WITH_ISSUES_FLAG}
+            ${WITH_ISSUES_FLAG} \
+            ${WITH_COMPATIBILITY_FLAG}
 
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/
@@ -197,6 +211,14 @@ jobs:
             --input reports/third_party_extensions_verified.md \
             --out-dir _site/third-party \
             --out-file index.html
+
+          # Generate HTML for compatibility testing results (only when present)
+          if [ -f reports/compatibility_testing.md ]; then
+            python scripts/build_report_site.py \
+              --input reports/compatibility_testing.md \
+              --out-dir _site/compatibility \
+              --out-file index.html
+          fi
           
           # Copy CSV and Excel files for download
           cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
@@ -204,6 +226,7 @@ jobs:
           # Also copy the original markdown for direct access
           cp reports/latest.md _site/report.md
           cp reports/third_party_extensions_verified.md _site/third-party/report.md 2>/dev/null || true
+          cp reports/compatibility_testing.md _site/compatibility/report.md 2>/dev/null || true
           
           echo "✅ Pages site prepared with proper HTML rendering"
       

@@ -649,6 +649,19 @@ class AnalysisOrchestrator:
                     filepath = self.report_generator.save_report(content, filename)
                     results[format_type] = filepath
 
+                    # If compatibility testing ran, publish a separate report with the full
+                    # detailed results, and link to it from the main report.
+                    if getattr(analysis_result, "compatibility_testing", None):
+                        compat_content = await self.report_generator.generate_markdown_template(
+                            analysis_result, template_name="compatibility_testing"
+                        )
+                        compat_path = self.report_generator.save_report(
+                            compat_content,
+                            "compatibility_testing.md",
+                            update_latest=False,
+                        )
+                        results["compatibility_testing_markdown"] = compat_path
+
                 elif format_type.lower() == "csv":
                     filepath = await self.report_generator.generate_csv(analysis_result)
                     results[format_type] = filepath
