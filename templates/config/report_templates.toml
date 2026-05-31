@@ -47,6 +47,14 @@
     "methodology"
   ]
 
+  [reports.compatibility_testing]
+  name = "DuckDB extension compatibility testing (experimental)"
+  description = "On-demand compatibility testing across a small set of DuckDB versions"
+  template = "reports/compatibility_testing.md.j2"
+  components = [
+    "header"
+  ]
+
 [components]
   # Reusable template components
   

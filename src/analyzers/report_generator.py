@@ -836,7 +836,9 @@ class ReportGenerator(BaseReportGenerator):
         else:
             return "unknown"
 
-    def save_report(self, content: str, filename: str) -> str:
+    def save_report(
+        self, content: str, filename: str, *, update_latest: bool = True
+    ) -> str:
         """Save the report content to a file."""
         self.config.ensure_directories()
 
@@ -845,7 +847,7 @@ class ReportGenerator(BaseReportGenerator):
             f.write(content)
 
         # Also save as latest.md for markdown reports
-        if filename.endswith(".md"):
+        if update_latest and filename.endswith(".md"):
             latest_path = self.reports_dir / "latest.md"
             with open(latest_path, "w", encoding="utf-8") as f:
                 f.write(content)

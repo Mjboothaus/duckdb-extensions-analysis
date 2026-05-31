@@ -1,0 +1,39 @@
+# DuckDB extension compatibility testing (experimental)
+This report summarises *on-demand* compatibility checks that attempt to `INSTALL` and `LOAD` extensions across a small set of DuckDB versions.
+
+Back to the main extensions report: [DuckDB Extensions Analysis](https://mjboothaus.github.io/duckdb-extensions-analysis/) ([Markdown]({{ metadata.links.github_repo }}/blob/main/reports/latest.md)).
+
+*Note:* This is an early implementation. Results are best-effort and may be incomplete if the run hit a time limit.
+
+---
+{% if compatibility_testing %}
+## Test scope
+- **DuckDB versions tested:** {{ compatibility_testing.versions_tested | join(', ') }}
+- **Extensions attempted:** {{ compatibility_testing.extensions_attempted_count }}
+- **Pairs attempted (extension × version):** {{ compatibility_testing.attempted_pairs_count }}
+- **Pairs completed:** {{ compatibility_testing.completed_pairs_count }}
+- **Results recorded:** {{ compatibility_testing.results_count }}
+- **Per-test timeout:** {{ compatibility_testing.per_test_timeout_seconds }} seconds
+- **Max runtime:** {{ compatibility_testing.max_runtime_seconds }} seconds
+- **Actual runtime:** {{ compatibility_testing.runtime_seconds }} seconds
+
+## Results (summary)
+
+||| Status | Count |
+|||--------|------:|
+||| ✅ Compatible (install+load) | {{ compatibility_testing.summary.compatible }} |
+||| ❌ Failed | {{ compatibility_testing.summary.failed }} |
+||| ⏱️ Timed out | {{ compatibility_testing.summary.timed_out_tests }} |
+||| ⏱️ Skipped (time limit) | {{ compatibility_testing.summary.skipped_pairs_time_limit }} |
+
+## Results (details)
+
+||| Extension | DuckDB version | Status | Seconds | Notes |
+|||----------|----------------|--------|--------:|-------|
+{% for r in compatibility_testing.results -%}
+||| {{ r.extension_name }} | {{ r.duckdb_version }} | {{ '✅' if r.success else '❌' }} | {{ '%.1f' | format(r.total_time_seconds) if r.total_time_seconds else '' }} | {{ r.error_message if r.error_message else '' }} |
+{% endfor %}
+
+{% else %}
+_No compatibility testing results were recorded for this run._
+{% endif %}
