@@ -245,3 +245,27 @@ jobs:
       
       - name: Deploy to Pages
         uses: actions/deploy-pages@v5
+
+  smoke-test-pages:
+    needs: deploy-to-pages
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Smoke test live Pages URLs
+        run: |
+          set -o pipefail
+
+          base_url="https://mjboothaus.github.io/duckdb-extensions-analysis"
+
+          echo "Checking main report URL: ${base_url}/"
+          curl -fsSL -o /dev/null "${base_url}/"
+
+          echo "Checking third-party report URL: ${base_url}/third-party/"
+          curl -fsSL -o /dev/null "${base_url}/third-party/"
+
+          echo "Checking compatibility report URL (may not exist on all runs): ${base_url}/compatibility/"
+          if curl -fsSL -o /dev/null "${base_url}/compatibility/"; then
+            echo "Compatibility URL OK"
+          else
+            echo "Compatibility URL not available on this run (skipping)"
+          fi
