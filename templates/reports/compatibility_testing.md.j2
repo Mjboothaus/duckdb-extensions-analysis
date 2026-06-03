@@ -31,7 +31,7 @@ Back to the main extensions report: [DuckDB Extensions Analysis](https://mjbooth
 ||| Extension | DuckDB version | Status | Seconds | Notes |
 |||----------|----------------|--------|--------:|-------|
 {% for r in compatibility_testing.results -%}
-||| {{ r.extension_name }} | {{ r.duckdb_version }} | {{ '✅' if r.success else '❌' }} | {{ '%.1f' | format(r.total_time_seconds) if r.total_time_seconds else '' }} | {{ r.error_message if r.error_message else '' }} |
+|||| {{ r.extension_name }} | {{ r.duckdb_version }} | {{ '✅' if r.success else '❌' }} | {{ '%.1f' | format(r.total_time_seconds) if r.total_time_seconds else '' }} | {{ (r.error_message if r.error_message else '') | replace('\\n', '<br/>') | replace('|', '\\\\|') }} |
 {% endfor %}
 
 {% else %}
