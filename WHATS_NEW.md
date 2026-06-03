@@ -4,6 +4,7 @@ This file is a lightweight, monthly roundup of notable developments in the DuckD
 ## Live reports
 - Main report (Core & Community): https://mjboothaus.github.io/duckdb-extensions-analysis/
 - Third-party extensions (work in progress): https://mjboothaus.github.io/duckdb-extensions-analysis/third-party/
+- Compatibility testing (experimental, on-demand): https://mjboothaus.github.io/duckdb-extensions-analysis/compatibility/
 
 ## 2026-05
 ### DuckDB: Quack (client/server) lands
@@ -34,7 +35,9 @@ Why this matters here: DuckLake is a core extension (`ducklake`) and it is incre
   - Release calendar entry: https://duckdb.org/release_calendar
 
 ## Recent changes in this repo
-- Surfaced the current DuckDB version at the top of the generated report as **“Running on DuckDB …”**.
+- Fixed core extension discovery + documentation links (moved to `docs/current`) so core extensions no longer disappear from the published report.
+- Added an executive summary to the main report for a faster “at a glance” view.
+- Added an experimental, on-demand compatibility testing report (published separately): https://mjboothaus.github.io/duckdb-extensions-analysis/compatibility/
 - Improved release-date accuracy by deriving newly released DuckDB versions from the GitHub Releases publish date when the upstream CSV lags.
 
 ---

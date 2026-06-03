@@ -1,5 +1,28 @@
 # DuckDB Extensions Analysis - Release Notes
 
+## v0.3.0 - June 2026 Update
+
+*Released: June 2026*
+
+### ✨ New Features
+
+**🧪 DuckDB version compatibility testing (experimental)**
+- Added optional “compatibility testing” that attempts to `INSTALL` + `LOAD` extensions across a small set of DuckDB versions.
+- Published as a separate report (so the main report stays readable):
+  - https://mjboothaus.github.io/duckdb-extensions-analysis/compatibility/
+- GitHub Actions: compatibility testing can be triggered on demand via workflow dispatch input `with_compatibility=true`.
+
+**🧾 Executive summary (main report)**
+- Added an executive summary section to highlight key counts and recent activity.
+
+### 🐛 Fixes
+
+- Fixed core extension documentation URL discovery by switching from `docs/stable` to `docs/current`, and versioned the cache key to avoid stale URLs.
+- Fixed repository URLs for newer core extensions that live outside the DuckDB monorepo.
+- Improved local GitHub Actions runs via `act` by skipping artefact upload steps under `env.ACT`.
+
+---
+
 ## v0.2.0 - January 2026 Update
 
 *Released: January 28, 2026*

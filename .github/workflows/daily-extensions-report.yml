@@ -25,7 +25,7 @@ permissions:
 jobs:
   analyse-and-render:
     runs-on: ubuntu-latest
-    timeout-minutes: 25  # Prevent workflows from hanging
+    timeout-minutes: 60  # Allows optional compatibility testing to complete
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -84,10 +84,18 @@ jobs:
             echo "⚡ Skipping compatibility testing"
           fi
 
+          # Keep compatibility runs reasonably bounded so CI finishes.
+          # (The implementation is best-effort, so a smaller sample is still useful.)
+          COMPAT_ARGS=""
+          if [ -n "$WITH_COMPATIBILITY_FLAG" ]; then
+            COMPAT_ARGS="--compat-max-runtime-seconds 600 --compat-max-extensions 10"
+          fi
+
           uv run scripts/cli.py report generate \
             --format markdown --format csv --format excel \
             ${WITH_ISSUES_FLAG} \
-            ${WITH_COMPATIBILITY_FLAG}
+            ${WITH_COMPATIBILITY_FLAG} \
+            ${COMPAT_ARGS}
 
           echo "✅ Analysis complete. Generated files:"
           ls -la reports/

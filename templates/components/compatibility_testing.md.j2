@@ -1,11 +1,10 @@
 ## Appendix: DuckDB version compatibility (experimental)
 This section summarises *on-demand* compatibility checks that attempt to `INSTALL` and `LOAD` extensions across a small set of DuckDB versions.
 
-This is published as a separate report:
+{% if compatibility_testing %}
+This run recorded compatibility testing results. A full detailed report is published separately:
 - **HTML:** https://mjboothaus.github.io/duckdb-extensions-analysis/compatibility/
 - **Markdown:** {{ metadata.links.github_repo }}/blob/main/reports/compatibility_testing.md
-
-{% if compatibility_testing %}
 
 ### Latest run summary
 - **DuckDB versions tested:** {{ compatibility_testing.versions_tested | join(', ') }}
@@ -22,7 +21,5 @@ This is published as a separate report:
 ||| ⏱️ Skipped (time limit) | {{ compatibility_testing.summary.skipped_pairs_time_limit }} |
 
 {% else %}
-
 _No compatibility testing results were recorded for this run._
-
 {% endif %}
