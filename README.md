@@ -6,9 +6,9 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 **Last Updated:** 2026-06-20 07:50:40 UTC
 
-[![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](./reports/latest.md)
-[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-290-blue)](./reports/latest.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-06-20%2007:50:40%20UTC-lightgrey)](./reports/latest.md)
+[![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
+[![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-290-blue)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-06-20%2007:50:40%20UTC-lightgrey)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
 
 ### Quick Summary
 
@@ -30,9 +30,10 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 ## Reports
 
-- **[Latest Analysis Report](./reports/latest.md)** - Complete markdown analysis
-- **[CSV Data](./reports/)** - Machine-readable data for further analysis  
-- **[Excel Reports](./reports/)** - Business-friendly spreadsheet format
+- **Latest Analysis Report**: https://mjboothaus.github.io/duckdb-extensions-analysis/ (HTML)
+- **Latest Analysis Report (Markdown)**: https://mjboothaus.github.io/duckdb-extensions-analysis/report.md
+- **Repository Markdown report source**: https://github.com/Mjboothaus/duckdb-extensions-analysis/blob/main/reports/latest.md
+- **CSV + Excel downloads**: https://mjboothaus.github.io/duckdb-extensions-analysis/ (see Downloads)
 
 ## Quick Start
 
