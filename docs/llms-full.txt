@@ -1,0 +1,37 @@
+DuckDB Extensions Analysis (LLM context)
+
+Overview
+DuckDB Extensions Analysis is an automated monitoring tool for DuckDB’s extension ecosystem. It discovers extensions, analyses GitHub and installation metadata (with caching), and produces daily reports in multiple formats. The GitHub Pages site intentionally publishes two surfaces:
+- Report UI at the site root (HTML).
+- Project documentation under /docs/ (Great Docs).
+
+What it produces
+- Markdown report (source-of-truth): reports/latest.md (published as /report.md)
+- CSV and Excel exports (published at the Pages root alongside the report UI)
+- Optional compatibility testing report (published at /compatibility/)
+- DuckDB database snapshot: data/extensions.duckdb
+
+Key entry points
+- CLI: scripts/cli.py (run via uv)
+- Orchestration: src/analyzers/orchestrator.py
+- Report generation: src/analyzers/report_generator.py + templates/
+- Pages HTML rendering: scripts/build_report_site.py
+
+Local development
+- Install dependencies: just install
+- Run the full pipeline (cached): just workflow
+- Run a fresh pipeline: just workflow-fresh
+- Generate reports only: just report / just report-all
+- Generate the HTML site output: just site
+- Quality checks: just check
+- Tests: uv run pytest
+
+Notes
+- Use uv for Python tooling.
+- Prefer Australian English in documentation and comments; keep code identifiers in standard US spelling.
+
+Links
+- Docs: https://mjboothaus.github.io/duckdb-extensions-analysis/docs/
+- Latest report (Markdown): https://mjboothaus.github.io/duckdb-extensions-analysis/report.md
+- Report UI (HTML): https://mjboothaus.github.io/duckdb-extensions-analysis/
+- Repository: https://github.com/Mjboothaus/duckdb-extensions-analysis
