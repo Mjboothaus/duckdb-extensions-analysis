@@ -221,10 +221,8 @@ jobs:
 
       - name: Create Pages site
         run: |
-          # Install markdown converter for the report HTML renderer
-          uv run python -m pip install markdown
-          
           # Generate HTML for main report
+          # Note: markdown is already a project dependency (see pyproject.toml).
           uv run python scripts/build_report_site.py
 
           # Generate HTML for the verified third-party report as an unlinked sub-page
