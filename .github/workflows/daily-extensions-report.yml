@@ -245,9 +245,9 @@ jobs:
           mkdir -p _site/docs
           rsync -a great-docs/_site/ _site/docs/
 
-          # Great Docs writes llms files outside of _site (project root of the build directory).
-          # Copy them into the deployed docs so skill.md links work.
-          cp great-docs/llms.txt great-docs/llms-full.txt _site/docs/ 2>/dev/null || true
+          # Great Docs expects llms files alongside skill.md.
+          # Great Docs' own generation is not reliably present for this repo, so we provide curated copies.
+          cp docs/llms.txt docs/llms-full.txt _site/docs/ 2>/dev/null || true
           
           # Copy CSV and Excel files for download
           cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
@@ -294,6 +294,12 @@ jobs:
           echo "Checking Great Docs URL (may not exist until first publish): ${base_url}/docs/"
           if curl -fsSL -o /dev/null "${base_url}/docs/"; then
             echo "Great Docs URL OK"
+
+            echo "Checking Great Docs llms.txt: ${base_url}/docs/llms.txt"
+            curl -fsSL -o /dev/null "${base_url}/docs/llms.txt"
+
+            echo "Checking Great Docs llms-full.txt: ${base_url}/docs/llms-full.txt"
+            curl -fsSL -o /dev/null "${base_url}/docs/llms-full.txt"
           else
             echo "Great Docs URL not available on this run (skipping)"
           fi

@@ -1,0 +1,24 @@
+DuckDB Extensions Analysis
+
+Purpose
+- Analyse DuckDB’s extension ecosystem (core + community).
+- Generate daily reports (Markdown, CSV, Excel, HTML) and optional GitHub issues health signals.
+
+Key links
+- Docs: https://mjboothaus.github.io/duckdb-extensions-analysis/docs/
+- Latest report (Markdown): https://mjboothaus.github.io/duckdb-extensions-analysis/report.md
+- Report UI (HTML): https://mjboothaus.github.io/duckdb-extensions-analysis/
+- Compatibility testing report (HTML): https://mjboothaus.github.io/duckdb-extensions-analysis/compatibility/
+
+Common local commands (via just)
+- just install
+- just workflow
+- just workflow-fresh
+- just report
+- just report-all
+- just site
+- just check
+- uv run pytest
+
+Repository
+- https://github.com/Mjboothaus/duckdb-extensions-analysis
