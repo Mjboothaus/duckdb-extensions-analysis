@@ -277,6 +277,30 @@ thirdparty-label-stats db="data/third_party_extensions.duckdb":
 thirdparty-report-verified source="recent" out="reports/third_party_extensions_verified.md" db="data/third_party_extensions.duckdb":
     uv run python scripts/render_verified_third_party_report.py --db {{db}} --source {{source}} --out {{out}}
 
+# === DOCS (GREAT DOCS) ===
+
+# Build the Great Docs site (output: great-docs/_site)
+docs-build:
+    uv run great-docs build
+
+# Preview the Great Docs site locally
+# Note: requires Quarto to be installed on your system.
+docs-preview:
+    uv run great-docs preview
+
+# Run Great Docs linting (docstring + cross-ref quality checks)
+docs-lint:
+    uv run great-docs lint
+
+# Link checks
+# Prepublish: best-effort (useful while the docs surface is being rolled out)
+docs-check-links:
+    uv run great-docs check-links
+
+# Strict link checks (no ignores; use for pre-release / tightening up)
+docs-check-links-strict:
+    uv run great-docs check-links --strict
+
 # === UTILITIES ===
 
 # Open the live GitHub Pages reports in your default browser (cross-platform).

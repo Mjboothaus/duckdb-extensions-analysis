@@ -29,10 +29,12 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 
 ## Reports
-
 - **[Latest Analysis Report](./reports/latest.md)** - Complete markdown analysis
-- **[CSV Data](./reports/)** - Machine-readable data for further analysis  
+- **[CSV Data](./reports/)** - Machine-readable data for further analysis
 - **[Excel Reports](./reports/)** - Business-friendly spreadsheet format
+
+## Documentation
+- Great Docs (project documentation): https://mjboothaus.github.io/duckdb-extensions-analysis/docs/
 
 ## Quick Start
 

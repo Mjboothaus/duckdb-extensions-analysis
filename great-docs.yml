@@ -1,0 +1,29 @@
+# Great Docs configuration
+# https://posit-dev.github.io/great-docs/user-guide/configuration.html
+
+display_name: DuckDB Extensions Analysis
+repo: https://github.com/Mjboothaus/duckdb-extensions-analysis
+
+# Important: this repo already publishes a separate HTML report site at the Pages root.
+# Serve Great Docs under /docs/ to avoid URL conflicts.
+site_url: "https://mjboothaus.github.io/duckdb-extensions-analysis/docs/"
+
+source:
+  branch: main
+
+# Start with narrative docs only (this repo is an application, not a library API).
+# We can add `reference:` later if/when we want API pages for selected modules.
+no_auto_exclude: true
+exclude:
+  - cli
+  - main
+  - logger
+  - logging
+  - config
+  - settings
+
+# Optional narrative documentation (Quarto .qmd files)
+sections:
+  - title: Project docs
+    dir: user_guide
+    navbar_after: null

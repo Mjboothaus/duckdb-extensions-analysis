@@ -1,0 +1,21 @@
+---
+title: Local development
+---
+
+## Setup
+
+This project uses `uv` for dependency management.
+
+- Install dependencies: `just install`
+
+## Common commands
+
+- Run a full workflow (cached): `just workflow`
+- Run a fresh workflow (bypass cache): `just workflow-fresh`
+- Generate the report (all formats): `just report-all`
+- Build the HTML report site: `just site`
+
+## Testing and quality
+
+- Format + lint: `just check`
+- Run tests: `uv run pytest`

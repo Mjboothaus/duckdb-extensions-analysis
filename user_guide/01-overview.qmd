@@ -1,0 +1,19 @@
+---
+title: Overview
+---
+
+This site documents the **DuckDB Extensions Analysis** project.
+
+Key links:
+
+- Live reports (GitHub Pages): https://mjboothaus.github.io/duckdb-extensions-analysis/
+- Source repository: https://github.com/Mjboothaus/duckdb-extensions-analysis
+
+## What this repo does
+- Analyses DuckDB core + community extensions.
+- Generates Markdown/CSV/Excel outputs under `reports/`.
+- Publishes a HTML view of the latest report via GitHub Pages.
+
+## Where the docs live
+- Great Docs site: `/docs/` (this site)
+- Project docs in-repo: `docs/`
