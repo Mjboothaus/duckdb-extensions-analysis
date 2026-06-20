@@ -4,11 +4,11 @@ Automated monitoring of DuckDB's extension ecosystem, tracking core and communit
 
 ## Latest Analysis
 
-**Last Updated:** 2026-06-20 07:00:58 UTC
+**Last Updated:** 2026-06-20 07:50:40 UTC
 
 [![Daily Report](https://img.shields.io/badge/Daily%20Report-Active-green)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
 [![Extensions Tracked](https://img.shields.io/badge/Extensions%20Tracked-290-blue)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-06-20%2007:00:58%20UTC-lightgrey)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026-06-20%2007:50:40%20UTC-lightgrey)](https://mjboothaus.github.io/duckdb-extensions-analysis/report.md)
 
 ### Quick Summary
 
