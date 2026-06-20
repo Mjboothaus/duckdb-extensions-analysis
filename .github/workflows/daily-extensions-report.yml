@@ -244,6 +244,10 @@ jobs:
           uv run great-docs build
           mkdir -p _site/docs
           rsync -a great-docs/_site/ _site/docs/
+
+          # Great Docs writes llms files outside of _site (project root of the build directory).
+          # Copy them into the deployed docs so skill.md links work.
+          cp great-docs/llms.txt great-docs/llms-full.txt _site/docs/ 2>/dev/null || true
           
           # Copy CSV and Excel files for download
           cp reports/*.csv reports/*.xlsx _site/ 2>/dev/null || true
