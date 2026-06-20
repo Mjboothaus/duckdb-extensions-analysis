@@ -256,6 +256,10 @@ jobs:
           cp reports/latest.md _site/report.md
           cp reports/third_party_extensions_verified.md _site/third-party/report.md 2>/dev/null || true
           cp reports/compatibility_testing.md _site/compatibility/report.md 2>/dev/null || true
+
+          # Backward-compatible link for docs surfaces that used /docs/reports/latest.md.
+          mkdir -p _site/docs/reports
+          cp reports/latest.md _site/docs/reports/latest.md
           
           echo "✅ Pages site prepared with proper HTML rendering"
       
