@@ -81,7 +81,7 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 || 37 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | 285 days ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
 || 38 | [REMOP](https://github.com/MSRG/REMOP) | [REMOP](https://github.com/MSRG/REMOP) | 🟢 Ongoing | 2 - ✅ Active | 29 days ago (2026-06-13 20:34:20 UTC) | 0 | C++ | REMOP: REmote-Memory-aware OPerator Optimization |
 || 39 | [sirius](https://github.com/ddiwu/sirius) | [sirius](https://github.com/ddiwu/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | 3 days ago (2026-07-10 01:24:02 UTC) | 0 | N/A | No description available |
-|| 40 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-07-13 07:50:35 UTC) | 1,013 | C++ | No description available |
+|| 40 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-07-13 10:45:12 UTC) | 1,013 | C++ | No description available |
 || 41 | [spy](https://github.com/hugolatendresse/rpt-plus-plus) | [rpt-plus-plus](https://github.com/hugolatendresse/rpt-plus-plus) | 🟢 Ongoing | 1 - 🔥 Very Active | 4 days ago (2026-07-08 14:58:43 UTC) | 0 | C++ | Robust predicate transfer with cache-aware hash tables. |
 || 42 | [VCrypt](https://github.com/ccfelius/VCrypt) | [VCrypt](https://github.com/ccfelius/VCrypt) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2025-04-19 13:06:24 UTC) | 4 | C++ | Experimental? |
 
