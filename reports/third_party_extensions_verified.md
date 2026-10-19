@@ -35,7 +35,7 @@ For a detailed description of how candidates are discovered, validated, promoted
 Manually labelled DuckDB extensions discovered outside the official registries.
 
 
-**Total:** 42 extensions | 🔥 Very Active (≤7d): 12 | ✅ Active (≤30d): 3 | 🟡 Stable (≤90d): 5 | 🟠 Stale (>90d): 22
+**Total:** 42 extensions | 🔥 Very Active (≤7d): 12 | ✅ Active (≤30d): 3 | 🟡 Stable (≤90d): 4 | 🟠 Stale (>90d): 23
 
 <details open markdown="1">
 <summary>Click to expand/collapse verified third-party extensions table</summary>
@@ -46,7 +46,7 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 || 2 | [Arengard/stps-extension](https://github.com/Arengard/stps-extension) | [stps-extension](https://github.com/Arengard/stps-extension) | ❓ Unknown | 1 - 🔥 Very Active | today | 0 | N/A | No description available |
 || 3 | [Arengard/wz-extension](https://github.com/Arengard/wz-extension) | [wz-extension](https://github.com/Arengard/wz-extension) | ❓ Unknown | 1 - 🔥 Very Active | today | 0 | N/A | No description available |
 || 4 | [BitEngine](https://github.com/junchangwang/BitEngine) | [BitEngine](https://github.com/junchangwang/BitEngine) | 🟢 Ongoing | 2 - ✅ Active | 17 days ago (2026-10-02 07:56:12 UTC) | 0 | C++ | No description available |
-|| 5 | [blobboxes](https://github.com/phrrngtn/blobboxes) | [blobboxes](https://github.com/phrrngtn/blobboxes) | 🟢 Ongoing | 3 - 🟡 Stable | 79 days ago (2026-07-31 14:06:59 UTC) | 2 | Python | No description available |
+|| 5 | [blobboxes](https://github.com/phrrngtn/blobboxes) | [blobboxes](https://github.com/phrrngtn/blobboxes) | 🟢 Ongoing | 3 - 🟡 Stable | 80 days ago (2026-07-31 14:06:59 UTC) | 2 | Python | No description available |
 || 6 | [ch-duckdb](https://github.com/newink/ch-duckdb) | [ch-duckdb](https://github.com/newink/ch-duckdb) | 🟢 Ongoing | 3 - 🟡 Stable | 41 days ago (2026-09-07 19:55:42 UTC) | 0 | C++ | No description available |
 || 7 | [duck_rdf](https://github.com/nonodename/read_rdf) | [read_rdf](https://github.com/nonodename/read_rdf) | 🟢 Ongoing | 2 - ✅ Active | 11 days ago (2026-10-07 18:23:22 UTC) | 41 | C++ | RDF file extension for DuckDB. Reads, writes & sparql supported |
 || 8 | [duckdb-3fs](https://github.com/open3fs/duckdb-3fs) | [duckdb-3fs](https://github.com/open3fs/duckdb-3fs) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2025-05-16 08:30:34 UTC) | 39 | C++ | DuckDB 3FS Extension |
@@ -67,22 +67,22 @@ Manually labelled DuckDB extensions discovered outside the official registries.
 || 23 | [duckdb-ros-extension](https://github.com/discretizer/duckdb-ros-extension) | [duckdb-ros-extension](https://github.com/discretizer/duckdb-ros-extension) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2024-07-29 19:13:44 UTC) | 1 | C++ | No description available |
 || 24 | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | [duckdb-spatial-raster](https://github.com/ahuarte47/duckdb-spatial-raster) | 🟡 Archived | 4 - 🟠 Stale | 201 days ago (2026-04-01 12:29:34 UTC) | 23 | C++ | This is a prototype of a geospatial extension for DuckDB that adds support fo... |
 || 25 | [duckdb-vcf-extension](https://github.com/vsbuffalo/duckdb-vcf-extension) | [duckdb-vcf-extension](https://github.com/vsbuffalo/duckdb-vcf-extension) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2024-12-24 02:09:42 UTC) | 10 | C++ | Experimental |
-|| 26 | [duckdb-vortex](https://github.com/vortex-data/duckdb-vortex) | [duckdb-vortex](https://github.com/vortex-data/duckdb-vortex) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 03:25:48 UTC) | 54 | CMake | DuckDB extension allowing reading/writing of vortex files |
+|| 26 | [duckdb-vortex](https://github.com/vortex-data/duckdb-vortex) | [duckdb-vortex](https://github.com/vortex-data/duckdb-vortex) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 13:22:02 UTC) | 54 | CMake | DuckDB extension allowing reading/writing of vortex files |
 || 27 | [duckdb_rdkit](https://github.com/bodowd/duckdb_rdkit) | [duckdb_rdkit](https://github.com/bodowd/duckdb_rdkit) | 🟢 Ongoing | 3 - 🟡 Stable | 57 days ago (2026-08-22 17:45:05 UTC) | 16 | C++ | Chemistry |
 || 28 | [DuckIR](https://github.com/Noorts/PDXearch) | [PDXearch](https://github.com/Noorts/PDXearch) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-18 18:50:19 UTC) | 14 | C++ | ⚡ [WIP] DuckIR: Information Retrieval suite for DuckDB. Introduces a state-of... |
 || 29 | [ducktorrent-extension](https://github.com/lmangani/ducktorrent-extension) | [ducktorrent-extension](https://github.com/lmangani/ducktorrent-extension) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2024-11-02 20:48:31 UTC) | 1 | C++ | Peer Discovery Extension for DuckDB |
 || 30 | [dynamic-predicate-transfer](https://github.com/embryo-labs/dynamic-predicate-transfer) | [dynamic-predicate-transfer](https://github.com/embryo-labs/dynamic-predicate-transfer) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-18 09:16:29 UTC) | 22 | C++ | [VLDB'26] This repository provides a DuckDB implementation of RPT+, following... |
 || 31 | [erpl](https://github.com/DataZooDE/erpl) | [erpl](https://github.com/DataZooDE/erpl) | 🟢 Ongoing | 2 - ✅ Active | 10 days ago (2026-10-08 14:55:08 UTC) | 63 | C++ | ERPL is a DuckDB extension to integrate Enterprise Data in your Data Science... |
 || 32 | [MobilityDuck](https://github.com/MobilityDB/MobilityDuck) | [MobilityDuck](https://github.com/MobilityDB/MobilityDuck) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 09:44:21 UTC) | 8 | C++ | MobilityDuck is a DuckDB extension for manipulating temporal and spatiotempor... |
-|| 33 | [nvmefs-personal](https://github.com/Cserki/nvmefs-personal) | [nvmefs-personal](https://github.com/Cserki/nvmefs-personal) | 🟢 Ongoing | 4 - 🟠 Stale | 346 days ago (2025-11-06 14:47:29 UTC) | 0 | C++ | No description available |
+|| 33 | [nvmefs-personal](https://github.com/Cserki/nvmefs-personal) | [nvmefs-personal](https://github.com/Cserki/nvmefs-personal) | 🟢 Ongoing | 4 - 🟠 Stale | 347 days ago (2025-11-06 14:47:29 UTC) | 0 | C++ | No description available |
 || 34 | [oglego/duckdb_grib2](https://github.com/oglego/duckdb_grib2) | [duckdb_grib2](https://github.com/oglego/duckdb_grib2) | ❓ Unknown | 1 - 🔥 Very Active | today | 0 | N/A | No description available |
-|| 35 | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 06:17:05 UTC) | 1,659 | Python | pg_lake: Postgres with Iceberg and data lake access |
+|| 35 | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | [pg_lake](https://github.com/Snowflake-Labs/pg_lake) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 13:35:23 UTC) | 1,659 | Python | pg_lake: Postgres with Iceberg and data lake access |
 || 36 | [PJBala/quackeccak](https://github.com/PJBala/quackeccak) | [quackeccak](https://github.com/PJBala/quackeccak) | ❓ Unknown | 1 - 🔥 Very Active | today | 0 | N/A | No description available |
 || 37 | [quackeccak](https://github.com/m--s/quackeccak) | [quackeccak](https://github.com/m--s/quackeccak) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2025-09-30 22:43:21 UTC) | 0 | C++ | Local EVM computations in DuckDB - CREATE2 address mining for gas optimizatio... |
 || 38 | [REMOP](https://github.com/MSRG/REMOP) | [REMOP](https://github.com/MSRG/REMOP) | 🟢 Ongoing | 4 - 🟠 Stale | 127 days ago (2026-06-13 20:34:20 UTC) | 1 | C++ | REMOP: REmote-Memory-aware OPerator Optimization |
 || 39 | [sirius](https://github.com/ddiwu/sirius) | [sirius](https://github.com/ddiwu/sirius) | 🟢 Ongoing | 3 - 🟡 Stable | 76 days ago (2026-08-04 00:28:33 UTC) | 0 | N/A | No description available |
-|| 40 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 12:16:22 UTC) | 1,096 | C++ | GPU-native composable analytics engine |
-|| 41 | [spy](https://github.com/hugolatendresse/rpt-plus-plus) | [rpt-plus-plus](https://github.com/hugolatendresse/rpt-plus-plus) | 🟢 Ongoing | 3 - 🟡 Stable | 90 days ago (2026-07-20 13:17:16 UTC) | 0 | C++ | Robust predicate transfer with cache-aware hash tables. |
+|| 40 | [sirius](https://github.com/sirius-db/sirius) | [sirius](https://github.com/sirius-db/sirius) | 🟢 Ongoing | 1 - 🔥 Very Active | today (2026-10-19 14:47:59 UTC) | 1,096 | C++ | GPU-native composable analytics engine |
+|| 41 | [spy](https://github.com/hugolatendresse/rpt-plus-plus) | [rpt-plus-plus](https://github.com/hugolatendresse/rpt-plus-plus) | 🟢 Ongoing | 4 - 🟠 Stale | 91 days ago (2026-07-20 13:17:16 UTC) | 0 | C++ | Robust predicate transfer with cache-aware hash tables. |
 || 42 | [VCrypt](https://github.com/ccfelius/VCrypt) | [VCrypt](https://github.com/ccfelius/VCrypt) | 🟢 Ongoing | 4 - 🟠 Stale | over a year ago (2025-04-19 13:06:24 UTC) | 4 | C++ | Experimental? |
 
 </details>
